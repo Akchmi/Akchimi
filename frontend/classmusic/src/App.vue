@@ -1,18 +1,26 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <nav>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/notice">공지사항</router-link> |
+      <router-link to="/article">자유게시판</router-link> |
+      <router-link to="/lecture">강의실</router-link> |
+      <router-link to="/search">강사검색</router-link> |
+      <router-link to="/login">로그인</router-link> |
+      <router-link to="/profile">마이페이지</router-link>
+    </nav>
+    <br />
+
+    <router-view />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  setup() {},
+};
 </script>
+"
 
 <style>
 #app {
@@ -21,6 +29,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+nav {
+  padding: 30px;
+}
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
