@@ -1,5 +1,8 @@
 <template>
-  <div>loginview</div>
+  <div>
+    loginview
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>

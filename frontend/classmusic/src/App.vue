@@ -2,15 +2,13 @@
   <div>
     <nav>
       <router-link to="/">Home</router-link> |
-      <router-link to="/notice">공지사항</router-link> |
-      <router-link to="/article">자유게시판</router-link> |
-      <router-link to="/lecture">강의실</router-link> |
+      <router-link to="/notice/list">공지사항</router-link> |
+      <router-link to="/article/list">자유게시판</router-link> |
+      <router-link to="/lecture/studentongoing">강의실</router-link> |
       <router-link to="/search">강사검색</router-link> |
-      <router-link to="/login">로그인</router-link> |
+      <router-link to="/login/signin">로그인</router-link> |
       <router-link to="/profile">마이페이지</router-link>
     </nav>
-    <br />
-
     <router-view />
   </div>
 </template>

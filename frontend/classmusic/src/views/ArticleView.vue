@@ -1,5 +1,8 @@
 <template>
-  <div>articleview</div>
+  <div>
+    articleview
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
