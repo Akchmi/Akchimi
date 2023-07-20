@@ -6,6 +6,8 @@ import LectureView from "../views/LectureView.vue";
 import SearchView from "../views/SearchView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import LoginView from "../views/LoginView.vue";
+import Chatview from "../views/ChatView.vue";
+import LivemeetingView from "../views/LivemeetingView";
 
 const routes = [
   {
@@ -42,6 +44,16 @@ const routes = [
     path: "/login",
     name: "login",
     component: LoginView,
+  },
+  {
+    path: "/chat",
+    name: "chat",
+    component: Chatview,
+  },
+  {
+    path: "/livemeeting",
+    name: "livemeeting",
+    component: LivemeetingView,
   },
 ];
 
