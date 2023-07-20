@@ -1,9 +1,19 @@
 <template>
-  <div>searchview</div>
+  <div>
+    searchview
+    <br />
+    <SearchBar> </SearchBar>
+  </div>
 </template>
 
 <script>
-export default {};
+import SearchBar from "../components/Search/SearchBar.vue";
+export default {
+  name: "SearchView",
+  components: {
+    SearchBar,
+  },
+};
 </script>
 
 <style></style>

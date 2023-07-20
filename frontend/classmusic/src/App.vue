@@ -12,10 +12,6 @@
     <br />
 
     <router-view />
-
-    <button class="py-2 px-4 rounded-lg shadow-md text-white bg-blue-500">
-      Click me
-    </button>
   </div>
 </template>
 
