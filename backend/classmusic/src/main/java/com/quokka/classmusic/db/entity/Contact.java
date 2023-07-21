@@ -1,9 +1,14 @@
 package com.quokka.classmusic.db.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Setter @Getter
 @Table(name = "contact")
 public class Contact {
     @Id
@@ -35,13 +40,13 @@ public class Contact {
     private Integer teacherOrder;
 
     @Column(name = "start_time")
-    private LocalDateTime startTime;
+    private Integer startTime;
 
     @Column(name = "end_time")
-    private LocalDateTime endTime;
+    private Integer endTime;
 
-    @Column(name = "key", length = 255)
-    private String key;
+    @Column(name = "room_key", length = 255)
+    private String roomKey;
 
     // Constructors, getters, and setters
 }
