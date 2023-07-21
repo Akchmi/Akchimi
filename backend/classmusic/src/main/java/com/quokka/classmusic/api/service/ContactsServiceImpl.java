@@ -2,7 +2,9 @@ package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.ContactsInsertDto;
 import com.quokka.classmusic.api.request.ContactsSelectAllDto;
+import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
 import com.quokka.classmusic.api.response.ContactsSelectAllVo;
+import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.repository.ContactsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +35,11 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    매칭 상태 바꾸기
     @Override
-    public void updateContactsState() throws Exception {
-
+    public int updateContactsState(int contactId , ContactsUpdateStateDto contactsUpdateStateDto) throws Exception {
+        Contact contact = contactsRepository.findAllByContactId(contactId);
+        contact.setState(contactsUpdateStateDto.getState());
+        contactsRepository.save(contact);
+        return 1;
     }
 //    매칭 메모 바꾸기
     @Override
@@ -54,6 +59,5 @@ public class ContactsServiceImpl implements ContactsService{
 //    강의실 입장
     @Override
     public void selectContacts() throws Exception {
-
     }
 }

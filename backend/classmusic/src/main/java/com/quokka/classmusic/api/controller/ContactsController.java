@@ -2,6 +2,7 @@ package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.ContactsInsertDto;
 import com.quokka.classmusic.api.request.ContactsSelectAllDto;
+import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
 import com.quokka.classmusic.api.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,15 @@ public class ContactsController {
     public ResponseEntity<Integer> insertContacts(@RequestBody ContactsInsertDto contactsInsertDto){
         try {
             return ResponseEntity.status(200).body(contactsService.insertContacts(contactsInsertDto));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PutMapping("/{contactId}/state")
+    public ResponseEntity<Integer> updateContactsState(@PathVariable("contactId") int contactId ,@RequestBody ContactsUpdateStateDto contactsUpdateStateDto){
+        try {
+            return ResponseEntity.status(200).body((contactsService.updateContactsState(contactId ,contactsUpdateStateDto)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

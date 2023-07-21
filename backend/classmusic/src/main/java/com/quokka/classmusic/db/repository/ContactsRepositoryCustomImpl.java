@@ -24,6 +24,7 @@ public class ContactsRepositoryCustomImpl implements ContactsRepositoryCustom{
                 .build();
 
         em.persist(contact);
+        
         return 1;
     }
 }
