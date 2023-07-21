@@ -1,9 +1,23 @@
 <template>
   <div>
-    <!-- 상단 네비게이션 바-->
+    <nav class="navbar">
+      <div class="navbar__logo">
+        <i class="fas fa-blog"></i>
+        <a>Akchimi</a>
+      </div>
+
+      <ul class="navbar__menu">
+        <li><a>공지사항</a></li>
+        <li><a>자유게시판</a></li>
+        <li><a>강의실</a></li>
+        <li><a>강사검색</a></li>
+        <li><a>로그인</a></li>
+        <li><a>마이페이지</a></li>
+      </ul>
+    </nav>
 
     <!-- 구성 화면 -->
-    <div class="screen">
+    <div class="container">
       <router-view></router-view>
     </div>
   </div>

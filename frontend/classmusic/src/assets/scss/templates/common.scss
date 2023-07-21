@@ -1,4 +1,11 @@
-.screen {
-  text-align: center;
-  color: red;
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: beige;
+  padding: 8px 12px;
+}
+
+.navbar__logo {
+  padding-left: 0;
 }
