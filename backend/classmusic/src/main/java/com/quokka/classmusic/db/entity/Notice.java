@@ -1,15 +1,33 @@
 package com.quokka.classmusic.db.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "notice")
+@DynamicInsert
 public class Notice {
+
+    @Builder
+    public Notice(int noticeId, String title, String content, Integer hit, Integer createdAt) {
+        this.noticeId = noticeId;
+        this.title = title;
+        this.content = content;
+        this.hit = hit;
+        this.createdAt = createdAt;
+    }
+
+    public void noticeUpdate(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notice_id")
@@ -25,5 +43,6 @@ public class Notice {
     private Integer hit;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @ColumnDefault("(UNIX_TIMESTAMP())")
+    private Integer createdAt;
 }
