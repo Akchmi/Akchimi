@@ -17,10 +17,12 @@ public class ContactsRepositoryCustomImpl implements ContactsRepositoryCustom{
     public int insertContacts(ContactsInsertDto contactsInsertDto) {
         User user = em.find(User.class, contactsInsertDto.getStudentId());
         Teacher teacher = em.find(Teacher.class, contactsInsertDto.getTeacherId());
-        Contact contact = new Contact();
-        contact.setStudent(user);
-        contact.setTeacher(teacher);
-        contact.setState(1);
+        Contact contact = Contact.builder()
+                .student(user)
+                .teacher(teacher)
+                .state(1)
+                .build();
+
         em.persist(contact);
         return 1;
     }

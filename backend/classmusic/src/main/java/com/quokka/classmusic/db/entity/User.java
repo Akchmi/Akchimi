@@ -1,15 +1,32 @@
 package com.quokka.classmusic.db.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 @Entity
-@Table(name="user") @DynamicInsert
-@Getter @Setter
+@Setter @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
+@Table(name="user")
 public class User {
+
+    @Builder
+    public User(int userId, String id, String password, String name, String email, String userProfileImage, Integer type, LocalDateTime createdAt, Integer gender) {
+        this.userId = userId;
+        this.id = id;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.userProfileImage = userProfileImage;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.gender = gender;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")

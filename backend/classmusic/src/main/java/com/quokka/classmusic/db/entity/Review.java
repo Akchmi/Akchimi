@@ -1,11 +1,28 @@
 package com.quokka.classmusic.db.entity;
 
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Setter @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "review")
 public class Review {
+    @Builder
+    public Review(int reviewId, Contact contact, Float rating, String content, LocalDateTime createdAt) {
+        this.reviewId = reviewId;
+        this.contact = contact;
+        this.rating = rating;
+        this.content = content;
+        this.createdAt = createdAt;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")

@@ -25,16 +25,17 @@ public class ArticleServiceImpl implements ArticleService{
     }
     @Override
     public int insertArticle(ArticleDto articleDto) throws Exception {
-        Article article = new Article();
-        User user=userRepository.getById(1);
-        articleDto.setUserId(1);
-        log.debug("user :::::::::: {} {}",user.getUserId(),user);
-        article.setUser(user);
-        article.setTitle(articleDto.getTitle());
-        article.setContent(articleDto.getContent());
-        article.setHit(0);
-        articleRepository.save(article);
-        return article.getArticleId();
+//        Article article = new Article();
+//        User user=userRepository.getById(1);
+//        articleDto.setUserId(1);
+//        log.debug("user :::::::::: {} {}",user.getUserId(),user);
+//        article.setUser(user);
+//        article.setTitle(articleDto.getTitle());
+//        article.setContent(articleDto.getContent());
+//        article.setHit(0);
+//        articleRepository.save(article);
+//        return article.getArticleId();
+        return 1;
     }
 
     @Override

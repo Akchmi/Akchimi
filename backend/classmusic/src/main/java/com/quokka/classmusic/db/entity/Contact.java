@@ -1,16 +1,35 @@
 package com.quokka.classmusic.db.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Setter @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "contact")
 public class Contact {
+
+    @Builder
+    public Contact(int contactId, User student, Teacher teacher, Integer state, String studentMemo, String teacherMemo, Integer studentOrder, Integer teacherOrder, Integer startTime, Integer endTime, String roomKey) {
+        this.contactId = contactId;
+        this.student = student;
+        this.teacher = teacher;
+        this.state = state;
+        this.studentMemo = studentMemo;
+        this.teacherMemo = teacherMemo;
+        this.studentOrder = studentOrder;
+        this.teacherOrder = teacherOrder;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.roomKey = roomKey;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "contact_id")
@@ -47,6 +66,7 @@ public class Contact {
 
     @Column(name = "room_key", length = 255)
     private String roomKey;
+
 
     // Constructors, getters, and setters
 }
