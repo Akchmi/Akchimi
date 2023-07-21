@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "review")
 public class Review {
     @Builder
-    public Review(int reviewId, Contact contact, Float rating, String content, LocalDateTime createdAt) {
+    public Review(int reviewId, Contact contact, Float rating, String content, Integer createdAt) {
         this.reviewId = reviewId;
         this.contact = contact;
         this.rating = rating;
@@ -39,7 +39,7 @@ public class Review {
     private String content;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Integer createdAt;
 
     // Constructors, getters, and setters
 }

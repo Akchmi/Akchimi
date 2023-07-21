@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Builder
-    public User(int userId, String id, String password, String name, String email, String userProfileImage, Integer type, LocalDateTime createdAt, Integer gender) {
+    public User(int userId, String id, String password, String name, String email, String userProfileImage, Integer type, Integer createdAt, Integer gender) {
         this.userId = userId;
         this.id = id;
         this.password = password;
@@ -51,7 +51,7 @@ public class User {
     private Integer type;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Integer createdAt;
 
     @Column(name = "gender")
     private Integer gender;
