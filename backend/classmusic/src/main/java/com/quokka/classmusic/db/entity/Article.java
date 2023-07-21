@@ -2,12 +2,13 @@ package com.quokka.classmusic.db.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@DynamicInsert
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,7 @@ public class Article {
     private String content;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Integer createdAt;
 
     @Column(name = "hit")
     private Integer hit;
