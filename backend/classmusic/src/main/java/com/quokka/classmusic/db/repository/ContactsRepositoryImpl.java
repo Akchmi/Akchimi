@@ -1,9 +1,13 @@
 package com.quokka.classmusic.db.repository;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.request.ContactsInsertDto;
+import com.quokka.classmusic.api.response.ContactsListVo;
 import com.quokka.classmusic.db.entity.Contact;
+import com.quokka.classmusic.db.entity.QContact;
 import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,15 +15,23 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Map;
 
+import static com.quokka.classmusic.db.entity.QContact.contact;
+
 @Repository
 public class ContactsRepositoryImpl implements ContactsRepository {
-
     @PersistenceContext
-    EntityManager em;
+    private final EntityManager em;
+    private final JPAQueryFactory query;
+
+    public ContactsRepositoryImpl(EntityManager em) {
+        this.em = em;
+        this.query = new JPAQueryFactory(em);
+    }
 
     @Override
     public List<Contact> findAll(Map<String ,Integer> params) {
-        return em.createQuery("select c.contactId from Contact c").getResultList();
+        return query.select(contact).from(contact).fetch();
+//        return em.createQuery("select c.contactId from Contact c").getResultList();
     }
 
     @Override
@@ -46,6 +58,9 @@ public class ContactsRepositoryImpl implements ContactsRepository {
                 .teacher(teacher)
                 .state(1)
                 .build();
+
+
+
 
         em.persist(contact);
         return 1;

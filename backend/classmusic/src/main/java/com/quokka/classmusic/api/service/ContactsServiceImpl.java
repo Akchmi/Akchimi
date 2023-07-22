@@ -28,10 +28,7 @@ public class ContactsServiceImpl implements ContactsService{
     public List<ContactsListVo> selectAllContacts(Map<String,Integer> params) throws Exception {
         List<ContactsListVo> Vo = new ArrayList<>();
         List<Contact> list = contactsRepository.findAll(params);
-        for (int i = 0; i < list.size(); i++) {
-            Contact contact = list.get(i);
-            Vo.add(new ContactsListVo(contact.getStudent().getName(), contact.getStudentMemo() , contact.getStudent().getUserProfileImage(), contact.getStudentOrder()));
-        }
+        System.out.println(list.size());
         return Vo;
     }
 //    내 매칭 삭제
