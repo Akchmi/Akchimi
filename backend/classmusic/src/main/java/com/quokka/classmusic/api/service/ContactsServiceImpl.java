@@ -1,6 +1,7 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.ContactsInsertDto;
+import com.quokka.classmusic.api.request.ContactsUpdateMemoDto;
 import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
 import com.quokka.classmusic.api.response.ContactsListVo;
 import com.quokka.classmusic.db.entity.Contact;
@@ -47,8 +48,14 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    매칭 메모 바꾸기
     @Override
-    public void updateContactsMemo() throws Exception {
-
+    public void updateContactsMemo(int contactId , ContactsUpdateMemoDto contactsUpdateMemoDto) throws Exception {
+        Contact contact = contactsRepository.findById(contactId);
+        if(contactsUpdateMemoDto.getType() == 0){
+            contact.setStudentMemo(contactsUpdateMemoDto.getMemo());
+        } else {
+            contact.setTeacherMemo(contactsUpdateMemoDto.getMemo());
+        }
+        contactsRepository.save(contact);
     }
 //    매칭 순서 바꾸기
     @Override

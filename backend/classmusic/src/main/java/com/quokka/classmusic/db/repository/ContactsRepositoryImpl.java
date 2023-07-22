@@ -31,6 +31,7 @@ public class ContactsRepositoryImpl implements ContactsRepository {
         Integer id = Integer.parseInt(String.valueOf(params.get("id")));
         Integer state = Integer.parseInt(String.valueOf(params.get("state")));
         Integer type = Integer.parseInt(String.valueOf(params.get("type")));
+
         if(type == 1){
             return query
                     .select(contact)
