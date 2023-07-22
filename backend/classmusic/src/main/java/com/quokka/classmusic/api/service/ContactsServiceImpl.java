@@ -69,6 +69,7 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    강의실 입장
     @Override
-    public void selectContacts() throws Exception {
+    public String selectContactsRoom(int contactId) throws Exception {
+        return contactsRepository.findById(contactId).getRoomKey();
     }
 }

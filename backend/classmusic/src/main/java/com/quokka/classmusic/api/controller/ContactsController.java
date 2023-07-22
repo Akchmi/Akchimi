@@ -74,4 +74,14 @@ public class ContactsController {
             throw new RuntimeException(e);
         }
     }
+
+// 강의실 입장url 가져오기
+    @GetMapping("/{contactId}/meeting-room")
+    public ResponseEntity<String> selectContactsRoom(@PathVariable("contactId") int contactId){
+        try {
+            return ResponseEntity.status(200).body(contactsService.selectContactsRoom(contactId));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

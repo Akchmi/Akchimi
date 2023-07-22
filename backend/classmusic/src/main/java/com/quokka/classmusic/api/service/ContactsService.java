@@ -16,5 +16,5 @@ public interface ContactsService {
     public void updateContactsMemo(int contactId , ContactsUpdateMemoDto contactsUpdateMemoDto) throws Exception;
     public void updateContactsOrder() throws Exception;
     public int insertContacts(ContactsInsertDto contactsInsertDto) throws Exception;
-    public void selectContacts() throws Exception;
+    public String selectContactsRoom(int contactId) throws Exception;
 }
