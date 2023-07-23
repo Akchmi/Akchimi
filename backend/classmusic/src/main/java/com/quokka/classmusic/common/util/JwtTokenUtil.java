@@ -37,14 +37,13 @@ public class JwtTokenUtil {
         this.jwtVerifier = generateVerifier();
     }
 
-    public String generateAccessJwt(int userId){
+    public String generateAccessJwt(int userId) {
         Date expires = getTokenExpiration(accessExpirationTime);
 
         String accessToken = JWT.create()
                 .withExpiresAt(expires)
                 .withIssuer(issuer)
                 .withClaim("userId", userId)
-//                .withClaim("role", "ROLE")
                 .sign(Algorithm.HMAC256(secretKey.getBytes()));
 
         log.debug("Access Token 생성 : {}", accessToken);
@@ -52,14 +51,13 @@ public class JwtTokenUtil {
         return accessToken;
     }
 
-    public String generateRefreshJwt(int userId){
-        Date expires = getTokenExpiration(accessExpirationTime);
+    public String generateRefreshJwt(int userId) {
+        Date expires = getTokenExpiration(refreshExpirationTime);
 
         String refreshToken = JWT.create()
                 .withExpiresAt(expires)
                 .withIssuer(issuer)
                 .withClaim("userId", userId)
-//                .withClaim("role", "ROLE")
                 .sign(Algorithm.HMAC256(secretKey.getBytes()));
 
         log.debug("Refresh Token 생성 : {}", refreshToken);
@@ -67,45 +65,15 @@ public class JwtTokenUtil {
         return refreshToken;
     }
 
-    public boolean validateJwtToken(String token){
-        try{
-            DecodedJWT decodedJWT = this.jwtVerifier.verify(token);
-            log.debug("JWT Token UserId : {}", decodedJWT.getClaim("userId"));
-
-
-        }catch(JWTVerificationException exception){
-            log.debug("JWT 인증 오류");
-        }
-
-        return false;
-    }
-
-    public void handleError(String token) {
-        JWTVerifier verifier = JWT
-                .require(Algorithm.HMAC512(secretKey.getBytes()))
-                .withIssuer(issuer)
-                .build();
-
+    public DecodedJWT validateJwtToken(String token) {
         try {
-            verifier.verify(token.replace(TOKEN_PREFIX, ""));
-        } catch (AlgorithmMismatchException ex) {
-            throw ex;
-        } catch (InvalidClaimException ex) {
-            throw ex;
-        } catch (SignatureGenerationException ex) {
-            throw ex;
-        } catch (SignatureVerificationException ex) {
-            throw ex;
-        } catch (TokenExpiredException ex) {
-            throw ex;
-        } catch (JWTCreationException ex) {
-            throw ex;
-        } catch (JWTDecodeException ex) {
-            throw ex;
-        } catch (JWTVerificationException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw ex;
+            DecodedJWT decodedJWT = this.jwtVerifier.verify(token);
+            log.debug("JWT Token Decode...");
+            log.debug("UserId : {}", decodedJWT.getClaim("userId"));
+
+            return decodedJWT;
+        } catch (JWTVerificationException exception) {
+            throw new JWTVerificationException("JWT 인증 오류");
         }
     }
 
