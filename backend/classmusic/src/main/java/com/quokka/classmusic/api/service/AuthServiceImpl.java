@@ -1,30 +1,59 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.LoginDto;
+import com.quokka.classmusic.api.request.SignupDto;
 import com.quokka.classmusic.api.response.LoginSuccessVo;
 import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.common.util.JwtTokenUtil;
+import com.quokka.classmusic.db.entity.User;
+import com.quokka.classmusic.db.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 public class AuthServiceImpl implements AuthService{
 
     private UserService userService;
+    private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public AuthServiceImpl(UserService userService, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil) {
+    public AuthServiceImpl(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
+    @Override
+    @Transactional
+    public int signup(SignupDto signupDto) {
+        log.debug("Auth Service signup 호출");
+
+        // TODO : 유저 프로필 이미지 기능 추가
+        // TODO : 유저 Type 기본값 0으로 설정? -> 백엔드에서 넣어주냐 vs DB에서 Default로 설정하냐
+        // TODO : 아이디 중복 체크 -> User Table Id Column에 unique 속성 추가합시다
+
+        User user = User.builder()
+                .id(signupDto.getId())
+                .name(signupDto.getName())
+                .email(signupDto.getEmail())
+                .gender(signupDto.getGender())
+                .password(passwordEncoder.encode(signupDto.getPassword()))
+                .build();
+
+        user = userRepository.save(user);
+
+        log.debug("회원가입된 사용자 정보 : {}", user);
+
+        return user.getUserId();
+    }
 
     @Override
     public LoginSuccessVo login(LoginDto loginDto) {

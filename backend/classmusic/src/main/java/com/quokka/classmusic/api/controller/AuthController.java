@@ -1,6 +1,7 @@
 package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.LoginDto;
+import com.quokka.classmusic.api.request.SignupDto;
 import com.quokka.classmusic.api.response.LoginSuccessVo;
 import com.quokka.classmusic.api.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,14 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @PostMapping("/sign-up")
+    public ResponseEntity<Integer> signup(@RequestBody SignupDto signupDto){
+        log.info("POST /auth/sign-up 요청 SignUpDto : {}", signupDto);
 
+        int userId = authService.signup(signupDto);
+
+        return new ResponseEntity<>(userId, HttpStatus.CREATED);
+    }
 
     // 200 성공 401 인증 실패 404 사용자 없음 500 서버 오류
     @PostMapping("/login")
