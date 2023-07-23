@@ -65,8 +65,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.debug("JWT 필터 UserDetailsVo 생성 시작...");
                 UserDetailsVo userDetailsVo = new UserDetailsVo(userVo);
                 UsernamePasswordAuthenticationToken jwtAuthentication =
-                        new UsernamePasswordAuthenticationToken(userId, null, userDetailsVo.getAuthorities());
-                jwtAuthentication.setDetails(userDetailsVo);
+                        new UsernamePasswordAuthenticationToken(userDetailsVo, null, userDetailsVo.getAuthorities());
+                log.debug("JWT 필터 UserDetailsVo 생성 완료 : {}", userDetailsVo);
                 return jwtAuthentication;
             }
         }
