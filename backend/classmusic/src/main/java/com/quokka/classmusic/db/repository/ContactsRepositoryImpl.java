@@ -32,14 +32,14 @@ public class ContactsRepositoryImpl implements ContactsRepository {
         Integer state = Integer.parseInt(String.valueOf(params.get("state")));
         Integer type = Integer.parseInt(String.valueOf(params.get("type")));
 
-        if(type == 1){
+        if(type == 0){
             return query
                     .select(contact)
                     .from(contact)
                     .where(contact.student.userId.eq(id) , contact.state.eq(state))
                     .orderBy(contact.studentOrder.desc())
                     .fetch();
-        } else if(type == 2){
+        } else if(type == 1){
             return query
                     .select(contact)
                     .from(contact)
