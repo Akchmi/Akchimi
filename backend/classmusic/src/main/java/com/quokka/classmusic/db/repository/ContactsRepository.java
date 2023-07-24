@@ -1,10 +1,15 @@
 package com.quokka.classmusic.db.repository;
 
+import com.quokka.classmusic.api.request.ContactsInsertDto;
 import com.quokka.classmusic.db.entity.Contact;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ContactsRepository extends JpaRepository<Contact, Integer> , ContactsRepositoryCustom{
+import java.util.List;
+import java.util.Map;
 
+public interface ContactsRepository  {
+    List<Contact> findAll(Map<String , Integer> params);
+    void save(Contact contact);
+    Contact findById(int contactId);
+    void delete(Contact contact);
+    int insertContacts(ContactsInsertDto contactsInsertDto);
 }
