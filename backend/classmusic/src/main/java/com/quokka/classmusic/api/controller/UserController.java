@@ -22,7 +22,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Void> regist(@RequestBody UserRegistDto userRegistDto) {
         try {
-            int res = userService.regist(userRegistDto);
+//            int res = userService.regist(userRegistDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e);

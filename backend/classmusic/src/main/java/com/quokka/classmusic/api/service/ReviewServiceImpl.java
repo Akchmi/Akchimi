@@ -1,0 +1,50 @@
+package com.quokka.classmusic.api.service;
+
+import com.quokka.classmusic.api.request.ReviewInsertDto;
+import com.quokka.classmusic.api.request.ReviewUpdateDto;
+import com.quokka.classmusic.api.response.ReviewVo;
+import com.quokka.classmusic.db.entity.Contact;
+import com.quokka.classmusic.db.entity.Review;
+import com.quokka.classmusic.db.repository.ReviewRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@Transactional
+public class ReviewServiceImpl implements ReviewService{
+    ReviewRepository reviewRepository;
+
+    @Autowired
+    public ReviewServiceImpl(ReviewRepository reviewRepository) {
+        this.reviewRepository = reviewRepository;
+    }
+
+    @Override
+    public List<ReviewVo> selectAllReview(int teacherId) {
+        return null;
+    }
+
+    @Override
+    public int insertReview(ReviewInsertDto reviewInsertDto) {
+         Contact contact = reviewRepository.findContactById(reviewInsertDto.getContactId());
+         Review review = Review.builder()
+                 .contact(contact)
+                 .rating(reviewInsertDto.getRating())
+                 .content(reviewInsertDto.getContent())
+                 .build();
+         reviewRepository.save(review);
+         return review.getReviewId();
+    }
+
+    @Override
+    public void updateReview(ReviewUpdateDto reviewUpdateDto) {
+//        reviewRepository.findById(reviewUpdateD)
+    }
+    @Override
+    public void deleteReview(int reviewId) {
+        reviewRepository.delete(reviewRepository.findById(reviewId));
+    }
+}
