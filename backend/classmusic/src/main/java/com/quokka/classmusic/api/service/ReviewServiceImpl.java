@@ -40,8 +40,11 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public void updateReview(ReviewUpdateDto reviewUpdateDto) {
-//        reviewRepository.findById(reviewUpdateD)
+    public void updateReview(int reviewId , ReviewUpdateDto reviewUpdateDto) {
+        Review review = reviewRepository.findById(reviewId);
+        review.setContent(reviewUpdateDto.getContent());
+        review.setRating(reviewUpdateDto.getRating());
+        reviewRepository.save(review);
     }
     @Override
     public void deleteReview(int reviewId) {
