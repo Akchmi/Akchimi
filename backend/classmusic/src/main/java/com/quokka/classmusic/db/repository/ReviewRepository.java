@@ -1,7 +1,6 @@
 package com.quokka.classmusic.db.repository;
 
 import com.quokka.classmusic.api.response.ReviewVo;
-import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Review;
 
 import java.util.List;
@@ -11,5 +10,4 @@ public interface ReviewRepository {
     void save(Review review);
     Review findById(int reviewId);
     void delete(Review review);
-    Contact findContactById(int contactId);
 }

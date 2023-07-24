@@ -5,6 +5,7 @@ import com.quokka.classmusic.api.request.ReviewUpdateDto;
 import com.quokka.classmusic.api.response.ReviewVo;
 import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Review;
+import com.quokka.classmusic.db.repository.ContactsRepository;
 import com.quokka.classmusic.db.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,13 @@ import java.util.List;
 @Service
 @Transactional
 public class ReviewServiceImpl implements ReviewService{
-    ReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
+    private ContactsRepository contactsRepository;
 
     @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ContactsRepository contactsRepository) {
         this.reviewRepository = reviewRepository;
+        this.contactsRepository = contactsRepository;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public int insertReview(ReviewInsertDto reviewInsertDto) {
-         Contact contact = reviewRepository.findContactById(reviewInsertDto.getContactId());
+         Contact contact = contactsRepository.findById(reviewInsertDto.getContactId());
          Review review = Review.builder()
                  .contact(contact)
                  .rating(reviewInsertDto.getRating())

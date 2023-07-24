@@ -58,9 +58,4 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     public void delete(Review review) {
         em.remove(review);
     }
-
-    @Override
-    public Contact findContactById(int contactId) {
-        return em.find(Contact.class , contactId);
-    }
 }
