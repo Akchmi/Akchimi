@@ -81,7 +81,7 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     }
 
     @Override
-    public ArticleVo findById(int articleId) {
+    public ArticleVo selectOneById(int articleId) {
         return query
                 .select(Projections.constructor(ArticleVo.class,
                         article.articleId,
@@ -98,7 +98,13 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     }
 
     @Override
+    public Article findById(int articleId){
+        return em.find(Article.class, articleId);
+    }
+
+    @Override
     public void delete(Article article) {
+        log.debug("delete articleId : {}",article.getArticleId());
         em.remove(article);
     }
 }

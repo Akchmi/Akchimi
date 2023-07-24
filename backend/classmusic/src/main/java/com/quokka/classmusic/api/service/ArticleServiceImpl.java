@@ -39,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public ArticleVo select(int articleId) throws Exception {
-        return articleRepository.findById(articleId);
+        return articleRepository.selectOneById(articleId);
     }
 
     @Override
@@ -49,13 +49,15 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public void modifyArticle(int articleId, ArticleDto articleDto) throws Exception {
-
+        Article article=articleRepository.findById(articleId);
+        article.setTitle(articleDto.getTitle());
+        article.setContent(articleDto.getContent());
+        articleRepository.save(article);
     }
 
     @Override
     public void deleteArticle(int articleId) throws Exception {
-        Article article = null;
-        articleRepository.findById(articleId);
+        Article article = articleRepository.findById(articleId);
         articleRepository.delete(article);
     }
 }
