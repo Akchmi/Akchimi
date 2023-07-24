@@ -11,7 +11,7 @@ import java.util.Map;
 public interface ContactsService {
     public List<ContactsVo> selectAllContacts(Map<String, Integer> params) throws Exception;
     public void deleteContacts(int contactId) throws Exception;
-    public int updateContactsState(int contactId , ContactsUpdateStateDto contactsUpdateStateDto) throws Exception;
+    public void updateContactsState(int contactId , ContactsUpdateStateDto contactsUpdateStateDto) throws Exception;
     public void updateContactsMemo(int contactId , ContactsUpdateMemoDto contactsUpdateMemoDto) throws Exception;
     public void updateContactsOrder() throws Exception;
     public int insertContacts(ContactsInsertDto contactsInsertDto) throws Exception;

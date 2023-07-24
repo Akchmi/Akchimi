@@ -54,9 +54,10 @@ public class ContactsController {
     }
 //  매칭 상태 수정
     @PutMapping("/{contactId}/state")
-    public ResponseEntity<Integer> updateContactsState(@PathVariable("contactId") int contactId ,@RequestBody ContactsUpdateStateDto contactsUpdateStateDto){
+    public ResponseEntity<Void> updateContactsState(@PathVariable("contactId") int contactId ,@RequestBody ContactsUpdateStateDto contactsUpdateStateDto){
         try {
-            return ResponseEntity.status(200).body((contactsService.updateContactsState(contactId ,contactsUpdateStateDto)));
+            contactsService.updateContactsState(contactId ,contactsUpdateStateDto);
+            return ResponseEntity.status(200).body(null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
