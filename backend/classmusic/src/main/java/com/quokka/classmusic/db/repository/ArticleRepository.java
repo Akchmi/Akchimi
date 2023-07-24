@@ -1,11 +1,16 @@
 package com.quokka.classmusic.db.repository;
 
+import com.quokka.classmusic.api.request.ArticleDto;
+import com.quokka.classmusic.api.response.ArticleVo;
 import com.quokka.classmusic.db.entity.Article;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ArticleRepository extends JpaRepository<Article , Integer>, ArticleRepositoryCustom{
+import java.util.List;
+import java.util.Map;
+
+
+public interface ArticleRepository{
+    void save(Article article);
+    List<ArticleVo> findAll(Map<String, String> params);
+    ArticleVo findById(int articleId);
+    void delete(Article article);
 }

@@ -19,13 +19,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<Void> regist(@RequestBody UserRegistDto userRegistDto) {
-        try {
+//    @PostMapping
+//    public ResponseEntity<Void> regist(@RequestBody UserRegistDto userRegistDto) {
+//        try {
 //            int res = userService.regist(userRegistDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }

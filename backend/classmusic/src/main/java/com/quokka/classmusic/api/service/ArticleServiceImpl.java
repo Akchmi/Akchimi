@@ -1,6 +1,7 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.ArticleDto;
+import com.quokka.classmusic.api.response.ArticleVo;
 import com.quokka.classmusic.db.entity.Article;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.ArticleRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -23,44 +25,37 @@ public class ArticleServiceImpl implements ArticleService{
         this.articleRepository=articleRepository;
         this.userRepository=userRepository;
     }
+
     @Override
     public int insertArticle(ArticleDto articleDto) throws Exception {
-//        Article article = new Article();
-//        User user=userRepository.getById(1);
-//        articleDto.setUserId(1);
-//        log.debug("user :::::::::: {} {}",user.getUserId(),user);
-//        article.setUser(user);
-//        article.setTitle(articleDto.getTitle());
-//        article.setContent(articleDto.getContent());
-//        article.setHit(0);
-//        articleRepository.save(article);
-//        return article.getArticleId();
-        return 1;
+        Article article = Article.builder()
+                .title(articleDto.getTitle())
+                .user(new User(1,"1","2","1","2","3",1,2,1))
+                .content(articleDto.getContent())
+                .build();
+        articleRepository.save(article);
+        return article.getArticleId();
     }
 
     @Override
-    public Article select(int articleId) throws Exception {
-        Article article= articleRepository.findById(articleId).get();
-        article.setHit(article.getHit()+1);
-        return article;
+    public ArticleVo select(int articleId) throws Exception {
+        return articleRepository.findById(articleId);
     }
 
     @Override
-    public List<Article> selectAll() throws Exception {
-        return articleRepository.findAll();
+    public List<ArticleVo> selectAll(Map<String, String> params) throws Exception {
+        return articleRepository.findAll(params);
     }
 
     @Override
     public void modifyArticle(int articleId, ArticleDto articleDto) throws Exception {
-//        Article article = em.find(Article.class, articleId);
-        Article article=articleRepository.findById(articleId).get();
-        article.setTitle(articleDto.getTitle());
-        article.setContent(articleDto.getContent());
-        articleRepository.save(article);
+
     }
 
     @Override
     public void deleteArticle(int articleId) throws Exception {
-        articleRepository.deleteById(articleId);
+        Article article = null;
+        articleRepository.findById(articleId);
+        articleRepository.delete(article);
     }
 }

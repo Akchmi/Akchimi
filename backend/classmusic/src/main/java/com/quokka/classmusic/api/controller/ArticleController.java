@@ -1,16 +1,16 @@
 package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.ArticleDto;
+import com.quokka.classmusic.api.response.ArticleVo;
 import com.quokka.classmusic.api.service.ArticleService;
-import com.quokka.classmusic.db.entity.Article;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/articles")
@@ -33,9 +33,9 @@ public class ArticleController {
         }
     }
     @GetMapping
-    public ResponseEntity findAllArticle(Pageable pageable, String searchType, String keyWord, int pageNo, int sortType){
+    public ResponseEntity findAllArticle(@RequestParam Map<String, String> params){
         try {
-            List<Article> articlesList=articleService.selectAll();
+            List<ArticleVo> articlesList=articleService.selectAll(params);
             log.debug("findAllArticles : {} articles loading",articlesList.size());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
@@ -46,8 +46,8 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public ResponseEntity findArticle(@PathVariable int articleId){
         try {
-            Article article=articleService.select(articleId);
-            log.debug("get {} article info : {} {} {}",article.getArticleId(), article.getUser(), article.getTitle(), article.getContent());
+            ArticleVo article=articleService.select(articleId);
+            log.debug("get {} article info : {} {} {}",article.getArticleId(), article.getName(), article.getTitle(), article.getContent());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e);
