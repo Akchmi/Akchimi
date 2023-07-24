@@ -3,7 +3,7 @@ package com.quokka.classmusic.api.service;
 import com.quokka.classmusic.api.request.ContactsInsertDto;
 import com.quokka.classmusic.api.request.ContactsUpdateMemoDto;
 import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
-import com.quokka.classmusic.api.response.ContactsListVo;
+import com.quokka.classmusic.api.response.ContactsVo;
 import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.repository.ContactsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +26,8 @@ public class ContactsServiceImpl implements ContactsService{
 
     //    내 매칭 보기
     @Override
-    public List<ContactsListVo> selectAllContacts(Map<String,Integer> params) throws Exception {
-        List<ContactsListVo> Vo = new ArrayList<>();
-        List<Contact> list = contactsRepository.findAll(params);
-        System.out.println(list.size());
-        return Vo;
+    public List<ContactsVo> selectAllContacts(Map<String,Integer> params) throws Exception {
+        return contactsRepository.findAll(params);
     }
 //    내 매칭 삭제
     @Override

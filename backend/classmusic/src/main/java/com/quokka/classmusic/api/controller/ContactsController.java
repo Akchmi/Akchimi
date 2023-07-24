@@ -1,14 +1,12 @@
 package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.ContactsInsertDto;
-import com.quokka.classmusic.api.request.ContactsSelectAllDto;
 import com.quokka.classmusic.api.request.ContactsUpdateMemoDto;
 import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
-import com.quokka.classmusic.api.response.ContactsListVo;
+import com.quokka.classmusic.api.response.ContactsVo;
 import com.quokka.classmusic.api.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +24,7 @@ public class ContactsController {
 
 //    내 매칭 보기
     @GetMapping("")
-    public ResponseEntity<List<ContactsListVo>> selectAllContacts(@RequestParam Map<String, Integer> params){
+    public ResponseEntity<List<ContactsVo>> selectAllContacts(@RequestParam Map<String, Integer> params){
         try {
             return ResponseEntity.status(200).body(contactsService.selectAllContacts(params));
         } catch (Exception e) {

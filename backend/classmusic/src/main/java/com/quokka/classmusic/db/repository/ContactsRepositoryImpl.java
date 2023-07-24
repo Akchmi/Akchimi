@@ -1,11 +1,15 @@
 package com.quokka.classmusic.db.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.request.ContactsInsertDto;
+import com.quokka.classmusic.api.response.ContactsVo;
+import com.quokka.classmusic.api.response.ReviewVo;
 import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.entity.User;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -14,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.quokka.classmusic.db.entity.QContact.contact;
+import static com.quokka.classmusic.db.entity.QTeacher.teacher;
+import static com.quokka.classmusic.db.entity.QUser.user;
 
 @Repository
 public class ContactsRepositoryImpl implements ContactsRepository {
@@ -27,25 +33,38 @@ public class ContactsRepositoryImpl implements ContactsRepository {
     }
 
     @Override
-    public List<Contact> findAll(Map<String ,Integer> params) {
+    public List<ContactsVo> findAll(Map<String ,Integer> params) {
         Integer id = Integer.parseInt(String.valueOf(params.get("id")));
         Integer state = Integer.parseInt(String.valueOf(params.get("state")));
         Integer type = Integer.parseInt(String.valueOf(params.get("type")));
-
-        if(type == 0){
-            return query
-                    .select(contact)
-                    .from(contact)
-                    .where(contact.student.userId.eq(id) , contact.state.eq(state))
-                    .orderBy(contact.studentOrder.desc())
-                    .fetch();
-        } else if(type == 1){
-            return query
-                    .select(contact)
-                    .from(contact)
-                    .where(contact.teacher.teacherId.eq(id) , contact.state.eq(state))
-                    .orderBy(contact.teacherOrder.desc())
-                    .fetch();
+        if(type != null){
+            if(type == 0){
+                return query.select(Projections.constructor(ContactsVo.class ,
+                                teacher.user.name,
+                                teacher.user.userProfileImage,
+                                contact.studentMemo,
+                                contact.studentOrder))
+                        .from(contact)
+                        .where(stateEq(state))
+                        .join(contact.student , user)
+                        .where(idEq(id))
+                        .join(contact.teacher , teacher)
+                        .orderBy(contact.studentOrder.desc())
+                        .fetch();
+            } else if(type == 1){
+                return query.select(Projections.constructor(ContactsVo.class ,
+                                user.name,
+                                user.userProfileImage,
+                                contact.teacherMemo,
+                                contact.teacherOrder))
+                        .from(contact)
+                        .where(stateEq(state))
+                        .join(contact.teacher , teacher)
+                        .where(teacheridEq(id))
+                        .join(contact.student , user)
+                        .orderBy(contact.teacherOrder.desc())
+                        .fetch();
+            }
         }
         return null;
     }
@@ -82,6 +101,20 @@ public class ContactsRepositoryImpl implements ContactsRepository {
         if(id == null){
             return null;
         }
-        return contact.student.userId.eq(id);
+        return user.userId.eq(id);
+    }
+
+    private BooleanExpression teacheridEq(Integer id){
+        if(id == null){
+            return null;
+        }
+        return teacher.teacherId.eq(id);
+    }
+
+    private BooleanExpression stateEq(Integer state){
+        if(state == null){
+            return null;
+        }
+        return contact.state.eq(state);
     }
 }
