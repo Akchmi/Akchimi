@@ -1,32 +1,36 @@
 package com.quokka.classmusic.api.service;
 
-import com.quokka.classmusic.api.request.UserRegistDto;
+import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 
 @Service
-@Transactional
+@Slf4j
 public class UserServiceImpl implements UserService{
+
     private UserRepository userRepository;
 
+    @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public int regist(UserRegistDto userRegistDto) throws Exception {
-        User user = User.builder()
-                .id(userRegistDto.getId())
-                .password(userRegistDto.getPassword())
-                .name(userRegistDto.getName())
-                .email(userRegistDto.getEmail())
-                .gender(userRegistDto.getGender())
-                .userProfileImage(userRegistDto.getUserProfileImage())
-                .type(userRegistDto.getType())
-                .build();
-        userRepository.save(user);
-        return 1;
+    public UserVo findUserById(String id) {
+        User user = userRepository.findUserById(id)
+                .orElseThrow(() -> new NoSuchElementException("id와 일치하는 회원이 없습니다."));
+        return new UserVo(user);
+    }
+
+    @Override
+    public UserVo findUserByUserId(int userId) {
+         User user = userRepository.findById(userId)
+                 .orElseThrow(() -> new NoSuchElementException("userId와 일치하는 회원이 없습니다."));
+         return new UserVo(user);
     }
 }

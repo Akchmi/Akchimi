@@ -1,7 +1,8 @@
 package com.quokka.classmusic.api.service;
 
-import com.quokka.classmusic.api.request.UserRegistDto;
+import com.quokka.classmusic.api.response.UserVo;
 
 public interface UserService {
-    public int regist(UserRegistDto userRegistDto) throws Exception;
+    UserVo findUserById(String id);
+    UserVo findUserByUserId(int userId);
 }
