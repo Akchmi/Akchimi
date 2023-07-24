@@ -24,7 +24,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<ReviewVo> selectAllReview(int teacherId) {
-        return null;
+        return reviewRepository.findAll(teacherId);
     }
 
     @Override

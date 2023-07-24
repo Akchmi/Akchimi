@@ -54,4 +54,15 @@ public class ReviewController {
             throw new RuntimeException(e);
         }
     }
+
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable int reviewId){
+        log.debug("리뷰삭제");
+        try {
+            reviewService.deleteReview(reviewId);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
