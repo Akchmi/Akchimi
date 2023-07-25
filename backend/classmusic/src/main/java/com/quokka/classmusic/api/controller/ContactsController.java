@@ -1,8 +1,6 @@
 package com.quokka.classmusic.api.controller;
 
-import com.quokka.classmusic.api.request.ContactsInsertDto;
-import com.quokka.classmusic.api.request.ContactsUpdateMemoDto;
-import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
+import com.quokka.classmusic.api.request.*;
 import com.quokka.classmusic.api.response.ContactsVo;
 import com.quokka.classmusic.api.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +55,17 @@ public class ContactsController {
     public ResponseEntity<Void> updateContactsState(@PathVariable("contactId") int contactId ,@RequestBody ContactsUpdateStateDto contactsUpdateStateDto){
         try {
             contactsService.updateContactsState(contactId ,contactsUpdateStateDto);
+            return ResponseEntity.status(200).body(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+//    매칭 순서 바꾸기
+    @PutMapping
+    public ResponseEntity<Void> updateContactsOrder(@RequestBody ContactsUpdateOrderListDto contactsUpdateOrderListDto){
+        try {
+            contactsService.updateContactsOrder(contactsUpdateOrderListDto);
             return ResponseEntity.status(200).body(null);
         } catch (Exception e) {
             throw new RuntimeException(e);

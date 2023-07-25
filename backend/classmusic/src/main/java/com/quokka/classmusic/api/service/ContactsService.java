@@ -2,6 +2,7 @@ package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.ContactsInsertDto;
 import com.quokka.classmusic.api.request.ContactsUpdateMemoDto;
+import com.quokka.classmusic.api.request.ContactsUpdateOrderListDto;
 import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
 import com.quokka.classmusic.api.response.ContactsVo;
 
@@ -13,7 +14,7 @@ public interface ContactsService {
     public void deleteContacts(int contactId) throws Exception;
     public void updateContactsState(int contactId , ContactsUpdateStateDto contactsUpdateStateDto) throws Exception;
     public void updateContactsMemo(int contactId , ContactsUpdateMemoDto contactsUpdateMemoDto) throws Exception;
-    public void updateContactsOrder() throws Exception;
+    public void updateContactsOrder(ContactsUpdateOrderListDto contactsUpdateOrderListDto) throws Exception;
     public int insertContacts(ContactsInsertDto contactsInsertDto) throws Exception;
     public String selectContactsRoom(int contactId) throws Exception;
 }

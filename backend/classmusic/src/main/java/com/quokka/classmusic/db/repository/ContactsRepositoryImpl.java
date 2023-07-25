@@ -3,7 +3,6 @@ package com.quokka.classmusic.db.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.quokka.classmusic.api.request.ContactsInsertDto;
 import com.quokka.classmusic.api.response.ContactsVo;
 import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Teacher;

@@ -1,13 +1,9 @@
 package com.quokka.classmusic.api.service;
 
-import com.quokka.classmusic.api.request.ContactsInsertDto;
-import com.quokka.classmusic.api.request.ContactsUpdateMemoDto;
-import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
+import com.quokka.classmusic.api.request.*;
 import com.quokka.classmusic.api.response.ContactsVo;
 import com.quokka.classmusic.db.entity.Contact;
-import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.ContactsRepository;
-import com.quokka.classmusic.db.repository.NoticeRepository;
 import com.quokka.classmusic.db.repository.TeacherRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +57,23 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    매칭 순서 바꾸기
     @Override
-    public void updateContactsOrder() throws Exception {
-
+    public void updateContactsOrder(ContactsUpdateOrderListDto contactsUpdateOrderListDto) throws Exception {
+        int type = contactsUpdateOrderListDto.getType();
+        if(contactsUpdateOrderListDto.getType() == 0){
+            for (ContactsUpdateOrderDto contactsUpdateOrderDto : contactsUpdateOrderListDto.getContacts()) {
+                Contact contact = contactsRepository.findById(contactsUpdateOrderDto.getContactId());
+                contact.setStudentOrder(contactsUpdateOrderDto.getOrder());
+                contactsRepository.save(contact);
+            }
+        } else if(contactsUpdateOrderListDto.getType() == 1){
+            for (ContactsUpdateOrderDto contactsUpdateOrderDto : contactsUpdateOrderListDto.getContacts()) {
+                Contact contact = contactsRepository.findById(contactsUpdateOrderDto.getContactId());
+                contact.setTeacherOrder(contactsUpdateOrderDto.getOrder());
+                contactsRepository.save(contact);
+            }
+        } else{
+            return;
+        }
     }
 //    매칭 생성하기
     @Override
