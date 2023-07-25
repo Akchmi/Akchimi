@@ -1,5 +1,6 @@
 package com.quokka.classmusic.api.controller;
 
+import com.quokka.classmusic.api.request.FindIdDto;
 import com.quokka.classmusic.api.request.UserRegistDto;
 import com.quokka.classmusic.api.service.UserService;
 import com.quokka.classmusic.db.entity.Article;
@@ -27,5 +28,17 @@ public class UserController {
 //        } catch (Exception e) {
 //            throw new RuntimeException(e);
 //        }
+//    }
+//    아이디찾기, 회원정보수정, 회원탈퇴, 비밀번호변경, 임시비번발급
+//    프로필 상세조회
+    @GetMapping("/{id}")
+    public ResponseEntity findUser(@PathVariable String id){
+        userService.findUserById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+//    @PostMapping("find-id")
+//    public ResponseEntity findId(@RequestBody FindIdDto findIdDto){
+//        userService.findId(findIdDto);
+//        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 }

@@ -1,9 +1,13 @@
 package com.quokka.classmusic.api.response;
 
 import com.quokka.classmusic.db.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserVo {
     private int userId;
     private String id;
