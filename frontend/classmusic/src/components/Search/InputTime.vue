@@ -27,7 +27,7 @@
       data: () => ({
           days: ['월', '화', '수', '목', '금', '토', '일'],
           selectedDays: [],
-          value: [10, 24]
+          value: [0, 24]
       }),
       methods: {
         handleComplete() {
