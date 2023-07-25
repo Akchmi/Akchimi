@@ -28,7 +28,7 @@ public class UserDetailsVo implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { return authorities; }
-    public String getId() { return userVo.getId(); }
+    public UserVo getUserVo() { return userVo; }
     @Override
     public String getPassword() {
         return userVo.getPassword();

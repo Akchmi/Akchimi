@@ -1,12 +1,15 @@
 package com.quokka.classmusic.api.service;
 
+import com.quokka.classmusic.api.request.ChangePasswordDto;
 import com.quokka.classmusic.api.request.FindIdDto;
 import com.quokka.classmusic.api.request.ModifyUserDto;
+import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +21,12 @@ import java.util.NoSuchElementException;
 public class UserServiceImpl implements UserService{
 
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -51,5 +56,19 @@ public class UserServiceImpl implements UserService{
         user.setUserProfileImage(modifyUserDto.getUserProfileImage());
         userRepository.save(user);
         return new UserVo(user);
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        User user = userRepository.findById(userId).get();
+        userRepository.delete(user);
+    }
+
+    @Override
+    public void changePassword(String id, ChangePasswordDto changePasswordDto) {
+        User user = userRepository.findUserById(id).get();
+        passwordEncoder.matches(user.getPassword(),changePasswordDto.getOldPassword());
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        userRepository.save(user);
     }
 }
