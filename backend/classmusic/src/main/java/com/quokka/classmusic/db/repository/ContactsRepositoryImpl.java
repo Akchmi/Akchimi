@@ -3,13 +3,10 @@ package com.quokka.classmusic.db.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.quokka.classmusic.api.request.ContactsInsertDto;
 import com.quokka.classmusic.api.response.ContactsVo;
-import com.quokka.classmusic.api.response.ReviewVo;
 import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.entity.User;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -47,7 +44,7 @@ public class ContactsRepositoryImpl implements ContactsRepository {
                         .from(contact)
                         .where(stateEq(state))
                         .join(contact.student , user)
-                        .where(idEq(id))
+                        .where(userIdEq(id))
                         .join(contact.teacher , teacher)
                         .orderBy(contact.studentOrder.desc())
                         .fetch();
@@ -60,7 +57,7 @@ public class ContactsRepositoryImpl implements ContactsRepository {
                         .from(contact)
                         .where(stateEq(state))
                         .join(contact.teacher , teacher)
-                        .where(teacheridEq(id))
+                        .where(teacherIdEq(id))
                         .join(contact.student , user)
                         .orderBy(contact.teacherOrder.desc())
                         .fetch();
@@ -85,26 +82,31 @@ public class ContactsRepositoryImpl implements ContactsRepository {
     }
 
     @Override
-    public int insertContacts(ContactsInsertDto contactsInsertDto) {
-        User user = em.find(User.class, contactsInsertDto.getStudentId());
-        Teacher teacher = em.find(Teacher.class, contactsInsertDto.getTeacherId());
-        Contact contact = Contact.builder()
-                .student(user)
-                .teacher(teacher)
-                .state(1)
-                .build();
-        em.persist(contact);
-        return 1;
+    public int maxOrder(Integer id , Integer state, Integer type) {
+        Integer order = 0;
+        if(type == 0){
+            order = query.select(contact.studentOrder.max())
+                    .from(contact)
+                    .where(contact.student.eq(em.find(User.class , id)))
+                    .fetchOne();
+        } else if(type == 1){
+            order = query.select(contact.teacherOrder.max())
+                    .from(contact)
+                    .where(contact.teacher.eq(em.find(Teacher.class , id)))
+                    .fetchOne();
+        }
+        return order == null ? 0 : order;
     }
 
-    private BooleanExpression idEq(Integer id){
+
+    private BooleanExpression userIdEq(Integer id){
         if(id == null){
             return null;
         }
         return user.userId.eq(id);
     }
 
-    private BooleanExpression teacheridEq(Integer id){
+    private BooleanExpression teacherIdEq(Integer id){
         if(id == null){
             return null;
         }

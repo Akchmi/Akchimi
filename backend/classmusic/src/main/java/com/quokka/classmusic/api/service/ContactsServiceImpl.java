@@ -1,8 +1,6 @@
 package com.quokka.classmusic.api.service;
 
-import com.quokka.classmusic.api.request.ContactsInsertDto;
-import com.quokka.classmusic.api.request.ContactsUpdateMemoDto;
-import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
+import com.quokka.classmusic.api.request.*;
 import com.quokka.classmusic.api.response.ContactsVo;
 import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.repository.ContactsRepository;
@@ -59,21 +57,36 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    매칭 순서 바꾸기
     @Override
-    public void updateContactsOrder() throws Exception {
-
+    public void updateContactsOrder(ContactsUpdateOrderListDto contactsUpdateOrderListDto) throws Exception {
+        int type = contactsUpdateOrderListDto.getType();
+        if(contactsUpdateOrderListDto.getType() == 0){
+            for (ContactsUpdateOrderDto contactsUpdateOrderDto : contactsUpdateOrderListDto.getContacts()) {
+                Contact contact = contactsRepository.findById(contactsUpdateOrderDto.getContactId());
+                contact.setStudentOrder(contactsUpdateOrderDto.getOrder());
+                contactsRepository.save(contact);
+            }
+        } else if(contactsUpdateOrderListDto.getType() == 1){
+            for (ContactsUpdateOrderDto contactsUpdateOrderDto : contactsUpdateOrderListDto.getContacts()) {
+                Contact contact = contactsRepository.findById(contactsUpdateOrderDto.getContactId());
+                contact.setTeacherOrder(contactsUpdateOrderDto.getOrder());
+                contactsRepository.save(contact);
+            }
+        } else{
+            return;
+        }
     }
 //    매칭 생성하기
     @Override
     public int insertContacts(ContactsInsertDto contactsInsertDto) throws Exception {
-//        Contact contact = Contact.builder()
-////                .student(userRepository.find(User.class , contactsInsertDto.getStudentId()))
-//                .teacher(teacherRepository.findById(contactsInsertDto.getTeacherId()))
-//                .state(0)
-//                .studentOrder()
-//                .teacherOrder()
-//                .build();
-
-        return contactsRepository.insertContacts(contactsInsertDto);
+        Contact contact = Contact.builder()
+                .student(userRepository.findById(contactsInsertDto.getStudentId()).get())
+                .teacher(teacherRepository.findById(contactsInsertDto.getTeacherId()))
+                .state(0)
+                .studentOrder(contactsRepository.maxOrder(contactsInsertDto.getStudentId() ,0,0) + 1)
+                .teacherOrder(contactsRepository.maxOrder(contactsInsertDto.getTeacherId() ,0,1) + 1)
+                .build();
+        contactsRepository.save(contact);
+        return contact.getContactId();
     }
 //    강의실 입장
     @Override

@@ -12,5 +12,5 @@ public interface ContactsRepository  {
     void save(Contact contact);
     Contact findById(int contactId);
     void delete(Contact contact);
-    int insertContacts(ContactsInsertDto contactsInsertDto);
+    int maxOrder(Integer id ,Integer state , Integer type);
 }
