@@ -1,17 +1,20 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.FindIdDto;
+import com.quokka.classmusic.api.request.ModifyUserDto;
 import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
+@Transactional
 public class UserServiceImpl implements UserService{
 
     private UserRepository userRepository;
@@ -35,9 +38,18 @@ public class UserServiceImpl implements UserService{
          return new UserVo(user);
     }
 
-//    @Override
-//    public UserVo findId(FindIdDto findIdDto) {
-//        User user = userRepository.findId(findIdDto);
-//        return null;
-//    }
+    @Override
+    public UserVo findId(FindIdDto findIdDto) {
+        User user = userRepository.findId(findIdDto);
+        return new UserVo(user);
+    }
+
+    @Override
+    public UserVo modifyUser(String id, ModifyUserDto modifyUserDto) {
+        User user = userRepository.findUserById(id).get();
+        user.setName(modifyUserDto.getName());
+        user.setUserProfileImage(modifyUserDto.getUserProfileImage());
+        userRepository.save(user);
+        return new UserVo(user);
+    }
 }
