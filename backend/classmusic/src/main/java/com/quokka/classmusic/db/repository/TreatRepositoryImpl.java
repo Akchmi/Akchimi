@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import java.util.List;
+
 import static com.quokka.classmusic.db.entity.QInstrument.instrument;
+import static com.quokka.classmusic.db.entity.QTreat.treat;
 
 @Repository
 public class TreatRepositoryImpl implements TreatRepository{
@@ -33,4 +36,19 @@ public class TreatRepositoryImpl implements TreatRepository{
                 .where(instrument.instrumentName.contains(instrumentName)).fetchOne();
         return ins;
     }
+
+    @Override
+    public List<Treat> findByTeacherId(int teacherId) {
+        return query
+                .selectFrom(treat)
+                .where(treat.teacher.teacherId.eq(teacherId))
+                .fetch();
+    }
+
+    @Override
+    public void delete(Treat treat) {
+
+    }
+
+
 }

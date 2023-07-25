@@ -44,4 +44,14 @@ public class TeacherController {
         }
     }
 
+    @PutMapping("/{teacherId}")
+    public ResponseEntity<Integer> updateTeacher(@PathVariable int teacherId , @RequestBody TeacherDto teacherDto){
+        try {
+            teacherService.updateTeacher(teacherId , teacherDto);
+            return ResponseEntity.status(200).body(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

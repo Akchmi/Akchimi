@@ -13,6 +13,6 @@ public interface TeacherService {
     List<TeacherVo> selectAllTeacher(Map<String, Objects> params);
     TeacherDetailVo selectDetailTeacher(int teacherId);
     int insertTeacher(TeacherDto teacherDto);
-    void updateTeacher(TeacherDto teacherDto);
+    void updateTeacher(int teacherId , TeacherDto teacherDto);
     void deleteTeacher(int teacherId);
 }
