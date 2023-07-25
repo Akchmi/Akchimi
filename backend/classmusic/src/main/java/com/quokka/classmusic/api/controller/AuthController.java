@@ -3,7 +3,9 @@ package com.quokka.classmusic.api.controller;
 import com.quokka.classmusic.api.request.LoginDto;
 import com.quokka.classmusic.api.request.SignupDto;
 import com.quokka.classmusic.api.response.LoginSuccessVo;
+import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.api.service.AuthService;
+import com.quokka.classmusic.api.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,12 @@ import java.util.NoSuchElementException;
 public class AuthController {
 
     private AuthService authService;
+    private UserService userService;
 
     @Autowired
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserService userService) {
         this.authService = authService;
+        this.userService = userService;
     }
 
     @PostMapping("/sign-up")
@@ -49,5 +53,25 @@ public class AuthController {
             log.debug("비밀번호가 일치하지 않습니다.");
             return  new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @GetMapping("/check-id")
+    public ResponseEntity<Boolean> checkIsDuplicateId(@RequestParam String id){
+        log.info("GET /auth/check-id id : {}", id);
+
+        boolean isDuplicated = false;
+
+        UserVo userVo = null;
+        try {
+            userVo = userService.findUserById(id);
+        }catch(NoSuchElementException e){
+            log.debug("아이디 중복체크 {}와 일치하는 아이디가 없습니다. 결과 : false", id);
+        }
+
+        if(userVo != null){
+            isDuplicated = true;
+        }
+
+        return new ResponseEntity<>(isDuplicated, HttpStatus.ACCEPTED);
     }
 }
