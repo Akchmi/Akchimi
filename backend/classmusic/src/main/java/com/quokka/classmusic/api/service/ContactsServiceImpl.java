@@ -5,7 +5,9 @@ import com.quokka.classmusic.api.request.ContactsUpdateMemoDto;
 import com.quokka.classmusic.api.request.ContactsUpdateStateDto;
 import com.quokka.classmusic.api.response.ContactsVo;
 import com.quokka.classmusic.db.entity.Contact;
+import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.ContactsRepository;
+import com.quokka.classmusic.db.repository.NoticeRepository;
 import com.quokka.classmusic.db.repository.TeacherRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,15 +67,15 @@ public class ContactsServiceImpl implements ContactsService{
 //    매칭 생성하기
     @Override
     public int insertContacts(ContactsInsertDto contactsInsertDto) throws Exception {
-//        Contact contact = Contact.builder()
-////                .student(userRepository.find(User.class , contactsInsertDto.getStudentId()))
-//                .teacher(teacherRepository.findById(contactsInsertDto.getTeacherId()))
-//                .state(0)
-//                .studentOrder()
-//                .teacherOrder()
-//                .build();
-
-        return contactsRepository.insertContacts(contactsInsertDto);
+        Contact contact = Contact.builder()
+                .student(userRepository.findById(contactsInsertDto.getStudentId()).get())
+                .teacher(teacherRepository.findById(contactsInsertDto.getTeacherId()))
+                .state(0)
+                .studentOrder(contactsRepository.maxOrder(contactsInsertDto.getStudentId() ,0,0) + 1)
+                .teacherOrder(contactsRepository.maxOrder(contactsInsertDto.getTeacherId() ,0,1) + 1)
+                .build();
+        contactsRepository.save(contact);
+        return contact.getContactId();
     }
 //    강의실 입장
     @Override
