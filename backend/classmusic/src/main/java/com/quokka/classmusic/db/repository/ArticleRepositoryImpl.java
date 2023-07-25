@@ -4,7 +4,6 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.quokka.classmusic.api.request.ArticleDto;
 import com.quokka.classmusic.api.response.ArticleVo;
 import com.quokka.classmusic.db.entity.Article;
 import lombok.extern.slf4j.Slf4j;
