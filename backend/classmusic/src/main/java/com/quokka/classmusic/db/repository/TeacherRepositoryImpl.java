@@ -22,4 +22,14 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     public Teacher findById(int teacherId) {
         return em.find(Teacher.class , teacherId);
     }
+
+    @Override
+    public void save(Teacher teacher) {
+        em.persist(teacher);
+    }
+
+    @Override
+    public void delete(Teacher teacher) {
+        em.remove(teacher);
+    }
 }

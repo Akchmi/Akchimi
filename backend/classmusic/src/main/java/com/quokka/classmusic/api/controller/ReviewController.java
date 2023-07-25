@@ -3,7 +3,7 @@ package com.quokka.classmusic.api.controller;
 import com.quokka.classmusic.api.request.ReviewInsertDto;
 import com.quokka.classmusic.api.request.ReviewUpdateDto;
 import com.quokka.classmusic.api.response.ReviewVo;
-import com.quokka.classmusic.api.service.ReviewServiceImpl;
+import com.quokka.classmusic.api.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +17,9 @@ import java.util.List;
 @CrossOrigin("*")
 @Slf4j
 public class ReviewController {
-    private ReviewServiceImpl reviewService;
+    private ReviewService reviewService;
     @Autowired
-    public ReviewController(ReviewServiceImpl reviewService) {
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 
