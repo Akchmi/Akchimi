@@ -23,7 +23,8 @@ public class SecurityConfiguration {
             "/teachers/*",
             "/notices/*",
             "/articles/**",
-            "/reviews/*"
+            "/reviews/*",
+            "/users/*"
     };
 
     @Bean
@@ -56,6 +57,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authorize) -> authorize
                         // 비회원 이용가능 경로
                         .antMatchers("/auth/**").permitAll()
+                        .antMatchers("/users/find-id").permitAll()
                         .antMatchers(HttpMethod.GET, PERMIT_GET_URLS).permitAll()
                         // 관리자 권한 필요한 경로
                         .antMatchers(HttpMethod.POST, "/notices").hasRole("ADMIN")
@@ -65,7 +67,8 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.PUT, "/teachers/*").hasRole("TEACHER")
                         .antMatchers(HttpMethod.DELETE, "/teachers/*").hasRole("TEACHER")
                         // 회원 권한 필요한 경로
-                        .antMatchers("/users/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET,"/users/*").hasRole("USER")
+//                        .antMatchers(HttpMethod.PUT,"/users/*").hasRole("USER")
                         .anyRequest().authenticated()
 
                         .and()
