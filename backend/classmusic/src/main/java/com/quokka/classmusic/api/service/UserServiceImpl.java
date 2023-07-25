@@ -1,5 +1,6 @@
 package com.quokka.classmusic.api.service;
 
+import com.quokka.classmusic.api.request.FindIdDto;
 import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.UserRepository;
@@ -33,4 +34,10 @@ public class UserServiceImpl implements UserService{
                  .orElseThrow(() -> new NoSuchElementException("userId와 일치하는 회원이 없습니다."));
          return new UserVo(user);
     }
+
+//    @Override
+//    public UserVo findId(FindIdDto findIdDto) {
+//        User user = userRepository.findId(findIdDto);
+//        return null;
+//    }
 }

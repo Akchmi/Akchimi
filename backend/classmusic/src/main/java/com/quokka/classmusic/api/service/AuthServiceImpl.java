@@ -48,8 +48,8 @@ public class AuthServiceImpl implements AuthService{
                 .password(passwordEncoder.encode(signupDto.getPassword()))
                 .build();
 
-        user = userRepository.save(user);
-
+//        user = userRepository.save(user);
+        userRepository.save(user);
         log.debug("회원가입된 사용자 정보 : {}", user);
 
         return user.getUserId();
