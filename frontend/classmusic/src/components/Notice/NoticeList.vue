@@ -3,6 +3,7 @@
     <div class="container">
       <!-- 공지사항 리스트 최상단 -->
       <h1>공지사항</h1>
+      <button @click="$router.push('/notice/create')">글 작성</button>
       <hr />
     </div>
 
@@ -20,7 +21,7 @@
         <tbody>
           <tr v-for="notice in notices" :key="notice.id">
             <td>{{ notice.id }}</td>
-            <td>{{ notice.title }}</td>
+            <td @click="$router.push('/notice/detail')">{{ notice.title }}</td>
             <td>관리자</td>
             <td>{{ notice.date }}</td>
           </tr>
