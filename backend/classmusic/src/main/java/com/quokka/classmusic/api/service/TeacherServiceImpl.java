@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -34,12 +33,19 @@ public class TeacherServiceImpl implements TeacherService{
 
     @Override
     public List<TeacherVo> selectAllTeacher(Map<String, Object> params) {
-        return teacherRepository.findAll(params);
+        List<TeacherVo> teacherVoList = teacherRepository.findAll(params);
+        for (TeacherVo teacherVo : teacherVoList ) {
+            teacherVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherVo.getTeacherId()));
+        }
+        return teacherVoList;
     }
 
     @Override
     public TeacherDetailVo selectDetailTeacher(int teacherId) {
-        return null;
+        TeacherDetailVo teacherDetailVo = teacherRepository.findDetailById(teacherId);
+        teacherDetailVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherId));
+        teacherDetailVo.setClassDay(IntToday(teacherRepository.findById(teacherId).getClassDay()));
+        return teacherDetailVo;
     }
 
     @Override
@@ -93,14 +99,12 @@ public class TeacherServiceImpl implements TeacherService{
         teacherRepository.delete(teacher);
     }
 
-    public int dayToInt(String days){
-        int day = 0;
-        for (int i = 0; i < days.length(); i++) {
-            if (days.charAt(i) == '1') {
-                day |= (1 << i);
-            }
-        }
-        return day;
+    public int dayToInt(String classDay){
+        return Integer.parseInt(classDay,2);
+    }
+
+    public String IntToday(int days){
+        return Integer.toBinaryString(days);
     }
 
     public void saveInstruments(Teacher teacher , List<String> list){

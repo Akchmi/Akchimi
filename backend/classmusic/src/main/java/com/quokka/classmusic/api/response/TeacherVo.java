@@ -13,10 +13,10 @@ public class TeacherVo {
     private String name;
     private String userProfileImage;
     private int teacherId;
-    private int career;
+    private Integer career;
     private String introduce;
     private float avgRating;
-    private int contactCnt;
+    private Integer contactCnt;
     private List<String> instruments;
 
     public TeacherVo(String name, String userProfileImage, int teacherId, int career, String introduce, float avgRating, int contactCnt) {
