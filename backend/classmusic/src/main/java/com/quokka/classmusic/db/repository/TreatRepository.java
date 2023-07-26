@@ -8,7 +8,7 @@ import java.util.List;
 public interface TreatRepository{
     void save(Treat treat);
     Instrument findInstrument(String instrumentName);
-
     List<Treat> findByTeacherId(int teacherId);
     void delete(Treat treat);
+    List<String> findInstrumentNameByTeacherId(int teacherId);
 }
