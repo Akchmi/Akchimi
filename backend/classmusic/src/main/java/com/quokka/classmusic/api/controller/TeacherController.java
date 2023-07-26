@@ -2,6 +2,7 @@ package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.TeacherDto;
 import com.quokka.classmusic.api.request.TeacherSelectDto;
+import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,16 @@ public class TeacherController {
         }
     }
 
-    @PostMapping
+    @GetMapping("/{teacherId}")
+    public ResponseEntity<TeacherDetailVo> selectDetailTeacher(@PathVariable int teacherId){
+        try {
+            return ResponseEntity.status(200).body(teacherService.selectDetailTeacher(teacherId));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping()
     public ResponseEntity<Integer> insertTeacher(@RequestBody TeacherDto teacherDto){
         try {
             return ResponseEntity.status(200).body(teacherService.insertTeacher(teacherDto));
@@ -54,4 +64,13 @@ public class TeacherController {
         }
     }
 
+    @DeleteMapping("/{teacherId}")
+    public ResponseEntity<Void> deleteTeacher(@PathVariable int teacherId){
+        try {
+            teacherService.deleteTeacher(teacherId);
+            return ResponseEntity.status(200).body(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

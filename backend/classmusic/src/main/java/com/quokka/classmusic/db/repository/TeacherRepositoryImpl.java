@@ -1,11 +1,12 @@
 package com.quokka.classmusic.db.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.quokka.classmusic.api.request.TeacherSelectDto;
-import com.quokka.classmusic.api.response.ReviewVo;
+import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.db.entity.Teacher;
 import org.springframework.stereotype.Repository;
@@ -15,11 +16,8 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Map;
 
-import static com.quokka.classmusic.db.entity.QContact.contact;
 import static com.quokka.classmusic.db.entity.QInstrument.instrument;
-import static com.quokka.classmusic.db.entity.QReview.review;
 import static com.quokka.classmusic.db.entity.QTeacher.teacher;
-import static com.quokka.classmusic.db.entity.QTreat.treat;
 import static com.quokka.classmusic.db.entity.QUser.user;
 
 @Repository
@@ -31,6 +29,25 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     public TeacherRepositoryImpl(EntityManager em) {
         this.em = em;
         this.query = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public TeacherDetailVo findDetailById(int teacherId) {
+        return query.select(Projections.constructor(TeacherDetailVo.class ,
+                user.name,
+                user.gender,
+                user.userProfileImage,
+                teacher.career,
+                teacher.cost,
+                teacher.introduce,
+                teacher.startTime,
+                teacher.endTime,
+                teacher.avgRating,
+                teacher.contactCnt))
+                .from(teacher)
+                .where(teacher.teacherId.eq(teacherId))
+                .join(teacher.user , user)
+                .fetchOne();
     }
 
     @Override
@@ -52,12 +69,8 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .where(selectGenderFilter(params))
                 .offset(Integer.parseInt(String.valueOf(params.get("page"))))
                 .limit(20)
+                .orderBy(orderType(String.valueOf(params.get("order_by"))))
                 .fetch();
-
-//        keyword;
-//        classDay;
-//        orderBy;
-//        page;
     }
 
     @Override
@@ -74,6 +87,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     public void delete(Teacher teacher) {
         em.remove(teacher);
     }
+
 
     private BooleanExpression startCareerGt(Integer startCareer){
         if(startCareer == null){
@@ -164,4 +178,12 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     }
 
 
+    private OrderSpecifier orderType(String orderBy){
+        if(orderBy.equals("별점수")){
+            return new OrderSpecifier(Order.DESC , teacher.avgRating);
+        } else if(orderBy.equals("매칭수")){
+            return new OrderSpecifier(Order.DESC , teacher.contactCnt);
+        }
+        return new OrderSpecifier(Order.DESC , teacher.teacherId);
+    }
 }

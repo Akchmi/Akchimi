@@ -1,6 +1,7 @@
 package com.quokka.classmusic.db.repository;
 
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.db.entity.Instrument;
 import com.quokka.classmusic.db.entity.Treat;
@@ -12,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static com.quokka.classmusic.db.entity.QInstrument.instrument;
+import static com.quokka.classmusic.db.entity.QTeacher.teacher;
 import static com.quokka.classmusic.db.entity.QTreat.treat;
 
 @Repository
@@ -45,10 +47,27 @@ public class TreatRepositoryImpl implements TreatRepository{
                 .fetch();
     }
 
+
+
     @Override
     public void delete(Treat treat) {
-
+        em.remove(treat);
     }
 
+    @Override
+    public List<String> findInstrumentNameByTeacherId(int teacherId) {
+        return query
+                .select(instrument.instrumentName)
+                .from(treat)
+                .where(treat.teacher.teacherId.eq(teacherId))
+                .rightJoin(treat.instrument , instrument)
+                .fetch();
+    }
 
+    private BooleanExpression teacherIdEq(Integer teacherId){
+        if(teacherId == null){
+            return null;
+        }
+        return treat.teacher.teacherId.eq(teacherId);
+    }
 }
