@@ -12,6 +12,5 @@ public interface UserService {
     UserVo findId(FindIdDto findIdDto);
     UserVo modifyUser(String id, ModifyUserDto modifyUserDto);
     void deleteUser(int userId);
-
     void changePassword(String id, ChangePasswordDto changePasswordDto);
 }

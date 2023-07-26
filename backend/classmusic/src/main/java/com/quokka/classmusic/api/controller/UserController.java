@@ -26,17 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<Void> regist(@RequestBody UserRegistDto userRegistDto) {
-//        try {
-//            int res = userService.regist(userRegistDto);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//    회원탈퇴(지금은 delete했는데 type 바뀌는거?), 임시비번발급
-//    프로필 상세조회, 아이디찾기, 회원정보수정, 비밀번호변경
+    // 회원 정보보기
     @GetMapping("/{id}")
     public ResponseEntity findUser(@PathVariable String id, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
         if(userDetailsVo.getUserVo().getId().equals(id)) {
@@ -47,15 +37,19 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // 이름과 이메일로 아이디 찾기
     @PostMapping("/find-id")
     public ResponseEntity findId(@RequestBody FindIdDto findIdDto){
         UserVo userVo = userService.findId(findIdDto);
         log.debug("find-id : {}",userVo.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // 회원정보 수정 (이름, 사진)
     @PutMapping("/{id}")
     public ResponseEntity modifyUser(@PathVariable String id, @RequestBody ModifyUserDto modifyUserDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
-        log.debug("##########3{} {}###########",modifyUserDto.getName(),modifyUserDto.getUserProfileImage());
+        log.debug(userDetailsVo.getUserVo().getId());
         if(userDetailsVo.getUserVo().getId().equals(id)){
             UserVo userVo = userService.modifyUser(id, modifyUserDto);
             log.debug("modified info : {} {}",userVo.getName(),userVo.getUserProfileImage());
@@ -64,6 +58,8 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // 회원 탈퇴 (회원 type 3으로 변경 | 0:user, 1:teacher, 2:admin, 3:탈퇴유저)
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable String id, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
         if(userDetailsVo.getUserVo().getId().equals(id)){
@@ -74,13 +70,14 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 비밀번호 변경
     @PutMapping("/{id}/password")
     public ResponseEntity changePassword(@PathVariable String id, @RequestBody ChangePasswordDto changePasswordDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
         if(userDetailsVo.getUserVo().getId().equals(id)){
             userService.changePassword(id, changePasswordDto);
             log.debug("id : {} newPassword : {}",userDetailsVo.getUserVo().getId(), userDetailsVo.getUserVo().getPassword());
         }else{
-            log.debug("아이디나가 다릅니다.");
+            log.debug("아이디가 다릅니다.");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
