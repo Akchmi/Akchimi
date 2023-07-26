@@ -70,6 +70,7 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.GET,"/users/*").hasAnyRole("USER", "TEACHER")
                         .antMatchers(HttpMethod.PUT,"/users/**").hasAnyRole("USER", "TEACHER")
                         .antMatchers(HttpMethod.DELETE,"/users/*").hasAnyRole("USER", "TEACHER")
+                        .antMatchers(HttpMethod.POST,"/users/**").hasAnyRole("USER", "TEACHER")
                         .anyRequest().authenticated()
 
                         .and()

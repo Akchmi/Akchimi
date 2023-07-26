@@ -2,6 +2,7 @@ package com.quokka.classmusic.db.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.request.FindIdDto;
+import com.quokka.classmusic.db.entity.Like;
 import com.quokka.classmusic.db.entity.User;
 import org.springframework.stereotype.Repository;
 

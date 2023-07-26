@@ -2,10 +2,15 @@ package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.ChangePasswordDto;
 import com.quokka.classmusic.api.request.FindIdDto;
+import com.quokka.classmusic.api.request.LikeInsertDto;
 import com.quokka.classmusic.api.request.ModifyUserDto;
-import com.quokka.classmusic.api.response.UserDetailsVo;
+import com.quokka.classmusic.api.response.LikeVo;
+import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserVo;
+import com.quokka.classmusic.db.entity.Like;
 import com.quokka.classmusic.db.entity.User;
+import com.quokka.classmusic.db.repository.LikeRepository;
+import com.quokka.classmusic.db.repository.TeacherRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -22,11 +28,14 @@ public class UserServiceImpl implements UserService{
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
-
+    private TeacherRepository teacherRepository;
+    private LikeRepository likeRepository;
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, TeacherRepository teacherRepository, LikeRepository likeRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.teacherRepository = teacherRepository;
+        this.likeRepository = likeRepository;
     }
 
     @Override
@@ -72,5 +81,25 @@ public class UserServiceImpl implements UserService{
         passwordEncoder.matches(user.getPassword(),changePasswordDto.getOldPassword());
         user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
         userRepository.save(user);
+    }
+
+    @Override
+    public LikeVo addLike(LikeInsertDto likeInsertDto) {
+        Like like = Like.builder()
+                .teacher(teacherRepository.findById(likeInsertDto.getTeacherId()))
+                .student(userRepository.findById(likeInsertDto.getStudentId()).get())
+                .build();
+        likeRepository.save(like);
+        return new LikeVo(like);
+    }
+
+    @Override
+    public List<TeacherVo> findAllLike(String id) {
+        return null;
+    }
+
+    @Override
+    public void deleteLike(int likeId) {
+
     }
 }
