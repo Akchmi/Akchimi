@@ -67,9 +67,9 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.PUT, "/teachers/*").hasRole("TEACHER")
                         .antMatchers(HttpMethod.DELETE, "/teachers/*").hasRole("TEACHER")
                         // 회원 권한 필요한 경로
-                        .antMatchers(HttpMethod.GET,"/users/*").hasRole("USER")
-                        .antMatchers(HttpMethod.PUT,"/users/*").hasRole("USER")
-                        .antMatchers(HttpMethod.PUT,"/users/*/password").hasRole("USER")
+                        .antMatchers(HttpMethod.GET,"/users/*").hasAnyRole("USER", "TEACHER")
+                        .antMatchers(HttpMethod.PUT,"/users/**").hasAnyRole("USER", "TEACHER")
+                        .antMatchers(HttpMethod.DELETE,"/users/*").hasAnyRole("USER", "TEACHER")
                         .anyRequest().authenticated()
 
                         .and()

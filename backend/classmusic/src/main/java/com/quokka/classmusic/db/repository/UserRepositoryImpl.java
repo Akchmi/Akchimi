@@ -1,6 +1,5 @@
 package com.quokka.classmusic.db.repository;
 
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.request.FindIdDto;
 import com.quokka.classmusic.db.entity.User;
@@ -32,12 +31,12 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public User findId(FindIdDto findIdDto) {
-        return query
+    public Optional<User> findId(FindIdDto findIdDto) {
+        return Optional.ofNullable(query
                 .select(user)
                 .from(user)
                 .where(user.email.eq(findIdDto.getEmail()).and(user.name.eq(findIdDto.getName())))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override
