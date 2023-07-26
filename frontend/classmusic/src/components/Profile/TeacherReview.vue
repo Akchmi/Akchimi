@@ -9,9 +9,9 @@
       <img :src="teacherImage" alt="Teacher profile picture" class="teacher-image" />
       <div class="review-content">
         <div class="student-info">
-          <p>학생 이름: {{ studentName }}</p>
-          <p>별점: {{ studentRating }}</p>
-          <p>수강 기간: {{ courseDuration }}</p>
+          <span>학생 이름: {{ studentName }}</span>
+          <span>별점: {{ studentRating }}</span>
+          <span class="course-duration">수강 기간: {{ courseDuration }}</span>
         </div>
         <div class="review-text">
           <p>{{ reviewText }}</p>
@@ -34,7 +34,7 @@ export default {
     },
     studentName: {
       type: String,
-      default: "박한샘",
+      default: "김상혁",
     },
     studentRating: {
       type: String,
@@ -42,11 +42,11 @@ export default {
     },
     courseDuration: {
       type: String,
-      default: "6개월",
+      default: "2023.01.04~2023.12.27",
     },
     reviewText: {
       type: String,
-      default: "최고의 강사입니다!",
+      default: "터치가 좀 그렇네요!",
     },
   },
 };
@@ -80,14 +80,24 @@ export default {
 }
 
 .review-content {
-  margin-left: 20px;
+  padding-left: 20px;
+  flex-grow: 1;
 }
 
-.student-info p {
-  margin: 5px 0;
+.student-info {
+  display: flex;
+  gap: 100px;
+  width:100%;
 }
-
+.course-duration {
+  margin-left: auto;
+}
 .review-text {
   margin-top: 10px;
+  background-color: #f5f5dc;
+  padding:10px;
+  
+
 }
+
 </style>

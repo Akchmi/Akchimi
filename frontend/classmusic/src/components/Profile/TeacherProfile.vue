@@ -1,7 +1,9 @@
 <template>
   <div>
     teacherprofile
-
+    <button>
+      <router-link to="/profile/TeacherProfileUpdate" class="button">강사 정보 수정</router-link>
+    </button>
     <!-- 남이 보는 강사 프로필 -->
     <div class="teacher-profile-container">
       <div class="teacher-profile">
@@ -82,7 +84,7 @@ export default {
   flex-direction: column;
   justify-content: center; 
   align-items: center; 
-  height: 100vh; 
+  
 }
 
 .button-group {
@@ -134,7 +136,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 800px;
-  height: 1000px;
+  height: 800px;
   border: 1px solid black;
   margin-bottom: 20px;
   border-radius: 8px;
