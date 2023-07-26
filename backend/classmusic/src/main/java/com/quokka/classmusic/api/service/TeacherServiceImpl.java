@@ -1,6 +1,7 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.TeacherDto;
+import com.quokka.classmusic.api.request.TeacherSelectDto;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.db.entity.Teacher;
@@ -32,8 +33,8 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public List<TeacherVo> selectAllTeacher(Map<String, Objects> params) {
-        return null;
+    public List<TeacherVo> selectAllTeacher(Map<String, Object> params) {
+        return teacherRepository.findAll(params);
     }
 
     @Override
@@ -43,6 +44,8 @@ public class TeacherServiceImpl implements TeacherService{
 
     @Override
     public int insertTeacher(TeacherDto teacherDto) {
+        //있는지화인해 유저가 선생테이블에 있는지 확인하고
+
 //        유저 타입 1로 바꿔줌
         User user = userRepository.findById(teacherDto.getUserId()).get();
         user.setType(1);

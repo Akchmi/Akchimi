@@ -4,13 +4,13 @@ import com.quokka.classmusic.api.request.TeacherDto;
 import com.quokka.classmusic.api.request.TeacherSelectDto;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public interface TeacherService {
-    List<TeacherVo> selectAllTeacher(Map<String, Objects> params);
+    List<TeacherVo> selectAllTeacher(Map<String, Object> params);
     TeacherDetailVo selectDetailTeacher(int teacherId);
     int insertTeacher(TeacherDto teacherDto);
     void updateTeacher(int teacherId , TeacherDto teacherDto);

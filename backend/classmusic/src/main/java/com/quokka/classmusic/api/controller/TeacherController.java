@@ -1,17 +1,17 @@
 package com.quokka.classmusic.api.controller;
 
-import com.quokka.classmusic.api.request.ReviewInsertDto;
 import com.quokka.classmusic.api.request.TeacherDto;
+import com.quokka.classmusic.api.request.TeacherSelectDto;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/teachers")
@@ -27,7 +27,7 @@ public class TeacherController {
 
 
     @GetMapping
-    public ResponseEntity<List<TeacherVo>> selectAllTeacher(@RequestParam Map<String, Objects> params){
+    public ResponseEntity<List<TeacherVo>> selectAllTeacher(@RequestParam Map<String, Object> params){
         try {
             return ResponseEntity.status(200).body(teacherService.selectAllTeacher(params));
         } catch (Exception e) {
