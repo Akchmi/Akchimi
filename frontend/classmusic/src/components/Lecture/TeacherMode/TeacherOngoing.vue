@@ -1,14 +1,8 @@
 <template>
   <div>
-    teacherongoing
+    teacherongoing2
     <br />
-    <button>
-      <router-link to="/lecture/teacherwaiting">대기중</router-link>
-    </button>
-    <br />
-    <button>
-      <router-link to="/lecture/teacherfinish">완료</router-link>
-    </button>
+
   </div>
 </template>
 

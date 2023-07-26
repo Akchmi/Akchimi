@@ -40,7 +40,7 @@ export default {
 <style scoped>
 .teacher-listcard {
   display: flex;
-  width: 700px;
+  width: 800px;
   height: 200px;
   border: 1px solid black;
   margin-bottom: 20px;
