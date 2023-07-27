@@ -11,6 +11,7 @@ import com.quokka.classmusic.db.entity.Like;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.LikeRepository;
 import com.quokka.classmusic.db.repository.TeacherRepository;
+import com.quokka.classmusic.db.repository.TreatRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +31,14 @@ public class UserServiceImpl implements UserService{
     private PasswordEncoder passwordEncoder;
     private TeacherRepository teacherRepository;
     private LikeRepository likeRepository;
+    private TreatRepository treatRepository;
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, TeacherRepository teacherRepository, LikeRepository likeRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, TeacherRepository teacherRepository, LikeRepository likeRepository, TreatRepository treatRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.teacherRepository = teacherRepository;
         this.likeRepository = likeRepository;
+        this.treatRepository = treatRepository;
     }
 
     @Override
@@ -89,17 +92,27 @@ public class UserServiceImpl implements UserService{
                 .teacher(teacherRepository.findById(likeInsertDto.getTeacherId()))
                 .student(userRepository.findById(likeInsertDto.getStudentId()).get())
                 .build();
-        likeRepository.save(like);
-        return new LikeVo(like);
+        boolean isDuplicated = likeRepository.duplicationCheck(like);
+        if(!isDuplicated) {
+            likeRepository.save(like);
+            return new LikeVo(like);
+        }else{
+            return null;
+        }
     }
 
     @Override
     public List<TeacherVo> findAllLike(String id) {
-        return null;
+        int userId = userRepository.findUserById(id).get().getUserId();
+        List<TeacherVo> teacherVoList = likeRepository.findAll(userId);
+        for (TeacherVo teacherVo:teacherVoList){
+            teacherVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherVo.getTeacherId()));
+        }
+        return teacherVoList;
     }
 
     @Override
     public void deleteLike(int likeId) {
-
+        likeRepository.delete(likeRepository.find(likeId));
     }
 }

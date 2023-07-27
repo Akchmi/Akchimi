@@ -38,10 +38,11 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public int insertComment(int articleId, CommentDto commentDto) throws Exception {
+    public int insertComment(int articleId, int userId, CommentDto commentDto) throws Exception {
+        User user=userRepository.findById(userId).get();
         Comment comment=Comment.builder()
                 .article(articleRepository.findById(articleId))
-                .user(new User(1,"1","2", "ssafy", "ssafy@c.a", "1",1,1,1))
+                .user(user)
                 .content(commentDto.getContent())
                 .build();
         Article article=articleRepository.findById(articleId);
@@ -63,5 +64,10 @@ public class CommentServiceImpl implements CommentService{
         comment.setContent(commentDto.getContent());
         commentRepository.save(comment);
         log.debug("modified comment - commentId{} content: {}",commentId, comment.getContent());
+    }
+
+    @Override
+    public Comment select(int commentId) throws Exception {
+        return commentRepository.findById(commentId);
     }
 }

@@ -9,5 +9,6 @@ public interface LikeRepository {
     public void save(Like like);
     public void delete(Like like);
     public List<TeacherVo> findAll(int userId);
-
+    public Like find(int likeId);
+    public boolean duplicationCheck(Like like);
 }

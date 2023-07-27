@@ -70,7 +70,7 @@ public class UserController {
         if(userDetailsVo.getUserVo().getId().equals(id)){
             UserVo userVo = userService.modifyUser(id, modifyUserDto);
             log.debug("modified info : {} {}",userVo.getName(),userVo.getUserProfileImage());
-            return new ResponseEntity<>(userVo, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
         }else{
             log.debug("아이디가 다릅니다.");
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
@@ -112,8 +112,12 @@ public class UserController {
             likeInsertDto.setTeacherId(teacherId);
             likeInsertDto.setStudentId(userService.findUserById(id).getUserId());
             LikeVo likeVo = userService.addLike(likeInsertDto);
-            log.debug("즐찾한 학생 : {} 즐찾당한 선생 : {}",likeVo.getStudent().getUserId(),likeVo.getTeacher().getTeacherId());
-            return new ResponseEntity<>(likeVo.getLikeId(), HttpStatus.ACCEPTED);
+            if(likeVo!=null) {
+                log.debug("즐찾한 학생 : {} 즐찾당한 선생 : {}", likeVo.getStudent().getUserId(), likeVo.getTeacher().getTeacherId());
+                return new ResponseEntity<>(likeVo.getLikeId(), HttpStatus.ACCEPTED);
+            }else{
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
         }else{
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
@@ -135,6 +139,9 @@ public class UserController {
     public ResponseEntity deleteLike(@PathVariable String id, @PathVariable int likeId, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
         if(userDetailsVo.getUserVo().getId().equals(id)){
             userService.deleteLike(likeId);
+            for (TeacherVo teacherVo:userService.findAllLike(id)){
+                log.debug("삭제후 {} {}",teacherVo.getTeacherId(), teacherVo.getName());
+            }
             return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
         }else{
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);

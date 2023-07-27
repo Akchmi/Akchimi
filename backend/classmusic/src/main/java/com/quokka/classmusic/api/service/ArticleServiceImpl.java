@@ -27,7 +27,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public int insertArticle(ArticleDto articleDto) throws Exception {
+    public int insertArticle(ArticleDto articleDto) {
         Article article = Article.builder()
                 .title(articleDto.getTitle())
                 .user(new User(1,"1","2","1","2","3",1,2,1))
@@ -38,17 +38,17 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public ArticleVo select(int articleId) throws Exception {
+    public ArticleVo select(int articleId) {
         return articleRepository.selectOneById(articleId);
     }
 
     @Override
-    public List<ArticleVo> selectAll(Map<String, String> params) throws Exception {
+    public List<ArticleVo> selectAll(Map<String, String> params) {
         return articleRepository.findAll(params);
     }
 
     @Override
-    public void modifyArticle(int articleId, ArticleDto articleDto) throws Exception {
+    public void modifyArticle(int articleId, ArticleDto articleDto) {
         Article article=articleRepository.findById(articleId);
         article.setTitle(articleDto.getTitle());
         article.setContent(articleDto.getContent());
@@ -56,7 +56,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public void deleteArticle(int articleId) throws Exception {
+    public void deleteArticle(int articleId) {
         Article article = articleRepository.findById(articleId);
         articleRepository.delete(article);
     }
