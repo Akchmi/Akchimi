@@ -1,30 +1,41 @@
 <template>
   <div>
-    lectureview <br />
-    <button @click="currentTab = 'student'; studentSubTab = 'ongoing';">
-      수업
-    </button>
-    |
-    <button @click="currentTab = 'teacher'; teacherSubTab = 'ongoing';">
-      강의
-    </button>
+    <div class="centered-div">
+      <h2>강의실</h2>
+      <br />
+      <button @click="currentTab = 'student'; studentSubTab = 'ongoing';">수업</button> |
+      <button @click="currentTab = 'teacher'; teacherSubTab = 'ongoing';">강의</button>
+      <hr>
+      <br>
+      <br>
+    </div>
 
-   
-    <div v-show="currentTab === 'student'">
-      <button @click="studentSubTab = 'ongoing'">진행 중</button>
-      <button @click="studentSubTab = 'waiting'">대기 중</button>
-      <button @click="studentSubTab = 'finish'">완료</button>
-
+    <div v-show="currentTab === 'student'" class="centered-div">
+      <button 
+        :class="{ 'ongoing': studentSubTab === 'ongoing' }"
+        @click="studentSubTab = 'ongoing'">진행 중</button> |
+      <button 
+        :class="{ 'waiting': studentSubTab === 'waiting' }"
+        @click="studentSubTab = 'waiting'">대기 중</button> |
+      <button 
+        :class="{ 'finish': studentSubTab === 'finish' }"
+        @click="studentSubTab = 'finish'">완료</button>
+      
       <StudentFinish v-show="studentSubTab === 'finish'"></StudentFinish>
       <StudentOngoing v-show="studentSubTab === 'ongoing'"></StudentOngoing>
       <StudentWaiting v-show="studentSubTab === 'waiting'"></StudentWaiting>
     </div>
 
-    
-    <div v-show="currentTab === 'teacher'">
-      <button @click="teacherSubTab = 'ongoing'">진행 중</button>
-      <button @click="teacherSubTab = 'waiting'">대기 중</button>
-      <button @click="teacherSubTab = 'finish'">완료</button>
+    <div v-show="currentTab === 'teacher'" class="centered-div">
+      <button 
+        :class="{ 'ongoing': teacherSubTab === 'ongoing' }"
+        @click="teacherSubTab = 'ongoing'">진행 중</button> |
+      <button 
+        :class="{ 'waiting': teacherSubTab === 'waiting' }"
+        @click="teacherSubTab = 'waiting'">대기 중</button> |
+      <button 
+        :class="{ 'finish': teacherSubTab === 'finish' }"
+        @click="teacherSubTab = 'finish'">완료</button>
 
       <TeacherFinish v-show="teacherSubTab === 'finish'"></TeacherFinish>
       <TeacherOngoing v-show="teacherSubTab === 'ongoing'"></TeacherOngoing>
@@ -54,14 +65,31 @@ export default {
     return {
       currentTab: 'student', 
       studentSubTab: 'ongoing', 
-      teacherSubTab: '',
+      teacherSubTab: 'ongoing',
     };
   },
 };
 </script>
 
 <style scoped>
+.centered-div {
+  width: 800px;
+  margin: 0 auto;
+}
 
+button {
+  color: black;
+}
 
+button.ongoing {
+  color: green;
+}
 
+button.waiting {
+  color: yellow;
+}
+
+button.finish {
+  color: red;
+}
 </style>
