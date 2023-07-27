@@ -27,8 +27,6 @@ public class NoticeController {
     public ResponseEntity<NoticeListVo> selectAllNotice(@RequestParam int pageNo, @RequestParam String keyword){
         log.debug("GET /notices pageNo : {} keyword : {}", pageNo, keyword);
 
-
-
         return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
     }
 

@@ -5,6 +5,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter @Getter
@@ -35,6 +37,10 @@ public class Teacher {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
+
+    @OneToMany
+    @JoinColumn(name = "treat_id")
+    private List<Treat> treats = new ArrayList<>();
 
     @Column(name = "career")
     private Integer career;

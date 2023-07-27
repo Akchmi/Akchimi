@@ -3,6 +3,7 @@ package com.quokka.classmusic.db.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 import static com.quokka.classmusic.db.entity.QInstrument.instrument;
 import static com.quokka.classmusic.db.entity.QTeacher.teacher;
+import static com.quokka.classmusic.db.entity.QTreat.treat;
 import static com.quokka.classmusic.db.entity.QUser.user;
 
 @Repository
@@ -61,12 +63,16 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                         teacher.career,
                         teacher.introduce,
                         teacher.avgRating,
-                        teacher.contactCnt
+                        teacher.contactCnt,
+                        teacher.treats
                 ))
                 .from(teacher)
                 .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(String.valueOf(params.get("keyword")))))
                 .join(teacher.user , user)
                 .where(selectGenderFilter(params))
+                .join(teacher.treats , treat)
+                .join(treat.instrument , instrument)
+                .where(selectInstrumentFilter(String.valueOf(params.get("instrument"))))
                 .offset(Integer.parseInt(String.valueOf(params.get("page"))))
                 .limit(20)
                 .orderBy(orderType(String.valueOf(params.get("order_by"))))
@@ -88,6 +94,13 @@ public class TeacherRepositoryImpl implements TeacherRepository{
         em.remove(teacher);
     }
 
+
+    private BooleanExpression selectInstrumentFilter(String instrumentName) {
+        if(!instrumentName.equals("")){
+            return null;
+        }
+        return instrument.instrumentName.eq(instrumentName);
+    }
 
     private BooleanExpression startCareerGt(Integer startCareer){
         if(startCareer == null){

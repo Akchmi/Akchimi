@@ -26,7 +26,7 @@ public class Treat {
     private int treatmentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
+    @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id" ,insertable = false , updatable = false)
     private Teacher teacher;
 
     @ManyToOne(fetch = FetchType.LAZY)
