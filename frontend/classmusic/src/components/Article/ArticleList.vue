@@ -26,7 +26,7 @@
                 {{ article.title }}
               </td>
               <td>{{ article.user }}</td>
-              <td>{{ article.date }}</td>
+              <td>{{ article.createdAt }}</td>
             </tr>
           </tbody>
         </table>
@@ -64,7 +64,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const articles = computed(() => store.state.articles.articles);
+    const articles = computed(() => store.state.articles.articleList);
 
     const searchCategory = ["전체", "제목", "내용", "작성자"];
 

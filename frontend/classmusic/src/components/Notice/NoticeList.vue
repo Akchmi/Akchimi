@@ -26,7 +26,7 @@
                 {{ notice.title }}
               </td>
               <td>관리자</td>
-              <td>{{ notice.date }}</td>
+              <td>{{ notice.createdAt }}</td>
             </tr>
           </tbody>
         </table>
@@ -64,7 +64,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const notices = computed(() => store.state.notices.notices);
+    const notices = computed(() => store.state.notices.noticeList);
 
     const searchCategory = ["전체", "제목", "내용"];
 

@@ -1,16 +1,34 @@
 import { createStore } from "vuex";
-import { notices } from "./modules/notices";
-import { articles } from "./modules/articles";
-import { chats } from "./modules/chats";
-import { contacts } from "./modules/contacts";
-import { reviews } from "./modules/reviews";
-import { teachers } from "./modules/teachers";
-import { users } from "./modules/users";
+
+import actions from "./actions";
+import getters from "./getters";
+import mutations from "./mutations";
+
+import articles from "./state/articles";
+import chats from "./state/chats";
+import lectures from "./state/lectures";
+import liveMeetings from "./state/liveMeetings";
+import login from "./state/login";
+import notices from "./state/notices";
+import profiles from "./state/profiles";
+import search from "./state/search";
+
+import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: { notices, articles, chats, contacts, reviews, teachers, users },
+  plugins: [createPersistedState()],
+
+  state: {
+    articles,
+    chats,
+    lectures,
+    liveMeetings,
+    login,
+    notices,
+    profiles,
+    search,
+  },
+  getters,
+  mutations,
+  actions,
 });
