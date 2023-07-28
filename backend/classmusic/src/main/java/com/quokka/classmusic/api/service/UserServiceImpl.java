@@ -43,15 +43,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserVo findUserById(String id) {
-        User user = userRepository.findUserById(id)
-                .orElseThrow(() -> new NoSuchElementException("id와 일치하는 회원이 없습니다."));
+        User user = userRepository.findUserById(id);
+//                .orElseThrow(() -> new NoSuchElementException("id와 일치하는 회원이 없습니다."));
         return new UserVo(user);
     }
 
     @Override
     public UserVo findUserByUserId(int userId) {
-         User user = userRepository.findById(userId)
-                 .orElseThrow(() -> new NoSuchElementException("userId와 일치하는 회원이 없습니다."));
+         User user = userRepository.findById(userId);
+//                 .orElseThrow(() -> new NoSuchElementException("userId와 일치하는 회원이 없습니다."));
          return new UserVo(user);
     }
 
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserVo modifyUser(String id, ModifyUserDto modifyUserDto) {
-        User user = userRepository.findUserById(id).get();
+        User user = userRepository.findUserById(id);
         user.setName(modifyUserDto.getName());
         user.setUserProfileImage(modifyUserDto.getUserProfileImage());
         userRepository.save(user);
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteUser(int userId) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId);
         user.setType(3);
         userRepository.save(user);
     }

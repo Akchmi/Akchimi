@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter @Setter
 public class ArticleDto {
-    private int articleId;
     private String name;
     private String title;
     private String content;

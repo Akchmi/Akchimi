@@ -26,9 +26,9 @@ import java.util.Map;
 @CrossOrigin("*")
 @Slf4j
 public class ArticleController {
-    private ArticleService articleService;
-    private CommentService commentService;
-    private UserService userService;
+    private final ArticleService articleService;
+    private final CommentService commentService;
+    private final UserService userService;
     @Autowired
     public ArticleController(ArticleService articleService, CommentService commentService, UserService userService){
         this.articleService = articleService;
@@ -40,9 +40,9 @@ public class ArticleController {
     @PostMapping
     public ResponseEntity<Integer> insertArticle(@RequestBody ArticleDto articleDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
         int userId = userDetailsVo.getUserVo().getUserId();
-        articleDto.setName(userService.findUserByUserId(userId).getName());
+//        articleDto.setName(userService.findUserByUserId(userId).getName());
         try {
-            int articleId = articleService.insertArticle(articleDto);
+            int articleId = articleService.insertArticle(userId, articleDto);
             log.debug("insertArticle : id {} article insertion", articleId);
             return new ResponseEntity<>(articleId,HttpStatus.ACCEPTED);
         } catch (Exception e) {
@@ -77,6 +77,7 @@ public class ArticleController {
     // 자유게시판 글 수정
     @PutMapping("/{articleId}")
     public ResponseEntity<Integer> modifyArticle(@PathVariable int articleId, @RequestBody ArticleDto articleDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
+        articleDto.setArticleId(articleId);
         int userId = userDetailsVo.getUserVo().getUserId();
         try {
             if(userId == userService.findUserById(articleService.select(articleId).getName()).getUserId()) {

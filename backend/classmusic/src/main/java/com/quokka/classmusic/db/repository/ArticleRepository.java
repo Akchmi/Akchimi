@@ -11,7 +11,7 @@ import java.util.Map;
 public interface ArticleRepository{
     void save(Article article);
     List<ArticleVo> findAll(Map<String, String> params);
-    ArticleVo selectOneById(int articleId);
+    Article selectOneById(int articleId);
     Article findById(int articleId);
     void delete(Article article);
 }

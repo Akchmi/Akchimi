@@ -27,10 +27,11 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public int insertArticle(ArticleDto articleDto) {
+    public int insertArticle(int userId, ArticleDto articleDto) {
+        User user = userRepository.findById(userId);
         Article article = Article.builder()
                 .title(articleDto.getTitle())
-                .user(new User(1,"1","2","1","2","3",1,2,1))
+                .user(user)
                 .content(articleDto.getContent())
                 .build();
         articleRepository.save(article);
@@ -39,7 +40,8 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public ArticleVo select(int articleId) {
-        return articleRepository.selectOneById(articleId);
+        ArticleVo articleVo = new ArticleVo(articleRepository.selectOneById(articleId));
+        return articleVo;
     }
 
     @Override

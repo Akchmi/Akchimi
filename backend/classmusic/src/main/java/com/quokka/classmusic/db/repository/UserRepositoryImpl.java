@@ -13,8 +13,8 @@ import static com.quokka.classmusic.db.entity.QUser.user;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository{
-    private EntityManager em;
-    private JPAQueryFactory query;
+    private final EntityManager em;
+    private final JPAQueryFactory query;
 
     public UserRepositoryImpl(EntityManager em) {
         this.em = em;
@@ -22,13 +22,16 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public Optional<User> findUserById(String id) {
-        return Optional.ofNullable(query.select(user).from(user).where(user.id.eq(id)).fetchOne());
+    public User findUserById(String id) {
+        return query.select(user)
+                .from(user)
+                .where(user.id.eq(id))
+                .fetchOne();
     }
 
     @Override
-    public Optional<User> findById(int userId) {
-        return Optional.ofNullable(em.find(User.class, userId));
+    public User findById(int userId) {
+        return em.find(User.class, userId);
     }
 
     @Override

@@ -35,7 +35,7 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     @Override
     public List<ArticleVo> findAll(Map<String, String> params) {
         String searchType=params.get("searchType");
-        String keyWord=params.get("keyWord");
+        String keyWord=params.get("keyword");
         Integer pageNo=Integer.parseInt(String.valueOf(params.get("pageNo")));
         String sortType=params.get("sortType");
         log.debug("{} {} {} {}",searchType,keyWord,pageNo,sortType);
@@ -65,24 +65,24 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     }
 
     private BooleanExpression searchKeyWord(String searchType, String keyWord) {
-        if(searchType.equals("default")){
+        if(searchType.equals("전체")){
             return article.title.contains(keyWord)
                     .or(article.content.contains(keyWord))
                     .or(article.user.name.contains(keyWord));
-        }else if(searchType.equals("title")){
+        }else if(searchType.equals("제목")){
             return article.title.contains(keyWord);
-        }else if(searchType.equals("content")){
+        }else if(searchType.equals("내용")){
             return article.content.contains(keyWord);
-        }else if(searchType.equals("name")){
+        }else if(searchType.equals("이름")){
             return  article.user.name.contains(keyWord);
         }
         return null;
     }
 
     @Override
-    public ArticleVo selectOneById(int articleId) {
+    public Article selectOneById(int articleId) {
         return query
-                .select(Projections.constructor(ArticleVo.class,
+                .select(Projections.constructor(Article.class,
                         article.articleId,
                         user.name,
                         article.title,

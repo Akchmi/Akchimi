@@ -29,12 +29,10 @@ import java.util.NoSuchElementException;
 @CrossOrigin("*")
 public class UserController {
     private final UserService userService;
-    private final TeacherService teacherService;
 
     @Autowired
-    public UserController(UserService userService, TeacherService teacherService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.teacherService = teacherService;
     }
 
     // 회원 정보보기
