@@ -1,3 +1,6 @@
+import axios from "@/common/axios";
+// import utils from "@/common/utils";
+
 export default {
   actions: {
     // 로그인 사용자 프로필 조회
