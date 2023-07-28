@@ -17,16 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 public class SecurityConfiguration {
-
-    private static final String[] PERMIT_GET_URLS = {
-            "/",
-            "/teachers/*",
-            "/notices/*",
-            "/articles/**",
-            "/reviews/*",
-            "/users/*"
-    };
-
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration
@@ -55,10 +45,6 @@ public class SecurityConfiguration {
 
         httpSecurity
                 .authorizeHttpRequests((authorize) -> authorize
-                        // 비회원 이용가능 경로
-                        .antMatchers("/auth/**").permitAll()
-                        .antMatchers("/users/find-id").permitAll()
-                        .antMatchers(HttpMethod.GET, PERMIT_GET_URLS).permitAll()
                         // 관리자 권한 필요한 경로
                         .antMatchers(HttpMethod.POST, "/notices").hasRole("ADMIN")
                         .antMatchers(HttpMethod.PUT, "/notices/*").hasRole("ADMIN")
@@ -71,7 +57,8 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.PUT,"/users/**").hasAnyRole("USER", "TEACHER")
                         .antMatchers(HttpMethod.DELETE,"/users/*").hasAnyRole("USER", "TEACHER")
                         .antMatchers(HttpMethod.POST,"/users/**").hasAnyRole("USER", "TEACHER")
-                        .anyRequest().authenticated()
+                        // 비회원 이용가능 경로
+                        .anyRequest().permitAll()
 
                         .and()
                         .addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
