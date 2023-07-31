@@ -1,46 +1,24 @@
 <template>
   <div>
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/notice">공지사항</router-link> |
-      <router-link to="/article">자유게시판</router-link> |
-      <router-link to="/lecture">강의실</router-link> |
-      <router-link to="/search">강사검색</router-link> |
-      <router-link to="/login">로그인</router-link> |
-      <router-link to="/profile">마이페이지</router-link>
-    </nav>
-    <br />
-
-    <router-view />
+    <!-- 구성 화면 -->
+    <div class="container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
+// import { computed } from "vue";
+// import { useStore } from "vuex";
+
 export default {
-  setup() {},
+  setup() {
+    // const store = useStore();
+  },
 };
 </script>
 "
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style lang="scss" scoped>
+@import "@/assets/scss/templates/common.scss";
 </style>

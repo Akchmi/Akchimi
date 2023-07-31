@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 <template>
   <div class="container">
     <div class="notice__list">
