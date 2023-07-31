@@ -17,7 +17,7 @@
         </div>
         <div class="button-group">
           <button>채팅입장</button>
-          <button @click="$router.push('/livemeeting')">강의실입장</button>
+          <button @click="moveLivemeeting">강의실입장</button>
           <button @click="showInput = !showInput">
             {{ showInput ? "취소" : "메모하기" }}
           </button>
@@ -49,6 +49,9 @@ export default {
     saveMemo() {
       this.savedMemo = this.memo;
       this.showInput = false;
+    },
+    moveLivemeeting() {
+      this.$router.push("/livemeeting");
     },
   },
 };

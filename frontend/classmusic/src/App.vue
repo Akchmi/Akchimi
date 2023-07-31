@@ -1,24 +1,5 @@
 <template>
   <div>
-    <nav class="navbar">
-      <div class="navbar__logo">
-        <i class="fas fa-blog"></i>
-        <a @click="$router.push('/')">Akchimi</a>
-      </div>
-
-      <ul class="navbar__menu">
-        <li @click="$router.push('/notice/list')">공지사항</li>
-        <li @click="$router.push('/article/list')">자유게시판</li>
-        <li @click="$router.push('/lecture/studentwaiting')">강의실</li>
-        <li @click="$router.push('/search')">강사검색</li>
-      </ul>
-
-      <ul class="navbar__menu">
-        <li @click="$router.push('/login/signin')">로그인</li>
-        <li @click="$router.push('/profile/myprofile')">마이페이지</li>
-      </ul>
-    </nav>
-
     <!-- 구성 화면 -->
     <div class="container">
       <router-view></router-view>
@@ -27,8 +8,13 @@
 </template>
 
 <script>
+// import { computed } from "vue";
+// import { useStore } from "vuex";
+
 export default {
-  setup() {},
+  setup() {
+    // const store = useStore();
+  },
 };
 </script>
 "

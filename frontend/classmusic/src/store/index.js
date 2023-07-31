@@ -17,7 +17,11 @@ import common from "./state/common";
 import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      paths: ["common"],
+    }),
+  ],
 
   state: {
     articles,
