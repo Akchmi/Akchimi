@@ -45,38 +45,46 @@
           </option>
         </select>
         <input style="margin: 10px" type="text" v-model="searchQuery" />
-        <button>검색</button>
+        <button @click="searchNoticelist">검색</button>
       </div>
     </div>
+
     {{ noticeList }}
+    {{ searchQuery }}
+    {{ selectedSearchCategory }}
+    {{ pageNo }}
   </div>
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore, mapGetters } from "vuex";
 // import axios from "@/common/axios";
 
 export default {
-  data() {
-    return {
-      searchQuery: "",
-      selectedSearchCategory: "전체",
-    };
-  },
-
   computed: {
     ...mapGetters({ noticeList: "getNoticeList" }),
   },
-
   setup() {
+    const pageNo = ref(1);
+    const searchQuery = ref("");
+    const selectedSearchCategory = ref("전체");
     const searchCategory = ["전체", "제목", "내용"];
     const store = useStore();
+
+    // const searchNoticelist = () => {
+    //   const query = searchQuery.value;
+    //   const category = selectedSearchCategory.value;
+    //   const page = pageNo.value;
+
+    //   store.dispatch("searchNoticelist", query, category, page);
+    // };
 
     onMounted(() => {
       store.dispatch("getNoticelist");
     });
-    return { searchCategory };
+
+    return { searchCategory, pageNo, searchQuery, selectedSearchCategory };
   },
 };
 </script>
@@ -84,4 +92,3 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/notice.scss";
 </style>
->>>>>>> Stashed changes

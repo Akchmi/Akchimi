@@ -11,4 +11,5 @@ export default {
     date: "2023.07.21",
     hit: 2164,
   },
+  searchNoticelist: [],
 };

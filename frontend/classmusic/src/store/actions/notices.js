@@ -1,4 +1,4 @@
-// import http from "@/common/axios";
+import http from "@/common/axios";
 // const baseURL = "http://localhost:8080";
 
 export default {
@@ -44,6 +44,23 @@ export default {
   //공지게시글 작성
 
   //공지게시글 상세
+  searchNoticelist(context, keyword, searchType, pageNo) {
+    http
+      .get("/notices", {
+        params: {
+          pageNo: pageNo,
+          keyword: keyword,
+          searchType: searchType,
+        },
+      })
+      .then((data) => {
+        context.commit("SEARCH_NOTICE_LIST", data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("GET 요청 에러 : ", error);
+      });
+  },
   //공지게시글 수정
   //공지게시글 삭제
   //첨부파일?
