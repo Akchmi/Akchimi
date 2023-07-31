@@ -1,20 +1,20 @@
 export default {
   getTotalPages(state) {
-    return state.articles.totalPages;
+    return state.notices.totalPages;
   },
   getPageSize(state) {
-    return state.articles.pageSize;
+    return state.notices.pageSize;
   },
   getPageNumber(state) {
-    return state.articles.pageNumber;
+    return state.notices.pageNumber;
   },
   getNoticeListTotalCount(state) {
-    return state.articles.noticeListTotalCount;
+    return state.notices.noticeListTotalCount;
   },
   getNoticeList(state) {
-    return state.articles.noticeList;
+    return state.notices.noticeList;
   },
   getNoticeDetail(state) {
-    return state.articles.noticeDetail;
+    return state.notices.noticeDetail;
   },
 };

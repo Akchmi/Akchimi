@@ -20,7 +20,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="notice in notices" :key="notice.id">
+            <tr v-for="notice in noticeList" :key="notice.id">
               <td>{{ notice.id }}</td>
               <td @click="$router.push('/notice/detail')">
                 {{ notice.title }}
@@ -48,12 +48,14 @@
         <button>검색</button>
       </div>
     </div>
+    {{ noticeList }}
   </div>
 </template>
 
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { onMounted } from "vue";
+import { useStore, mapGetters } from "vuex";
+// import axios from "@/common/axios";
 
 export default {
   data() {
@@ -62,13 +64,19 @@ export default {
       selectedSearchCategory: "전체",
     };
   },
+
+  computed: {
+    ...mapGetters({ noticeList: "getNoticeList" }),
+  },
+
   setup() {
-    const store = useStore();
-    const notices = computed(() => store.state.notices.noticeList);
-
     const searchCategory = ["전체", "제목", "내용"];
+    const store = useStore();
 
-    return { notices, searchCategory };
+    onMounted(() => {
+      store.dispatch("getNoticelist");
+    });
+    return { searchCategory };
   },
 };
 </script>
@@ -76,3 +84,4 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/notice.scss";
 </style>
+>>>>>>> Stashed changes
