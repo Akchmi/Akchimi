@@ -1,19 +1,20 @@
 // import axios from "@/common/axios";
 
 export default {
-  getIsLogin(state) {
-    return state.articles.isLogin;
-  },
-  getIsLoginModalOpen(state) {
-    return state.articles.isLoginModalOpen;
-  },
-  getLoginInfo(state) {
-    return state.articles.loginInfo;
-  },
-  getUserInfo(state) {
-    return state.articles.userInfo;
-  },
-  getTeacherInfo(state) {
-    return state.articles.teacherInfo;
-  },
+  id: state => state.id,
+  name: state => state.name,
+  email: state => state.email,
+  userProfileImage: state => state.userProfileImage,
+  type: state => state.type,
+  createdAt: state => state.createdAt,
+  gender: state => state.gender,
+  favoriteTeachers: state => state.favoriteTeachers,
+  teacherId: state=> state.teacherId,
+  teacherInfo: state => state.teacherInfo,
+  teacherIntroduce: state => state.teacherIntroduce,
+  teacherAttach: state => state.teacherAttach,
+  teacherReview: state => state.teacherReview,
+
+
+
 };

@@ -1,21 +1,21 @@
-import http from "@/common/axios";
+// import http from "@/common/axios";
 // import utils from "@/common/utils";
 
 export default {
-  async getMypage(context) {
-    try {
-      let { data } = await http.get(`users/${context.state.user_id}`);
-      switch (data.resultCode) {
-        case "SUCCESS":
-          context.commit("SET_USER_INFO", data.data);
-          break;
-        case "FAIL":
-          break;
-      }
-    } catch (err) {
-      console.error(err);
-    }
+  SET_USER(state, data) {
+    state.id = data.id;
+    state.name = data.name;
+    state.email = data.email;
+    state.userProfileImage = data.userProfileImage;
+    state.type = data.type;
+    state.createdAt = data.createdAt;
+    state.gender = data.gender;
   },
-};
+  SET_FAVORITE_TEACHERS(state, data) {
+    state.favoriteTeachers = data;
+  },
+  SET_TEACHER_PROFILE(state, data) {
+    state.teacherId = data.teacherId
 
-// 회원 정보
+  }
+};
