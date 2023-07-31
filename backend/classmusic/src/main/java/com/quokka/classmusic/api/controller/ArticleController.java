@@ -5,12 +5,8 @@ import com.quokka.classmusic.api.request.CommentDto;
 import com.quokka.classmusic.api.response.ArticleVo;
 import com.quokka.classmusic.api.response.CommentVo;
 import com.quokka.classmusic.api.response.UserDetailsVo;
-import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.api.service.ArticleService;
 import com.quokka.classmusic.api.service.CommentService;
-import com.quokka.classmusic.api.service.UserService;
-import com.quokka.classmusic.db.entity.Comment;
-import com.quokka.classmusic.db.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,12 +24,10 @@ import java.util.Map;
 public class ArticleController {
     private final ArticleService articleService;
     private final CommentService commentService;
-    private final UserService userService;
     @Autowired
-    public ArticleController(ArticleService articleService, CommentService commentService, UserService userService){
+    public ArticleController(ArticleService articleService, CommentService commentService){
         this.articleService = articleService;
         this.commentService = commentService;
-        this.userService = userService;
     }
 
     // 자유게시판 글쓰기
@@ -44,7 +38,7 @@ public class ArticleController {
         try {
             int articleId = articleService.insertArticle(userId, articleDto);
             log.debug("insertArticle : id {} article insertion", articleId);
-            return new ResponseEntity<>(articleId,HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(articleId, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +50,7 @@ public class ArticleController {
         try {
             List<ArticleVo> articlesList = articleService.selectAll(params);
             log.debug("findAllArticles : {} articles loading",articlesList.size());
-            return new ResponseEntity<>(articlesList, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(articlesList, HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -68,7 +62,7 @@ public class ArticleController {
         try {
             ArticleVo article = articleService.select(articleId);
             log.debug("get {} article info : {} {} {}",article.getArticleId(), article.getName(), article.getTitle(), article.getContent());
-            return new ResponseEntity<>(article, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(article, HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -76,17 +70,11 @@ public class ArticleController {
 
     // 자유게시판 글 수정
     @PutMapping("/{articleId}")
-    public ResponseEntity<Integer> modifyArticle(@PathVariable int articleId, @RequestBody ArticleDto articleDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
+    public ResponseEntity<Integer> modifyArticle(@PathVariable int articleId, @RequestBody ArticleDto articleDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
 //        articleDto.setArticleId(articleId);
-        int userId = userDetailsVo.getUserVo().getUserId();
         try {
-            if(userId == userService.findUserById(articleService.select(articleId).getName()).getUserId()) {
-                articleService.modifyArticle(articleId, articleDto);
-                return new ResponseEntity<>(articleId, HttpStatus.ACCEPTED);
-            }else{
-                log.debug("작성자가 아닙니다.");
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-            }
+            articleService.modifyArticle(articleId, articleDto, userDetailsVo.getUserVo().getUserId());
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -95,16 +83,9 @@ public class ArticleController {
     // 자유게시판 글 삭제
     @DeleteMapping("/{articleId}")
     public ResponseEntity deleteArticle(@PathVariable int articleId, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
-        int userId = userDetailsVo.getUserVo().getUserId();
         try {
-            if(userId == userService.findUserById(articleService.select(articleId).getName()).getUserId()) {
-                articleService.deleteArticle(articleId);
-                return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
-            }
-            else{
-                log.debug("작성자가 아닙니다.");
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-            }
+            articleService.deleteArticle(articleId, userDetailsVo.getUserVo().getUserId());
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -115,7 +96,7 @@ public class ArticleController {
     public ResponseEntity<List<CommentVo>> findAllComments(@PathVariable int articleId){
         try {
             List<CommentVo> commentVoList = commentService.selectAll(articleId);
-            return new ResponseEntity<>(commentVoList, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(commentVoList, HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -127,7 +108,7 @@ public class ArticleController {
         int userId = userDetailsVo.getUserVo().getUserId();
         try {
             int commentId = commentService.insertComment(articleId, userId, commentDto);
-            return new ResponseEntity(commentId, HttpStatus.ACCEPTED);
+            return new ResponseEntity(commentId, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -136,31 +117,18 @@ public class ArticleController {
     // 댓글 수정
     @PutMapping("/{articleId}/comments/{commentId}")
     public ResponseEntity<Integer> modifyComment(@PathVariable int articleId, @PathVariable int commentId, @RequestBody CommentDto commentDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
-        int userId = userDetailsVo.getUserVo().getUserId();
         try {
-            Comment comment = commentService.select(commentId);
-            if(userId == commentService.select(commentId).getUser().getUserId()){
-                commentService.modifyComment(commentId, commentDto);
-                return new ResponseEntity<>(commentId, HttpStatus.ACCEPTED);
-            }else{
-                log.debug("작성자가 아닙니다.");
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-            }
+            commentService.modifyComment(commentId, commentDto, userDetailsVo.getUserVo().getUserId());
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     @DeleteMapping("/{articleId}/comments/{commentId}")
     public ResponseEntity deleteComment(@PathVariable int articleId, @PathVariable int commentId, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
-        int userId = userDetailsVo.getUserVo().getUserId();
         try {
-            if(userId == commentService.select(commentId).getUser().getUserId()){
-                commentService.deleteComment(commentId);
-                return new ResponseEntity<>(HttpStatus.ACCEPTED);
-            }else{
-                log.debug("작성자가 아닙니다.");
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-            }
+            commentService.deleteComment(commentId, userDetailsVo.getUserVo().getUserId());
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

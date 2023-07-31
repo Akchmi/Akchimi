@@ -2,7 +2,6 @@ package com.quokka.classmusic.db.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.quokka.classmusic.api.response.CommentVo;
 import com.quokka.classmusic.db.entity.Comment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -31,13 +30,12 @@ public class CommentRepositoryImpl implements CommentRepository{
     }
 
     @Override
-    public List<CommentVo> findAll(int articleId) {
-        log.debug("articleId : {}",articleId);
+    public List<Comment> findAll(int articleId) {
         return query
-                .select(Projections.constructor(CommentVo.class,
+                .select(Projections.constructor(Comment.class,
                     comment.commentId,
-                    article.articleId,
-                    user.name,
+                    article,
+                    user,
                     comment.content,
                     comment.createdAt
                 ))

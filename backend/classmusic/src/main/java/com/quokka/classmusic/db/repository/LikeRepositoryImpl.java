@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.db.entity.Like;
+import com.quokka.classmusic.db.entity.Teacher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 

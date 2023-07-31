@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface ArticleRepository{
     void save(Article article);
-    List<ArticleVo> findAll(Map<String, String> params);
+    List<Article> findAll(Map<String, String> params);
     Article selectOneById(int articleId);
     Article findById(int articleId);
     void delete(Article article);

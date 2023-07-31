@@ -8,9 +8,7 @@ import com.quokka.classmusic.api.response.LikeVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.api.response.UserVo;
-import com.quokka.classmusic.api.service.TeacherService;
 import com.quokka.classmusic.api.service.UserService;
-import com.quokka.classmusic.db.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -38,14 +35,10 @@ public class UserController {
     // 회원 정보보기
     @GetMapping("/{id}")
     public ResponseEntity<UserVo> findUser(@PathVariable String id, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
-        if(userDetailsVo.getUserVo().getId().equals(id)) {
-            UserVo userVo = userService.findUserById(id);
-            log.debug("findUser : {} / {}",userVo.getId(), userVo.getName());
-            return new ResponseEntity<>(userVo, HttpStatus.ACCEPTED);
-        }else{
-            log.debug("아이디가 다릅니다.");
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-        }
+        int loginId = userDetailsVo.getUserVo().getUserId();
+        UserVo userVo = userService.findUserById(id);
+        log.debug("findUser : {} / {}",userVo.getId(), userVo.getName());
+        return new ResponseEntity<>(userVo, HttpStatus.ACCEPTED);
     }
 
     // 이름과 이메일로 아이디 찾기

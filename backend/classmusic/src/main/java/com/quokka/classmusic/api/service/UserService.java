@@ -7,7 +7,6 @@ import com.quokka.classmusic.api.request.ModifyUserDto;
 import com.quokka.classmusic.api.response.LikeVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserVo;
-import com.quokka.classmusic.db.entity.User;
 
 import java.util.List;
 

@@ -33,16 +33,16 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     }
 
     @Override
-    public List<ArticleVo> findAll(Map<String, String> params) {
+    public List<Article> findAll(Map<String, String> params) {
         String searchType=params.get("searchType");
         String keyWord=params.get("keyword");
         Integer pageNo=Integer.parseInt(String.valueOf(params.get("pageNo")));
         String sortType=params.get("sortType");
         log.debug("{} {} {} {}",searchType,keyWord,pageNo,sortType);
         return query
-                .select(Projections.constructor(ArticleVo.class,
+                .select(Projections.constructor(Article.class,
                         article.articleId,
-                        user.name,
+                        user,
                         article.title,
                         article.content,
                         article.createdAt,
@@ -81,10 +81,12 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
 
     @Override
     public Article selectOneById(int articleId) {
+        Article viewArticle = em.find(Article.class, articleId);
+        viewArticle.setHit(viewArticle.getHit()+1);
         return query
                 .select(Projections.constructor(Article.class,
                         article.articleId,
-                        user.name,
+                        user,
                         article.title,
                         article.content,
                         article.createdAt,
@@ -103,7 +105,6 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
 
     @Override
     public void delete(Article article) {
-        log.debug("delete articleId : {}",article.getArticleId());
         em.remove(article);
     }
 }

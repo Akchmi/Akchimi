@@ -57,8 +57,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserVo findId(FindIdDto findIdDto) {
-        User user = userRepository.findId(findIdDto)
-                .orElseThrow(() -> new NoSuchElementException("일치하는 아이디가 없습니다."));
+        User user = userRepository.findId(findIdDto);
+//                .orElseThrow(() -> new NoSuchElementException("일치하는 아이디가 없습니다."));
         return new UserVo(user);
     }
 

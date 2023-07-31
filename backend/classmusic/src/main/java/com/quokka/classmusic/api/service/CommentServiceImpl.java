@@ -2,7 +2,6 @@ package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.CommentDto;
 import com.quokka.classmusic.api.response.CommentVo;
-import com.quokka.classmusic.db.entity.Article;
 import com.quokka.classmusic.db.entity.Comment;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.ArticleRepository;
@@ -12,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -31,10 +31,11 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public List<CommentVo> selectAll(int articleId) throws Exception {
-        for(CommentVo cv:commentRepository.findAll(articleId)){
-            log.debug("commentId : {}, content : {}", cv.getCommentId(), cv.getContent());
+        List<CommentVo> commentVoList = new ArrayList<>();
+        for(Comment comment:commentRepository.findAll(articleId)){
+            commentVoList.add(new CommentVo(comment));
         }
-        return commentRepository.findAll(articleId);
+        return commentVoList;
     }
 
     @Override
@@ -45,29 +46,34 @@ public class CommentServiceImpl implements CommentService{
                 .user(user)
                 .content(commentDto.getContent())
                 .build();
-        Article article=articleRepository.findById(articleId);
-        log.debug("articleT : {}, comment : {}",article.getTitle(), comment.getContent());
         commentRepository.save(comment);
         return comment.getCommentId();
     }
 
     @Override
-    public void deleteComment(int commentId) throws Exception {
+    public void deleteComment(int commentId, int userId) throws Exception {
         Comment comment = commentRepository.findById(commentId);
-        commentRepository.delete(comment);
-        log.debug("deleted comment - commentId{} content: {}",commentId,comment.getContent());
+        if(comment.getUser().getUserId() == userId){
+            commentRepository.delete(comment);
+        }else{
+            log.debug("작성자가 아닙니다.");
+        }
     }
 
     @Override
-    public void modifyComment(int commentId, CommentDto commentDto) throws Exception {
+    public void modifyComment(int commentId, CommentDto commentDto, int userId) throws Exception {
         Comment comment = commentRepository.findById(commentId);
-        comment.setContent(commentDto.getContent());
-        commentRepository.save(comment);
-        log.debug("modified comment - commentId{} content: {}",commentId, comment.getContent());
+        if(comment.getUser().getUserId() == userId){
+            comment.setContent(commentDto.getContent());
+            commentRepository.save(comment);
+        }else{
+            log.debug("작성자가 아닙니다.");
+        }
     }
 
     @Override
-    public Comment select(int commentId) throws Exception {
-        return commentRepository.findById(commentId);
+    public CommentVo select(int commentId) throws Exception {
+        CommentVo commentVo = new CommentVo(commentRepository.findById(commentId));
+        return commentVo;
     }
 }

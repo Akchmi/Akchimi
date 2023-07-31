@@ -2,7 +2,6 @@ package com.quokka.classmusic.db.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.request.FindIdDto;
-import com.quokka.classmusic.db.entity.Like;
 import com.quokka.classmusic.db.entity.User;
 import org.springframework.stereotype.Repository;
 
@@ -35,12 +34,12 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public Optional<User> findId(FindIdDto findIdDto) {
-        return Optional.ofNullable(query
+    public User findId(FindIdDto findIdDto) {
+        return query
                 .select(user)
                 .from(user)
                 .where(user.email.eq(findIdDto.getEmail()).and(user.name.eq(findIdDto.getName())))
-                .fetchOne());
+                .fetchOne();
     }
 
     @Override

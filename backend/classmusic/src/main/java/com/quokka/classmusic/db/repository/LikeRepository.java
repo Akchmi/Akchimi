@@ -2,6 +2,7 @@ package com.quokka.classmusic.db.repository;
 
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.db.entity.Like;
+import com.quokka.classmusic.db.entity.Teacher;
 
 import java.util.List;
 
