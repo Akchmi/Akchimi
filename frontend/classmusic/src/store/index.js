@@ -12,6 +12,7 @@ import login from "./state/login";
 import notices from "./state/notices";
 import profiles from "./state/profiles";
 import search from "./state/search";
+import common from "./state/common";
 
 import createPersistedState from "vuex-persistedstate";
 
@@ -27,6 +28,7 @@ export default createStore({
     notices,
     profiles,
     search,
+    common,
   },
   getters,
   mutations,

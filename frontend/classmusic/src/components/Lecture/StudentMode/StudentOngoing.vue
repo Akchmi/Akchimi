@@ -3,18 +3,24 @@
     <div class="student-ongoing-container">
       <div class="student-ongoing">
         <div class="top-section">
-          <img :src="image" alt="Teacher profile picture" class="teacher-image" />
+          <img
+            :src="image"
+            alt="Teacher profile picture"
+            class="teacher-image"
+          />
           <div class="info-box">
             <h3>{{ name }}</h3>
             <div class="memo-box">
               <p>{{ savedMemo }}</p>
             </div>
-          </div>        
+          </div>
         </div>
         <div class="button-group">
           <button>채팅입장</button>
-          <button>강의실입장</button>
-          <button @click="showInput = !showInput">{{showInput ? '취소' : '메모하기'}}</button>
+          <button @click="$router.push('/livemeeting')">강의실입장</button>
+          <button @click="showInput = !showInput">
+            {{ showInput ? "취소" : "메모하기" }}
+          </button>
           <button>강의완료</button>
         </div>
       </div>
@@ -29,13 +35,13 @@
 <script>
 export default {
   props: {
-    image: { type: String, default:"https://via.placeholder.com/280"},
-    name: { type: String, default: '박한샘' },
+    image: { type: String, default: "https://via.placeholder.com/280" },
+    name: { type: String, default: "박한샘" },
   },
   data() {
     return {
-      memo: '',
-      savedMemo: '',
+      memo: "",
+      savedMemo: "",
       showInput: false,
     };
   },
@@ -58,16 +64,16 @@ export default {
 
 .student-ongoing {
   box-sizing: border-box;
-  position:relative;
-  display:flex;
+  position: relative;
+  display: flex;
   flex-direction: column;
-  width:800px;
-  height:300px;
+  width: 800px;
+  height: 300px;
   border: 1px solid black;
-  margin-bottom:20px;
+  margin-bottom: 20px;
   border-radius: 10px;
-  overflow:hidden;
-  padding:20px;
+  overflow: hidden;
+  padding: 20px;
 }
 
 .top-section {
@@ -76,9 +82,9 @@ export default {
 
 .teacher-image {
   width: 170px;
-  height:220px;
+  height: 220px;
   object-fit: cover;
-  margin-right:1em;
+  margin-right: 1em;
 }
 
 .info-box {
@@ -90,7 +96,6 @@ export default {
 }
 
 .memo-box {
-  
 }
 
 .button-group {

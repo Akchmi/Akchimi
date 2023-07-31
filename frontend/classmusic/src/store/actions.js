@@ -6,6 +6,7 @@ import login from "./actions/login";
 import notices from "./actions/notices";
 import profiles from "./actions/profiles";
 import search from "./actions/search";
+import common from "./actions/common";
 
 export default {
   // 각 파일 만들어서 모듈화 사용
@@ -17,4 +18,5 @@ export default {
   ...notices,
   ...profiles,
   ...search,
+  ...common,
 };

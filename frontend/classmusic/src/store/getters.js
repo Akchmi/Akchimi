@@ -6,6 +6,7 @@ import login from "./getters/login";
 import notices from "./getters/notices";
 import profiles from "./getters/profiles";
 import search from "./getters/search";
+import common from "./getters/common";
 
 export default {
   // 각 파일 만들어서 모듈화 사용
@@ -17,4 +18,5 @@ export default {
   ...notices,
   ...profiles,
   ...search,
+  ...common,
 };
