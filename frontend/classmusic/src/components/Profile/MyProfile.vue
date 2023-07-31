@@ -3,7 +3,7 @@
     <div class="myprofile">
       <div class="top-section">
         <div class="img-container">
-          <img :src="image" alt="Teacher profile picture" class="teacher-image" />
+          <img :src="userProfileImage" alt="User profile picture" class="user-image" />
           <button>사진 추가</button>
         </div>
         <div class="info-container">
@@ -33,12 +33,16 @@
     </div>
     <div class="favorites">
       <h3>{{name}} 님이 즐겨찾기한 강사</h3>
-      <TeacherCard></TeacherCard>
+      <div v-if="favoriteTeachers.length">
+        <TeacherCard v-for="teacher in favoriteTeachers" :key="teacher.id" :teacher="teacher"></TeacherCard>
+     </div>
+     <p v-else>아직 즐겨찾기한 강사가 없습니다.</p>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import TeacherCard from '../Search/TeacherCard.vue';
 
 
@@ -46,17 +50,36 @@ export default {
   components: {
     TeacherCard,
   },
-  props: {
-    image: { type: String, default: "https://via.placeholder.com/280" },
-    id: { type: String, default: "phs98" },
-    email: { type: String, default: "phs98@gmail.com" },
-    name: { type: String, default: "박한샘" },
-    gender: { type: String, default: "비밀" },
+  computed: {
+    ...mapGetters([
+      'loginid',
+      'name',
+      'email',
+      'userProfileImage',
+      'gender',
+      'favoriteTeachers',
+    ]),
+  },
+  methods: {
+    ...mapActions([
+      'getUser',
+      'getFavoriteTeachers',
+
+    ]),
+  },
+  created() {
+    this.getUser();
+    this.getFavrotieTeachers();
   }
 };
 </script>
 
 <style scoped>
+
+.user-image {
+  width: 180px;
+  height: 220px;
+}
 
 .myprofile-container {
   display: flex;
