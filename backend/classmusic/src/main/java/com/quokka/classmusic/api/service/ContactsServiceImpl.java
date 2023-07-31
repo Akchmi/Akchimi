@@ -79,7 +79,7 @@ public class ContactsServiceImpl implements ContactsService{
     @Override
     public int insertContacts(ContactsInsertDto contactsInsertDto) throws Exception {
         Contact contact = Contact.builder()
-                .student(userRepository.findById(contactsInsertDto.getStudentId()).get())
+                .student(userRepository.findById(contactsInsertDto.getStudentId()))
                 .teacher(teacherRepository.findById(contactsInsertDto.getTeacherId()))
                 .state(0)
                 .studentOrder(contactsRepository.maxOrder(contactsInsertDto.getStudentId() ,0,0) + 1)

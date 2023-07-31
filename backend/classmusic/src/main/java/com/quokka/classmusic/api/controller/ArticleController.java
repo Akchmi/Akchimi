@@ -77,7 +77,7 @@ public class ArticleController {
     // 자유게시판 글 수정
     @PutMapping("/{articleId}")
     public ResponseEntity<Integer> modifyArticle(@PathVariable int articleId, @RequestBody ArticleDto articleDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
-        articleDto.setArticleId(articleId);
+//        articleDto.setArticleId(articleId);
         int userId = userDetailsVo.getUserVo().getUserId();
         try {
             if(userId == userService.findUserById(articleService.select(articleId).getName()).getUserId()) {

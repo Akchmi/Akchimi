@@ -53,7 +53,7 @@ public class TeacherServiceImpl implements TeacherService{
         //있는지화인해 유저가 선생테이블에 있는지 확인하고
 
 //        유저 타입 1로 바꿔줌
-        User user = userRepository.findById(teacherDto.getUserId()).get();
+        User user = userRepository.findById(teacherDto.getUserId());
         user.setType(1);
         userRepository.save(user);
 

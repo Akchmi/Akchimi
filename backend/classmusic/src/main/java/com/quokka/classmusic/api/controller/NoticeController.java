@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/notices")
+@CrossOrigin("*")
 @Slf4j
 public class NoticeController {
     private NoticeService noticeService;

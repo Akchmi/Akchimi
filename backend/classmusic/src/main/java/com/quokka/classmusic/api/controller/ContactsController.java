@@ -12,6 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/contacts")
+@CrossOrigin("*")
 public class ContactsController {
     private ContactsService contactsService;
 

@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin("*")
 @Slf4j
 public class AuthController {
 

@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public int insertComment(int articleId, int userId, CommentDto commentDto) throws Exception {
-        User user=userRepository.findById(userId).get();
+        User user=userRepository.findById(userId);
         Comment comment=Comment.builder()
                 .article(articleRepository.findById(articleId))
                 .user(user)

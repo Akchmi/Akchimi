@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void changePassword(String id, ChangePasswordDto changePasswordDto) {
-        User user = userRepository.findUserById(id).get();
+        User user = userRepository.findUserById(id);
         passwordEncoder.matches(user.getPassword(),changePasswordDto.getOldPassword());
         user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
         userRepository.save(user);
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService{
     public LikeVo addLike(LikeInsertDto likeInsertDto) {
         Like like = Like.builder()
                 .teacher(teacherRepository.findById(likeInsertDto.getTeacherId()))
-                .student(userRepository.findById(likeInsertDto.getStudentId()).get())
+                .student(userRepository.findById(likeInsertDto.getStudentId()))
                 .build();
         boolean isDuplicated = likeRepository.duplicationCheck(like);
         if(!isDuplicated) {
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<TeacherVo> findAllLike(String id) {
-        int userId = userRepository.findUserById(id).get().getUserId();
+        int userId = userRepository.findUserById(id).getUserId();
         List<TeacherVo> teacherVoList = likeRepository.findAll(userId);
         for (TeacherVo teacherVo:teacherVoList){
             teacherVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherVo.getTeacherId()));
