@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "notice")
+@ToString
 @DynamicInsert
 public class Notice {
 
@@ -26,6 +27,13 @@ public class Notice {
     public void noticeUpdate(String title, String content){
         this.title = title;
         this.content = content;
+    }
+
+    @PrePersist
+    public void setDefaultValueBeforePersist(){
+        if(this.hit == null){
+            this.hit = 0;
+        }
     }
 
     @Id

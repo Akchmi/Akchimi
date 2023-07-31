@@ -27,6 +27,13 @@ public class User {
         this.gender = gender;
     }
 
+    @PrePersist
+    public void setDefaultValueBeforePersist(){
+        if(this.type == null){
+            this.type = 0;
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")

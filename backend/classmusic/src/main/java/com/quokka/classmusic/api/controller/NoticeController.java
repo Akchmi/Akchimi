@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/notices")
 @CrossOrigin("*")
@@ -25,16 +28,20 @@ public class NoticeController {
     }
 
     @GetMapping
-    public ResponseEntity<NoticeListVo> selectAllNotice(@RequestParam int pageNo, @RequestParam String keyword){
-        log.debug("GET /notices pageNo : {} keyword : {}", pageNo, keyword);
+    public ResponseEntity<List<NoticeListVo>> selectAllNotice(@RequestParam Map<String, String> params){
+        log.debug("GET /notices params : {}", params);
 
-        return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+        List<NoticeListVo> result = noticeService.selectAllNotice(params);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/{noticeId}")
     public ResponseEntity<NoticeDetailVo> selectNoticeDetail(@PathVariable("noticeId") int noticeId){
+        log.debug("GET /notices/:noticeId noticeId : {}", noticeId);
         NoticeDetailVo noticeDetailVo = noticeService.selectNotice(noticeId);
-        return new ResponseEntity<>(noticeDetailVo, HttpStatus.ACCEPTED);
+
+        return new ResponseEntity<>(noticeDetailVo, HttpStatus.OK);
     }
 
     @PostMapping
@@ -42,14 +49,25 @@ public class NoticeController {
         log.debug("POST /notices");
         log.debug("공지사항 작성자 : {}", userDetailsVo);
 
-        return new ResponseEntity<>(noticeService.insertNotice(noticeInsertDto), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(noticeService.insertNotice(noticeInsertDto), HttpStatus.CREATED);
     }
 
-//    @PutMapping
-//    public ResponseEntity<NoticeDetailVo> updateNotice(@RequestBody){
-//
-//        return new ResponseEntity<>()
-//    }
+    @PutMapping("/{noticeId}")
+    public ResponseEntity<Void> updateNotice(@PathVariable int noticeId, @RequestBody NoticeDto noticeDto){
+        log.debug("PUT /notices/:noticeId noticeDto : {}", noticeDto);
 
+        noticeService.updateNotice(noticeDto, noticeId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{noticeId}")
+    public ResponseEntity<Void> deleteNotice(@PathVariable int noticeId){
+        log.debug("DELETE /notices/:noticeId noticeId : {}", noticeId);
+
+        noticeService.deleteNotice(noticeId);
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
 
 }
