@@ -28,7 +28,7 @@ public class TeacherController {
 
 
     @GetMapping
-    public ResponseEntity<List<TeacherVo>> selectAllTeacher(@RequestParam Map<String, Object> params){
+    public ResponseEntity<List<TeacherVo>> selectAllTeacher(@RequestParam Map<String, String> params){
         try {
             return ResponseEntity.status(200).body(teacherService.selectAllTeacher(params));
         } catch (Exception e) {

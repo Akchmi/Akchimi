@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +33,24 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public List<TeacherVo> selectAllTeacher(Map<String, Object> params) {
-        List<TeacherVo> teacherVoList = teacherRepository.findAll(params);
-        for (TeacherVo teacherVo : teacherVoList ) {
-            teacherVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherVo.getTeacherId()));
+    public List<TeacherVo> selectAllTeacher(Map<String, String> params) {
+        List<Teacher> teacherList = teacherRepository.findAll(params);
+        List<TeacherVo> teacherVoList = new ArrayList<>();
+        for (Teacher teacher : teacherList) {
+            teacherVoList.add(new TeacherVo(teacher.getUser().getName() ,
+                    teacher.getUser().getUserProfileImage(),
+                    teacher.getTeacherId(),
+                    teacher.getCareer(),
+                    teacher.getIntroduce(),
+                    teacher.getAvgRating(),
+                    teacher.getContactCnt(),
+                    treatRepository.findInstrumentNameByTeacherId(teacher.getTeacherId())
+                    ));
         }
+
+//        for (TeacherVo teacherVo : teacherVoList ) {
+//            teacherVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherVo.getTeacherId()));
+//        }
         return teacherVoList;
     }
 

@@ -39,7 +39,7 @@ public class Teacher {
     private User user;
 
     @OneToMany
-    @JoinColumn(name = "treat_id")
+    @JoinColumn(name = "treatment_id")
     private List<Treat> treats = new ArrayList<>();
 
     @Column(name = "career")

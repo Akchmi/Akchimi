@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public interface TeacherRepository {
     TeacherDetailVo findDetailById(int teacherId);
-    List<TeacherVo> findAll(Map<String, Object> params);
+    List<Teacher> findAll(Map<String, String> params);
     Teacher findById(int teacherId);
     void save(Teacher teacher);
     void delete(Teacher teacher);
