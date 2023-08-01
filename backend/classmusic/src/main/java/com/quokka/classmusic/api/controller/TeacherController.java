@@ -4,10 +4,12 @@ import com.quokka.classmusic.api.request.TeacherDto;
 import com.quokka.classmusic.api.request.TeacherSelectDto;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
+import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.api.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,10 +48,13 @@ public class TeacherController {
     }
 
     @PostMapping()
-    public ResponseEntity<Integer> insertTeacher(@RequestBody TeacherDto teacherDto){
+    public ResponseEntity<Integer> insertTeacher(@RequestBody TeacherDto teacherDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
+        int userId = userDetailsVo.getUserVo().getUserId();
+        teacherDto.setUserId(userId);
         try {
             return ResponseEntity.status(200).body(teacherService.insertTeacher(teacherDto));
         } catch (Exception e) {
+            log.debug("에ㅓ럴아너히ㅠㅏ머ㅗ하ㅓㅚ" + e.getMessage());
             throw new RuntimeException(e);
         }
     }
