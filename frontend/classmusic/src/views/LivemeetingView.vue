@@ -45,6 +45,33 @@
           value="Leave session"
         />
       </div>
+      <div>
+        <div class="messages-container">
+          <!-- Sent Messages -->
+          <div class="sent-messages">
+            <div
+              v-for="(message, index) in receivedMessages"
+              :class="message.className"
+              :key="index"
+            >
+              <div>
+                {{ message.message }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Received Messages -->
+
+        <div>
+          <!-- 메세지를 입력하는 input 요소 -->
+          <input type="text" v-model="newMessage" />
+
+          <!-- 메세지를 보내는 버튼 -->
+          <button @click="sendMessage">메세지 보내기</button>
+        </div>
+      </div>
+
       <div id="main-video" class="col-md-6">
         <user-video :stream-manager="mainStreamManager" />
       </div>
@@ -89,6 +116,9 @@ export default {
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
+      receivedMessages: [],
+      sentMessages: [],
+      newMessage: "",
 
       // Join form
       mySessionId: "SessionA",
@@ -97,6 +127,36 @@ export default {
   },
 
   methods: {
+    setupDataChannel() {
+      // 데이터 채널 생성
+    },
+    sendMessage() {
+      if (this.session) {
+        this.session
+          .signal({
+            data: this.myUserName + ":" + this.newMessage, // Any string (optional)
+            to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+            type: "my-chat",
+            // The type of message (optional)
+          })
+          .then(() => {
+            console.log("Message successfully sent");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        console.error("Session or data channel is not available.");
+      }
+    },
+    handleMessage(message) {
+      // Extract the message data from the incoming signal object
+      const receivedMessage = message.data;
+
+      // Push the received message into the messages array
+      this.messages.push(receivedMessage);
+    },
+
     joinSession() {
       // --- 1) Get an OpenVidu object ---
       this.OV = new OpenVidu();
@@ -110,6 +170,22 @@ export default {
       this.session.on("streamCreated", ({ stream }) => {
         const subscriber = this.session.subscribe(stream);
         this.subscribers.push(subscriber);
+      });
+      this.session.on("signal", (event) => {
+        const receivedMessage = event.data;
+        console.log(event.from);
+        console.log(event.from);
+        if (receivedMessage != this.myUserName + ":" + this.newMessage) {
+          this.receivedMessages.push({
+            message: receivedMessage,
+            className: "left",
+          });
+        } else {
+          this.receivedMessages.push({
+            message: receivedMessage,
+            className: "right",
+          });
+        }
       });
 
       // On every Stream destroyed...
@@ -233,3 +309,25 @@ export default {
   },
 };
 </script>
+<style>
+.split-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.messages-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.sent-messages {
+  width: 100%;
+}
+
+.right {
+  display: flex;
+  justify-content: right;
+  align-content: center;
+}
+</style>
