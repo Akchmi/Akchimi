@@ -15,4 +15,5 @@ public interface ArticleService {
     public List<ArticleVo> selectAll(Map<String, String> params) throws Exception;
     public void modifyArticle(int articleId, ArticleDto articleDto, int userId) throws Exception;
     public void deleteArticle(int articleId, int userId) throws Exception;
+    public int endPageNo(Map<String, String> params);
 }
