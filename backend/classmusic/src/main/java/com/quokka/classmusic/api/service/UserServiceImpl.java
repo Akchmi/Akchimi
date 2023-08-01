@@ -74,6 +74,12 @@ public class UserServiceImpl implements UserService{
         if(user == null){
             throw new NoSuchElementException("id와 일치하는 회원이 없습니다.");
         }
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("악취미 : 아이디 찾기");
+        message.setText("악취미 아이디 찾기 서비스입니다.\n아이디 : "+user.getId());
+        mailSender.send(message);
+
         return new UserVo(user);
     }
 
@@ -144,18 +150,22 @@ public class UserServiceImpl implements UserService{
                 throw new BadCredentialsException("아이디 이메일이 일치하지 않습니다.");
             }
         }
-        String tmpPassword = getRamdomPassword(10);
-        userRepository.findByEmail(mailDto.getEmail()).setPassword(tmpPassword);
+        String tmpPassword = getRandomPassword(10);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailDto.getEmail());
-        message.setSubject("테스트 메일 제목");
-        message.setText("테스트 메일 내용" + tmpPassword);
+        message.setSubject("악취미 : 임시 비밀번호 발급");
+        message.setText("임시 비밀번호 발급드립니다 : \n" + tmpPassword);
         log.debug("{} / {} / {}",message.getTo(),message.getSubject(),message.getText());
         mailSender.send(message);
+
+        User user = userRepository.findByEmail(mailDto.getEmail());
+
+        user.setPassword(passwordEncoder.encode(tmpPassword));
+        userRepository.save(user);
     }
 
-    public String getRamdomPassword(int size) {
+    public String getRandomPassword(int size) {
         char[] charSet = new char[] {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
