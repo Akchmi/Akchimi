@@ -62,6 +62,7 @@ public class ArticleServiceImpl implements ArticleService{
                     article.getHit());
             articleList.add(new ArticleVo(article));
         }
+
         return articleList;
     }
 
@@ -85,5 +86,10 @@ public class ArticleServiceImpl implements ArticleService{
         }else {
             log.debug("작성자가 아닙니다.");
         }
+    }
+
+    @Override
+    public int endPageNo(Map<String, String> params) {
+        return articleRepository.getEndPage(params);
     }
 }
