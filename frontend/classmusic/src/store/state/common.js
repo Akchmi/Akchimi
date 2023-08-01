@@ -1,4 +1,4 @@
 export default {
   isLogin: false,
-  accessToken: "",
+  accessToken: null,
 };

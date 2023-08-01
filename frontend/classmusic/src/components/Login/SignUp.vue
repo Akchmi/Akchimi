@@ -27,7 +27,8 @@
 </template>
 
 <script>
-import axios from "@/common/axios.js";
+import axios from "@/api/axios.js"
+import { apiCheckId } from "@/api/auth.js";
 import { mapActions } from "vuex";
 import router from "@/router";
 
@@ -46,17 +47,20 @@ export default {
   methods: {
     ...mapActions(["setToken"]),
     async checkId() {
-      try {
-        const response = await axios.get(`/auth/check-id/?id=${this.loginid}`);
-        if (response.data.isIdExists) {
-          alert("이미 가입한 아이디입니다.");
-        } else {
-          alert("회원가입이 가능한 아이디입니다.");
-          this.isIdChecked = true;
+      apiCheckId(
+        this.loginid,
+        ({ data }) => {
+          if (data.isIdExists) {
+            alert("이미 가입한 아이디입니다.");
+          } else {
+            alert("회원가입이 가능한 아이디입니다.");
+            this.isIdChecked = true;
+          }
+        },
+        ({ error }) => {
+          alert(error+"에러!");
         }
-      } catch (error) {
-        console.error(error);
-      }
+      );
     },
     async register() {
       if (!this.isIdChecked) {
