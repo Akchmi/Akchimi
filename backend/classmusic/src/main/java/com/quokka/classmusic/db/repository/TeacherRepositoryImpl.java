@@ -70,7 +70,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .from(treat)
                 .join(treat.teacher , teacher)
                 .join(treat.instrument , instrument)
-                .join(teacher.user)
+                .join(teacher.user , user)
                 .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(params.get("keyword"))))
                 .where(selectGenderFilter(params))
                 .where(instrumentEq(params.get("instrument")))
