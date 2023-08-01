@@ -83,7 +83,7 @@ const routes = [
         component: ArticleCreate,
       },
       {
-        path: "/article/detail",
+        path: "/article/:id",
         name: "/articledetail",
         component: ArticleDetail,
       },
