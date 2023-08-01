@@ -35,7 +35,7 @@
           </div>
           <div>
             <button @click="showLogin">로그인</button>
-            <button @click="findId">아이디 찾기</button>
+            <button @click="findId">비밀번호 찾기</button>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@ export default {
           password: this.password,
         });
 
-        this.setToken(response.data.token);
+        this.setToken(response.data);
         this.$router.push('/');
 
       } catch (error) {

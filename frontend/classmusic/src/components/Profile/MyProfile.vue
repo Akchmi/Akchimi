@@ -69,7 +69,7 @@ export default {
   },
   created() {
     this.getUser();
-    this.getFavrotieTeachers();
+    this.getFavoriteTeachers();
   }
 };
 </script>

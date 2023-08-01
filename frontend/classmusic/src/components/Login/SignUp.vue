@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/common/axios.js";
 import { mapActions } from "vuex";
 import router from "@/router";
 
@@ -73,6 +73,7 @@ export default {
         const response = await axios.post("/auth/sign-up", {
           loginid: this.loginid,
           password: this.password,
+
           name: this.name,
           email: this.email,
           gender: this.gender,

@@ -5,7 +5,9 @@ export default {
   //id 중복확인
   //임시 비밀번호 발급
   //아이디 찾기
-  
+  setToken( {commit, dispatch}, token) {
+    commit('SET_TOKEN', token)
+  }
 
 
 };

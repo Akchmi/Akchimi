@@ -55,12 +55,12 @@ export default {
   data() {
     return {
       showInstrumentDropdown: false,
-      selectedInstrument: null,
       showInputCareer: false,
-      selectedCareer: null,
       showInputExpense: false,
-      selectedExpense: null,
       showInputTime: false,
+      selectedInstrument: null,
+      selectedCareer: null,
+      selectedExpense: null,
       selectedTime: null
     };
   },

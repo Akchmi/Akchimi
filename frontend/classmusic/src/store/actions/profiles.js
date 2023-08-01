@@ -2,13 +2,27 @@ import axios from "@/common/axios";
 // import utils from "@/common/utils";
 
 export default {
-  getUser({ commit, state }) {
-    axios.get(`users/${state.id}`).then((response) => {
-      commit('SET_USER', response.data);
-      commit('SET_FAVORITE_TEACHERS', response.data.favoriteTeachers);
-    }).catch((error) => {
+  // getUser({ commit, state }) {
+  //   axios.get(`users/${state.id}`).then((response) => {
+  //     commit('SET_USER', response.data);
+  //     commit('SET_FAVORITE_TEACHERS', response.data.favoriteTeachers);
+  //   }).catch((error) => {
+  //     console.error(error);
+  //   });
+  // },
+  async getUser({ commit, state }) {
+    try {
+
+      const [userResponse, favoriteTeachersResponse] = await Promise.all([
+        axios.get(`users/${state.id}`),
+        axios.get(`users/${state.id}/like`),
+      ]);
+
+      commit('SET_USER', userResponse.data);
+      commit('SET_FAVORITE_TEACHERS', favoriteTeachersResponse.data);
+    } catch (error) {
       console.error(error);
-    });
+    }
   },
   updateUser({ commit, state}, userData) {
     axios.put(`users/${state.id}`, userData).then((response) => {
@@ -33,7 +47,7 @@ export default {
     });
   },
   // getFavoriteTeachers({commit,state}) {
-  //   axios.get(`users/${state.id}`).then((response) => {
+  //   axios.get(`users/${state.id}/like`).then((response) => {
   //     commit('SET_FAVORITE_TEACHERS', response.data);
   //   }).catch((error) => {
   //     console.error(error)
