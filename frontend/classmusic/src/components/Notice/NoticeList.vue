@@ -45,7 +45,22 @@
           </option>
         </select>
         <input style="margin: 10px" type="text" v-model="searchQuery" />
-        <button>검색</button>
+        <button @click="runSearch">검색</button>
+      </div>
+
+      <div>
+        <!-- 페이지 번호-->
+        <button @click="pageDown">이전</button>
+        <button
+          class="pageBtn"
+          v-for="page in pages"
+          :key="page"
+          @click="pageChange(page)"
+          v-show="page <= lastpage"
+        >
+          {{ page }}
+        </button>
+        <button @click="pageUp">다음</button>
       </div>
     </div>
     {{ noticeList }}
@@ -54,12 +69,15 @@
 
 <script>
 import { onMounted } from "vue";
-import { useStore, mapGetters } from "vuex";
+import { useStore, mapGetters, mapActions } from "vuex";
 // import axios from "@/common/axios";
 
 export default {
   data() {
     return {
+      lastpage: 86,
+      pages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      pageNo: 1,
       searchQuery: "",
       selectedSearchCategory: "전체",
     };
@@ -68,13 +86,56 @@ export default {
   computed: {
     ...mapGetters({ noticeList: "getNoticeList" }),
   },
+  methods: {
+    ...mapActions(["getNoticelist"]),
+    runSearch() {
+      this.getNoticelist({
+        pageNo: this.pageNo,
+        keyword: this.searchQuery,
+        searchType: this.selectedSearchCategory,
+      });
+    },
 
+    pageDown() {
+      if (this.pages[0] == 1) {
+        alert("최근 페이지입니다.");
+        return;
+      }
+
+      for (let i = 0; i < 10; i++) {
+        this.pages[i] -= 10;
+      }
+    },
+
+    pageUp() {
+      if (this.pages[this.pages.length - 1] >= this.lastpage) {
+        alert("마지막 페이지입니다.");
+        return;
+      }
+
+      for (let i = 0; i < 10; i++) {
+        this.pages[i] += 10;
+      }
+    },
+
+    pageChange(page) {
+      this.getNoticelist({
+        pageNo: page,
+        keyword: this.searchQuery,
+        searchType: this.selectedSearchCategory,
+      });
+    },
+  },
   setup() {
     const searchCategory = ["전체", "제목", "내용"];
     const store = useStore();
 
     onMounted(() => {
-      store.dispatch("getNoticelist");
+      store.dispatch("getNoticelist", {
+        pageNo: 1,
+        keyword: "",
+        searchType: "전체",
+      });
     });
     return { searchCategory };
   },
@@ -84,4 +145,3 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/notice.scss";
 </style>
-
