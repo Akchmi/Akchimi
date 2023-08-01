@@ -56,7 +56,7 @@ const routes = [
         component: NoticeCreate,
       },
       {
-        path: "/notice/detail",
+        path: "/notice/:id",
         name: "noticedetail",
         component: NoticeDetail,
       },

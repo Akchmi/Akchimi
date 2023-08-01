@@ -1,16 +1,4 @@
 export default {
-  getTotalPages(state) {
-    return state.articles.totalPages;
-  },
-  getPageSize(state) {
-    return state.articles.state;
-  },
-  getPageNumber(state) {
-    return state.articles.pageNumber;
-  },
-  getArticleListTotalCount(state) {
-    return state.articles.articleListTotalCount;
-  },
   getArticleList(state) {
     return state.articles.articleList;
   },

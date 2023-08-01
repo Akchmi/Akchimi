@@ -4,18 +4,20 @@
       <div>
         <button @click="$router.push('/notice/list')">목록으로</button>
         <hr />
+        글 id: {{ noticeId }}
+        {{ noticeDetail }}
         <div>
-          <h2>글제목입니다아아아아아</h2>
+          <h2>{{ noticeDetail.title }}</h2>
         </div>
 
         <div>
-          <p>조회수:</p>
-          <p>작성자:</p>
+          <p>조회수: {{ noticeDetail.hit }}</p>
+          <p>작성자: 관리자</p>
         </div>
         <hr />
 
         <div>
-          <h3>글 내용</h3>
+          <h3>{{ noticeDetail.content }}</h3>
         </div>
         <hr />
 
@@ -29,7 +31,29 @@
 </template>
 
 <script>
-export default {};
+import { onMounted } from "vue";
+import { useStore, mapGetters } from "vuex";
+import { useRoute } from "vue-router";
+
+export default {
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters({ noticeDetail: "getNoticeDetail" }),
+  },
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const noticeId = route.params.id;
+
+    onMounted(() => {
+      store.dispatch("getNoticedetail", noticeId);
+    });
+
+    return { noticeId };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

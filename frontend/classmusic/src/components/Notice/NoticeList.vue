@@ -21,12 +21,12 @@
           </thead>
           <tbody>
             <tr v-for="notice in noticeList" :key="notice.id">
-              <td>{{ notice.id }}</td>
-              <td @click="$router.push('/notice/detail')">
+              <td>{{ notice.noticeId }}</td>
+              <td @click="$router.push(`/notice/${notice.noticeId}`)">
                 {{ notice.title }}
               </td>
               <td>관리자</td>
-              <td>{{ notice.createdAt }}</td>
+              <td>{{ notice.createAt }}</td>
             </tr>
           </tbody>
         </table>
