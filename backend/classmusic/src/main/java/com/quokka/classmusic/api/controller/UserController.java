@@ -29,14 +29,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 임시 비밀번호 발급
-    @PostMapping("/temporary-password")
-    public ResponseEntity sendEmail(@RequestBody MailDto mailDto){
-        userService.sendTemporaryPassword(mailDto);
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
-
     // 회원 정보보기
     @GetMapping("/{id}")
     public ResponseEntity<UserVo> findUser(@PathVariable String id, @AuthenticationPrincipal UserDetailsVo userDetailsVo){

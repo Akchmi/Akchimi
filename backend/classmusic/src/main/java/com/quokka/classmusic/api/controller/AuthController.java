@@ -2,6 +2,7 @@ package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.FindIdDto;
 import com.quokka.classmusic.api.request.LoginDto;
+import com.quokka.classmusic.api.request.MailDto;
 import com.quokka.classmusic.api.request.SignupDto;
 import com.quokka.classmusic.api.response.LoginSuccessVo;
 import com.quokka.classmusic.api.response.UserVo;
@@ -87,5 +88,12 @@ public class AuthController {
             log.debug("해당하는 아이디를 찾지 못했습니다.");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+    }
+
+    // 임시 비밀번호 발급
+    @PutMapping("/temporary-password")
+    public ResponseEntity sendEmail(@RequestBody MailDto mailDto){
+        userService.sendTemporaryPassword(mailDto);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }
