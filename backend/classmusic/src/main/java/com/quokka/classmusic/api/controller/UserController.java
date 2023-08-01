@@ -46,18 +46,6 @@ public class UserController {
         return new ResponseEntity<>(userVo, HttpStatus.ACCEPTED);
     }
 
-    // 이름과 이메일로 아이디 찾기
-    @PostMapping("/find-id")
-    public ResponseEntity<String> findId(@RequestBody FindIdDto findIdDto){
-        try{
-            UserVo userVo = userService.findId(findIdDto);
-            log.debug("find-id : {}",userVo.getId());
-            return new ResponseEntity<>(userVo.getId(), HttpStatus.ACCEPTED);
-        }catch (NoSuchElementException e){
-            log.debug("해당하는 아이디를 찾지 못했습니다.");
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-    }
 
     // 회원정보 수정 (이름, 사진)
     @PutMapping("/{id}")
