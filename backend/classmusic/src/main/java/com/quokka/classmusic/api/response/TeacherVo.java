@@ -29,6 +29,20 @@ public class TeacherVo {
         this.contactCnt = contactCnt;
     }
 
+    @Override
+    public String toString() {
+        return "TeacherVo{" +
+                "name='" + name + '\'' +
+                ", userProfileImage='" + userProfileImage + '\'' +
+                ", teacherId=" + teacherId +
+                ", career=" + career +
+                ", introduce='" + introduce + '\'' +
+                ", avgRating=" + avgRating +
+                ", contactCnt=" + contactCnt +
+                ", instruments=" + instruments +
+                '}';
+    }
+
     public void setInstruments(List<String> instruments) {
         this.instruments = instruments;
     }

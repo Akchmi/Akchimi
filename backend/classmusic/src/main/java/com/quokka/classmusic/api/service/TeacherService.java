@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface TeacherService {
-    List<TeacherVo> selectAllTeacher(Map<String, Object> params);
+    List<TeacherVo> selectAllTeacher(Map<String, String> params);
     TeacherDetailVo selectDetailTeacher(int teacherId);
     int insertTeacher(TeacherDto teacherDto);
     void updateTeacher(int teacherId , TeacherDto teacherDto);

@@ -56,6 +56,17 @@ public class ArticleController {
         }
     }
 
+    // 마지막 페이지 번호만 보내주기
+    @GetMapping("/endPageNo")
+    public ResponseEntity<Integer> endPageNo(@RequestParam Map<String, String> params){
+        try {
+            int endPageNo = articleService.endPageNo(params);
+            return new ResponseEntity<>(endPageNo, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // 자유게시판 글 상세보기
     @GetMapping("/{articleId}")
     public ResponseEntity<ArticleVo> findArticle(@PathVariable int articleId){

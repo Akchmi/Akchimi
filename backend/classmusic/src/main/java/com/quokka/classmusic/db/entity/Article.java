@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Getter @Setter
@@ -42,5 +43,10 @@ public class Article {
 
     @Column(name = "hit")
     private Integer hit;
+    @PrePersist
+    private void prePersist(){
+        this.hit = this.hit == null ? 0 : this.hit;
+        this.createdAt = this.createdAt == null ? (int) Instant.now().getEpochSecond() : 0;
+    }
 
 }

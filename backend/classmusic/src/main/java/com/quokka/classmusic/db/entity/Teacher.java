@@ -39,8 +39,12 @@ public class Teacher {
     private User user;
 
     @OneToMany
-    @JoinColumn(name = "treat_id")
+    @JoinColumn(name = "treatment_id")
     private List<Treat> treats = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "contact_id")
+    private List<Treat> contacts = new ArrayList<>();
 
     @Column(name = "career")
     private Integer career;
@@ -65,6 +69,14 @@ public class Teacher {
 
     @Column(name = "contact_cnt")
     private Integer contactCnt;
+
+    @PrePersist
+    private void prePersist(){
+        this.avgRating = this.avgRating == null ? 0.0f : this.avgRating;
+        this.contactCnt = this.contactCnt == null ? 0 : this.contactCnt;
+    }
+
+
 
     // Constructors, getters, and setters
 }

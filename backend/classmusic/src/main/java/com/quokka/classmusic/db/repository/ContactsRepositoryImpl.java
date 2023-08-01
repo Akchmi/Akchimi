@@ -37,6 +37,7 @@ public class ContactsRepositoryImpl implements ContactsRepository {
         if(type != null){
             if(type == 0){
                 return query.select(Projections.constructor(ContactsVo.class ,
+                                contact.contactId,
                                 teacher.user.name,
                                 teacher.user.userProfileImage,
                                 contact.studentMemo,
@@ -50,6 +51,7 @@ public class ContactsRepositoryImpl implements ContactsRepository {
                         .fetch();
             } else if(type == 1){
                 return query.select(Projections.constructor(ContactsVo.class ,
+                                contact.contactId,
                                 user.name,
                                 user.userProfileImage,
                                 contact.teacherMemo,

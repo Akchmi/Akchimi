@@ -3,6 +3,7 @@ package com.quokka.classmusic.api.service;
 import com.quokka.classmusic.api.request.*;
 import com.quokka.classmusic.api.response.ContactsVo;
 import com.quokka.classmusic.db.entity.Contact;
+import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.repository.ContactsRepository;
 import com.quokka.classmusic.db.repository.TeacherRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
@@ -41,7 +42,16 @@ public class ContactsServiceImpl implements ContactsService{
     @Override
     public void updateContactsState(int contactId , ContactsUpdateStateDto contactsUpdateStateDto) throws Exception {
         Contact contact = contactsRepository.findById(contactId);
-        contact.setState(contactsUpdateStateDto.getState());
+        int state = contactsUpdateStateDto.getState();
+//        수락 시 매칭 수 증가 > 시간 넣어줘야됨
+        if(state == 1){
+            Teacher teacher = contact.getTeacher();
+            teacher.setContactCnt(teacher.getContactCnt() + 1);
+            contact.setStartTime((int) (System.currentTimeMillis() / 1000));
+        } else if(state == 4){
+            contact.setEndTime((int) (System.currentTimeMillis() / 1000));
+        }
+        contact.setState(state);
         contactsRepository.save(contact);
     }
 //    매칭 메모 바꾸기

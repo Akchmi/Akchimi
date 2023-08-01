@@ -3,12 +3,10 @@ package com.quokka.classmusic.db.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
-import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.db.entity.Teacher;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +15,9 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Map;
 
+import static com.quokka.classmusic.db.entity.QContact.contact;
 import static com.quokka.classmusic.db.entity.QInstrument.instrument;
+import static com.quokka.classmusic.db.entity.QReview.review;
 import static com.quokka.classmusic.db.entity.QTeacher.teacher;
 import static com.quokka.classmusic.db.entity.QTreat.treat;
 import static com.quokka.classmusic.db.entity.QUser.user;
@@ -53,27 +53,16 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     }
 
     @Override
-    public List<TeacherVo> findAll(Map<String, Object> params) {
-        StringBuilder keyword = new StringBuilder();
-        keyword.append("%").append(params.get("keyword")).append("%");
-        return query.select(Projections.constructor(TeacherVo.class ,
-                        user.name,
-                        user.userProfileImage,
-                        teacher.teacherId,
-                        teacher.career,
-                        teacher.introduce,
-                        teacher.avgRating,
-                        teacher.contactCnt,
-                        teacher.treats
-                ))
+    public List<Teacher> findAll(Map<String, String> params) {
+        return query.select(teacher)
                 .from(teacher)
-                .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(String.valueOf(params.get("keyword")))))
+                .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(params.get("keyword"))))
                 .join(teacher.user , user)
                 .where(selectGenderFilter(params))
-                .join(teacher.treats , treat)
-                .join(treat.instrument , instrument)
-                .where(selectInstrumentFilter(String.valueOf(params.get("instrument"))))
-                .offset(Integer.parseInt(String.valueOf(params.get("page"))))
+                .leftJoin(teacher.treats , treat)
+                .leftJoin(treat.instrument , instrument)
+                .where(selectInstrumentFilter(params.get("instrument")))
+                .offset((Integer.parseInt(params.get("page")) - 1) * 20)
                 .limit(20)
                 .orderBy(orderType(String.valueOf(params.get("order_by"))))
                 .fetch();
@@ -94,26 +83,40 @@ public class TeacherRepositoryImpl implements TeacherRepository{
         em.remove(teacher);
     }
 
+    @Override
+    public int findReviewCount(int teacherId) {
+        query.select(review.count())
+                .from(teacher)
+//                .join(teacher , contact)
+                .fetchOne();
+
+        return 0;
+    }
+
+    @Override
+    public int findReviewSum(int teacherId) {
+        return 0;
+    }
 
     private BooleanExpression selectInstrumentFilter(String instrumentName) {
-        if(!instrumentName.equals("")){
+        if(instrumentName.equals("")){
             return null;
         }
         return instrument.instrumentName.eq(instrumentName);
     }
 
-    private BooleanExpression startCareerGt(Integer startCareer){
+    private BooleanExpression startCareerGoe(Integer startCareer){
         if(startCareer == null){
             return null;
         }
-        return teacher.career.gt(startCareer);
+        return teacher.career.goe(startCareer);
     }
 
-    private BooleanExpression endCareerLt(Integer endCareer){
+    private BooleanExpression endCareerLoe(Integer endCareer){
         if(endCareer == null){
             return null;
         }
-        return teacher.career.lt(endCareer);
+        return teacher.career.loe(endCareer);
     }
 
     private BooleanExpression genderEq(Integer gender){
@@ -123,18 +126,18 @@ public class TeacherRepositoryImpl implements TeacherRepository{
         return user.gender.eq(gender);
     }
 
-    private BooleanExpression startTimeGt(Integer startTime){
+    private BooleanExpression startTimeGoe(Integer startTime){
         if(startTime == null){
             return null;
         }
-        return teacher.endTime.gt(startTime);
+        return teacher.endTime.goe(startTime);
     }
 
-    private BooleanExpression endTimeLt(Integer endTime){
+    private BooleanExpression endTimeLoe(Integer endTime){
         if(endTime == null){
             return null;
         }
-        return teacher.startTime.lt(endTime);
+        return teacher.startTime.loe(endTime);
     }
 
     private BooleanExpression startCostGoe(Integer startCost){
@@ -159,30 +162,36 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     }
 
     BooleanExpression selectTeacherIntroduceFilter(String keyword){
-        if(!keyword.equals("")){
+        if(keyword.equals("")){
             return null;
         }
-        return teacher.introduce.like(new StringBuilder().append("%").append(keyword).append("%").toString());
+        return teacher.introduce.like(new StringBuilder().append('%').append(keyword).append('%').toString());
     }
 
-    private BooleanBuilder selectTeacherFilter(Map<String, Object> params){
+    private BooleanBuilder selectTeacherFilter(Map<String, String> params){
         BooleanBuilder builder = new BooleanBuilder();
         if(!params.get("start_career").equals("")){
-            builder.and(startCareerGt(Integer.parseInt(String.valueOf(params.get("start_career")))));
+            builder.and(startCareerGoe(Integer.parseInt(String.valueOf(params.get("start_career")))));
         }
         if(!params.get("end_career").equals("")){
-            builder.and(endCareerLt(Integer.parseInt(String.valueOf(params.get("end_career")))));
+            builder.and(endCareerLoe(Integer.parseInt(String.valueOf(params.get("end_career")))));
         }
         if(!params.get("start_time").equals("")){
-            builder.and(startCareerGt(Integer.parseInt(String.valueOf(params.get("start_time")))));
+            builder.and(startTimeGoe(Integer.parseInt(String.valueOf(params.get("start_time")))));
         }
         if(!params.get("end_time").equals("")){
-            builder.and(endCareerLt(Integer.parseInt(String.valueOf(params.get("end_time")))));
+            builder.and(endTimeLoe(Integer.parseInt(String.valueOf(params.get("end_time")))));
+        }
+        if(!params.get("start_cost").equals("")){
+            builder.and(startCostGoe(Integer.parseInt(String.valueOf(params.get("start_cost")))));
+        }
+        if(!params.get("end_cost").equals("")){
+            builder.and(endCostLoe(Integer.parseInt(String.valueOf(params.get("end_cost")))));
         }
         return builder;
     }
 
-    private BooleanBuilder selectGenderFilter(Map<String, Object> params){
+    private BooleanBuilder selectGenderFilter(Map<String, String> params){
         BooleanBuilder builder = new BooleanBuilder();
         if(!params.get("gender").equals("")){
             builder.and(genderEq(Integer.parseInt(String.valueOf(params.get("gender")))));
@@ -194,7 +203,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     private OrderSpecifier orderType(String orderBy){
         if(orderBy.equals("별점수")){
             return new OrderSpecifier(Order.DESC , teacher.avgRating);
-        } else if(orderBy.equals("매칭수")){
+        } else if(orderBy.equals("매칭순")){
             return new OrderSpecifier(Order.DESC , teacher.contactCnt);
         }
         return new OrderSpecifier(Order.DESC , teacher.teacherId);

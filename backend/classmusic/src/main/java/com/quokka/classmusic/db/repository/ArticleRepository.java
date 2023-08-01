@@ -14,4 +14,5 @@ public interface ArticleRepository{
     Article selectOneById(int articleId);
     Article findById(int articleId);
     void delete(Article article);
+    int getEndPage(Map<String, String> params);
 }
