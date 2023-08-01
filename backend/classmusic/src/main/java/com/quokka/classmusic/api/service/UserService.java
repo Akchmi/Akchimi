@@ -1,9 +1,6 @@
 package com.quokka.classmusic.api.service;
 
-import com.quokka.classmusic.api.request.ChangePasswordDto;
-import com.quokka.classmusic.api.request.FindIdDto;
-import com.quokka.classmusic.api.request.LikeInsertDto;
-import com.quokka.classmusic.api.request.ModifyUserDto;
+import com.quokka.classmusic.api.request.*;
 import com.quokka.classmusic.api.response.LikeVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserVo;
@@ -20,4 +17,5 @@ public interface UserService {
     LikeVo addLike(LikeInsertDto likeInsertDto);
     List<TeacherVo> findAllLike(String id);
     void deleteLike(int likeId);
+    void sendTemporaryPassword(MailDto mailDto);
 }

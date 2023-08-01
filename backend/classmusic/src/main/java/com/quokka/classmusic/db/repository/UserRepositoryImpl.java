@@ -32,6 +32,13 @@ public class UserRepositoryImpl implements UserRepository{
     public User findById(int userId) {
         return em.find(User.class, userId);
     }
+    @Override
+    public User findByEmail(String email){
+        return query.select(user)
+                .from(user)
+                .where(user.email.eq(email))
+                .fetchOne();
+    }
 
     @Override
     public User findId(FindIdDto findIdDto) {

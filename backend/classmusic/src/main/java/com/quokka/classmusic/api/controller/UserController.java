@@ -1,9 +1,6 @@
 package com.quokka.classmusic.api.controller;
 
-import com.quokka.classmusic.api.request.ChangePasswordDto;
-import com.quokka.classmusic.api.request.FindIdDto;
-import com.quokka.classmusic.api.request.LikeInsertDto;
-import com.quokka.classmusic.api.request.ModifyUserDto;
+import com.quokka.classmusic.api.request.*;
 import com.quokka.classmusic.api.response.LikeVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserDetailsVo;
@@ -31,6 +28,14 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+    // 임시 비밀번호 발급
+    @PostMapping("/temporary-password")
+    public ResponseEntity sendEmail(@RequestBody MailDto mailDto){
+        userService.sendTemporaryPassword(mailDto);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
 
     // 회원 정보보기
     @GetMapping("/{id}")

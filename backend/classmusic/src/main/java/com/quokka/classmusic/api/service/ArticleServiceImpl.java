@@ -37,7 +37,7 @@ public class ArticleServiceImpl implements ArticleService{
                 .title(articleDto.getTitle())
                 .user(user)
                 .content(articleDto.getContent())
-                .hit(0)
+//                .hit(0)
                 .build();
         articleRepository.save(article);
         return article.getArticleId();

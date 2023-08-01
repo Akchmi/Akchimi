@@ -9,4 +9,5 @@ public interface UserRepository{
     User findId(FindIdDto findIdDto);
     void save(User user);
     void delete(User user);
+    User findByEmail(String email);
 }

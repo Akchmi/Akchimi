@@ -11,6 +11,7 @@ import com.quokka.classmusic.db.repository.TeacherRepository;
 import com.quokka.classmusic.db.repository.TreatRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +66,9 @@ public class TeacherServiceImpl implements TeacherService{
     @Override
     public int insertTeacher(TeacherDto teacherDto) {
         //있는지화인해 유저가 선생테이블에 있는지 확인하고
-
+        if(userRepository.findById(teacherDto.getUserId()).getType() == 1){
+            throw new BadCredentialsException("이미 선생님 프로필이 있음");
+        }
 //        유저 타입 1로 바꿔줌
         User user = userRepository.findById(teacherDto.getUserId());
         user.setType(1);

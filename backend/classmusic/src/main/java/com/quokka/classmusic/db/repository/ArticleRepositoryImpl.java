@@ -56,9 +56,9 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     }
 
     private OrderSpecifier<?> sortKeyWord(String sortType) {
-        if(sortType.equals("default")){
+        if(sortType.equals("최신순")){
             return article.articleId.desc();
-        }else if(sortType.equals("hits")){
+        }else if(sortType.equals("조회순")){
             return article.hit.desc();
         }
         return null;
