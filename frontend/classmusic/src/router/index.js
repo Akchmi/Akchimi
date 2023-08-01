@@ -88,7 +88,7 @@ const routes = [
         component: ArticleDetail,
       },
       {
-        path: "/article/update",
+        path: "/article/update/:id",
         name: "/articleupdate",
         component: ArticleUpdate,
       },

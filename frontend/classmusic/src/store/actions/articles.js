@@ -15,6 +15,10 @@ export default {
   },
 
   //자유게시글 작성
+  getArticledetail(context, articleId) {
+    apiGetArticledetail(context, articleId);
+  },
+
   //자유게시글 상세
   //자유게시글 수정
   //자유게시글 삭제

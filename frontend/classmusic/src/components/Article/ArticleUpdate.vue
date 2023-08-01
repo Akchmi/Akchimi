@@ -10,9 +10,13 @@
       <div>
         <!-- 글 제목, 내용 -->
         <h3>제목</h3>
-        <input class="input__title" type="text" />
+        <input class="input__title" type="text" v-model="articleDetail.title" />
         <h3>내용</h3>
-        <input class="input__content" type="text" />
+        <input
+          class="input__content"
+          type="text"
+          v-model="articleDetail.content"
+        />
       </div>
 
       <hr />
@@ -30,7 +34,29 @@
 </template>
 
 <script>
-export default {};
+import { onMounted } from "vue";
+import { useStore, mapGetters } from "vuex";
+import { useRoute } from "vue-router";
+
+export default {
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters({ articleDetail: "getArticleDetail" }),
+  },
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const articleId = route.params.id;
+
+    onMounted(() => {
+      store.dispatch("getArticledetail", articleId);
+    });
+
+    return { articleId };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

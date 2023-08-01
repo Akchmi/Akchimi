@@ -33,4 +33,16 @@ function apiGetPageno(context, searchType, keyword) {
       console.error("GET 요청 에러 : ", error);
     });
 }
-export { apiGetArticlelist, apiGetPageno };
+
+function apiGetArticledetail(context, articleId) {
+  axios
+    .get(`/articles/${articleId}`)
+    .then(({ data }) => {
+      context.commit("SET_ARTICLE_DETAIL", data);
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error("GET 요청 에러 : ", error);
+    });
+}
+export { apiGetArticlelist, apiGetPageno, apiGetArticledetail };

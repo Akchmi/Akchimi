@@ -7,4 +7,7 @@ export default {
     console.log(data);
     state.articles.endPageno = data;
   },
+  SET_ARTICLE_DETAIL(state, data) {
+    state.articles.articleDetail = data;
+  },
 };

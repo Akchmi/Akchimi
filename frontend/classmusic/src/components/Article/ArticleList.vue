@@ -30,7 +30,7 @@
           <tbody>
             <tr v-for="article in articleList" :key="article.id">
               <td>{{ article.id }}</td>
-              <td @click="$router.push('/article/detail')">
+              <td @click="$router.push(`/article/${article.boardId}`)">
                 {{ article.title }}
               </td>
               <td>{{ article.name }}</td>
