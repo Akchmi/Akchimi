@@ -5,6 +5,7 @@ import com.quokka.classmusic.api.request.ReviewUpdateDto;
 import com.quokka.classmusic.api.response.ReviewVo;
 import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Review;
+import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.repository.ContactsRepository;
 import com.quokka.classmusic.db.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,12 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public void deleteReview(int reviewId) {
         reviewRepository.delete(reviewRepository.findById(reviewId));
+    }
+
+    public void updateRating(int reviewId) {
+        Review review = reviewRepository.findById(reviewId);
+        Teacher teacher = review.getContact().getTeacher();
+
+        teacher.setAvgRating(1.1f);
     }
 }

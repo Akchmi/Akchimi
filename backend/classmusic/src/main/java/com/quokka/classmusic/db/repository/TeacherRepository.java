@@ -15,4 +15,6 @@ public interface TeacherRepository {
     Teacher findById(int teacherId);
     void save(Teacher teacher);
     void delete(Teacher teacher);
+    int findReviewCount(int teacherId);
+    int findReviewSum(int teacherId);
 }

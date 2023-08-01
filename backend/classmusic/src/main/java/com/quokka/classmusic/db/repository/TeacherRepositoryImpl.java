@@ -15,7 +15,9 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Map;
 
+import static com.quokka.classmusic.db.entity.QContact.contact;
 import static com.quokka.classmusic.db.entity.QInstrument.instrument;
+import static com.quokka.classmusic.db.entity.QReview.review;
 import static com.quokka.classmusic.db.entity.QTeacher.teacher;
 import static com.quokka.classmusic.db.entity.QTreat.treat;
 import static com.quokka.classmusic.db.entity.QUser.user;
@@ -57,8 +59,8 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(params.get("keyword"))))
                 .join(teacher.user , user)
                 .where(selectGenderFilter(params))
-                .join(teacher.treats , treat)
-                .join(treat.instrument , instrument)
+                .leftJoin(teacher.treats , treat)
+                .leftJoin(treat.instrument , instrument)
                 .where(selectInstrumentFilter(params.get("instrument")))
                 .offset((Integer.parseInt(params.get("page")) - 1) * 20)
                 .limit(20)
@@ -81,6 +83,20 @@ public class TeacherRepositoryImpl implements TeacherRepository{
         em.remove(teacher);
     }
 
+    @Override
+    public int findReviewCount(int teacherId) {
+        query.select(review.count())
+                .from(teacher)
+//                .join(teacher , contact)
+                .fetchOne();
+
+        return 0;
+    }
+
+    @Override
+    public int findReviewSum(int teacherId) {
+        return 0;
+    }
 
     private BooleanExpression selectInstrumentFilter(String instrumentName) {
         if(instrumentName.equals("")){
@@ -172,9 +188,6 @@ public class TeacherRepositoryImpl implements TeacherRepository{
         if(!params.get("end_cost").equals("")){
             builder.and(endCostLoe(Integer.parseInt(String.valueOf(params.get("end_cost")))));
         }
-
-
-
         return builder;
     }
 

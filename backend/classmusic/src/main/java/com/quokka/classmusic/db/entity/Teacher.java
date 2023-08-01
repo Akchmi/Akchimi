@@ -42,6 +42,10 @@ public class Teacher {
     @JoinColumn(name = "treatment_id")
     private List<Treat> treats = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "contact_id")
+    private List<Treat> contacts = new ArrayList<>();
+
     @Column(name = "career")
     private Integer career;
 
