@@ -1,28 +1,39 @@
-import { apiLogin } from "@/api/auth.js";
+import { apiLogin,  apiFindId, apiFindPw } from "@/api/auth.js";
 
 export default {
-  // 필요 기능
-  //로그인
-  //회원 등록
-  //id 중복확인
-  //임시 비밀번호 발급
-  //아이디 찾기
-  // setToken({ commit, dispatch }, token) {
-  //   commit("SET_TOKEN", token);
-  // },
-  login({commit}, loginInfo) {
-    
-    apiLogin(
-      loginInfo,
-      ({ data }) => {
-        console.log(data);
-        commit('SET_TOKEN', data.accessToken, {root: true});
-               
-      },
-      ({ error }) => {
-        console.log(error);
-      }
-    );
+  async login({commit}, loginInfo) {    
+    try {
+      const { data } = await apiLogin(loginInfo);
+      console.log(data);
+      commit('SET_TOKEN', data.accessToken, {root: true});
+    } catch (error) {
+      console.log(error.response.data);
+      throw error;
+    }        
   },
-};
 
+  async findId({commit}, namemail) {
+    try {
+      const { data } = await apiFindId(namemail);
+      console.log(data);
+      console.log(namemail)
+      commit('SET_FINDID_ERROR', null);      
+    } catch (error) {
+      console.log(error.response.data);
+      commit('SET_FINDID_ERROR','정보가 잘못되었습니다.');    
+    }
+  },
+
+  async findPw({commit}, idemail) {
+    try {
+      const { data } = await apiFindPw(idemail);
+      console.log(data)
+      commit('SET_FINDPW_ERROR', null)
+    } catch (error) {
+      commit('SET_FINDPW_ERROR', '정보가 잘못되었습니다.')
+      console.log(error.response.data)
+    }
+  }
+
+
+};

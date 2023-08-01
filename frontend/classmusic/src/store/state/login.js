@@ -1,3 +1,4 @@
 export default {
-  token: null,
+  findIdError : null,
+  findPwError : null,
 };
