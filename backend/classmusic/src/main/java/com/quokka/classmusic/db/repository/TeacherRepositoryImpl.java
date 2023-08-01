@@ -52,20 +52,6 @@ public class TeacherRepositoryImpl implements TeacherRepository{
 
     @Override
     public List<Teacher> findAll(Map<String, String> params) {
-        System.out.println(params.get("keyword"));
-        System.out.println(params.get("start_career"));
-        System.out.println(params.get("end_career"));
-        System.out.println(params.get("gender"));
-        System.out.println(params.get("class_day"));
-        System.out.println(params.get("start_time"));
-        System.out.println(params.get("end_time"));
-        System.out.println(params.get("start_cost"));
-        System.out.println(params.get("instrument"));
-        System.out.println(params.get("order_by"));
-        System.out.println(params.get("page"));
-        StringBuilder keyword = new StringBuilder();
-        keyword.append("%").append(params.get("keyword")).append("%");
-
         return query.select(teacher)
                 .from(teacher)
                 .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(params.get("keyword"))))
@@ -74,7 +60,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .join(teacher.treats , treat)
                 .join(treat.instrument , instrument)
                 .where(selectInstrumentFilter(params.get("instrument")))
-                .offset(Integer.parseInt(String.valueOf(params.get("page"))))
+                .offset((Integer.parseInt(params.get("page")) - 1) * 20)
                 .limit(20)
                 .orderBy(orderType(String.valueOf(params.get("order_by"))))
                 .fetch();

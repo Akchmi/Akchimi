@@ -49,9 +49,6 @@ public class TeacherServiceImpl implements TeacherService{
                     ));
         }
 
-//        for (TeacherVo teacherVo : teacherVoList ) {
-//            teacherVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherVo.getTeacherId()));
-//        }
         return teacherVoList;
     }
 
@@ -85,8 +82,6 @@ public class TeacherServiceImpl implements TeacherService{
                 .introduce(teacherDto.getIntroduce())
                 .startTime(teacherDto.getStartTime())
                 .endTime(teacherDto.getEndTime())
-                .contactCnt(0)
-                .avgRating(0.0f)
                 .classDay(day)
                 .build();
         teacherRepository.save(teacher);

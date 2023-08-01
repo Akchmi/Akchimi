@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContactsVo {
+    private int contactId;
     private String name;
     private String userProfileImage;
     private String memo;
