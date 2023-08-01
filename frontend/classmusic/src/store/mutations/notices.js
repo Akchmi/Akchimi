@@ -1,5 +1,5 @@
 export default {
-  SET_NOTICE_LIST(state, noticeList) {
-    state.notices.noticeList = noticeList;
+  SET_NOTICE_LIST(state, data) {
+    state.notices.noticeList = data.data;
   },
 };
