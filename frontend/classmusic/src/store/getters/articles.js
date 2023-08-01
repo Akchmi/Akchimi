@@ -1,4 +1,7 @@
 export default {
+  getEndPageNo(state) {
+    return state.articles.endPageno;
+  },
   getArticleList(state) {
     return state.articles.articleList;
   },

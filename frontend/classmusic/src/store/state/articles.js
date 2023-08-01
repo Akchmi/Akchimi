@@ -1,4 +1,5 @@
 export default {
+  endPageno: 1,
   articleList: [],
   articleDetail: [],
 

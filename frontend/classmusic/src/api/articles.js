@@ -1,17 +1,36 @@
 import axios from "@/api/axios";
 
-function apiGetArticlelist(context, params) {
+function apiGetArticlelist(context, searchType, keyword, pageNo, sortType) {
   axios
     .get("/articles", {
-      params: params,
+      params: {
+        searchType: searchType,
+        keyword: keyword,
+        pageNo: pageNo,
+        sortType: sortType,
+      },
     })
     .then(({ data }) => {
       context.commit("SET_ARTICLE_LIST", data);
-      console.log(data);
     })
     .catch((error) => {
       console.error("GET 요청 에러 : ", error);
     });
 }
 
-export { apiGetArticlelist };
+function apiGetPageno(context, searchType, keyword) {
+  axios
+    .get("/articles/endPageNo", {
+      params: {
+        searchType: searchType,
+        keyword: keyword,
+      },
+    })
+    .then(({ data }) => {
+      context.commit("GET_PAGENO", data);
+    })
+    .catch((error) => {
+      console.error("GET 요청 에러 : ", error);
+    });
+}
+export { apiGetArticlelist, apiGetPageno };

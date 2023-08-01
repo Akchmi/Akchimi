@@ -1,10 +1,17 @@
-import { apiGetArticlelist } from "@/api/articles";
+import { apiGetArticlelist, apiGetPageno } from "@/api/articles";
 
 export default {
   // 필요 기능
   //자유게시글 리스트 조회
   getArticlelist(context, params) {
-    apiGetArticlelist(context, params);
+    apiGetArticlelist(
+      context,
+      params.searchType,
+      params.keyword,
+      params.pageNo,
+      params.sortType
+    );
+    apiGetPageno(context, params.searchType, params.keyword);
   },
 
   //자유게시글 작성

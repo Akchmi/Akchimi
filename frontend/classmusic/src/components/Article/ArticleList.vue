@@ -9,7 +9,7 @@
       </div>
       <div>
         <!-- 자유게시판 정렬-->
-        <select v-model="selectedSorttype">
+        <select v-model="selectedSorttype" @change="sortTypeChange">
           <option v-for="(item, idx) in sortType" :key="idx" :value="item">
             {{ item }}
           </option>
@@ -24,6 +24,7 @@
               <th>제목</th>
               <th>작성자</th>
               <th>작성일자</th>
+              <th>조회수</th>
             </tr>
           </thead>
           <tbody>
@@ -34,6 +35,7 @@
               </td>
               <td>{{ article.name }}</td>
               <td>{{ article.createdAt }}</td>
+              <td>{{ article.hit }}</td>
             </tr>
           </tbody>
         </table>
@@ -63,7 +65,7 @@
           v-for="page in pages"
           :key="page"
           @click="pageChange(page)"
-          v-show="page <= lastpage"
+          v-show="page <= endPageno"
         >
           {{ page }}
         </button>
@@ -90,15 +92,16 @@ export default {
   },
   computed: {
     ...mapGetters({ articleList: "getArticleList" }),
+    ...mapGetters({ endPageno: "getEndPageNo" }),
   },
   methods: {
     ...mapActions(["getArticlelist"]),
     runSearch() {
-      this.getNoticelist({
+      this.getArticlelist({
         searchType: this.selectedSearchCategory,
         keyword: this.searchQuery,
         pageNo: 1,
-        sortType: "default",
+        sortType: this.selectedSorttype,
       });
     },
 
@@ -114,7 +117,7 @@ export default {
     },
 
     pageUp() {
-      if (this.pages[this.pages.length - 1] >= this.lastpage) {
+      if (this.pages[this.pages.length - 1] >= this.endPageno) {
         alert("마지막 페이지입니다.");
         return;
       }
@@ -125,10 +128,20 @@ export default {
     },
 
     pageChange(page) {
-      this.getNoticelist({
-        pageNo: page,
-        keyword: this.searchQuery,
+      this.getArticlelist({
         searchType: this.selectedSearchCategory,
+        keyword: this.searchQuery,
+        pageNo: page,
+        sortType: this.selectedSorttype,
+      });
+    },
+
+    sortTypeChange() {
+      this.getArticlelist({
+        searchType: this.selectedSearchCategory,
+        keyword: this.searchQuery,
+        pageNo: 1,
+        sortType: this.selectedSorttype,
       });
     },
   },
@@ -139,10 +152,10 @@ export default {
 
     onMounted(() => {
       store.dispatch("getArticlelist", {
-        searchType: "default",
+        searchType: "전체",
         keyword: "",
         pageNo: 1,
-        sortType: "default",
+        sortType: "최신순",
       });
     });
 
