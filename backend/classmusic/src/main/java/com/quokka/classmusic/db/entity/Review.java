@@ -28,8 +28,8 @@ public class Review {
     @Column(name = "review_id")
     private int reviewId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contact_id", referencedColumnName = "contact_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "contact_id")
     private Contact contact;
 
     @Column(name = "rating")

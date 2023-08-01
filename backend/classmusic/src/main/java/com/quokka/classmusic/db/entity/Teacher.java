@@ -44,7 +44,7 @@ public class Teacher {
 
     @OneToMany
     @JoinColumn(name = "contact_id")
-    private List<Treat> contacts = new ArrayList<>();
+    private List<Contact> contacts = new ArrayList<>();
 
     @Column(name = "career")
     private Integer career;

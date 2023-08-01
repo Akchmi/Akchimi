@@ -54,14 +54,26 @@ public class TeacherRepositoryImpl implements TeacherRepository{
 
     @Override
     public List<Teacher> findAll(Map<String, String> params) {
+//        return query.select(teacher)
+//                .from(teacher)
+//                .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(params.get("keyword"))))
+//                .join(teacher.user , user)
+//                .where(selectGenderFilter(params))
+//                .leftJoin(teacher.treats , treat)
+//                .leftJoin(treat.instrument , instrument)
+//                .where(instrumentEq(params.get("instrument")))
+//                .offset((Integer.parseInt(params.get("page")) - 1) * 20)
+//                .limit(20)
+//                .orderBy(orderType(String.valueOf(params.get("order_by"))))
+//                .fetch();
         return query.select(teacher)
-                .from(teacher)
+                .from(treat)
+                .join(treat.teacher , teacher)
+                .join(treat.instrument , instrument)
+                .join(teacher.user)
                 .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(params.get("keyword"))))
-                .join(teacher.user , user)
                 .where(selectGenderFilter(params))
-                .leftJoin(teacher.treats , treat)
-                .leftJoin(treat.instrument , instrument)
-                .where(selectInstrumentFilter(params.get("instrument")))
+                .where(instrumentEq(params.get("instrument")))
                 .offset((Integer.parseInt(params.get("page")) - 1) * 20)
                 .limit(20)
                 .orderBy(orderType(String.valueOf(params.get("order_by"))))
@@ -84,25 +96,23 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     }
 
     @Override
-    public int findReviewCount(int teacherId) {
-        query.select(review.count())
-                .from(teacher)
-//                .join(teacher , contact)
+    public long findReviewCount(int teacherId) {
+        return query.select(review.count())
+                .from(review)
+                .join(review.contact , contact)
+                .join(contact.teacher , teacher)
+                .where(teacher.teacherId.eq(teacherId))
                 .fetchOne();
-
-        return 0;
     }
 
     @Override
-    public int findReviewSum(int teacherId) {
-        return 0;
-    }
-
-    private BooleanExpression selectInstrumentFilter(String instrumentName) {
-        if(instrumentName.equals("")){
-            return null;
-        }
-        return instrument.instrumentName.eq(instrumentName);
+    public float findReviewSum(int teacherId) {
+        return query.select(review.rating.sum())
+                .from(review)
+                .join(review.contact , contact)
+                .join(contact.teacher , teacher)
+                .where(teacher.teacherId.eq(teacherId))
+                .fetchOne();
     }
 
     private BooleanExpression startCareerGoe(Integer startCareer){
@@ -155,9 +165,11 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     }
 
     private BooleanExpression instrumentEq(String ins){
-        if(ins == null){
+        System.out.println(ins + "asdf");
+        if(ins.equals("")){
             return null;
         }
+//        return treat.instrument.instrumentName.like("%" + ins + "%");
         return instrument.instrumentName.eq(ins);
     }
 

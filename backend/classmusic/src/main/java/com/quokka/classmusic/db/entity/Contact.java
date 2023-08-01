@@ -6,6 +6,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter @Getter
@@ -42,6 +44,10 @@ public class Contact {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
     private Teacher teacher;
+
+    @OneToMany()
+    @JoinColumn(name = "review_id")
+    private List<Review> reviews = new ArrayList<>();
 
     @Column(name = "state")
     private Integer state;
