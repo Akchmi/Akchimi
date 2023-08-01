@@ -46,7 +46,7 @@ public class AuthController {
 
         try {
             LoginSuccessVo loginSuccessVo = authService.login(loginDto);
-            return new ResponseEntity<>(loginSuccessVo, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(loginSuccessVo, HttpStatus.OK);
         }catch(NoSuchElementException e){
             log.debug("아이디가 존재하지 않습니다.");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -73,6 +73,6 @@ public class AuthController {
             isDuplicated = true;
         }
 
-        return new ResponseEntity<>(isDuplicated, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(isDuplicated, HttpStatus.OK);
     }
 }

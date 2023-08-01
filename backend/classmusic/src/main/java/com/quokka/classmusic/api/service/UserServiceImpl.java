@@ -44,21 +44,27 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserVo findUserById(String id) {
         User user = userRepository.findUserById(id);
-//                .orElseThrow(() -> new NoSuchElementException("id와 일치하는 회원이 없습니다."));
+        if(user == null){
+            throw new NoSuchElementException("id와 일치하는 회원이 없습니다.");
+        }
         return new UserVo(user);
     }
 
     @Override
     public UserVo findUserByUserId(int userId) {
          User user = userRepository.findById(userId);
-//                 .orElseThrow(() -> new NoSuchElementException("userId와 일치하는 회원이 없습니다."));
+        if(user == null){
+            throw new NoSuchElementException("id와 일치하는 회원이 없습니다.");
+        }
          return new UserVo(user);
     }
 
     @Override
     public UserVo findId(FindIdDto findIdDto) {
         User user = userRepository.findId(findIdDto);
-//                .orElseThrow(() -> new NoSuchElementException("일치하는 아이디가 없습니다."));
+        if(user == null){
+            throw new NoSuchElementException("id와 일치하는 회원이 없습니다.");
+        }
         return new UserVo(user);
     }
 
