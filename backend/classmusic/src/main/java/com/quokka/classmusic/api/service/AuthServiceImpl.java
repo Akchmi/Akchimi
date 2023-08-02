@@ -4,6 +4,7 @@ import com.quokka.classmusic.api.request.LoginDto;
 import com.quokka.classmusic.api.request.SignupDto;
 import com.quokka.classmusic.api.response.LoginSuccessVo;
 import com.quokka.classmusic.api.response.UserVo;
+import com.quokka.classmusic.common.exception.UserIdDuplicatedExeception;
 import com.quokka.classmusic.common.util.JwtTokenUtil;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.UserRepository;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @Service
 @Slf4j
@@ -39,6 +42,10 @@ public class AuthServiceImpl implements AuthService{
         // TODO : 유저 프로필 이미지 기능 추가
         // TODO : 유저 Type 기본값 0으로 설정? -> 백엔드에서 넣어주냐 vs DB에서 Default로 설정하냐
         // TODO : 아이디 중복 체크 -> User Table Id Column에 unique 속성 추가합시다
+
+        if(userRepository.findUserById(signupDto.getId())!=null){
+            throw new UserIdDuplicatedExeception("중복아이디입니다.");
+        }
 
         User user = User.builder()
                 .id(signupDto.getId())

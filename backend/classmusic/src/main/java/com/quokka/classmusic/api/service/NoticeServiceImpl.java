@@ -67,6 +67,11 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
+    public int endPageNo(Map<String, String> params) {
+        return noticeRepository.getEndPage(params);
+    }
+
+    @Override
     public int insertNotice(NoticeDto noticeInsertDto) {
         log.debug("NoticeService insertNotice 호출 noticeInsertDto : {}", noticeInsertDto);
         Notice notice = Notice.builder()

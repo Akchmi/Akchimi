@@ -35,6 +35,16 @@ public class NoticeController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+    @GetMapping("/endPageNo")
+    public ResponseEntity<Integer> endPageNo(@RequestParam Map<String, String> params){
+        try {
+            int endPageNo = noticeService.endPageNo(params);
+            return new ResponseEntity<>(endPageNo, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @GetMapping("/{noticeId}")
     public ResponseEntity<NoticeDetailVo> selectNoticeDetail(@PathVariable("noticeId") int noticeId){

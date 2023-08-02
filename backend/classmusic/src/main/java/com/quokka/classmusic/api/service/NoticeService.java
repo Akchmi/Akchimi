@@ -13,4 +13,5 @@ public interface NoticeService {
     int insertNotice(NoticeDto noticeInsertDto);
     void updateNotice(NoticeDto noticeDto, int noticeId);
     void deleteNotice(int noticeId);
+    int endPageNo(Map<String, String> params);
 }

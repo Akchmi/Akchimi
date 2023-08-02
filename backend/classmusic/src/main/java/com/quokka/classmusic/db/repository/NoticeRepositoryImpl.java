@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
+import static com.quokka.classmusic.db.entity.QArticle.article;
 import static com.quokka.classmusic.db.entity.QNotice.notice;
 
 @Repository
@@ -45,6 +46,7 @@ public class NoticeRepositoryImpl implements NoticeRepository {
                 notice.createdAt))
                 .from(notice)
                 .where(likeKeywordInSearchType(searchType, keyword))
+                .offset((pageNo-1)*20).limit(20)
                 .fetch();
     }
 
@@ -61,6 +63,17 @@ public class NoticeRepositoryImpl implements NoticeRepository {
     @Override
     public void delete(Notice notice) {
         em.remove(notice);
+    }
+
+    @Override
+    public int getEndPage(Map<String, String> params) {
+        String searchType = params.get("searchType");
+        String keyword = params.get("keyword");
+        long totalNoticeNum = queryFactory
+                .selectFrom(notice)
+                .where(likeKeywordInSearchType(searchType, keyword))
+                .fetchCount();
+        return (int)(totalNoticeNum-1)/20+1;
     }
 
     private BooleanExpression likeKeywordInSearchType(String searchType, String keyword){

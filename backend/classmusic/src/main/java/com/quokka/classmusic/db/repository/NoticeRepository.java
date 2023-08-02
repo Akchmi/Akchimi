@@ -14,4 +14,5 @@ public interface NoticeRepository {
     Notice findNoticeById(int noticeId);
     void save(Notice notice);
     void delete(Notice notice);
+    int getEndPage(Map<String, String> params);
 }

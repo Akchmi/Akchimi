@@ -8,6 +8,7 @@ import com.quokka.classmusic.api.response.LoginSuccessVo;
 import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.api.service.AuthService;
 import com.quokka.classmusic.api.service.UserService;
+import com.quokka.classmusic.common.exception.UserIdDuplicatedExeception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,9 +37,12 @@ public class AuthController {
     public ResponseEntity<Integer> signup(@RequestBody SignupDto signupDto){
         log.info("POST /auth/sign-up 요청 SignUpDto : {}", signupDto);
 
-        int userId = authService.signup(signupDto);
-
-        return new ResponseEntity<>(userId, HttpStatus.CREATED);
+        try {
+            int userId = authService.signup(signupDto);
+            return new ResponseEntity<>(userId, HttpStatus.CREATED);
+        }catch(UserIdDuplicatedExeception e){
+            return new ResponseEntity<>(-1, HttpStatus.BAD_REQUEST);
+        }
     }
 
     // 200 성공 401 인증 실패 404 사용자 없음 500 서버 오류
@@ -83,7 +87,7 @@ public class AuthController {
         try{
             UserVo userVo = userService.findId(findIdDto);
             log.debug("find-id : {}",userVo.getId());
-            return new ResponseEntity<>(userVo.getId(), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(userVo.getId(), HttpStatus.OK);
         }catch (NoSuchElementException e){
             log.debug("해당하는 아이디를 찾지 못했습니다.");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
