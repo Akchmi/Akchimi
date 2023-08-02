@@ -67,6 +67,8 @@ async function apiCheckId(params) {
   console.log("URL:", url); 
   try {
     const response =await axios.get(`/auth/check-id/?id=${params}`);
+    console.log(response);
+
     return response;
   } catch (error) {
     console.error(error.response.data)
@@ -76,6 +78,7 @@ async function apiCheckId(params) {
 async function apiRegister(params) {
   try {
     const response = await axios.post("/auth/sign-up", params);
+    
     return response;
   } catch (error) {
     console.error(error.response.data);
