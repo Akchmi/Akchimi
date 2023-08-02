@@ -1,4 +1,5 @@
 import axios from "@/api/axios";
+import router from "@/router/index";
 
 function apiGetArticlelist(context, searchType, keyword, pageNo, sortType) {
   axios
@@ -47,14 +48,7 @@ function apiGetArticledetail(context, articleId) {
 }
 
 function apiArticleupdate(context, data) {
-  console.log(
-    JSON.stringify({
-      title: data.title,
-      content: data.content,
-      file: data.file,
-      userId: data.userId,
-    })
-  );
+  const articleId = data.articleId;
   axios
     .put(
       `/articles/${data.articleId}`,
@@ -65,13 +59,33 @@ function apiArticleupdate(context, data) {
         userId: data.userId,
       })
     )
-    .then(({ data }) => {
-      console.log(data);
-      console.log("axios then까지 됨");
-      // context.commit("GET_PAGENO", data);
+    .then(() => {
+      router.push(`/article/${articleId}`);
     })
     .catch((error) => {
       console.error("PUT 요청 에러 : ", error);
+    });
+}
+
+function apiArticlecreate(context, data) {
+  axios
+    .post(`/articles`, data)
+    .then(({ data }) => {
+      context.commit("SET_CREATE_ID", data);
+    })
+    .catch((error) => {
+      console.error("POST 요청 에러 : ", error);
+    });
+}
+
+function apiArticledelete(context, articleId) {
+  axios
+    .delete(`/articles/${articleId}`)
+    .then(() => {
+      router.push(`/article/list`);
+    })
+    .catch((error) => {
+      console.error("POST 요청 에러 : ", error);
     });
 }
 
@@ -80,4 +94,6 @@ export {
   apiGetPageno,
   apiGetArticledetail,
   apiArticleupdate,
+  apiArticlecreate,
+  apiArticledelete,
 };

@@ -21,10 +21,12 @@
 
         <h3>첨부파일</h3>
 
-        <button @click="$router.push(`/article/update/${articleId}`)">
-      수정
-    </button>
-        <button>삭제</button>
+        <div v-if="articleDetail.userId === loginUser">
+          <button @click="$router.push(`/article/update/${articleId}`)">
+            수정
+          </button>
+          <button @click="articleDelete">삭제</button>
+        </div>
       </div>
     </div>
   </div>
@@ -32,7 +34,7 @@
 
 <script>
 import { onMounted } from "vue";
-import { useStore, mapGetters } from "vuex";
+import { useStore, mapGetters, mapActions } from "vuex";
 import { useRoute } from "vue-router";
 
 export default {
@@ -41,6 +43,15 @@ export default {
   },
   computed: {
     ...mapGetters({ articleDetail: "getArticleDetail" }),
+    ...mapGetters({ isLogin: "getIsLogin" }),
+    ...mapGetters({ loginUser: "getUserId" }),
+  },
+  methods: {
+    ...mapActions(["deleteArticleDelete"]),
+
+    articleDelete() {
+      this.deleteArticleDelete(this.articleDetail.articleId);
+    },
   },
 
   setup() {

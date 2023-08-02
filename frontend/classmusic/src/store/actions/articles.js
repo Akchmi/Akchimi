@@ -3,6 +3,8 @@ import {
   apiGetPageno,
   apiGetArticledetail,
   apiArticleupdate,
+  apiArticlecreate,
+  apiArticledelete,
 } from "@/api/articles";
 
 export default {
@@ -29,7 +31,13 @@ export default {
     apiArticleupdate(context, data);
   },
   //자유게시글 작성
+  postArticleCreate(context, data) {
+    apiArticlecreate(context, data);
+  },
   //자유게시글 삭제
+  deleteArticleDelete(context, articleId) {
+    apiArticledelete(context, articleId);
+  },
   //자유게시글 댓글 조회
   //자유게시글 댓글 작성
   //자유게시글 댓글 수정

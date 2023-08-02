@@ -93,6 +93,7 @@ export default {
   computed: {
     ...mapGetters({ articleList: "getArticleList" }),
     ...mapGetters({ endPageno: "getEndPageNo" }),
+    ...mapGetters({ isLogin: "getIsLogin" }),
   },
   methods: {
     ...mapActions(["getArticlelist"]),
@@ -143,6 +144,15 @@ export default {
         pageNo: 1,
         sortType: this.selectedSorttype,
       });
+    },
+
+    goArticlecreate() {
+      if (this.isLogin == false) {
+        alert("로그인이 필요합니다");
+        this.$router.push("/login/signin");
+        return;
+      }
+      this.$router.push("/article/create");
     },
   },
   setup() {

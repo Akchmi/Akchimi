@@ -10,9 +10,9 @@
       <div>
         <!-- 글 제목, 내용 -->
         <h3>제목</h3>
-        <input class="input__title" type="text" />
+        <input class="input__title" type="text" v-model="title" />
         <h3>내용</h3>
-        <input class="input__content" type="text" />
+        <input class="input__content" type="text" v-model="content" />
         <hr />
       </div>
 
@@ -23,14 +23,36 @@
 
       <div>
         <!-- 작성완료 버튼 -->
-        <button>작성완료</button>
+        <button @click="postArticle">작성완료</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapActions, mapGetters } from "vuex";
+
+export default {
+  data() {
+    return {
+      title: "",
+      content: "",
+    };
+  },
+  computed: {
+    ...mapGetters({ createId: "getArticleCreateId" }),
+  },
+  methods: {
+    ...mapActions(["postArticleCreate"]),
+
+    postArticle() {
+      this.postArticleCreate({
+        title: this.title,
+        content: this.content,
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
