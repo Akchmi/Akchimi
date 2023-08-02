@@ -39,7 +39,8 @@ async function apiLogin(params) {
     const response = await axios.post(`/auth/login`, JSON.stringify(params));
     return response;
   } catch (error) {
-    console.error(error.response.data);  
+    console.log("api login error : " + error);
+    return error.response;
   }
 }
 

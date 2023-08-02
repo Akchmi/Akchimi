@@ -11,14 +11,18 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     console.log("axios bearer token 설정");
-    const common = JSON.parse(localStorage.getItem("vuex")).common;
-    const accessToken = common.accessToken;
-    console.log(accessToken);
+    const vuexStorage = JSON.parse(localStorage.getItem("vuex"));
 
-    if (accessToken != null) config.headers.Authorization = `${accessToken}`;
+    if(vuexStorage != null){
+      const accessToken = vuexStorage.common.accessToken;
+      console.log("access token : " + accessToken);
+      if (accessToken != null) config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+   
     return config;
   },
   (error) => {
+    console.log("axios bearer 설정 에러");
     return Promise.reject(error);
   }
 );
