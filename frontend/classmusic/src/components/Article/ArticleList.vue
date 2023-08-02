@@ -29,8 +29,8 @@
           </thead>
           <tbody>
             <tr v-for="article in articleList" :key="article.id">
-              <td>{{ article.id }}</td>
-              <td @click="$router.push(`/article/${article.boardId}`)">
+              <td>{{ article.articleId }}</td>
+              <td @click="$router.push(`/article/${article.articleId}`)">
                 {{ article.title }}
               </td>
               <td>{{ article.name }}</td>

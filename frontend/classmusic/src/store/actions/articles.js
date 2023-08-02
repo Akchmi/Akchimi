@@ -1,4 +1,9 @@
-import { apiGetArticlelist, apiGetPageno } from "@/api/articles";
+import {
+  apiGetArticlelist,
+  apiGetPageno,
+  apiGetArticledetail,
+  apiArticleupdate,
+} from "@/api/articles";
 
 export default {
   // 필요 기능
@@ -14,13 +19,16 @@ export default {
     apiGetPageno(context, params.searchType, params.keyword);
   },
 
-  //자유게시글 작성
+  //자유게시글 상세
   getArticledetail(context, articleId) {
     apiGetArticledetail(context, articleId);
   },
 
-  //자유게시글 상세
   //자유게시글 수정
+  putArticleupdate(context, data) {
+    apiArticleupdate(context, data);
+  },
+  //자유게시글 작성
   //자유게시글 삭제
   //자유게시글 댓글 조회
   //자유게시글 댓글 작성

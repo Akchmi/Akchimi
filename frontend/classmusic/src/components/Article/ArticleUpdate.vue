@@ -18,7 +18,6 @@
           v-model="articleDetail.content"
         />
       </div>
-
       <hr />
       <div>
         <!-- 첨부파일 -->
@@ -27,7 +26,7 @@
 
       <div>
         <!-- 수정완료 버튼 -->
-        <button>수정완료</button>
+        <button @click="articleUpdate">수정완료</button>
       </div>
     </div>
   </div>
@@ -35,7 +34,7 @@
 
 <script>
 import { onMounted } from "vue";
-import { useStore, mapGetters } from "vuex";
+import { useStore, mapGetters, mapActions } from "vuex";
 import { useRoute } from "vue-router";
 
 export default {
@@ -44,6 +43,19 @@ export default {
   },
   computed: {
     ...mapGetters({ articleDetail: "getArticleDetail" }),
+  },
+  methods: {
+    ...mapActions(["putArticleupdate"]),
+
+    articleUpdate() {
+      this.putArticleupdate({
+        title: this.articleDetail.title,
+        content: this.articleDetail.content,
+        file: "",
+        userId: 1,
+        articleId: this.articleId,
+      });
+    },
   },
   setup() {
     const store = useStore();

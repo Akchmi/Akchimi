@@ -21,11 +21,7 @@
 
         <h3>첨부파일</h3>
 
-        <button
-          @click="$router.push(`/article/update/${articleDetail.boardId}`)"
-        >
-          수정
-        </button>
+        <button @click="articleUpdate">수정</button>
         <button>삭제</button>
       </div>
     </div>
@@ -44,6 +40,7 @@ export default {
   computed: {
     ...mapGetters({ articleDetail: "getArticleDetail" }),
   },
+
   setup() {
     const store = useStore();
     const route = useRoute();
