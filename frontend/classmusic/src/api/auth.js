@@ -63,10 +63,10 @@ async function apiFindPw(params) {
 }
 
 async function apiCheckId(params) {
-  const url = `/auth/check-id/?id=${params}`;
+  const url = `/auth/check-id?id=${params}`;
   console.log("URL:", url); 
   try {
-    const response =await axios.get(`/auth/check-id/?id=${params}`);
+    const response =await axios.get(`/auth/check-id?id=${params}`);
     console.log(response);
 
     return response;
@@ -84,8 +84,6 @@ async function apiRegister(params) {
     console.error(error.response.data);
   }
 }
-
-
 
 
 export { apiLogin, apiCheckId, apiFindId, apiFindPw, apiRegister}

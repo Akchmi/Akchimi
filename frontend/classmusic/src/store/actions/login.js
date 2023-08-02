@@ -9,7 +9,8 @@ export default {
       
       if(status == HttpStatusCode.Ok){
         // 로그인 성공 시 vuex common에 저장
-        commit('SET_TOKEN', data.accessToken, {root: true});
+        commit('SET_TOKEN', data, {root: true});
+   
       }else if(status == HttpStatusCode.Unauthorized){
         alert("비밀번호가 일치하지 않습니다.");
         throw response;

@@ -1,7 +1,9 @@
 export default {
-  SET_TOKEN(state, token){
-    state.common.accessToken = token;
+  SET_TOKEN(state, data){
+    console.log(data)
+    state.common.accessToken = data.accessToken;
     state.common.isLogin = true;
+    state.common.userId = data.userId;
     // console.log(token)
   }
 
