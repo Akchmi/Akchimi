@@ -19,7 +19,7 @@ export default {
     apiGetPageno(context, params.searchType, params.keyword);
   },
 
-  //자유게시글 상세
+  //자유게시글 작성
   getArticledetail(context, articleId) {
     apiGetArticledetail(context, articleId);
   },

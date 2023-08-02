@@ -1,4 +1,4 @@
-import { apiLogin,  apiFindId, apiFindPw } from "@/api/auth.js";
+import { apiLogin,  apiFindId, apiFindPw,   } from "@/api/auth.js";
 
 export default {
   async login({commit}, loginInfo) {    
@@ -33,7 +33,7 @@ export default {
       commit('SET_FINDPW_ERROR', '정보가 잘못되었습니다.')
       console.log(error.response.data)
     }
-  }
+  },  
 
 
 };

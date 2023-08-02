@@ -9,19 +9,18 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-  (config)=>{
-    console.log("axios bearer token 설정")
+  (config) => {
+    console.log("axios bearer token 설정");
     const common = JSON.parse(localStorage.getItem("vuex")).common;
     const accessToken = common.accessToken;
     console.log(accessToken);
 
-    if(accessToken != null)
-      config.headers.Authorization = `Bearer ${accessToken}`;
+    if (accessToken != null) config.headers.Authorization = `${accessToken}`;
     return config;
   },
-  (error)=>{
+  (error) => {
     return Promise.reject(error);
   }
-)
+);
 
 export default api;

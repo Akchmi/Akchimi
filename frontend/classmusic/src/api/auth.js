@@ -39,8 +39,7 @@ async function apiLogin(params) {
     const response = await axios.post(`/auth/login`, JSON.stringify(params));
     return response;
   } catch (error) {
-    console.error(error.response.data);
-    throw error;
+    console.error(error.response.data);  
   }
 }
 
@@ -50,7 +49,6 @@ async function apiFindId(params) {
     return response;
   } catch (error) {
     console.error(error.response.data);
-    throw error;
   }
 }
 
@@ -60,21 +58,30 @@ async function apiFindPw(params) {
     return response;  
   } catch (error) {
     console.error(error.response.data)
+  }
+}
 
+async function apiCheckId(params) {
+  const url = `/auth/check-id/?id=${params}`;
+  console.log("URL:", url); 
+  try {
+    const response =await axios.get(`/auth/check-id/?id=${params}`);
+    return response;
+  } catch (error) {
+    console.error(error.response.data)
+  }
+}
+
+async function apiRegister(params) {
+  try {
+    const response = await axios.post("/auth/sign-up", params);
+    return response;
+  } catch (error) {
+    console.error(error.response.data);
   }
 }
 
 
-function apiCheckId(loginId, success, fail) {
-  axios.get(`/auth/check-id/?id=${loginId}`)
-  .than(success)
-  .catch(fail)
-}
-
-// function apiRegister() {
-//   axios.post(`/auth/sign-up`)
-
-// }
 
 
-export { apiLogin, apiCheckId, apiFindId, apiFindPw }
+export { apiLogin, apiCheckId, apiFindId, apiFindPw, apiRegister}
