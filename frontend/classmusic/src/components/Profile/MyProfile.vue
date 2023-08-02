@@ -30,18 +30,40 @@
         </div>
       </div>
       <div class="button">
-        <button>비밀번호변경</button>
+        <button @click="showChangePasswordModal = true">비밀번호 변경</button>
         <button>회원탈퇴</button>
       </div>
+
+      <div class="modal" v-if="showChangePasswordModal">
+        <div class="modal-background" @click="showChangePasswordModal = false"></div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>비밀번호 변경</h3>
+            <button class="close-button" @click="showChangePasswordModal = false">X</button>
+          </div>
+
+          <div class="modal-body">
+            <label>현재 비밀번호:</label>
+            <input type="password" v-model="currentPassword" placeholder="Current Password">
+            <br>
+            <label>새 비밀번호:</label>
+            <input type="password" v-model="newPassword" placeholder="New Password">
+          </div>
+
+          <div class="modal-footer">
+            <button @click="changePassword">확인</button>
+          </div>
+        </div>  
+      </div>
     </div>
+    
     <div class="favorites">
-      <!-- <h3>{{ userInfo.name }} 님이 즐겨찾기한 강사</h3> -->
+      <h3>{{ userInfo.name }} 님이 즐겨찾기한 강사</h3>
       <!-- <div v-if="favoriteTeachers.length">
         <TeacherCard v-for="teacher in favoriteTeachers" :key="teacher.id" :teacher="teacher"></TeacherCard>
      </div>
      <p v-else>아직 즐겨찾기한 강사가 없습니다.</p> -->
     </div>
-    {{ id }}
   </div>
 </template>
 
@@ -52,23 +74,21 @@ import { apiGetUserInfo } from "@/api/profiles.js";
 
 export default {
   data() {
-    return {
-      // userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
+    return { 
       userInfo : {},
       id : JSON.parse(localStorage.getItem("vuex")).common.id,
+      showChangePasswordModal: false,
+      currentPassword: '',
+      newPassword: ''
     };
   },
 
   methods: {
-    async getUserInfo() {
-  
+    async getUserInfo() {  
       try {
-        const data = await apiGetUserInfo(this.id);
-        console.log(this.id)
-        console.log(data)
+        const data = await apiGetUserInfo(this.id);   
         if (data) {
-          this.userInfo = data
-          console.log(data)
+          this.userInfo = data        
         }
       } catch (error) {
         console.log(error)
