@@ -2,6 +2,7 @@ package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.CommentDto;
 import com.quokka.classmusic.api.response.CommentVo;
+import com.quokka.classmusic.common.exception.NotAuthorExeception;
 import com.quokka.classmusic.db.entity.Comment;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.ArticleRepository;
@@ -30,7 +31,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public List<CommentVo> selectAll(int articleId) throws Exception {
+    public List<CommentVo> selectAll(int articleId) {
         List<CommentVo> commentVoList = new ArrayList<>();
         for(Comment comment:commentRepository.findAll(articleId)){
             commentVoList.add(new CommentVo(comment));
@@ -39,7 +40,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public int insertComment(int articleId, int userId, CommentDto commentDto) throws Exception {
+    public int insertComment(int articleId, int userId, CommentDto commentDto){
         User user=userRepository.findById(userId);
         Comment comment=Comment.builder()
                 .article(articleRepository.findById(articleId))
@@ -51,28 +52,28 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public void deleteComment(int commentId, int userId) throws Exception {
+    public void deleteComment(int commentId, int userId) {
         Comment comment = commentRepository.findById(commentId);
         if(comment.getUser().getUserId() == userId){
             commentRepository.delete(comment);
         }else{
-            log.debug("작성자가 아닙니다.");
+            throw new NotAuthorExeception("작성자가 아닙니다.");
         }
     }
 
     @Override
-    public void modifyComment(int commentId, CommentDto commentDto, int userId) throws Exception {
+    public void modifyComment(int commentId, CommentDto commentDto, int userId) {
         Comment comment = commentRepository.findById(commentId);
         if(comment.getUser().getUserId() == userId){
             comment.setContent(commentDto.getContent());
             commentRepository.save(comment);
         }else{
-            log.debug("작성자가 아닙니다.");
+            throw new NotAuthorExeception("작성자가 아닙니다.");
         }
     }
 
     @Override
-    public CommentVo select(int commentId) throws Exception {
+    public CommentVo select(int commentId) {
         CommentVo commentVo = new CommentVo(commentRepository.findById(commentId));
         return commentVo;
     }
