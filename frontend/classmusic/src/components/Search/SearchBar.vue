@@ -4,7 +4,11 @@
       <button id="instrumentButton" @click="toggleInstrumentDropdown">
         악기
       </button>
-      <div id="instrumentDropdown" class="dropdown-content" v-if="showInstrumentDropdown">
+      <div
+        id="instrumentDropdown"
+        class="dropdown-content"
+        v-if="showInstrumentDropdown"
+      >
         <button @click="selectInstrument('피아노')">피아노</button>
         <button @click="selectInstrument('기타')">기타</button>
         <button @click="selectInstrument('드럼')">드럼</button>
@@ -12,39 +16,36 @@
     </div>
 
     <div class="dropdown">
-      <button id="careerButton" @click="toggleInputCareer">
-        경력
-      </button>
+      <button id="careerButton" @click="toggleInputCareer">경력</button>
       <div id="careerDropdown" class="dropdown-content" v-if="showInputCareer">
-        <InputCareer @onComplete="handleCompleteCareer" />
+        <InputCareer @careerChange="setCareer" />
       </div>
     </div>
 
     <div class="dropdown">
-      <button id="expenseButton" @click="toggleInputExpense">
-        비용
-      </button>
-      <div id="expenseDropdown" class="dropdown-content" v-if="showInputExpense">
-        <InputExpense @onComplete="handleCompleteExpense" />
+      <button id="expenseButton" @click="toggleInputExpense">비용</button>
+      <div
+        id="expenseDropdown"
+        class="dropdown-content"
+        v-if="showInputExpense"
+      >
+        <InputExpense @costChange="setCost" />
       </div>
     </div>
 
     <div class="dropdown">
-      <button id="timeButton" @click="toggleInputTime">
-        시간
-      </button>
+      <button id="timeButton" @click="toggleInputTime">시간</button>
       <div id="timeDropdown" class="dropdown-content" v-if="showInputTime">
-        <InputTime @onComplete="handleCompleteTime" />
+        <InputTime @timeChange="setTime" @daysChange="setClassDay" />
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import InputCareer from './InputCareer.vue'
-import InputExpense from './InputExpense.vue'
-import InputTime from './InputTime.vue'
+import InputCareer from "./InputCareer.vue";
+import InputExpense from "./InputExpense.vue";
+import InputTime from "./InputTime.vue";
 
 export default {
   components: {
@@ -58,10 +59,20 @@ export default {
       showInputCareer: false,
       showInputExpense: false,
       showInputTime: false,
+
+      searchParams: {
+        startCareer: 10,
+        endCareer: 90,
+        startCost: 0,
+        endCost: 10,
+        startTime: 0,
+        endTime: 23,
+        classDay: 0,
+      },
       selectedInstrument: null,
       selectedCareer: null,
       selectedExpense: null,
-      selectedTime: null
+      selectedTime: null,
     };
   },
   methods: {
@@ -93,19 +104,30 @@ export default {
       this.selectedInstrument = instrument;
       this.showInstrumentDropdown = false;
     },
-    handleCompleteCareer(value) {
-      this.selectedCareer = value;
-      this.showInputCareer = false;
+
+    setCareer(career) {
+      console.log("경력 필터 수정", career);
+      this.searchParams.startCareer = career[0];
+      this.searchParams.endCareer = career[1];
     },
-    handleCompleteExpense(value) {
-      this.selectedExpense = value;
-      this.showInputExpense = false;
+
+    setCost(cost) {
+      console.log("비용 필터 수정", cost);
+      this.searchParams.startCost = cost[0];
+      this.searchParams.endCost = cost[1];
     },
-    handleCompleteTime(value) {
-      this.selectedTime = value;
-      this.showInputTime = false;
-    }
-  }
+
+    setTime(time) {
+      console.log("시간 필터 수정", time);
+      this.searchParams.startTime = time[0];
+      this.searchParams.endTIme = time[1];
+    },
+
+    setDays(bitMaskedDays) {
+      console.log("요일 필터 수정", bitMaskedDays);
+      this.searchParams.classDay = bitMaskedDays;
+    },
+  },
 };
 </script>
 
