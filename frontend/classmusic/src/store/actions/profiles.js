@@ -4,7 +4,7 @@ import axios from "@/api/axios";
 export default {
   getUser({ commit, state }) {
     axios
-      .get(`users/${state.id}`)
+      .get(`users/${state.userId}`)
       .then((response) => {
         commit("SET_USER", response.data);
         commit("SET_FAVORITE_TEACHERS", response.data.favoriteTeachers);

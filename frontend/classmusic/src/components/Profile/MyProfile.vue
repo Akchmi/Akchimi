@@ -37,8 +37,12 @@
         <TeacherCard v-for="teacher in favoriteTeachers" :key="teacher.id" :teacher="teacher"></TeacherCard>
      </div>
      <p v-else>아직 즐겨찾기한 강사가 없습니다.</p> -->
+  
     </div>
+    {{ getUserId }}
   </div>
+  
+
 </template>
 
 <script>
@@ -58,6 +62,7 @@ export default {
       'userProfileImage',
       'gender',
       'favoriteTeachers',
+      'getUserId',
     ]),
   },
   methods: {
