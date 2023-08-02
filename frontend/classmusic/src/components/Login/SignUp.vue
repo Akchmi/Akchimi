@@ -51,7 +51,8 @@ export default {
     async checkId() {
       try {
         const {data} = await apiCheckId(this.loginid);
-        if (data.isIdExists) {
+        if (data) {
+          console.log(data)
           this.loginid ="";
           alert("이미 가입한 아이디입니다.");
           this.isIdChecked = false;
@@ -70,7 +71,7 @@ export default {
       }
       
       if (!this.isIdChecked) {
-        alert("아이디를 확인해 주세요.");
+        alert("아이디 중복확인을 해 주세요.");
         return;
       }
       
