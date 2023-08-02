@@ -3,6 +3,7 @@ package com.quokka.classmusic.api.service;
 import com.quokka.classmusic.api.request.ArticleDto;
 import com.quokka.classmusic.api.response.ArticleVo;
 import com.quokka.classmusic.api.response.UserDetailsVo;
+import com.quokka.classmusic.common.exception.NotAuthorExeception;
 import com.quokka.classmusic.db.entity.Article;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.ArticleRepository;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -46,6 +48,12 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public ArticleVo select(int articleId) {
         ArticleVo articleVo = new ArticleVo(articleRepository.selectOneById(articleId));
+
+        // 없는 글 조회시
+        if(articleVo == null){
+            throw new NoSuchElementException("존재하지 않는 게시글입니다.");
+        }
+
         return articleVo;
     }
 
@@ -74,7 +82,7 @@ public class ArticleServiceImpl implements ArticleService{
             article.setContent(articleDto.getContent());
             articleRepository.save(article);
         }else{
-            log.debug("작성자가 아닙니다.");
+            throw new NotAuthorExeception("작성자가 아닙니다.");
         }
     }
 
@@ -84,7 +92,7 @@ public class ArticleServiceImpl implements ArticleService{
         if(article.getUser().getUserId() == userId){
             articleRepository.delete(article);
         }else {
-            log.debug("작성자가 아닙니다.");
+            throw new NotAuthorExeception("작성자가 아닙니다.");
         }
     }
 
