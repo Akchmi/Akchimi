@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class LoginSuccessVo {
     private int userId;
     private String name;
+    private int type;
     private String accessToken;
     private String refreshToken;
 }
