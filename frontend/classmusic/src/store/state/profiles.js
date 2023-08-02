@@ -1,6 +1,8 @@
 // import axios from "@/common/axios";
 
 export default {
-  userInfo : [],
+  userInfo : {},
+  favoriteTeachers : [],
+  teacherId : '',
   
 }

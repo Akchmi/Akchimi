@@ -4,7 +4,8 @@ export default {
     state.common.accessToken = data.accessToken;
     state.common.isLogin = true;
     state.common.userId = data.userId;
-    // console.log(token)
+    state.common.id = data.id;
+    
   }
 
 };

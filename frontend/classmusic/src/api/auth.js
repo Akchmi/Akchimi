@@ -1,37 +1,3 @@
-// import axios from "@/api/axios";
-
-// function apiLogin(params, success, fail) {
-//   axios.post(`/auth/login`,
-//     JSON.stringify(params)
-//   )
-//   .then(success)
-//   .catch(fail)
-// }
-
-
-// function apiFindId(params, success, fail) {
-//   axios.post('/auth/find-id',
-//     JSON.stringify(params)
-//   )
-//   .then(success)
-//   .catch(fail)
-
-// }
-
-
-
-
-// function apiCheckId(loginId, success, fail) {
-//   axios.get(`/auth/check-id/?id=${loginId}`)
-//   .than(success)
-//   .catch(fail)
-// }
-
-
-
-
-// export { apiLogin, apiCheckId, apiFindId }
-
 import axios from "@/api/axios";
 
 async function apiLogin(params) {
