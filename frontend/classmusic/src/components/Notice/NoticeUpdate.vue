@@ -10,9 +10,13 @@
       <div>
         <!-- 글 제목, 내용 -->
         <h3>제목</h3>
-        <input class="input__title" type="text" />
+        <input class="input__title" type="text" v-model="noticeDetail.title" />
         <h3>내용</h3>
-        <input class="input__content" type="text" />
+        <input
+          class="input__content"
+          type="text"
+          v-model="noticeDetail.content"
+        />
       </div>
 
       <hr />
@@ -23,14 +27,45 @@
 
       <div>
         <!-- 수정완료 버튼 -->
-        <button>수정완료</button>
+        <button @click="noticeUpdate">수정완료</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { onMounted } from "vue";
+import { useStore, mapGetters, mapActions } from "vuex";
+import { useRoute } from "vue-router";
+
+export default {
+  computed: {
+    ...mapGetters({ noticeDetail: "getNoticeDetail" }),
+  },
+  methods: {
+    ...mapActions(["putNoticeupdate"]),
+
+    noticeUpdate() {
+      this.putNoticeupdate({
+        title: this.noticeDetail.title,
+        content: this.noticeDetail.content,
+        file: "",
+        noticeId: this.noticeId,
+      });
+    },
+  },
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const noticeId = route.params.id;
+
+    onMounted(() => {
+      store.dispatch("getNoticedetail", noticeId);
+    });
+
+    return { noticeId };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

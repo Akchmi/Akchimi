@@ -4,7 +4,7 @@
       <div>
         <!-- 자유게시판 리스트 최상단 -->
         <h1>자유게시판</h1>
-        <button @click="$router.push('/article/create')">글 작성</button>
+        <button @click="goArticlecreate">글 작성</button>
         <hr />
       </div>
       <div>
