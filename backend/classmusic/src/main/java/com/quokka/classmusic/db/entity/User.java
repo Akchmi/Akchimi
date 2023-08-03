@@ -42,7 +42,7 @@ public class User {
     @Column(name = "id", length = 20, unique = true)
     private String id;
 
-    @Column(name = "password", length = 20)
+    @Column(name = "password", length = 255)
     private String password;
 
     @Column(name = "name", length = 10)

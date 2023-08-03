@@ -48,7 +48,10 @@ public class ContactsServiceImpl implements ContactsService{
             Teacher teacher = contact.getTeacher();
             teacher.setContactCnt(teacher.getContactCnt() + 1);
             contact.setStartTime((int) (System.currentTimeMillis() / 1000));
-        } else if(state == 4){
+        } else if(state == 2){
+            contact.setEndTime((int) (System.currentTimeMillis() / 1000));
+        }
+        else if(state == 4){
             contact.setEndTime((int) (System.currentTimeMillis() / 1000));
         }
         contact.setState(state);

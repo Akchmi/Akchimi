@@ -3,11 +3,13 @@ package com.quokka.classmusic.api.controller;
 import com.quokka.classmusic.api.request.ReviewInsertDto;
 import com.quokka.classmusic.api.request.ReviewUpdateDto;
 import com.quokka.classmusic.api.response.ReviewVo;
+import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.api.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +33,18 @@ public class ReviewController {
             return ResponseEntity.status(200).body(reviewService.selectAllReview(teacherId));
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/myreview")
+    public ResponseEntity<ReviewVo> selectReviews(@RequestParam int contactId, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
+        int userId = userDetailsVo.getUserVo().getUserId();
+        ReviewVo reviewVo = reviewService.selectReview(contactId, userId);
+        if(reviewVo != null) {
+            log.debug("{}",reviewVo.getContent());
+            return new ResponseEntity<>(reviewVo, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 

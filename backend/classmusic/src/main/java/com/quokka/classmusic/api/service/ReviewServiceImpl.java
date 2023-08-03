@@ -9,6 +9,8 @@ import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.repository.ContactsRepository;
 import com.quokka.classmusic.db.repository.ReviewRepository;
 import com.quokka.classmusic.db.repository.TeacherRepository;
+import com.quokka.classmusic.db.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,16 +19,19 @@ import java.util.List;
 
 @Service
 @Transactional
+@Slf4j
 public class ReviewServiceImpl implements ReviewService{
     private ReviewRepository reviewRepository;
     private ContactsRepository contactsRepository;
     private TeacherRepository teacherRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ContactsRepository contactsRepository, TeacherRepository teacherRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ContactsRepository contactsRepository, TeacherRepository teacherRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.contactsRepository = contactsRepository;
         this.teacherRepository = teacherRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -61,6 +66,17 @@ public class ReviewServiceImpl implements ReviewService{
         Teacher teacher = reviewRepository.findById(reviewId).getContact().getTeacher();
         reviewRepository.delete(reviewRepository.findById(reviewId));
         updateRating(teacher);
+    }
+
+    @Override
+    public ReviewVo selectReview(int contactId, int userId) {
+        Review review = reviewRepository.findReviewByContactId(contactId, userId);
+        if(review!=null){
+            if(review.getContact().getStudent().getUserId() == userId)
+            return new ReviewVo(review);
+        }
+
+        return null;
     }
 
     public void updateRating(Teacher teacher) {

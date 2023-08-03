@@ -58,4 +58,19 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     public void delete(Review review) {
         em.remove(review);
     }
+
+    @Override
+    public Review findReviewByContactId(int contactId, int userId) {
+        return query.select(Projections.constructor(Review.class,
+                review.reviewId,
+                review.contact,
+                review.rating,
+                review.content,
+                review.createdAt
+                ))
+                .from(review)
+                .join(review.contact , contact)
+                .where(review.contact.contactId.eq(contactId).and(contact.student.userId.eq(userId)))
+                .fetchOne();
+    }
 }
