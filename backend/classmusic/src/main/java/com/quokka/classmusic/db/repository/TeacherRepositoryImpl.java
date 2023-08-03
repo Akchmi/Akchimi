@@ -5,6 +5,9 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberTemplate;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.db.entity.Teacher;
@@ -54,18 +57,6 @@ public class TeacherRepositoryImpl implements TeacherRepository{
 
     @Override
     public List<Teacher> findAll(Map<String, String> params) {
-//        return query.select(teacher)
-//                .from(teacher)
-//                .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(params.get("keyword"))))
-//                .join(teacher.user , user)
-//                .where(selectGenderFilter(params))
-//                .leftJoin(teacher.treats , treat)
-//                .leftJoin(treat.instrument , instrument)
-//                .where(instrumentEq(params.get("instrument")))
-//                .offset((Integer.parseInt(params.get("page")) - 1) * 20)
-//                .limit(20)
-//                .orderBy(orderType(String.valueOf(params.get("order_by"))))
-//                .fetch();
         return query.select(teacher)
                 .distinct()
                 .from(treat)
@@ -75,6 +66,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(params.get("keyword"))))
                 .where(selectGenderFilter(params))
                 .where(instrumentEq(params.get("instrument")))
+                .where(getBitAndTemplate(Integer.parseInt(params.get("classDay"))).gt(0))
                 .offset((Integer.parseInt(params.get("page")) - 1) * 20)
                 .limit(20)
                 .orderBy(orderType(String.valueOf(params.get("orderBy"))))
@@ -166,11 +158,9 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     }
 
     private BooleanExpression instrumentEq(String ins){
-        System.out.println(ins + "asdf");
-        if(ins.equals("악기종류")){
+        if(ins.equals("악기종류") || ins.equals("")){
             return null;
         }
-//        return treat.instrument.instrumentName.like("%" + ins + "%");
         return instrument.instrumentName.eq(ins);
     }
 
@@ -220,5 +210,9 @@ public class TeacherRepositoryImpl implements TeacherRepository{
             return new OrderSpecifier(Order.DESC , teacher.contactCnt);
         }
         return new OrderSpecifier(Order.DESC , teacher.teacherId);
+    }
+
+    private NumberTemplate<Integer> getBitAndTemplate(int day){
+        return Expressions.numberTemplate(Integer.class , "function('bitand',{0} , {1})", teacher.classDay , day);
     }
 }

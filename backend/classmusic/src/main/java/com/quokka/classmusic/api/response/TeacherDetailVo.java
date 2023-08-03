@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TeacherDetailVo {
+    private int userId;
     private String name;
     private Integer gender;
     private String userProfileImage;
