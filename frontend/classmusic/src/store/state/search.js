@@ -1,19 +1,18 @@
 export default {
-  totalTeachers: 0, //총 검색 결과 갯수
-  listSize: 5, // 한번에 가져오는 결과 갯수
-  listNumber: 0, // 현재 페이지
-  listTotalCount: 0,
+  teacherList: [],
 
-  teacherList: [
-    {
-      id: 1,
-      name: "박한샘",
-      instrumentList: [],
-      career: 10,
-      avgRating: 5,
-      matchcount: 10,
-      introduce: "",
-      image: null,
-    },
-  ],
+  searchParams: {
+    startCareer: 0,
+    endCareer: 90,
+    startCost: 0,
+    endCost: 100,
+    startTime: 0,
+    endTime: 23,
+    classDay: 0,
+    instrument: "악기종류",
+    keyword: "",
+    orderBy: "최신순",
+    page: 1,
+    gender: "",
+  },
 };
