@@ -71,7 +71,7 @@ public class NoticeRepositoryImpl implements NoticeRepository {
         String searchType = params.get("searchType");
         String keyword = params.get("keyword");
         long totalNoticeNum = queryFactory
-                .selectFrom(article)
+                .selectFrom(notice)
                 .where(likeKeywordInSearchType(searchType, keyword))
                 .fetchCount();
         return (int)(totalNoticeNum-1)/20+1;

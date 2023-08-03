@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class ContactsVo {
     private int contactId;
     private String name;
+    private int matchingUserId; // contact 상대 userId (강사이면 studentId, 학생이면 teacherId)
     private String userProfileImage;
     private String memo;
     private int order;

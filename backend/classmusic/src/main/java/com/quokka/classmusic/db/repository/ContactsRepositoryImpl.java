@@ -39,6 +39,7 @@ public class ContactsRepositoryImpl implements ContactsRepository {
                 return query.select(Projections.constructor(ContactsVo.class ,
                                 contact.contactId,
                                 teacher.user.name,
+                                teacher.teacherId,
                                 teacher.user.userProfileImage,
                                 contact.studentMemo,
                                 contact.studentOrder))
@@ -53,6 +54,7 @@ public class ContactsRepositoryImpl implements ContactsRepository {
                 return query.select(Projections.constructor(ContactsVo.class ,
                                 contact.contactId,
                                 user.name,
+                                user.userId,
                                 user.userProfileImage,
                                 contact.teacherMemo,
                                 contact.teacherOrder))

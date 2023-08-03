@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Getter @Setter
@@ -40,5 +41,10 @@ public class Comment {
 
     @Column(name = "created_at")
     private Integer createdAt;
+
+    @PrePersist
+    private void prePersist(){
+        this.createdAt = this.createdAt == null ? (int) Instant.now().getEpochSecond() : 0;
+    }
 
 }

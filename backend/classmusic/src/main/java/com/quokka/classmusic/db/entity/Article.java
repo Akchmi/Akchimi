@@ -12,6 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @DynamicUpdate
+@Table(name = "article")
 public class Article {
     @Builder
     public Article(int articleId, User user, String title, String content, Integer createdAt, Integer hit) {
