@@ -67,6 +67,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
 //                .orderBy(orderType(String.valueOf(params.get("order_by"))))
 //                .fetch();
         return query.select(teacher)
+                .distinct()
                 .from(treat)
                 .join(treat.teacher , teacher)
                 .join(treat.instrument , instrument)
@@ -76,7 +77,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .where(instrumentEq(params.get("instrument")))
                 .offset((Integer.parseInt(params.get("page")) - 1) * 20)
                 .limit(20)
-                .orderBy(orderType(String.valueOf(params.get("order_by"))))
+                .orderBy(orderType(String.valueOf(params.get("orderBy"))))
                 .fetch();
     }
 
@@ -166,7 +167,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
 
     private BooleanExpression instrumentEq(String ins){
         System.out.println(ins + "asdf");
-        if(ins.equals("")){
+        if(ins.equals("악기종류")){
             return null;
         }
 //        return treat.instrument.instrumentName.like("%" + ins + "%");
@@ -182,23 +183,23 @@ public class TeacherRepositoryImpl implements TeacherRepository{
 
     private BooleanBuilder selectTeacherFilter(Map<String, String> params){
         BooleanBuilder builder = new BooleanBuilder();
-        if(!params.get("start_career").equals("")){
-            builder.and(startCareerGoe(Integer.parseInt(String.valueOf(params.get("start_career")))));
+        if(!params.get("startCareer").equals("")){
+            builder.and(startCareerGoe(Integer.parseInt(String.valueOf(params.get("startCareer")))));
         }
-        if(!params.get("end_career").equals("")){
-            builder.and(endCareerLoe(Integer.parseInt(String.valueOf(params.get("end_career")))));
+        if(!params.get("endCareer").equals("")){
+            builder.and(endCareerLoe(Integer.parseInt(String.valueOf(params.get("endCareer")))));
         }
-        if(!params.get("start_time").equals("")){
-            builder.and(startTimeGoe(Integer.parseInt(String.valueOf(params.get("start_time")))));
+        if(!params.get("startTime").equals("")){
+            builder.and(startTimeGoe(Integer.parseInt(String.valueOf(params.get("startTime")))));
         }
-        if(!params.get("end_time").equals("")){
-            builder.and(endTimeLoe(Integer.parseInt(String.valueOf(params.get("end_time")))));
+        if(!params.get("endTime").equals("")){
+            builder.and(endTimeLoe(Integer.parseInt(String.valueOf(params.get("endTime")))));
         }
-        if(!params.get("start_cost").equals("")){
-            builder.and(startCostGoe(Integer.parseInt(String.valueOf(params.get("start_cost")))));
+        if(!params.get("startCost").equals("")){
+            builder.and(startCostGoe(Integer.parseInt(String.valueOf(params.get("startCost")))));
         }
-        if(!params.get("end_cost").equals("")){
-            builder.and(endCostLoe(Integer.parseInt(String.valueOf(params.get("end_cost")))));
+        if(!params.get("endCost").equals("")){
+            builder.and(endCostLoe(Integer.parseInt(String.valueOf(params.get("endCost")))));
         }
         return builder;
     }
