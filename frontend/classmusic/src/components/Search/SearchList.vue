@@ -9,13 +9,12 @@
         image="https://via.placeholder.com/280"
       />
     </div>
-    <button @click="this.$emit('searchMore')">더 보기</button>
+    <button @click="searchMoreTeacher">더 보기</button>
   </div>
 </template>
 
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import TeacherCard from "./TeacherCard.vue";
 
 export default {
@@ -23,14 +22,11 @@ export default {
   data() {
     return {};
   },
-  props: {
-    teachers: Array,
+  computed: {
+    ...mapGetters({ teachers: "getTeacherList" }),
   },
-  setup() {
-    const store = useStore();
-    const notices = computed(() => store.state.notices.notices);
-
-    return { notices };
+  methods: {
+    ...mapActions(["searchMoreTeacher"]),
   },
 };
 </script>

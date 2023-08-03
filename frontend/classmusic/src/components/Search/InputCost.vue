@@ -11,12 +11,15 @@
 
 <script>
 import Slider from "@vueform/slider";
+import { mapGetters } from "vuex";
 
 export default {
   components: { Slider },
   data: () => ({}),
-  props: {
-    cost: Array,
+  computed: {
+    ...mapGetters({
+      cost: "getSearchParamsCost",
+    }),
   },
   methods: {
     onCostChange(costs) {

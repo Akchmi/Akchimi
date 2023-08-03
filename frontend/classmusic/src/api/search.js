@@ -1,14 +1,12 @@
 import axios from "@/api/axios";
 
-async function apiSearchTeachers(params) {
+async function apiSearchTeachers(params, success, fail) {
   console.log("apiSearchTeachers params : ", params);
   try {
     const response = await axios.get(`/teachers`, { params: params });
-
-    return response.data;
+    success(response);
   } catch (error) {
-    console.log("api search teachers error : " + error);
-    return error.response;
+    fail(error);
   }
 }
 

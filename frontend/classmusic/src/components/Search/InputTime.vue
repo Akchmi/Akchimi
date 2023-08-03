@@ -22,12 +22,17 @@
 
 <script>
 import Slider from "@vueform/slider";
+import { mapGetters } from "vuex";
 
 export default {
   components: { Slider },
   props: {
     days: Object,
-    time: Array,
+  },
+  computed: {
+    ...mapGetters({
+      time: "getSearchParamsTime",
+    }),
   },
   data: () => ({}),
   methods: {

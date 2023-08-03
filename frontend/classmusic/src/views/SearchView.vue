@@ -21,38 +21,35 @@
       </nav>
     </div>
     <br />
-    <SearchBar ref="searchBar" @searchTeachers="onSearchTeachers"> </SearchBar>
+    <SearchBar ref="searchBar"> </SearchBar>
     <hr />
-    <SearchList @searchMore="onSearchMore" :teachers="this.teachers">
-    </SearchList>
+    <SearchList> </SearchList>
   </div>
 </template>
 
 <script>
 import SearchBar from "../components/Search/SearchBar.vue";
 import SearchList from "../components/Search/SearchList.vue";
+import { useStore } from "vuex";
+import { onMounted } from "vue";
 
 export default {
   name: "SearchView",
   data() {
-    return {
-      teachers: [],
-    };
+    return {};
   },
   components: {
     SearchBar,
     SearchList,
   },
-  methods: {
-    onSearchTeachers(teachers) {
-      this.teachers = teachers;
-      console.log("SearchView onSearchTeachers : ", teachers);
-    },
-    onSearchMore() {
-      const teachers = this.$refs.searchBar.searchTeachers();
-      console.log("더 보기 : ", teachers);
-    },
+  setup() {
+    const store = useStore();
+
+    onMounted(() => {
+      store.dispatch("searchTeacher");
+    });
   },
+  methods: {},
 };
 </script>
 

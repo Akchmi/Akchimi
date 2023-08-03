@@ -2,14 +2,14 @@
   <div class="search-bar">
     <!-- 검색바 -->
     <!-- 성별 필터 -->
-    <select v-model="searchParams.gender">
+    <select v-model="searchParams.gender" @change="setGender">
       <option v-for="(value, gender) in genders" :key="value" :value="value">
         {{ gender }}
       </option>
     </select>
 
     <!-- 악기 필터 -->
-    <select v-model="searchParams.instrument">
+    <select v-model="searchParams.instrument" @change="setInstrument">
       <option
         v-for="instrument in instruments"
         :key="instrument"
@@ -43,10 +43,7 @@
         class="dropdown-content"
         v-if="isDisplaySearchInputs.career"
       >
-        <InputCareer
-          :career="[searchParams.startCareer, searchParams.endCareer]"
-          @careerChange="setCareer"
-        />
+        <InputCareer @careerChange="setCareer" />
       </div>
     </div>
 
@@ -60,10 +57,7 @@
         class="dropdown-content"
         v-if="isDisplaySearchInputs.cost"
       >
-        <InputCost
-          :cost="[searchParams.startCost, searchParams.endCost]"
-          @costChange="setCost"
-        />
+        <InputCost @costChange="setCost" />
       </div>
     </div>
 
@@ -77,7 +71,6 @@
       >
         <InputTime
           :days="days"
-          :time="[searchParams.startTime, searchParams.endTime]"
           @timeChange="setTime"
           @dayChange="setClassDay"
         />
@@ -85,7 +78,16 @@
     </div>
 
     <!-- 키워드 검색 -->
-    <select v-model="searchParams.orderBy" @change="searchTeachers">
+    <!-- 검색 버튼 -->
+    <input
+      placeholder="검색어를 입력하세요."
+      type="text"
+      v-model="searchParams.keyword"
+    />
+    <button @click="searchTeacher">검색</button>
+
+    <!-- 정렬 -->
+    <select v-model="searchParams.orderBy" @change="onChangeOrderBy">
       <option
         v-for="category in searchCategory"
         :key="category"
@@ -94,14 +96,6 @@
         {{ category }}
       </option>
     </select>
-
-    <!-- 검색 버튼 -->
-    <input
-      placeholder="검색어를 입력하세요."
-      type="text"
-      v-model="searchParams.keyword"
-    />
-    <button @click="searchTeachers">검색</button>
   </div>
 </template>
 
@@ -109,7 +103,8 @@
 import InputCareer from "./InputCareer.vue";
 import InputCost from "./InputCost.vue";
 import InputTime from "./InputTime.vue";
-import { apiSearchTeachers } from "@/api/search";
+import { onMounted } from "vue";
+import { mapActions, useStore } from "vuex";
 
 export default {
   components: {
@@ -117,13 +112,17 @@ export default {
     InputCost,
     InputTime,
   },
+  setup() {
+    const store = useStore();
+
+    onMounted(() => {
+      store.dispatch("commitInstrument", "악기종류");
+      store.dispatch("commitGender", "");
+      store.dispatch("commitKeyword", "");
+    });
+  },
   data() {
     return {
-      showInstrumentDropdown: false,
-      showInputCareer: false,
-      showInputExpense: false,
-      showInputTime: false,
-
       isDisplaySearchInputs: {
         instrument: false,
         career: false,
@@ -153,22 +152,30 @@ export default {
       },
 
       searchParams: {
-        startCareer: 10,
-        endCareer: 90,
-        startCost: 0,
-        endCost: 10,
-        startTime: 0,
-        endTime: 23,
-        classDay: 0,
         instrument: "악기종류",
         keyword: "",
         orderBy: "최신순",
-        page: 1,
         gender: "0",
       },
     };
   },
   methods: {
+    ...mapActions([
+      "searchTeacher",
+      "commitCareer",
+      "commitCost",
+      "commitTime",
+      "commitClassDay",
+      "commitInstrument",
+      "commitGender",
+      "commitOrderBy",
+    ]),
+
+    onChangeOrderBy() {
+      this.commitOrderBy(this.searchParams.orderBy);
+      this.searchTeacher();
+    },
+
     toggleInputDropdown(targetSearchInput) {
       console.log("toggle clicked", targetSearchInput);
       for (const searchInput in this.isDisplaySearchInputs) {
@@ -182,25 +189,52 @@ export default {
 
     setCareer(career) {
       console.log("경력 필터 수정", career);
-      this.searchParams.startCareer = career[0];
-      this.searchParams.endCareer = career[1];
+      this.commitCareer(career);
     },
 
     setCost(cost) {
       console.log("비용 필터 수정", cost);
-      this.searchParams.startCost = cost[0];
-      this.searchParams.endCost = cost[1];
+      this.commitCost(cost);
     },
 
     setTime(time) {
       console.log("시간 필터 수정", time);
-      this.searchParams.startTime = time[0];
-      this.searchParams.endTime = time[1];
+      this.commitTime(time);
     },
 
     setClassDay(value, day) {
       console.log("요일 필터 수정", value, day);
+
       this.days[day] = value;
+      const daysBitMask = this.convertDaysToBitMask();
+
+      this.commitClassDay(daysBitMask);
+    },
+
+    setInstrument() {
+      console.log("악기 종류 수정", this.searchParams.instrument);
+
+      this.commitInstrument(this.searchParams.instrument);
+    },
+
+    setGender() {
+      console.log("성별 수정", this.searchParams.gender);
+
+      this.commitGender(
+        this.searchParams.gender == 0 ? "" : this.searchParams.gender
+      );
+    },
+
+    setOrderBy() {
+      console.log("정렬 수정", this.searchParams.orderBy);
+
+      this.commitOrderBy(this.searchParams.orderBy);
+    },
+
+    setKeyword() {
+      console.log("검색 키워드 수정", this.searchParams.keyword);
+
+      this.commitKeyword(this.searchParams.keyword);
     },
 
     convertDaysToBitMask() {
@@ -217,19 +251,6 @@ export default {
 
       console.log(bitMaskedDays.toString(2));
       return bitMaskedDays;
-    },
-
-    async searchTeachers() {
-      this.searchParams.classDay = this.convertDaysToBitMask();
-      const teachers = await apiSearchTeachers({
-        ...this.searchParams,
-        startCost: this.searchParams.startCost * 10000,
-        endCost: this.searchParams.endCost * 10000,
-        gender: this.searchParams.gender == 0 ? "" : this.searchParams.gender,
-      });
-
-      this.$emit("searchTeachers", teachers);
-      console.log(teachers);
     },
   },
 };
