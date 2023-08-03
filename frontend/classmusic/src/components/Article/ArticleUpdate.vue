@@ -52,7 +52,7 @@ export default {
         title: this.articleDetail.title,
         content: this.articleDetail.content,
         file: "",
-        userId: 1,
+        userId: this.articleDetail.userId,
         articleId: this.articleId,
       });
     },

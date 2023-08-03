@@ -5,4 +5,10 @@ export default {
   getIsLogin(state) {
     return state.common.isLogin;
   },
+  getId(state) {
+    return state.common.id;
+  },
+  getUsertype(state) {
+    return state.common.userType;
+  },
 };

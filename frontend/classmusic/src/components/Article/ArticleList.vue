@@ -4,7 +4,7 @@
       <div>
         <!-- 자유게시판 리스트 최상단 -->
         <h1>자유게시판</h1>
-        <button @click="$router.push('/article/create')">글 작성</button>
+        <button @click="goArticlecreate">글 작성</button>
         <hr />
       </div>
       <div>
@@ -93,6 +93,7 @@ export default {
   computed: {
     ...mapGetters({ articleList: "getArticleList" }),
     ...mapGetters({ endPageno: "getEndPageNo" }),
+    ...mapGetters({ isLogin: "getIsLogin" }),
   },
   methods: {
     ...mapActions(["getArticlelist"]),
@@ -143,6 +144,15 @@ export default {
         pageNo: 1,
         sortType: this.selectedSorttype,
       });
+    },
+
+    goArticlecreate() {
+      if (this.isLogin == false) {
+        alert("로그인이 필요합니다");
+        this.$router.push("/login/signin");
+        return;
+      }
+      this.$router.push("/article/create");
     },
   },
   setup() {

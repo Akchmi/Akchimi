@@ -4,7 +4,7 @@
       <div>
         <!-- 공지사항 리스트 최상단 -->
         <h1>공지사항</h1>
-        <button @click="$router.push('/notice/create')">글 작성</button>
+        <button v-if="userType == 2" @click="goNoticeCreate">글 작성</button>
         <hr />
       </div>
 
@@ -63,7 +63,6 @@
         <button @click="pageUp">다음</button>
       </div>
     </div>
-    {{ noticeList }}
   </div>
 </template>
 
@@ -75,7 +74,6 @@ import { useStore, mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      lastpage: 86,
       pages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       pageNo: 1,
       searchQuery: "",
@@ -85,6 +83,9 @@ export default {
 
   computed: {
     ...mapGetters({ noticeList: "getNoticeList" }),
+    ...mapGetters({ isLogin: "getIsLogin" }),
+    ...mapGetters({ userType: "getUsertype" }),
+    ...mapGetters({ lastpage: "getEndPageNo" }),
   },
   methods: {
     ...mapActions(["getNoticelist"]),
@@ -124,6 +125,9 @@ export default {
         keyword: this.searchQuery,
         searchType: this.selectedSearchCategory,
       });
+    },
+    goNoticeCreate() {
+      this.$router.push("/notice/create");
     },
   },
   setup() {

@@ -8,13 +8,11 @@ export default {
   getArticleDetail(state) {
     return state.articles.articleDetail;
   },
-  getCommentListTotalCount(state) {
-    return state.articles.commentListTotalCount;
+  getArticleCreateId(state) {
+    return state.articles.articleCreateId;
   },
+
   getCommentList(state) {
-    return state.articles.commentList;
-  },
-  getCommentDetail(state) {
-    return state.articles.commentDetail;
+    return state.articles.articleCommentsList;
   },
 };

@@ -1,8 +1,14 @@
 import {
   apiGetArticlelist,
-  apiGetPageno,
+  apiGetArticlePageno,
   apiGetArticledetail,
   apiArticleupdate,
+  apiArticlecreate,
+  apiArticledelete,
+  apiGetArticlecomment,
+  apiPostArticleComment,
+  apiCommentUpdate,
+  apiCommentdelete,
 } from "@/api/articles";
 
 export default {
@@ -16,7 +22,7 @@ export default {
       params.pageNo,
       params.sortType
     );
-    apiGetPageno(context, params.searchType, params.keyword);
+    apiGetArticlePageno(context, params.searchType, params.keyword);
   },
 
   //자유게시글 작성
@@ -29,10 +35,30 @@ export default {
     apiArticleupdate(context, data);
   },
   //자유게시글 작성
+  postArticleCreate(context, data) {
+    apiArticlecreate(context, data);
+  },
   //자유게시글 삭제
+  deleteArticleDelete(context, articleId) {
+    apiArticledelete(context, articleId);
+  },
+
   //자유게시글 댓글 조회
+  getArticlecomment(context, articleId) {
+    apiGetArticlecomment(context, articleId);
+  },
+
   //자유게시글 댓글 작성
+  postArticleComment(context, data) {
+    apiPostArticleComment(context, data);
+  },
   //자유게시글 댓글 수정
+  putArticleComment(context, data) {
+    apiCommentUpdate(context, data);
+  },
   //자유게시글 댓글 삭제
+  deleteComment(context, data) {
+    apiCommentdelete(context, data);
+  },
   //첨부파일?
 };

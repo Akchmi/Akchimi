@@ -10,6 +10,9 @@ export default {
   },
   SET_TEACHER_PROFILE(state, data) {
     state.teacherId = data.teacherId
+  },
+  SET_USER_INFO(state, userInfo) {
+    state.userInfo = userInfo;
+  },
 
-  }
 };
