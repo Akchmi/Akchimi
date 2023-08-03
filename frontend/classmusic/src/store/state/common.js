@@ -2,5 +2,6 @@ export default {
   isLogin: false,
   accessToken: null,
   userId: null,
-  id : null,
+  id: null,
+  userType: null,
 };

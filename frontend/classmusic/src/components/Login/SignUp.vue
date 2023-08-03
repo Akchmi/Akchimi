@@ -32,7 +32,6 @@ import { apiCheckId, apiRegister } from "@/api/auth.js";
 import { mapActions } from "vuex";
 import router from "@/router";
 
-
 export default {
   data() {
     return {
@@ -43,17 +42,16 @@ export default {
       email: "",
       gender: "",
       isIdChecked: false,
-
     };
   },
   methods: {
     ...mapActions(["setToken"]),
     async checkId() {
       try {
-        const {data} = await apiCheckId(this.loginid);
+        const { data } = await apiCheckId(this.loginid);
         if (data) {
-          console.log(data)
-          this.loginid ="";
+          console.log(data);
+          this.loginid = "";
           alert("이미 가입한 아이디입니다.");
           this.isIdChecked = false;
         } else {
@@ -61,27 +59,33 @@ export default {
           this.isIdChecked = true;
         }
       } catch (error) {
-        console.error(error);        
+        console.error(error);
       }
     },
     async register() {
-      if (!this.loginid || !this.password || !this.name || !this.email || !this.gender) {
+      if (
+        !this.loginid ||
+        !this.password ||
+        !this.name ||
+        !this.email ||
+        !this.gender
+      ) {
         alert("모든 필드를 입력해주세요.");
         return;
       }
-      
+
       if (!this.isIdChecked) {
         alert("아이디 중복확인을 해 주세요.");
         return;
       }
-      
+
       if (this.password !== this.confirmPassword) {
         alert("비밀번호가 일치하지 않습니다.");
         this.password = "";
         this.confirmPassword = "";
         return;
       }
-      
+
       try {
         const response = await apiRegister({
           id: this.loginid,
@@ -90,9 +94,9 @@ export default {
           email: this.email,
           gender: this.gender,
         });
-        
+
         this.setToken(response.data.token);
-        router.push("/login/signin");  
+        router.push("/login/signin");
       } catch (error) {
         console.error(error);
       }
