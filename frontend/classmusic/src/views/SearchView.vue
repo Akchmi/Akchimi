@@ -21,38 +21,37 @@
       </nav>
     </div>
     <br />
-    <SearchBar @searchTeacher="onSearchTeacher"> </SearchBar>
+    <SearchBar ref="searchBar" @searchTeachers="onSearchTeachers"> </SearchBar>
     <hr />
-    <SearchList> </SearchList>
+    <SearchList @searchMore="onSearchMore" :teachers="this.teachers">
+    </SearchList>
   </div>
 </template>
 
 <script>
 import SearchBar from "../components/Search/SearchBar.vue";
 import SearchList from "../components/Search/SearchList.vue";
-import { apiSearchTeacher } from "@/api/search";
 
 export default {
   name: "SearchView",
   data() {
     return {
       teachers: [],
-    }
+    };
   },
   components: {
     SearchBar,
     SearchList,
   },
   methods: {
-    onSearchTeacher(params){
-      apiSearchTeacher(params, 
-      ({ data})=>{
-        console.log(data);
-        this.teachers = data;
-      }, (error)=>{
-        alert(error);
-      });
-    }
+    onSearchTeachers(teachers) {
+      this.teachers = teachers;
+      console.log("SearchView onSearchTeachers : ", teachers);
+    },
+    onSearchMore() {
+      const teachers = this.$refs.searchBar.searchTeachers();
+      console.log("더 보기 : ", teachers);
+    },
   },
 };
 </script>
