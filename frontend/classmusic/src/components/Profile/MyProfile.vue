@@ -11,19 +11,23 @@
           <button>사진 추가</button>
         </div>
         <div class="info-container">
-          <div class="id-container">
+          <!-- <div class="id-container">  -->
+            <div> 
             <label>ID:</label>
             <div class="info-field">{{ userInfo.id }}</div>
           </div>
-          <div class="email-container">
+          <!-- <div class="email-container"> -->
+            <div>
             <label>Email:</label>
             <div class="info-field">{{ userInfo.email }}</div>
           </div>
-          <div class="name-container">
+          <!-- <div class="name-container"> -->
+            <div>
             <label>Name:</label>
             <div class="info-field">{{ userInfo.name }}</div>
           </div>
-          <div class="gender-container">
+          <div>
+          <!-- <div class="gender-container"> -->
             <label>Gender:</label>
             <div class="info-field">{{ userInfo.gender === 1 ? '남자' : '여자' }}</div>
           </div>

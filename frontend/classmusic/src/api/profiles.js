@@ -51,4 +51,66 @@ async function apiDeleteLIkeTeacher(likeId) {
   }
 }
 
-export { apiGetUserInfo, apiLikeTeacher , apiDeleteLIkeTeacher, apiChangePw, apiDeleteUser}
+async function apiDetailTeacherInfo(userId) {
+  try{
+    const response = await axios.get(`teachers/${userId}`);
+    return response.data
+  } catch(error) {
+    console.log(error)
+    return error
+  }
+}
+
+async function apiTeacherProfileCreate(data) {
+  try {
+    const response = await axios.post('/teachers', data)
+    return response.data
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
+
+async function apiTeacherProfileUpdate(userId, updateData) {
+  try {
+    const response = await axios.put(`/teachers/${userId}`, updateData)
+    return response.data
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
+
+async function apiGetReview(teacherId) {
+  try {
+    const response = await axios.get(`/reveiws?teacher=${teacherId}`)
+    return response.data
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
+
+async function apiReviewCreate(data) {
+  try {
+    const response = await axios.post(`/reviews`, data)
+    return response.data
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
+
+async function apiGetMyReview(matchingId) {
+  try {
+    const response = await axios.get(`/reviews/myreview?contactId=${matchingId}`)
+    return response.data
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
+
+
+
+export {apiGetMyReview,  apiReviewCreate, apiGetReview, apiTeacherProfileUpdate, apiTeacherProfileCreate, apiGetUserInfo, apiLikeTeacher , apiDeleteLIkeTeacher, apiChangePw, apiDeleteUser, apiDetailTeacherInfo}
