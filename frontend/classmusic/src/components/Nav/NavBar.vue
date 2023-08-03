@@ -19,52 +19,35 @@
         <li v-else @click="$router.push('/login/signin')">로그인</li>
       </ul>      
     </nav>
+
   </div>
 </template>
 
 <script>
-import axios from "@/api/axios";
+// import axios from "@/api/axios";
+// import common from "@/store/actions/common";
 
 export default {
   data() {
     return {
-      isLoggedIn: false
+      // isLoggedIn: false
+    }
+  },
+    computed: {
+    isLoggedIn() {
+      return this.$store.state.common.isLogin;
+    }
+  },
+  methods: {
+    logOut() {
+      this.$store.commit('LOGOUT');
+      this.$router.push('/');
     }
   },
   created() {
-    this.updateLoginStatus();
+    this.isLoggedIn = this.$store.state.common.isLogin;
   },
-  methods: {
-    updateLoginStatus() {
-      const vuexData = JSON.parse(localStorage.getItem("vuex"));
-      this.isLoggedIn = vuexData && (vuexData.common.isLogin === 'true' || vuexData.common.isLogin === true) ? true : false;
-    },
-    async logOut() {
-      try {
-        const response = await axios.get('/users/logout');
-        if (response.status === 200) {
-          localStorage.setItem('vuex', JSON.stringify({ 
-            common: { 
-              isLogin: 'false',
-              accessToken: null,
-              id: null,
-              userId: null 
-            }
-          }));
-          this.updateLoginStatus();
-        } else {
-          console.error('Logout fail');
-        }
-      } catch(error) {
-        console.error(error)
-      }
-    }
-  },
-  watch: {
-    'localStorage.vuex': function() {
-      this.updateLoginStatus();
-    }
-  }
+
 }
 </script>
 

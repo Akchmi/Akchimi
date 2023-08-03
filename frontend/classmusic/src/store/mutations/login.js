@@ -4,6 +4,11 @@ export default {
   },
   SET_FINDPW_ERROR(state, message) {
     state.findPwError = message;
+  },
+  LOGOUT(state) {
+    state.common.isLogin = false;
+    state.common.accessToken = null;
+    state.common.userId = null;
+    state.common.id = null;
   }
-
 };
