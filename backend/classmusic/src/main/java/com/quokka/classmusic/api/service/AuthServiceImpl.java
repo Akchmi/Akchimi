@@ -4,7 +4,8 @@ import com.quokka.classmusic.api.request.LoginDto;
 import com.quokka.classmusic.api.request.SignupDto;
 import com.quokka.classmusic.api.response.LoginSuccessVo;
 import com.quokka.classmusic.api.response.UserVo;
-import com.quokka.classmusic.common.exception.UserIdDuplicatedExeception;
+import com.quokka.classmusic.common.exception.ErrorCode;
+import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.common.util.JwtTokenUtil;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.UserRepository;
@@ -14,8 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.SQLIntegrityConstraintViolationException;
 
 @Service
 @Slf4j
@@ -44,7 +43,7 @@ public class AuthServiceImpl implements AuthService{
         // TODO : 아이디 중복 체크 -> User Table Id Column에 unique 속성 추가합시다
 
         if(userRepository.findUserById(signupDto.getId())!=null){
-            throw new UserIdDuplicatedExeception("중복아이디입니다.");
+            throw new RestApiException(ErrorCode.DUPLICATED_ID);
         }
 
         User user = User.builder()
@@ -55,7 +54,6 @@ public class AuthServiceImpl implements AuthService{
                 .password(passwordEncoder.encode(signupDto.getPassword()))
                 .build();
 
-//        user = userRepository.save(user);
         userRepository.save(user);
         log.debug("회원가입된 사용자 정보 : {}", user);
 
@@ -71,12 +69,12 @@ public class AuthServiceImpl implements AuthService{
 
         // 3. 가져왔는데 비밀번호가 틀린 경우 로그인 실패 -> 비밀번호가 틀렸습니다.
         if(!passwordEncoder.matches(loginDto.getPassword(), userVo.getPassword())){
-            throw new BadCredentialsException("로그인 실패");
+            throw new RestApiException(ErrorCode.PASSWORD_MISMATCH);
         }
         // 4. 일치하는 경우 JWT Access, Refresh 토큰 생성하여 반환
         String accessToken = jwtTokenUtil.generateAccessJwt(userVo.getUserId());
         String refreshToken = jwtTokenUtil.generateRefreshJwt(userVo.getUserId());
 
-        return new LoginSuccessVo(userVo.getUserId(), userVo.getName(), userVo.getId(), userVo.getType(), accessToken, refreshToken);
+        return new LoginSuccessVo(userVo.getUserId(), userVo.getName(), userVo.getId(), userVo.getType(), userVo.getTeacherId(), accessToken, refreshToken);
     }
 }
