@@ -103,8 +103,7 @@
 import InputCareer from "./InputCareer.vue";
 import InputCost from "./InputCost.vue";
 import InputTime from "./InputTime.vue";
-import { onMounted } from "vue";
-import { mapActions, useStore } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -112,15 +111,7 @@ export default {
     InputCost,
     InputTime,
   },
-  setup() {
-    const store = useStore();
 
-    onMounted(() => {
-      store.dispatch("commitInstrument", "악기종류");
-      store.dispatch("commitGender", "");
-      store.dispatch("commitKeyword", "");
-    });
-  },
   data() {
     return {
       isDisplaySearchInputs: {
@@ -250,7 +241,7 @@ export default {
       }
 
       console.log(bitMaskedDays.toString(2));
-      return bitMaskedDays;
+      return bitMaskedDays.toString(2);
     },
   },
 };

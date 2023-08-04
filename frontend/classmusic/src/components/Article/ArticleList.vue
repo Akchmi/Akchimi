@@ -34,7 +34,9 @@
                 {{ article.title }}
               </td>
               <td>{{ article.name }}</td>
-              <td>{{ article.createdAt }}</td>
+              <td>
+                {{ toLocalTimeStamp(article.createdAt) }}
+              </td>
               <td>{{ article.hit }}</td>
             </tr>
           </tbody>
@@ -78,6 +80,7 @@
 <script>
 import { onMounted } from "vue";
 import { useStore, mapGetters, mapActions } from "vuex";
+import utils from "@/common/utils";
 
 export default {
   data() {
@@ -153,6 +156,10 @@ export default {
         return;
       }
       this.$router.push("/article/create");
+    },
+
+    toLocalTimeStamp(unixTimeStamp) {
+      return utils.unixTimeStampToLocalTimeStamp(unixTimeStamp);
     },
   },
   setup() {

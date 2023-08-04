@@ -21,7 +21,7 @@ export default {
   },
 
   searchMoreTeacher({ commit, state }) {
-    console.log(state.search.searchParams);
+    console.log("searchMoreTeacher : ", state.search.searchParams);
 
     apiSearchTeachers(
       state.search.searchParams,
