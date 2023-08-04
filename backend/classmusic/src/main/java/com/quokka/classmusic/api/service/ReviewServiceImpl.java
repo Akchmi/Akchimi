@@ -3,6 +3,8 @@ package com.quokka.classmusic.api.service;
 import com.quokka.classmusic.api.request.ReviewInsertDto;
 import com.quokka.classmusic.api.request.ReviewUpdateDto;
 import com.quokka.classmusic.api.response.ReviewVo;
+import com.quokka.classmusic.common.exception.ErrorCode;
+import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Review;
 import com.quokka.classmusic.db.entity.Teacher;
@@ -69,18 +71,18 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public ReviewVo selectReview(int contactId, int userId) {
-        Review review = reviewRepository.findReviewByContactId(contactId, userId);
-        if(review!=null){
-            if(review.getContact().getStudent().getUserId() == userId)
-            return new ReviewVo(review);
+    public ReviewVo selectReview(int contactId) {
+        Review review = reviewRepository.findReviewByContactId(contactId);
+
+        if(review == null){
+            throw new RestApiException(ErrorCode.NOT_FOUND);
         }
 
-        return null;
+        return new ReviewVo(review);
     }
 
     public void updateRating(Teacher teacher) {
-        System.out.println(teacher);
+        log.debug("teacher : {}", teacher);
         float sum = teacherRepository.findReviewSum(teacher.getTeacherId());
         long cnt = teacherRepository.findReviewCount(teacher.getTeacherId());
         if(cnt != 0){

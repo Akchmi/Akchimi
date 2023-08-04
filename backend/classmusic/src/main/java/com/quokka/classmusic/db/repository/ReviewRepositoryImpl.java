@@ -60,17 +60,10 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     }
 
     @Override
-    public Review findReviewByContactId(int contactId, int userId) {
-        return query.select(Projections.constructor(Review.class,
-                review.reviewId,
-                review.contact,
-                review.rating,
-                review.content,
-                review.createdAt
-                ))
-                .from(review)
+    public Review findReviewByContactId(int contactId) {
+        return query.selectFrom(review)
                 .join(review.contact , contact)
-                .where(review.contact.contactId.eq(contactId).and(contact.student.userId.eq(userId)))
+                .where(review.contact.contactId.eq(contactId))
                 .fetchOne();
     }
 }
