@@ -16,6 +16,7 @@ public class UserVo {
     private String email;
     private String userProfileImage;
     private Integer type;
+    private Integer teacherId;
     private Integer createdAt;
     private Integer gender;
 
@@ -29,5 +30,9 @@ public class UserVo {
         this.type = user.getType();
         this.createdAt = user.getCreatedAt();
         this.gender = user.getGender();
+
+        if(this.type == 1){
+            this.teacherId = user.getTeacher().getTeacherId();
+        }
     }
 }

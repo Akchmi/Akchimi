@@ -4,6 +4,8 @@ import com.quokka.classmusic.api.request.*;
 import com.quokka.classmusic.api.response.LikeVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserVo;
+import com.quokka.classmusic.common.exception.ErrorCode;
+import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Like;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.LikeRepository;
@@ -14,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,19 +23,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
 @Transactional
 public class UserServiceImpl implements UserService{
-
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private TeacherRepository teacherRepository;
-    private LikeRepository likeRepository;
-    private TreatRepository treatRepository;
-    private JavaMailSender mailSender;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TeacherRepository teacherRepository;
+    private final LikeRepository likeRepository;
+    private final TreatRepository treatRepository;
+    private final JavaMailSender mailSender;
     @Autowired
     public UserServiceImpl(UserRepository userRepository
             , PasswordEncoder passwordEncoder
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserService{
     public UserVo findUserById(String id) {
         User user = userRepository.findUserById(id);
         if(user == null){
-            throw new NoSuchElementException("id와 일치하는 회원이 없습니다.");
+            throw new RestApiException(ErrorCode.ID_NOT_FOUND);
         }
         return new UserVo(user);
     }
@@ -63,7 +62,7 @@ public class UserServiceImpl implements UserService{
     public UserVo findUserByUserId(int userId) {
          User user = userRepository.findById(userId);
         if(user == null){
-            throw new NoSuchElementException("id와 일치하는 회원이 없습니다.");
+            throw new RestApiException(ErrorCode.ID_NOT_FOUND);
         }
          return new UserVo(user);
     }
@@ -72,7 +71,7 @@ public class UserServiceImpl implements UserService{
     public UserVo findId(FindIdDto findIdDto) {
         User user = userRepository.findId(findIdDto);
         if(user == null){
-            throw new NoSuchElementException("id와 일치하는 회원이 없습니다.");
+            throw new RestApiException(ErrorCode.ID_NOT_FOUND);
         }
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
@@ -114,12 +113,13 @@ public class UserServiceImpl implements UserService{
                 .student(userRepository.findById(likeInsertDto.getStudentId()))
                 .build();
         boolean isDuplicated = likeRepository.duplicationCheck(like);
-        if(!isDuplicated) {
-            likeRepository.save(like);
-            return new LikeVo(like);
-        }else{
-            return null;
+
+        if(isDuplicated) {
+            throw new RestApiException(ErrorCode.LIKE_DUPLICATED);
         }
+
+        likeRepository.save(like);
+        return new LikeVo(like);
     }
 
     @Override
@@ -143,11 +143,11 @@ public class UserServiceImpl implements UserService{
         User userIdFindByEmail = userRepository.findByEmail(mailDto.getEmail());
         if(userIdFindById==null || userIdFindByEmail==null){
             log.debug("그런 사용자 없습니다.");
-            throw new BadCredentialsException("그런 사용자 없습니다.");
+            throw new RestApiException(ErrorCode.ID_NOT_FOUND);
         }else{
             if(userIdFindById.getUserId()!=userIdFindByEmail.getUserId()){
                 log.debug("아이디 이메일이 일치하지 않습니다.");
-                throw new BadCredentialsException("아이디 이메일이 일치하지 않습니다.");
+                throw new RestApiException(ErrorCode.ID_EMAIL_MISMATCH);
             }
         }
         String tmpPassword = getRandomPassword(10);
@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService{
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
                 '!', '@', '#', '$', '%', '^', '&' };
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         SecureRandom sr = new SecureRandom();
         sr.setSeed(new Date().getTime());
 

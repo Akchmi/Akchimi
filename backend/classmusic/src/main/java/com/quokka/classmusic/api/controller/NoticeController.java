@@ -20,7 +20,7 @@ import java.util.Map;
 @CrossOrigin("*")
 @Slf4j
 public class NoticeController {
-    private NoticeService noticeService;
+    private final NoticeService noticeService;
 
     @Autowired
     public NoticeController(NoticeService noticeService) {
@@ -37,12 +37,8 @@ public class NoticeController {
     }
     @GetMapping("/endPageNo")
     public ResponseEntity<Integer> endPageNo(@RequestParam Map<String, String> params){
-        try {
-            int endPageNo = noticeService.endPageNo(params);
-            return new ResponseEntity<>(endPageNo, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        int endPageNo = noticeService.endPageNo(params);
+        return new ResponseEntity<>(endPageNo, HttpStatus.OK);
     }
 
 
@@ -77,7 +73,7 @@ public class NoticeController {
 
         noticeService.deleteNotice(noticeId);
 
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

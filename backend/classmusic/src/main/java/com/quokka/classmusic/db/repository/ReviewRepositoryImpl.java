@@ -3,7 +3,6 @@ package com.quokka.classmusic.db.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.response.ReviewVo;
-import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Review;
 import org.springframework.stereotype.Repository;
 
@@ -60,17 +59,10 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     }
 
     @Override
-    public Review findReviewByContactId(int contactId, int userId) {
-        return query.select(Projections.constructor(Review.class,
-                review.reviewId,
-                review.contact,
-                review.rating,
-                review.content,
-                review.createdAt
-                ))
-                .from(review)
+    public Review findReviewByContactId(int contactId) {
+        return query.selectFrom(review)
                 .join(review.contact , contact)
-                .where(review.contact.contactId.eq(contactId).and(contact.student.userId.eq(userId)))
+                .where(review.contact.contactId.eq(contactId))
                 .fetchOne();
     }
 }

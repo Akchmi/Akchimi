@@ -3,13 +3,11 @@ package com.quokka.classmusic.api.controller;
 import com.quokka.classmusic.api.request.ReviewInsertDto;
 import com.quokka.classmusic.api.request.ReviewUpdateDto;
 import com.quokka.classmusic.api.response.ReviewVo;
-import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.api.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.List;
 @CrossOrigin("*")
 @Slf4j
 public class ReviewController {
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
     @Autowired
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
@@ -27,56 +25,39 @@ public class ReviewController {
 
     @GetMapping
     public ResponseEntity<List<ReviewVo>> selectAllReviews(@RequestParam int teacherId){
-        System.out.println(teacherId);
         log.debug("teacherId = {} 리뷰 목록 조회" ,teacherId);
-        try {
-            return ResponseEntity.status(200).body(reviewService.selectAllReview(teacherId));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        return new ResponseEntity<>(reviewService.selectAllReview(teacherId), HttpStatus.OK);
     }
 
     @GetMapping("/myreview")
-    public ResponseEntity<ReviewVo> selectReviews(@RequestParam int contactId, @AuthenticationPrincipal UserDetailsVo userDetailsVo){
-        int userId = userDetailsVo.getUserVo().getUserId();
-        ReviewVo reviewVo = reviewService.selectReview(contactId, userId);
-        if(reviewVo != null) {
-            log.debug("{}",reviewVo.getContent());
-            return new ResponseEntity<>(reviewVo, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<ReviewVo> selectReviews(@RequestParam int contactId){
+        ReviewVo reviewVo = reviewService.selectReview(contactId);
+
+        log.debug("{}",reviewVo.getContent());
+        return new ResponseEntity<>(reviewVo, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Integer> insertReview(@RequestBody ReviewInsertDto reviewInsertDto){
         log.debug("리뷰쓰기");
-        try {
-            return ResponseEntity.status(200).body(reviewService.insertReview(reviewInsertDto));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        return new ResponseEntity<>(reviewService.insertReview(reviewInsertDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{reviewId}")
     public ResponseEntity<Void> updateReview(@PathVariable int reviewId ,@RequestBody ReviewUpdateDto reviewUpdateDto){
         log.debug("리뷰수정");
-        try {
-            reviewService.updateReview(reviewId , reviewUpdateDto);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        reviewService.updateReview(reviewId , reviewUpdateDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable int reviewId){
         log.debug("리뷰삭제");
-        try {
-            reviewService.deleteReview(reviewId);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        reviewService.deleteReview(reviewId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

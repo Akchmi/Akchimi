@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface ContactsService {
-    public List<ContactsVo> selectAllContacts(Map<String, Integer> params) throws Exception;
-    public void deleteContacts(int contactId) throws Exception;
-    public void updateContactsState(int contactId , ContactsUpdateStateDto contactsUpdateStateDto) throws Exception;
-    public void updateContactsMemo(int contactId , ContactsUpdateMemoDto contactsUpdateMemoDto) throws Exception;
-    public void updateContactsOrder(ContactsUpdateOrderListDto contactsUpdateOrderListDto) throws Exception;
-    public int insertContacts(ContactsInsertDto contactsInsertDto) throws Exception;
-    public String selectContactsRoom(int contactId) throws Exception;
+    List<ContactsVo> selectAllContacts(Map<String, Integer> params);
+    void deleteContacts(int contactId);
+    void updateContactsState(int contactId , ContactsUpdateStateDto contactsUpdateStateDto);
+    void updateContactsMemo(int contactId , ContactsUpdateMemoDto contactsUpdateMemoDto);
+    void updateContactsOrder(ContactsUpdateOrderListDto contactsUpdateOrderListDto);
+    int insertContacts(ContactsInsertDto contactsInsertDto);
+    String selectContactsRoom(int contactId);
 }

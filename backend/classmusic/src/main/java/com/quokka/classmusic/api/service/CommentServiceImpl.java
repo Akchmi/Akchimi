@@ -2,7 +2,8 @@ package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.CommentDto;
 import com.quokka.classmusic.api.response.CommentVo;
-import com.quokka.classmusic.common.exception.NotAuthorExeception;
+import com.quokka.classmusic.common.exception.ErrorCode;
+import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Comment;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.ArticleRepository;
@@ -20,9 +21,9 @@ import java.util.List;
 @Transactional
 public class CommentServiceImpl implements CommentService{
 
-    private CommentRepository commentRepository;
-    private UserRepository userRepository;
-    private ArticleRepository articleRepository;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final ArticleRepository articleRepository;
 
     public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, ArticleRepository articleRepository) {
         this.commentRepository = commentRepository;
@@ -57,7 +58,7 @@ public class CommentServiceImpl implements CommentService{
         if(comment.getUser().getUserId() == userId){
             commentRepository.delete(comment);
         }else{
-            throw new NotAuthorExeception("작성자가 아닙니다.");
+            throw new RestApiException(ErrorCode.NOT_AUTHOR);
         }
     }
 
@@ -68,7 +69,7 @@ public class CommentServiceImpl implements CommentService{
             comment.setContent(commentDto.getContent());
             commentRepository.save(comment);
         }else{
-            throw new NotAuthorExeception("작성자가 아닙니다.");
+            throw new RestApiException(ErrorCode.NOT_AUTHOR);
         }
     }
 
