@@ -29,18 +29,18 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    내 매칭 보기
     @Override
-    public List<ContactsVo> selectAllContacts(Map<String,Integer> params) throws Exception {
+    public List<ContactsVo> selectAllContacts(Map<String,Integer> params){
         return contactsRepository.findAll(params);
     }
 //    매칭 삭제
     @Override
-    public void deleteContacts(int contactId) throws Exception {
+    public void deleteContacts(int contactId){
         Contact contact = contactsRepository.findById(contactId);
         contactsRepository.delete(contact);
     }
 //    매칭 상태 바꾸기
     @Override
-    public void updateContactsState(int contactId , ContactsUpdateStateDto contactsUpdateStateDto) throws Exception {
+    public void updateContactsState(int contactId , ContactsUpdateStateDto contactsUpdateStateDto) {
         Contact contact = contactsRepository.findById(contactId);
         int state = contactsUpdateStateDto.getState();
 //        수락 시 매칭 수 증가 > 시간 넣어줘야됨
@@ -59,7 +59,7 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    매칭 메모 바꾸기
     @Override
-    public void updateContactsMemo(int contactId , ContactsUpdateMemoDto contactsUpdateMemoDto) throws Exception {
+    public void updateContactsMemo(int contactId , ContactsUpdateMemoDto contactsUpdateMemoDto) {
         Contact contact = contactsRepository.findById(contactId);
         if(contactsUpdateMemoDto.getType() == 0){
             contact.setStudentMemo(contactsUpdateMemoDto.getMemo());
@@ -70,7 +70,7 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    매칭 순서 바꾸기
     @Override
-    public void updateContactsOrder(ContactsUpdateOrderListDto contactsUpdateOrderListDto) throws Exception {
+    public void updateContactsOrder(ContactsUpdateOrderListDto contactsUpdateOrderListDto){
         int type = contactsUpdateOrderListDto.getType();
         if(contactsUpdateOrderListDto.getType() == 0){
             for (ContactsUpdateOrderDto contactsUpdateOrderDto : contactsUpdateOrderListDto.getContacts()) {
@@ -90,7 +90,7 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    매칭 생성하기
     @Override
-    public int insertContacts(ContactsInsertDto contactsInsertDto) throws Exception {
+    public int insertContacts(ContactsInsertDto contactsInsertDto) {
         Contact contact = Contact.builder()
                 .student(userRepository.findById(contactsInsertDto.getStudentId()))
                 .teacher(teacherRepository.findById(contactsInsertDto.getTeacherId()))
@@ -103,7 +103,7 @@ public class ContactsServiceImpl implements ContactsService{
     }
 //    강의실 입장
     @Override
-    public String selectContactsRoom(int contactId) throws Exception {
+    public String selectContactsRoom(int contactId){
         return contactsRepository.findById(contactId).getRoomKey();
     }
 }
