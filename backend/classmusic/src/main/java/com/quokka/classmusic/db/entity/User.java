@@ -62,4 +62,7 @@ public class User {
 
     @Column(name = "gender")
     private Integer gender;
+
+    @OneToOne(mappedBy = "user")
+    private Teacher teacher;
 }
