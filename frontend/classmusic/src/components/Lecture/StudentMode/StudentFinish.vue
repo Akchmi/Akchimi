@@ -1,41 +1,54 @@
-<template lang="">
-  <div class="student-finish-container">
-    <div class="student-finish">
-      <div class="top-section">
-        <img :src="image" alt="Teacher profile picture" class="teacher-image" />
-          <div class="info-box">
-            <h3>{{name}}</h3>
-            <p>{{instrument}} | {{career}}</p>
-            <p> 별점 : {{localRating}}</p>            
+<template>
+  <div>
+    <div v-for="lecture in lectures" :key="lecture.contactId">
+      {{ lecture }}
+      <div class="student-finish-container">
+        <div class="student-finish">
+          <div class="top-section">
+            <img :src="image" alt="Teacher profile picture" class="teacher-image" />
+              <div class="info-box">
+                <h3>{{lecture.name}}</h3>
+                <!-- <p>{{instrument}} | {{career}}</p> -->
+                <p>{{ lecture.teacherInfo.name }} </p>
+                <p>{{lecture.teacherInfo.career}} 년</p>
+                <p> 별점 : {{lecture.teacherInfo.avgRating}}</p>            
+                <p> 강사소개 : {{lecture.teacherInfo.introduce}}</p>            
+              </div>
           </div>
+          <div class="button-group">
+            <button @click="toggleInput">{{showInput ? '취소' : '리뷰 작성하기'}}</button>
+            <button @click="toggleView">작성한 리뷰 보기</button>
+          </div>
+        </div>
+        <div v-if="showInput" class="input-area">
+          <textarea v-model="review" placeholder="리뷰를 작성해주세요." class="review-input"></textarea>
+          <div class="rating-submit">
+            <input type="number" min="1" max="5" v-model.number="inputRating">
+            <button @click="saveReview">리뷰 제출</button>
+          </div>
+        </div>
+        <div v-if="showReview" class="view-area">
+          <!-- <p>{{review}}</p> -->
+          <!-- <p>별점 : {{localRating}}</p> -->
+          <p>{{lecture.myreview.content}}</p>
+          <p>별점 : {{lecture.myreview.rating}}</p>
+        </div>
       </div>
-      <div class="button-group">
-        <button @click="toggleInput">{{showInput ? '취소' : '리뷰 작성하기'}}</button>
-        <button @click="toggleView">작성한 리뷰 보기</button>
-      </div>
-    </div>
-    <div v-if="showInput" class="input-area">
-      <textarea v-model="review" placeholder="리뷰를 작성해주세요." class="review-input"></textarea>
-      <div class="rating-submit">
-        <input type="number" min="1" max="5" v-model.number="inputRating">
-        <button @click="saveReview">리뷰 제출</button>
-      </div>
-    </div>
-    <div v-if="showReview" class="view-area">
-      <p>{{review}}</p>
-      <p>별점 : {{localRating}}</p>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "@/api/axios";
+import { useStore } from 'vuex';
+
 export default {
   props: {
     image: { type: String, default:"https://via.placeholder.com/280"},
     name: { type: String, default: '박한샘' },
-    instrument: {type:String, default: '드럼,피아노'},
-    career: {type: String, default: '카이스트 리코더 박사'},
-    rating: {type: Number, default: 0},
+    // instrument: {type:String, default: '드럼,피아노'},
+    // career: {type: String, default: '카이스트 리코더 박사'},
+    // rating: {type: Number, default: 0},
   },
   data() {
     return {
@@ -44,6 +57,7 @@ export default {
       review: '',
       inputRating: 5,
       localRating: 0,
+      lectures: [],
     };
   },
   mounted() {
@@ -62,6 +76,35 @@ export default {
       this.localRating = this.inputRating;
       this.showInput = false;
     },
+  },
+  created(){
+    const store=useStore();
+    const userId = store.getters.getUserId;
+    axios
+    .get(`http://localhost:8080/contacts?id=${userId}&state=2&type=0`)
+    .then((data)=>{
+      console.log(data.data);
+      this.$data.lectures=data.data;
+      console.log(data.data[0]);
+      for(let i=0;i<this.$data.lectures.length;i++) {
+        const contactId=this.$data.lectures[i].contactId;
+        const teacherId=this.$data.lectures[i].matchingUserId;
+        
+        axios
+        .get(`http://localhost:8080/reviews/myreview?contactId=${contactId}`)
+        .then((data)=>{
+          this.$data.lectures[i]["myreview"]=data.data;
+        })
+        axios
+        .get(`http://localhost:8080/teachers/${teacherId}`)
+        .then((data)=>{
+          this.$data.lectures[i]["teacherInfo"]=data.data;
+          console.log(this.$data.lectures[i]);
+
+        })
+      }
+
+    });
   },
 }
 </script>

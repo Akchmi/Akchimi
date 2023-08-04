@@ -8,8 +8,8 @@
         </div>
         <div class="info-container">
           <div class="name-container">
-            <label for="name" class="name-label">강사 이름</label>
-            <input id="name" class="name-input" type="text" placeholder="이름을 입력해주세요" />
+            <h3>강사 이름</h3>
+            <p>{{ name }}</p>
           </div>
           <div class="teacher-profile-update-container">
             <div class="left-field">
@@ -24,12 +24,12 @@
               </div>
               <div class="input-field">
                 <label for="years">경력 : </label>
-                <input id="years" type="number" min="1" />
+                <input id="years" v-model.number="career" type="number" min="1" />
                 년
               </div>
               <div class="input-field">
                 <label for="cost">시간당 비용 : </label>
-                <input id="cost" type="number" min="0" />
+                <input id="cost" v-model.number="cost" type="number" min="0" />
                 만원
               </div>
             </div>
@@ -43,11 +43,11 @@
               </div>
               <div class="input-field">
                 <label for="start">시작 시간 :</label>
-                <input id="start" type="time" v-model="startTime" />
+                <input id="start" v-model="startTime" type="time" />
               </div>
               <div class="input-field">
                 <label for="end">종료 시간 :</label>
-                <input id="end" type="time" v-model="endTime" />
+                <input id="end" v-model="endTime" type="time" />
               </div>
               <div class="input-field">
                 <p>가능 시간 : {{ selectedDays.join(', ') }} {{ startTime }} ~ {{ endTime }}</p>
@@ -69,15 +69,17 @@
         첨부파일 추가 시 보여줄 공간
       </div>
       <div class="save-button">
-        <button>
-          <router-link to="/profile/teacherprofile">저장</router-link>
-        </button>
+        <button @click="submitForm">저장</button>
       </div>
     </div>
   </div>
 </template>
 
+
 <script>
+import { mapGetters } from "vuex";
+import { apiTeacherProfileCreate } from "@/api/profiles.js";
+
 export default {
   props: {
     image: { type: String, default: "https://via.placeholder.com/280" },
@@ -85,6 +87,7 @@ export default {
   },
   data() {
     return {
+      name: 1,
       selectedInstrument: null,
       instruments: ['피아노', '기타', '드럼', '바이올린', '트럼펫'],
       selectedInstruments: [],
@@ -93,20 +96,53 @@ export default {
       startTime: '',
       endTime: '',
       description: "",
+      career: 0,
+      cost: 0,
     };
   },
-  watch: {
-    selectedInstrument(newVal) {
-      if (newVal && !this.selectedInstruments.includes(newVal)) {
-        this.selectedInstruments.push(newVal);
+  computed: {
+    ...mapGetters(["getName"]),
+  },
+  methods: {
+    submitForm() {
+      const data = {
+        userId: this.userId,
+        career: this.career,
+        cost: this.cost,
+        introduce: this.description,
+        startTime: this.convertTimeToMinutes(this.startTime),
+        endTime: this.convertTimeToMinutes(this.endTime),
+        classday: this.convertDaysToBitMask(),
+        instruments: this.selectedInstruments,
+      };
+
+      apiTeacherProfileCreate(data)
+        .then((response) => {
+          this.$store.dispatch("saveTeacherId", response.teacherId);
+        })
+        .catch((error) => {
+          console.error("등록 오류:", error);
+        });
+      },
+      convertDaysToBitMask() {
+      console.log("ConvertDaysToBitMask");
+      let index = 0,
+        bitMaskedDays = 0;
+
+      for (const day in this.days) {
+        if (this.days[day]) {
+          bitMaskedDays ^= 1 << index;
+        }
+        index++;
       }
+
+      console.log(bitMaskedDays.toString(2));
+      return bitMaskedDays;
+    },
     }
   }
-};
 </script>
 
 <style scoped>
-
-@import "@/assets/scss/teacherprofileupdate.scss";
-
+@import "@/assets/scss/teacherprofile.scss";
 </style>
