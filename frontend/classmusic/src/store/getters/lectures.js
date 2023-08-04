@@ -1,6 +1,8 @@
 export default {
-  getLectureList(state) {
+  getlectureList(state) {
     return state.lectures.lectureList;
   },
-
+  getRefusedLectureList(state) {
+    return state.lectures.refusedLectureList;
+  },
 };

@@ -5,33 +5,43 @@
       <div class="student-finish-container">
         <div class="student-finish">
           <div class="top-section">
-            <img :src="image" alt="Teacher profile picture" class="teacher-image" />
-              <div class="info-box">
-                <h3>{{lecture.name}}</h3>
-                <!-- <p>{{instrument}} | {{career}}</p> -->
-                <p>{{ lecture.teacherInfo.name }} </p>
-                <p>{{lecture.teacherInfo.career}} 년</p>
-                <p> 별점 : {{lecture.teacherInfo.avgRating}}</p>            
-                <p> 강사소개 : {{lecture.teacherInfo.introduce}}</p>            
-              </div>
+            <img
+              :src="image"
+              alt="Teacher profile picture"
+              class="teacher-image"
+            />
+            <div class="info-box">
+              <h3>{{ lecture.name }}</h3>
+              <!-- <p>{{instrument}} | {{career}}</p> -->
+              <p>{{ lecture.teacherInfo.name }}</p>
+              <p>{{ lecture.teacherInfo.career }} 년</p>
+              <p>별점 : {{ lecture.teacherInfo.avgRating }}</p>
+              <p>강사소개 : {{ lecture.teacherInfo.introduce }}</p>
+            </div>
           </div>
           <div class="button-group">
-            <button @click="toggleInput">{{showInput ? '취소' : '리뷰 작성하기'}}</button>
+            <button @click="toggleInput">
+              {{ showInput ? "취소" : "리뷰 작성하기" }}
+            </button>
             <button @click="toggleView">작성한 리뷰 보기</button>
           </div>
         </div>
         <div v-if="showInput" class="input-area">
-          <textarea v-model="review" placeholder="리뷰를 작성해주세요." class="review-input"></textarea>
+          <textarea
+            v-model="review"
+            placeholder="리뷰를 작성해주세요."
+            class="review-input"
+          ></textarea>
           <div class="rating-submit">
-            <input type="number" min="1" max="5" v-model.number="inputRating">
+            <input type="number" min="1" max="5" v-model.number="inputRating" />
             <button @click="saveReview">리뷰 제출</button>
           </div>
         </div>
         <div v-if="showReview" class="view-area">
           <!-- <p>{{review}}</p> -->
           <!-- <p>별점 : {{localRating}}</p> -->
-          <p>{{lecture.myreview.content}}</p>
-          <p>별점 : {{lecture.myreview.rating}}</p>
+          <p>{{ lecture.myreview.content }}</p>
+          <p>별점 : {{ lecture.myreview.rating }}</p>
         </div>
       </div>
     </div>
@@ -39,13 +49,10 @@
 </template>
 
 <script>
-import axios from "@/api/axios";
-import { useStore } from 'vuex';
-
 export default {
   props: {
-    image: { type: String, default:"https://via.placeholder.com/280"},
-    name: { type: String, default: '박한샘' },
+    image: { type: String, default: "https://via.placeholder.com/280" },
+    name: { type: String, default: "박한샘" },
     // instrument: {type:String, default: '드럼,피아노'},
     // career: {type: String, default: '카이스트 리코더 박사'},
     // rating: {type: Number, default: 0},
@@ -54,7 +61,7 @@ export default {
     return {
       showInput: false,
       showReview: false,
-      review: '',
+      review: "",
       inputRating: 5,
       localRating: 0,
       lectures: [],
@@ -77,36 +84,7 @@ export default {
       this.showInput = false;
     },
   },
-  created(){
-    const store=useStore();
-    const userId = store.getters.getUserId;
-    axios
-    .get(`http://localhost:8080/contacts?id=${userId}&state=2&type=0`)
-    .then((data)=>{
-      console.log(data.data);
-      this.$data.lectures=data.data;
-      console.log(data.data[0]);
-      for(let i=0;i<this.$data.lectures.length;i++) {
-        const contactId=this.$data.lectures[i].contactId;
-        const teacherId=this.$data.lectures[i].matchingUserId;
-        
-        axios
-        .get(`http://localhost:8080/reviews/myreview?contactId=${contactId}`)
-        .then((data)=>{
-          this.$data.lectures[i]["myreview"]=data.data;
-        })
-        axios
-        .get(`http://localhost:8080/teachers/${teacherId}`)
-        .then((data)=>{
-          this.$data.lectures[i]["teacherInfo"]=data.data;
-          console.log(this.$data.lectures[i]);
-
-        })
-      }
-
-    });
-  },
-}
+};
 </script>
 
 <style scoped>
@@ -124,11 +102,11 @@ export default {
   flex-direction: column;
   width: 800px;
   height: 300px;
-  border : 1px solid black;
-  margin-bottom : 20px;
+  border: 1px solid black;
+  margin-bottom: 20px;
   border-radius: 10px;
   overflow: hidden;
-  padding:20px
+  padding: 20px;
 }
 
 .top-section {
@@ -153,7 +131,7 @@ export default {
 .button-group {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 20px
+  margin-bottom: 20px;
 }
 
 .input-area {
@@ -174,5 +152,4 @@ export default {
   justify-content: flex-end;
   width: 800px;
 }
-
 </style>

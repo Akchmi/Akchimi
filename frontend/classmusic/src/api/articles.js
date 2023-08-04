@@ -102,7 +102,6 @@ function apiGetArticlecomment(context, articleId) {
 }
 
 function apiPostArticleComment(context, data) {
-  console.log("데이터는", data);
   axios
     .post(`/articles/${data.articleId}/comments`, { content: data.content })
     .then(() => {
