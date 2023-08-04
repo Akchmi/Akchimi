@@ -2,8 +2,6 @@ package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.response.SocketVO;
 
-import com.quokka.classmusic.api.service.ChatService;
-
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
