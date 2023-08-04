@@ -7,7 +7,7 @@ import com.quokka.classmusic.api.response.CommentVo;
 import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.api.service.ArticleService;
 import com.quokka.classmusic.api.service.CommentService;
-import com.quokka.classmusic.common.exception.NotAuthorExeception;
+import com.quokka.classmusic.common.exception.RestApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,18 +32,6 @@ public class ArticleController {
     public ArticleController(ArticleService articleService, CommentService commentService) {
         this.articleService = articleService;
         this.commentService = commentService;
-    }
-
-    @ExceptionHandler({NoSuchElementException.class})
-    public ResponseEntity<String> noSuchElementExceptionHandler(NoSuchElementException e, HttpServletRequest request) {
-        log.warn("NoSuchElementException 발생 url:{}, trace:{}", request.getRequestURI(), e.getStackTrace());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler({NotAuthorExeception.class})
-    public ResponseEntity<String> notAuthorExeceptionHandler(NotAuthorExeception e, HttpServletRequest request) {
-        log.warn("NotAuthorExeception 발생 url:{}, trace:{}", request.getRequestURI(), e.getStackTrace());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     // 자유게시판 글쓰기
@@ -87,7 +75,7 @@ public class ArticleController {
 //        articleDto.setArticleId(articleId);
 
         articleService.modifyArticle(articleId, articleDto, userDetailsVo.getUserVo().getUserId());
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        return new ResponseEntity<>(null, HttpStatus.OK);
 
     }
 
@@ -120,7 +108,7 @@ public class ArticleController {
     @PutMapping("/{articleId}/comments/{commentId}")
     public ResponseEntity<Integer> modifyComment(@PathVariable int articleId, @PathVariable int commentId, @RequestBody CommentDto commentDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
         commentService.modifyComment(commentId, commentDto, userDetailsVo.getUserVo().getUserId());
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @DeleteMapping("/{articleId}/comments/{commentId}")

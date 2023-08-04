@@ -2,15 +2,13 @@ package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.ArticleDto;
 import com.quokka.classmusic.api.response.ArticleVo;
-import com.quokka.classmusic.api.response.UserDetailsVo;
-import com.quokka.classmusic.common.exception.NotAuthorExeception;
+import com.quokka.classmusic.common.exception.ErrorCode;
+import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Article;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.ArticleRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +37,6 @@ public class ArticleServiceImpl implements ArticleService{
                 .title(articleDto.getTitle())
                 .user(user)
                 .content(articleDto.getContent())
-//                .hit(0)
                 .build();
         articleRepository.save(article);
         return article.getArticleId();
@@ -51,7 +48,7 @@ public class ArticleServiceImpl implements ArticleService{
 
         // 없는 글 조회시
         if(articleVo == null){
-            throw new NoSuchElementException("존재하지 않는 게시글입니다.");
+            throw new RestApiException(ErrorCode.NOT_FOUND);
         }
 
         return articleVo;
@@ -82,7 +79,7 @@ public class ArticleServiceImpl implements ArticleService{
             article.setContent(articleDto.getContent());
             articleRepository.save(article);
         }else{
-            throw new NotAuthorExeception("작성자가 아닙니다.");
+            throw new RestApiException(ErrorCode.NOT_AUTHOR);
         }
     }
 
@@ -92,7 +89,7 @@ public class ArticleServiceImpl implements ArticleService{
         if(article.getUser().getUserId() == userId){
             articleRepository.delete(article);
         }else {
-            throw new NotAuthorExeception("작성자가 아닙니다.");
+            throw new RestApiException(ErrorCode.NOT_AUTHOR);
         }
     }
 
