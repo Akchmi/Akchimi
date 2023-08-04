@@ -12,6 +12,7 @@ public class LoginSuccessVo {
     private String name;
     private String id;
     private int type;
+    private Integer teacherId;
     private String accessToken;
     private String refreshToken;
 }
