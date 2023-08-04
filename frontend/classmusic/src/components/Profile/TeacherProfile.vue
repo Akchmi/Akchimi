@@ -81,6 +81,7 @@ export default {
   async created() {
     const userId = JSON.parse(localStorage.getItem("vuex")).common.userId
     const res = await apiDetailTeacherInfo(userId);
+    console.log('티쳐정보는', res)
     this.teacherId = res.teacherId;
     this.name = res.name;
     this.gender = res.gender;
@@ -94,6 +95,7 @@ export default {
     this.instrument = res.instrument;
     this.attachedFiles = res.attachedFiles;
   },
+
   methods: {
     parseDays(classDay) {
       const days = ['월','화','수','목','금','토','일'];

@@ -98,7 +98,8 @@ export default {
           id: this.loginid,
           password: this.password,
         });
-        this.$router.push('/');     
+        this.$router.push('/');
+        console.log()     
       } catch (error) {
         console.error(error);
         this.$router.push('/login/signin');

@@ -11,4 +11,7 @@ export default {
   getUsertype(state) {
     return state.common.userType;
   },
+  getUserName(state) {
+    return state.common.userName
+  }
 };

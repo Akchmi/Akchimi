@@ -92,7 +92,7 @@ export default {
       try {
         const data = await apiGetUserInfo(this.id);   
         if (data) {
-          this.userInfo = data        
+          this.userInfo = data           
         }
       } catch (error) {
         console.log(error)

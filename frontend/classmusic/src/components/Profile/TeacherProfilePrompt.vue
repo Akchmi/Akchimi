@@ -2,7 +2,7 @@
     <div class="teacher-registration-box">
       <p >아직 강사 등록을 하지 않으셨군요?</p>
       <button>
-        <router-link to="/profile/teacherprofilecreate">강사 프로필</router-link>
+        <router-link to="/profile/teacherprofilecreate">강사 등록하러 가기</router-link>
       </button>
 
     </div>
