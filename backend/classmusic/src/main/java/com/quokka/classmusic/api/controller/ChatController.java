@@ -1,12 +1,10 @@
 package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.ChatInsertDto;
-import com.quokka.classmusic.api.request.ContactsInsertDto;
 import com.quokka.classmusic.api.response.ChatsVo;
 import com.quokka.classmusic.api.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +22,20 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @GetMapping("/{contentId}")
-    public ResponseEntity<List<ChatsVo>> selectAllChat(@PathVariable int contentId){
+    @GetMapping("/{contactId}")
+    public ResponseEntity<List<ChatsVo>> selectAllChat(@PathVariable int contactId){
         try {
-            return ResponseEntity.status(200).body(chatService.selectAll(contentId));
+            return ResponseEntity.status(200).body(chatService.selectAll(contactId));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    @PostMapping("/{contentId}")
-    public ResponseEntity<Integer> insertChat(@PathVariable int contentId , @RequestBody ChatInsertDto chatInsertDto){
+    @PostMapping("/{contactId}")
+    public ResponseEntity<Integer> insertChat(@PathVariable int contactId , @RequestBody ChatInsertDto chatInsertDto){
+        log.debug("contactId : {}, dto : {}", contactId, chatInsertDto);
         try {
-            chatService.insertChat(contentId, chatInsertDto);
+            chatService.insertChat(contactId, chatInsertDto);
             return ResponseEntity.status(200).body(null);
         } catch (Exception e) {
             throw new RuntimeException(e);
