@@ -12,6 +12,7 @@ import java.util.Objects;
 public interface TeacherRepository {
     List<Teacher> findAll(Map<String, String> params);
     Teacher findById(int teacherId);
+    
     void save(Teacher teacher);
     void delete(Teacher teacher);
     long findReviewCount(int teacherId);

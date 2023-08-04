@@ -4,6 +4,8 @@ import com.quokka.classmusic.api.request.TeacherDto;
 import com.quokka.classmusic.api.request.TeacherSelectDto;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
+import com.quokka.classmusic.common.exception.ErrorCode;
+import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.entity.Treat;
 import com.quokka.classmusic.db.entity.User;
@@ -78,7 +80,7 @@ public class TeacherServiceImpl implements TeacherService{
     public int insertTeacher(TeacherDto teacherDto) {
         //있는지화인해 유저가 선생테이블에 있는지 확인하고
         if(userRepository.findById(teacherDto.getUserId()).getType() == 1){
-            throw new BadCredentialsException("이미 선생님 프로필이 있음");
+            throw new RestApiException(ErrorCode.BAD_REQUEST);
         }
 //        유저 타입 1로 바꿔줌
         User user = userRepository.findById(teacherDto.getUserId());
