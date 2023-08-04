@@ -54,9 +54,23 @@ public class TeacherServiceImpl implements TeacherService{
 
     @Override
     public TeacherDetailVo selectDetailTeacher(int teacherId) {
-        TeacherDetailVo teacherDetailVo = teacherRepository.findDetailById(teacherId);
-        teacherDetailVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherId));
-        teacherDetailVo.setClassDay(IntToday(teacherRepository.findById(teacherId).getClassDay()));
+        Teacher teacher = teacherRepository.findById(teacherId);
+        User user = teacher.getUser();
+        TeacherDetailVo teacherDetailVo = new TeacherDetailVo(
+                user.getUserId(),
+                user.getName(),
+                user.getGender(),
+                user.getUserProfileImage(),
+                teacher.getCareer(),
+                teacher.getCost(),
+                teacher.getIntroduce(),
+                teacher.getStartTime(),
+                teacher.getEndTime(),
+                IntToday(teacher.getClassDay()),
+                teacher.getAvgRating(),
+                teacher.getContactCnt(),
+                treatRepository.findInstrumentNameByTeacherId(teacherId)
+        );
         return teacherDetailVo;
     }
 

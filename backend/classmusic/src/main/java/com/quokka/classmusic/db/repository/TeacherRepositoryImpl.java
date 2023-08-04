@@ -3,13 +3,10 @@ package com.quokka.classmusic.db.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.db.entity.Teacher;
 import org.springframework.stereotype.Repository;
 
@@ -34,25 +31,6 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     public TeacherRepositoryImpl(EntityManager em) {
         this.em = em;
         this.query = new JPAQueryFactory(em);
-    }
-
-    @Override
-    public TeacherDetailVo findDetailById(int teacherId) {
-        return query.select(Projections.constructor(TeacherDetailVo.class ,
-                user.name,
-                user.gender,
-                user.userProfileImage,
-                teacher.career,
-                teacher.cost,
-                teacher.introduce,
-                teacher.startTime,
-                teacher.endTime,
-                teacher.avgRating,
-                teacher.contactCnt))
-                .from(teacher)
-                .where(teacher.teacherId.eq(teacherId))
-                .join(teacher.user , user)
-                .fetchOne();
     }
 
     @Override

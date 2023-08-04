@@ -24,19 +24,6 @@ public class TeacherDetailVo {
     private Integer contactCnt;
     private List<String> instruments;
 
-    public TeacherDetailVo(String name, int gender, String userProfileImage, int career, int cost, String introduce, int startTime, int endTime, float avgRating, int contactCnt) {
-        this.name = name;
-        this.gender = gender;
-        this.userProfileImage = userProfileImage;
-        this.career = career;
-        this.cost = cost;
-        this.introduce = introduce;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.avgRating = avgRating;
-        this.contactCnt = contactCnt;
-    }
-
     public void setClassDay(String classDay) {
         this.classDay = classDay;
     }

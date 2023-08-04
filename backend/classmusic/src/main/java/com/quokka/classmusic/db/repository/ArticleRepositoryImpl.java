@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static com.quokka.classmusic.db.entity.QArticle.article;
 import static com.quokka.classmusic.db.entity.QUser.user;
@@ -81,6 +82,8 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     @Override
     public Article selectOneById(int articleId) {
         Article viewArticle = em.find(Article.class, articleId);
+        if(viewArticle == null)
+            throw new NoSuchElementException();
         viewArticle.setHit(viewArticle.getHit()+1);
         return query
                 .select(Projections.constructor(Article.class,

@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public interface TeacherRepository {
-    TeacherDetailVo findDetailById(int teacherId);
     List<Teacher> findAll(Map<String, String> params);
     Teacher findById(int teacherId);
     void save(Teacher teacher);
