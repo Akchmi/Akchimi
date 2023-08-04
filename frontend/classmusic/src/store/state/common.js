@@ -4,4 +4,6 @@ export default {
   userId: null,
   id: null,
   userType: null,
+  teacherId: null,
+  
 };

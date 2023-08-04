@@ -6,5 +6,9 @@ export default {
     state.common.userId = data.userId;
     state.common.id = data.id;
     state.common.userType = data.type;
+    state.common.teacherId = data.teacherId
+  },
+  SET_USER_TYPE(state, userType) {
+    state.common.userType = userType;
   },
 };

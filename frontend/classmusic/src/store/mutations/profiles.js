@@ -6,13 +6,10 @@ export default {
     state.profiles.userInfo = data
   },
   SET_FAVORITE_TEACHERS(state, data) {
-    state.favoriteTeachers = data;
+    state.profiles.favoriteTeachers = data;
   },
   SET_TEACHER_PROFILE(state, data) {
-    state.teacherId = data.teacherId
+    state.profiles.teacherId = data.teacherId
   },
-  SET_USER_INFO(state, userInfo) {
-    state.userInfo = userInfo;
-  },
-
+ 
 };

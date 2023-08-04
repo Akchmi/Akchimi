@@ -30,10 +30,8 @@ export default {
     },
   },
   methods: {
-    navigateToTeacherProfile() {
-      console.log(1)
-      const userType = this.$store.state.common.userType;
-      console.log(userType, typeof userType)
+    navigateToTeacherProfile() {   
+      const userType = this.$store.state.common.userType;   
       if (userType === 0) {
         this.$router.push("/profile/teacherprofileprompt");
       } else if (userType === 1) {

@@ -3,28 +3,53 @@
     <div class="teacher-profile">
       <div class="top-section">
         <div class="img-container">
-          <img :src="image" alt="Teacher profile picture" class="teacher-image" />
+          <img
+            :src="image"
+            alt="Teacher profile picture"
+            class="teacher-image"
+          />
           <button>이미지 수정</button>
         </div>
         <div class="info-container">
           <div class="name-container">
             <h3>강사 이름</h3>
-            <p>{{ name }}</p>
+            <p>1 :{{ userInfo.name }}</p>
           </div>
           <div class="teacher-profile-update-container">
             <div class="left-field">
               <div class="input-field">
                 <label for="instrument">악기 : </label>
-                <select id="instrument" v-model="selectedInstrument">
-                  <option v-for="(instrument, index) in instruments" :value="instrument" :key="index">{{ instrument }}</option>
+                <select
+                  id="instrument"
+                  v-model="selectedInstrument"
+                  @change="saveToselectedInsruments"
+                >
+                  <option
+                    v-for="(instrument, index) in instruments"
+                    :value="instrument"
+                    :key="index"
+                  >
+                    {{ instrument }}
+                  </option>
                 </select>
-                <div v-for="(instrument, index) in selectedInstruments" :key="index">
+                <br />
+                선택된 악기:
+                {{ selectedInstruments }}
+                <!-- <div
+                  v-for="(instrument, index) in selectedInstruments"
+                  :key="index"
+                >
                   {{ instrument }}
-                </div>
+                </div> -->
               </div>
               <div class="input-field">
                 <label for="years">경력 : </label>
-                <input id="years" v-model.number="career" type="number" min="1" />
+                <input
+                  id="years"
+                  v-model.number="career"
+                  type="number"
+                  min="1"
+                />
                 년
               </div>
               <div class="input-field">
@@ -36,21 +61,34 @@
             <div class="right-field">
               <div class="input-field">
                 <label>요일:</label>
-                <div class="days-container" v-for="(day, index) in days" :key="index">
-                  <input type="checkbox" :id="day" v-model="selectedDays" :value="day">
+                <div
+                  class="days-container"
+                  v-for="(checked, day) in days"
+                  :key="day"
+                >
+                  <input type="checkbox" :id="day" v-model="days[day]" />
                   <label :for="day">{{ day }}</label>
                 </div>
               </div>
               <div class="input-field">
                 <label for="start">시작 시간 :</label>
-                <input id="start" v-model="startTime" type="time" />
+                <input
+                  id="start"
+                  v-model.number="startTime"
+                  type="number"
+                  min="0"
+                  max="23"
+                />
               </div>
               <div class="input-field">
                 <label for="end">종료 시간 :</label>
-                <input id="end" v-model="endTime" type="time" />
-              </div>
-              <div class="input-field">
-                <p>가능 시간 : {{ selectedDays.join(', ') }} {{ startTime }} ~ {{ endTime }}</p>
+                <input
+                  id="end"
+                  v-model.number="endTime"
+                  type="number"
+                  min="0"
+                  max="23"
+                />
               </div>
             </div>
           </div>
@@ -59,7 +97,11 @@
       <div class="teacher-details">
         <h2>자기 소개</h2>
         <div class="description-box">
-          <textarea class="description-input" v-model="description" placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요.\n 휴대전화 번호 공개를 권장하지 않습니다."></textarea>
+          <textarea
+            class="description-input"
+            v-model="description"
+            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요.\n 휴대전화 번호 공개를 권장하지 않습니다."
+          ></textarea>
         </div>
       </div>
       <div class="attach-container">
@@ -69,63 +111,93 @@
         첨부파일 추가 시 보여줄 공간
       </div>
       <div class="save-button">
-        <button @click="submitForm">저장</button>
+        <!-- <button @click="submitForm">저장</button> -->
+        <button @click="submitForm">강사 등록하기</button>
+
       </div>
     </div>
   </div>
 </template>
 
-
 <script>
-import { mapGetters } from "vuex";
-import { apiTeacherProfileCreate } from "@/api/profiles.js";
+import { mapActions } from "vuex";
+import { apiGetUserInfo } from "@/api/profiles.js";
 
 export default {
   props: {
     image: { type: String, default: "https://via.placeholder.com/280" },
-  
   },
   data() {
     return {
-      name: 1,
+      userInfo: {},
       selectedInstrument: null,
-      instruments: ['피아노', '기타', '드럼', '바이올린', '트럼펫'],
+      instruments: ["피아노", "기타", "드럼", "바이올린", "트럼펫"],
       selectedInstruments: [],
-      days: ['월', '화', '수', '목', '금', '토', '일'],
-      selectedDays: [],
-      startTime: '',
-      endTime: '',
+      days: {
+        월: false,
+        화: false,
+        수: false,
+        목: false,
+        금: false,
+        토: false,
+        일: false,
+      },
+      startTime: "00",
+      endTime: "00",
       description: "",
       career: 0,
       cost: 0,
+      selectedDays: [],
+      id: JSON.parse(localStorage.getItem("vuex")).common.id,
     };
   },
   computed: {
-    ...mapGetters(["getName"]),
+    selectedDaysString() {
+      return Object.keys(this.days)
+        .map((day) => (this.days[day] ? "1" : "0"))
+        .join("");
+    },
   },
+
   methods: {
+    async getUserInfo() {
+      try {
+        const data = await apiGetUserInfo(this.id);
+        if (data) {
+          this.userInfo = data;
+          console.log(1, data);
+          console.log(this.userInfo);
+          console.log(2);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ...mapActions(["postTeacherProfileCreate", "updateUserType"]),
+
     submitForm() {
       const data = {
-        userId: this.userId,
+        userId: this.userInfo.userid,
         career: this.career,
         cost: this.cost,
         introduce: this.description,
-        startTime: this.convertTimeToMinutes(this.startTime),
-        endTime: this.convertTimeToMinutes(this.endTime),
-        classday: this.convertDaysToBitMask(),
-        instruments: this.selectedInstruments,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        classDay: this.convertDaysToBitMask(),
+        instruments: [...this.selectedInstruments],        
       };
 
-      apiTeacherProfileCreate(data)
-        .then((response) => {
-          this.$store.dispatch("saveTeacherId", response.teacherId);
-        })
-        .catch((error) => {
-          console.error("등록 오류:", error);
+      this.postTeacherProfileCreate(data)      
+        .then(response => {
+          console.log(response)
+          this.updateUserType(1)
+          this.$router.push('/profile/teacherprofile');
+          console.log(this.userInfo.userType)
         });
-      },
-      convertDaysToBitMask() {
-      console.log("ConvertDaysToBitMask");
+
+    },
+    convertDaysToBitMask() {
       let index = 0,
         bitMaskedDays = 0;
 
@@ -135,12 +207,24 @@ export default {
         }
         index++;
       }
-
-      console.log(bitMaskedDays.toString(2));
-      return bitMaskedDays;
+      return bitMaskedDays.toString(2);
     },
-    }
-  }
+
+    saveToselectedInsruments() {
+      const selectedInstrument = this.selectedInstrument;
+      for (let i = 0; i < this.selectedInstruments.length; i++) {
+        if (this.selectedInstruments[i] == selectedInstrument) {
+          return;
+        }
+      }
+      this.selectedInstruments.push(selectedInstrument);
+    },
+  },
+  created() {
+    this.getUserInfo();
+    console.log('바뀌자', this.userInfo)
+  },
+};
 </script>
 
 <style scoped>
