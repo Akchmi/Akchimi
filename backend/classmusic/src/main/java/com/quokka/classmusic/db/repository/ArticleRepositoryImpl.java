@@ -4,6 +4,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.quokka.classmusic.common.exception.ErrorCode;
+import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Article;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -83,7 +85,7 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     public Article selectOneById(int articleId) {
         Article viewArticle = em.find(Article.class, articleId);
         if(viewArticle == null)
-            throw new NoSuchElementException();
+            throw new RestApiException(ErrorCode.NOT_FOUND);
         viewArticle.setHit(viewArticle.getHit()+1);
         return query
                 .select(Projections.constructor(Article.class,
