@@ -11,7 +11,6 @@ import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.repository.ContactsRepository;
 import com.quokka.classmusic.db.repository.ReviewRepository;
 import com.quokka.classmusic.db.repository.TeacherRepository;
-import com.quokka.classmusic.db.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

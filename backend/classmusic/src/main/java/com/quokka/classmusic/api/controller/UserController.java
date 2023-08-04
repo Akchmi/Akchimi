@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @RestController
@@ -59,7 +58,7 @@ public class UserController {
 
     // 회원 탈퇴 (회원 type 3으로 변경 | 0:user, 1:teacher, 2:admin, 3:탈퇴유저)
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable String id, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String id, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
         log.debug(userDetailsVo.getUserVo().getId());
         String currentLoginId = userDetailsVo.getUserVo().getId();
 
@@ -74,7 +73,7 @@ public class UserController {
 
     // 비밀번호 변경
     @PutMapping("/{id}/password")
-    public ResponseEntity changePassword(@PathVariable String id, @RequestBody ChangePasswordDto changePasswordDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+    public ResponseEntity<Void> changePassword(@PathVariable String id, @RequestBody ChangePasswordDto changePasswordDto, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
         log.debug(userDetailsVo.getUserVo().getId());
         String currentLoginId = userDetailsVo.getUserVo().getId();
 
@@ -127,7 +126,7 @@ public class UserController {
 
     // 즐겨찾기 삭제
     @DeleteMapping("/{id}/like/{likeId}")
-    public ResponseEntity deleteLike(@PathVariable String id, @PathVariable int likeId, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+    public ResponseEntity<Void> deleteLike(@PathVariable String id, @PathVariable int likeId, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
         log.debug(userDetailsVo.getUserVo().getId());
         String currentLoginId = userDetailsVo.getUserVo().getId();
 
