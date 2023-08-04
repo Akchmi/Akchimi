@@ -23,17 +23,15 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class ReviewServiceImpl implements ReviewService{
-    private ReviewRepository reviewRepository;
-    private ContactsRepository contactsRepository;
-    private TeacherRepository teacherRepository;
-    private UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
+    private final ContactsRepository contactsRepository;
+    private final TeacherRepository teacherRepository;
 
     @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ContactsRepository contactsRepository, TeacherRepository teacherRepository, UserRepository userRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ContactsRepository contactsRepository, TeacherRepository teacherRepository) {
         this.reviewRepository = reviewRepository;
         this.contactsRepository = contactsRepository;
         this.teacherRepository = teacherRepository;
-        this.userRepository = userRepository;
     }
 
     @Override

@@ -3,15 +3,11 @@ package com.quokka.classmusic.api.controller;
 import com.quokka.classmusic.api.request.ReviewInsertDto;
 import com.quokka.classmusic.api.request.ReviewUpdateDto;
 import com.quokka.classmusic.api.response.ReviewVo;
-import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.api.service.ReviewService;
-import com.quokka.classmusic.common.exception.ErrorCode;
-import com.quokka.classmusic.common.exception.RestApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +17,7 @@ import java.util.List;
 @CrossOrigin("*")
 @Slf4j
 public class ReviewController {
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
     @Autowired
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
@@ -49,7 +45,7 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.insertReview(reviewInsertDto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{revidewId}")
+    @PutMapping("/{reviewId}")
     public ResponseEntity<Void> updateReview(@PathVariable int reviewId ,@RequestBody ReviewUpdateDto reviewUpdateDto){
         log.debug("리뷰수정");
 

@@ -1,7 +1,6 @@
 package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.TeacherDto;
-import com.quokka.classmusic.api.request.TeacherSelectDto;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserDetailsVo;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +20,7 @@ import java.util.Map;
 @CrossOrigin("*")
 @Slf4j
 public class TeacherController {
-    private TeacherService teacherService;
+    private final TeacherService teacherService;
 
     @Autowired
     public TeacherController(TeacherService teacherService) {

@@ -20,7 +20,7 @@ import java.util.Map;
 @CrossOrigin("*")
 @Slf4j
 public class NoticeController {
-    private NoticeService noticeService;
+    private final NoticeService noticeService;
 
     @Autowired
     public NoticeController(NoticeService noticeService) {

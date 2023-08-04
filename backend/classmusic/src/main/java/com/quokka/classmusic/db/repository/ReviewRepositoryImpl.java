@@ -3,7 +3,6 @@ package com.quokka.classmusic.db.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.response.ReviewVo;
-import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Review;
 import org.springframework.stereotype.Repository;
 

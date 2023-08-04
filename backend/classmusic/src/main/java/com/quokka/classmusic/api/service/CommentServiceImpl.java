@@ -21,9 +21,9 @@ import java.util.List;
 @Transactional
 public class CommentServiceImpl implements CommentService{
 
-    private CommentRepository commentRepository;
-    private UserRepository userRepository;
-    private ArticleRepository articleRepository;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final ArticleRepository articleRepository;
 
     public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, ArticleRepository articleRepository) {
         this.commentRepository = commentRepository;

@@ -45,7 +45,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .where(selectGenderFilter(params))
                 .where(instrumentEq(params.get("instrument")))
                 .where(getBitAndTemplate(Integer.parseInt(params.get("classDay"))).gt(0))
-                .offset((Integer.parseInt(params.get("page")) - 1) * 20)
+                .offset((Long.parseLong(params.get("page")) - 1) * 20)
                 .limit(20)
                 .orderBy(orderType(String.valueOf(params.get("orderBy"))))
                 .fetch();

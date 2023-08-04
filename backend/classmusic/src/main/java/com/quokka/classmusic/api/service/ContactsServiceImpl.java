@@ -17,9 +17,9 @@ import java.util.Map;
 @Service
 @Transactional
 public class ContactsServiceImpl implements ContactsService{
-    private ContactsRepository contactsRepository;
-    private UserRepository userRepository;
-    private TeacherRepository teacherRepository;
+    private final ContactsRepository contactsRepository;
+    private final UserRepository userRepository;
+    private final TeacherRepository teacherRepository;
 
     @Autowired
     public ContactsServiceImpl(ContactsRepository contactsRepository, UserRepository userRepository, TeacherRepository teacherRepository) {
@@ -72,20 +72,18 @@ public class ContactsServiceImpl implements ContactsService{
     @Override
     public void updateContactsOrder(ContactsUpdateOrderListDto contactsUpdateOrderListDto){
         int type = contactsUpdateOrderListDto.getType();
-        if(contactsUpdateOrderListDto.getType() == 0){
+        if(type == 0){
             for (ContactsUpdateOrderDto contactsUpdateOrderDto : contactsUpdateOrderListDto.getContacts()) {
                 Contact contact = contactsRepository.findById(contactsUpdateOrderDto.getContactId());
                 contact.setStudentOrder(contactsUpdateOrderDto.getOrder());
                 contactsRepository.save(contact);
             }
-        } else if(contactsUpdateOrderListDto.getType() == 1){
+        } else if(type == 1){
             for (ContactsUpdateOrderDto contactsUpdateOrderDto : contactsUpdateOrderListDto.getContacts()) {
                 Contact contact = contactsRepository.findById(contactsUpdateOrderDto.getContactId());
                 contact.setTeacherOrder(contactsUpdateOrderDto.getOrder());
                 contactsRepository.save(contact);
             }
-        } else{
-            return;
         }
     }
 //    매칭 생성하기

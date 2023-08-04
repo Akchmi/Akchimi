@@ -1,7 +1,6 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.TeacherDto;
-import com.quokka.classmusic.api.request.TeacherSelectDto;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.common.exception.ErrorCode;
@@ -13,7 +12,6 @@ import com.quokka.classmusic.db.repository.TeacherRepository;
 import com.quokka.classmusic.db.repository.TreatRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +22,9 @@ import java.util.Map;
 @Service
 @Transactional
 public class TeacherServiceImpl implements TeacherService{
-    private TeacherRepository teacherRepository;
-    private UserRepository userRepository;
-    private TreatRepository treatRepository;
+    private final TeacherRepository teacherRepository;
+    private final UserRepository userRepository;
+    private final TreatRepository treatRepository;
 
     @Autowired
     public TeacherServiceImpl(TeacherRepository teacherRepository, UserRepository userRepository, TreatRepository treatRepository) {

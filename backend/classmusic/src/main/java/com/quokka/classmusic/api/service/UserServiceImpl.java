@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,18 +23,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
 @Transactional
 public class UserServiceImpl implements UserService{
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private TeacherRepository teacherRepository;
-    private LikeRepository likeRepository;
-    private TreatRepository treatRepository;
-    private JavaMailSender mailSender;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TeacherRepository teacherRepository;
+    private final LikeRepository likeRepository;
+    private final TreatRepository treatRepository;
+    private final JavaMailSender mailSender;
     @Autowired
     public UserServiceImpl(UserRepository userRepository
             , PasswordEncoder passwordEncoder
@@ -174,7 +172,7 @@ public class UserServiceImpl implements UserService{
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
                 '!', '@', '#', '$', '%', '^', '&' };
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         SecureRandom sr = new SecureRandom();
         sr.setSeed(new Date().getTime());
 
