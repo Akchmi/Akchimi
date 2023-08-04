@@ -34,6 +34,9 @@ import TeacherProfile from "../components/Profile/TeacherProfile.vue";
 import TeacherProfileUpdate from "../components/Profile/TeacherProfileUpdate.vue";
 import TeacherReview from "../components/Profile/TeacherReview.vue";
 
+import ChatRoomStudent from "../components/Chat/ChatRoomStudent.vue";
+import ChatRoomTeacher from "../components/Chat/ChatRoomTeacher.vue";
+
 const routes = [
   {
     path: "/",
@@ -184,6 +187,18 @@ const routes = [
     path: "/chat",
     name: "chat",
     component: Chatview,
+    children: [
+      {
+        path: "/chat/student/:id",
+        name: "studentchat",
+        component: ChatRoomStudent,
+      },
+      {
+        path: "/chat/teacher/:id",
+        name: "teacherchat",
+        component: ChatRoomTeacher,
+      },
+    ],
   },
   {
     path: "/livemeeting",
