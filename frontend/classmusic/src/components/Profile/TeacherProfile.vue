@@ -4,11 +4,14 @@
     <button>
       <router-link to="/profile/TeacherProfileUpdate" class="button">강사 정보 수정</router-link>
     </button>
+    <!-- <button v-if="userId === teacherId">
+      <router-link to="/profile/TeacherProfileUpdate" class="button">강사 정보 수정</router-link>
+   </button> -->
     <!-- 남이 보는 강사 프로필 -->
     <div class="teacher-profile-container">
       <div class="teacher-profile">
         <div class="top-section">
-          <img :src="image" alt="Teacher profile picture" class="teacher-image" />
+          <img :src="userProfileImage" alt="Teacher profile picture" class="teacher-image" />
           <div class="teacher-name-gender-info">
             <div class="name-gender-row">
               <div class="name-box">
@@ -21,23 +24,24 @@
               </div>
             </div>
             <div class="info-container">
-              <p class="info-box">악기 : {{ information.instrument }}</p>
-              <p class="info-box">경력 : {{ information.career }}</p>
-              <p class="info-box">가격 : {{ information.expense }}</p>
-              <p class="info-box">시간 : {{ information.time }}</p>
+              <p class="info-box">악기 : {{ instrument }}</p>
+              <p class="info-box">경력 : {{ career }}년</p>
+              <p class="info-box">가격 : {{ cost }}원</p>
+              <p class="info-box">시간 : {{ classDay !== undefined ? parseDays(classDay) : '' }}, {{ startTime }} - {{ endTime }}</p>
+
             </div>
           </div>
         </div>
         <div class="teacher-details">
           <h2>자기 소개</h2>
           <div class="description-box">
-            <p>{{ description }}</p>
+            <p>{{ introduce }}</p>
           </div>
         </div>
         <div class="attach-file">
-          <img :src="image" alt="Attached file" class="attach-image" />
-          <img :src="image" alt="Attached file" class="attach-image" />
-          <img :src="image" alt="Attached file" class="attach-image" />
+      
+          <img v-for="(file, index) in attachedFiles" :src="file" :key="index" alt="Attached file" class="attach-image" />
+
         </div>
         <div class="button-group">
           <router-link to="/" class="button">강사 즐겨찾기</router-link>
@@ -46,170 +50,66 @@
       </div>
       <TeacherReview></TeacherReview>
     </div>
- 
   </div>
 </template>
 
 <script>
-
 import TeacherReview from './TeacherReview.vue'
+import { apiDetailTeacherInfo } from "@/api/profiles.js";  
 
 export default {
   components: {
     TeacherReview
   },
-  props: {
-    image: { type: String, default: "https://via.placeholder.com/280" },
-    name: { type: String, default: "박한샘" },
-    gender: { type: String, default: "respect" },
-    information: {
-      type: Object,
-      default: () => ({
-        instrument: "기타",
-        career: "10년",
-        expense: "5만원",
-        time: "1시간",
-      }),
-    },
-    description: { type: String, default: "이대나온여자" },
-    attachedFile: { type: String, default: "https://via.placeholder.com/280" },
+  data() {
+    return {
+      name: '',
+      gender: '',
+      userProfileImage: '',
+      career: 0,
+      cost: 0,
+      introduce: '',
+      startTime: 0,
+      endTime: 0,
+      classDay: '',
+      instrument: '',
+      attachedFiles: [],
+      userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
+      teacherId: '',
+    }
+  },
+  async created() {
+    const userId = JSON.parse(localStorage.getItem("vuex")).common.userId
+    const res = await apiDetailTeacherInfo(userId);
+    this.teacherId = res.teacherId;
+    this.name = res.name;
+    this.gender = res.gender;
+    this.userProfileImage = res.userProfileImage;
+    this.career = res.career;
+    this.cost = res.cost;
+    this.introduce = res.introduce;
+    this.startTime = res.startTime;
+    this.endTime = res.endTime;
+    this.classDay = res.classDay;
+    this.instrument = res.instrument;
+    this.attachedFiles = res.attachedFiles;
+  },
+  methods: {
+    parseDays(classDay) {
+      const days = ['월','화','수','목','금','토','일'];
+      return classDay
+        .toString(2)
+        .padStart(7, '0')
+        .split('')
+        .reverse()
+        .map((day, index) => day === '1' ? days[index] : null)
+        .filter(Boolean)
+        .join(', ');
+    }
   },
 };
 </script>
 
 <style scoped>
-
-.teacher-profile-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; 
-  align-items: center; 
-  
-}
-
-.button-group {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-.button {
-  background: none;
-  border: none;
-  color: inherit;
-  text-align: inherit;
-  cursor: pointer;
-  padding: 0;
-  font: inherit;
-  outline: inherit;
-  text-decoration: none; 
-  margin-right: 10px; 
-}
-
-
-.attach-image {
-  width:170px;
-  height:220px;
-  object-fit: cover;
-}
-
-.description-box {
-  border: 1px solid black;
-  padding: 10px;
-  height: auto; 
-  min-height: 6em;
-  max-height: auto; 
-  overflow: auto; 
-  line-height: 1.2em; 
-  margin-bottom: 20px;
-  border-radius: 10px;
-}
-
-.introduce {
-  border: 1px solid black;
-  width: 30px;
-}
-
-.teacher-profile {
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 800px;
-  height: 800px;
-  border: 1px solid black;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-  padding: 20px;
-}
-
-.top-section {
-  display: flex;
-}
-
-.teacher-image {
-  width: 170px;
-  height: 220px;
-  object-fit: cover;
-}
-
-.teacher-name-gender-info {
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 200px;
-  flex-grow: 1;
-}
-
-.name-gender-row {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.name-box,
-.gender-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex-basis: 30%;
-  text-align: center;
-}
-
-.box {
-  display: flex;
-  font-size: 16px;
-  border: 1px solid black;
-  width: 70px; 
-  height: 24px;
-  margin: 1px;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
-}
-
-.info-container {
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 10px;
-  height: 140px; 
-  justify-content: center;
-  align-items: center;
-}
-
-.info-box {
-  margin-bottom: 5px;
-  text-align: left;
-  height: 15px;
-  display: flex;
-  align-items: center;
-}
-
-.label {
-  line-height: 1; 
-  margin: 0; 
-  padding: 0; 
-}
+@import "@/assets/scss/teacherprofile.scss";
 </style>

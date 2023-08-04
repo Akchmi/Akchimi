@@ -7,5 +7,8 @@ export default {
   },
   getId(state) {
     return state.common.id;
-  }
+  },
+  getUsertype(state) {
+    return state.common.userType;
+  },
 };

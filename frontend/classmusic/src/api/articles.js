@@ -19,7 +19,7 @@ function apiGetArticlelist(context, searchType, keyword, pageNo, sortType) {
     });
 }
 
-function apiGetPageno(context, searchType, keyword) {
+function apiGetArticlePageno(context, searchType, keyword) {
   axios
     .get("/articles/endPageNo", {
       params: {
@@ -28,7 +28,7 @@ function apiGetPageno(context, searchType, keyword) {
       },
     })
     .then(({ data }) => {
-      context.commit("GET_PAGENO", data);
+      context.commit("GET_ARTICLE_PAGENO", data);
     })
     .catch((error) => {
       console.error("GET 요청 에러 : ", error);
@@ -89,11 +89,73 @@ function apiArticledelete(context, articleId) {
     });
 }
 
+function apiGetArticlecomment(context, articleId) {
+  axios
+    .get(`/articles/${articleId}/comments`)
+    .then(({ data }) => {
+      context.commit("SET_ARTICLE_COMMENTS", data);
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error("GET 요청 에러 : ", error);
+    });
+}
+
+function apiPostArticleComment(context, data) {
+  console.log("데이터는", data);
+  axios
+    .post(`/articles/${data.articleId}/comments`, { content: data.content })
+    .then(() => {
+      apiGetArticlecomment(context, data.articleId);
+    })
+    .catch((error) => {
+      console.error("POST 요청 에러 : ", error);
+    });
+}
+
+function apiCommentUpdate(context, data) {
+  const articleId = data.articleId;
+  const commentId = data.commentId;
+  axios
+    .put(
+      `/articles/${articleId}/comments/${commentId}`,
+      JSON.stringify({
+        content: data.content,
+      })
+    )
+    .then(() => {
+      context.commit("UPDATE_ARTICLE_COMMENTS", {
+        commentId: commentId,
+        content: data.content,
+      });
+    })
+    .catch((error) => {
+      console.error("PUT 요청 에러 : ", error);
+    });
+}
+
+function apiCommentdelete(context, data) {
+  const articleId = data.articleId;
+  const commentId = data.commentId;
+  axios
+    .delete(`/articles/${articleId}/comments/${commentId}`)
+    .then(() => {
+      context.commit("DELETE_ARTICLE_COMMENTS", commentId);
+    })
+    .catch((error) => {
+      console.error("POST 요청 에러 : ", error);
+    });
+}
+
 export {
   apiGetArticlelist,
-  apiGetPageno,
+  apiGetArticlePageno,
   apiGetArticledetail,
   apiArticleupdate,
   apiArticlecreate,
   apiArticledelete,
+  apiGetArticlecomment,
+  apiPostArticleComment,
+  apiCommentUpdate,
+  apiCommentdelete,
 };

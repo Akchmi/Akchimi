@@ -12,13 +12,7 @@ export default {
     return state.articles.articleCreateId;
   },
 
-  getCommentListTotalCount(state) {
-    return state.articles.commentListTotalCount;
-  },
   getCommentList(state) {
-    return state.articles.commentList;
-  },
-  getCommentDetail(state) {
-    return state.articles.commentDetail;
+    return state.articles.articleCommentsList;
   },
 };

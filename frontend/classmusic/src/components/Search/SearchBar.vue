@@ -1,114 +1,268 @@
 <template>
   <div class="search-bar">
-    <div class="dropdown">
-      <button id="instrumentButton" @click="toggleInstrumentDropdown">
+    <!-- 검색바 -->
+    <!-- 성별 필터 -->
+    <select v-model="searchParams.gender" @change="setGender">
+      <option v-for="(value, gender) in genders" :key="value" :value="value">
+        {{ gender }}
+      </option>
+    </select>
+
+    <!-- 악기 필터 -->
+    <select v-model="searchParams.instrument" @change="setInstrument">
+      <option
+        v-for="instrument in instruments"
+        :key="instrument"
+        :value="instrument"
+      >
+        {{ instrument }}
+      </option>
+    </select>
+
+    <!-- <div class="dropdown">
+      <button id="instrumentButton" @click="toggleInputDropdown('instrument')">
         악기
       </button>
-      <div id="instrumentDropdown" class="dropdown-content" v-if="showInstrumentDropdown">
-        <button @click="selectInstrument('피아노')">피아노</button>
-        <button @click="selectInstrument('기타')">기타</button>
-        <button @click="selectInstrument('드럼')">드럼</button>
+      <div
+        id="instrumentDropdown"
+        class="dropdown-content"
+        v-if="isDisplaySearchInputs.instrument"
+      >
+      // 시간 남으면 악기 이미지 radio 버튼으로 악기 종류 선택
+      
       </div>
-    </div>
+    </div> -->
 
+    <!-- 경력 필터 -->
     <div class="dropdown">
-      <button id="careerButton" @click="toggleInputCareer">
+      <button id="careerButton" @click="toggleInputDropdown('career')">
         경력
       </button>
-      <div id="careerDropdown" class="dropdown-content" v-if="showInputCareer">
-        <InputCareer @onComplete="handleCompleteCareer" />
+      <div
+        id="careerDropdown"
+        class="dropdown-content"
+        v-if="isDisplaySearchInputs.career"
+      >
+        <InputCareer @careerChange="setCareer" />
       </div>
     </div>
 
+    <!-- 비용 필터 -->
     <div class="dropdown">
-      <button id="expenseButton" @click="toggleInputExpense">
+      <button id="expenseButton" @click="toggleInputDropdown('cost')">
         비용
       </button>
-      <div id="expenseDropdown" class="dropdown-content" v-if="showInputExpense">
-        <InputExpense @onComplete="handleCompleteExpense" />
+      <div
+        id="expenseDropdown"
+        class="dropdown-content"
+        v-if="isDisplaySearchInputs.cost"
+      >
+        <InputCost @costChange="setCost" />
       </div>
     </div>
 
+    <!-- 시간 필터 -->
     <div class="dropdown">
-      <button id="timeButton" @click="toggleInputTime">
-        시간
-      </button>
-      <div id="timeDropdown" class="dropdown-content" v-if="showInputTime">
-        <InputTime @onComplete="handleCompleteTime" />
+      <button id="timeButton" @click="toggleInputDropdown('time')">시간</button>
+      <div
+        id="timeDropdown"
+        class="dropdown-content"
+        v-if="isDisplaySearchInputs.time"
+      >
+        <InputTime
+          :days="days"
+          @timeChange="setTime"
+          @dayChange="setClassDay"
+        />
       </div>
     </div>
 
+    <!-- 키워드 검색 -->
+    <!-- 검색 버튼 -->
+    <input
+      placeholder="검색어를 입력하세요."
+      type="text"
+      v-model="searchParams.keyword"
+    />
+    <button @click="searchTeacher">검색</button>
+
+    <!-- 정렬 -->
+    <select v-model="searchParams.orderBy" @change="onChangeOrderBy">
+      <option
+        v-for="category in searchCategory"
+        :key="category"
+        :value="category"
+      >
+        {{ category }}
+      </option>
+    </select>
   </div>
 </template>
 
 <script>
-import InputCareer from './InputCareer.vue'
-import InputExpense from './InputExpense.vue'
-import InputTime from './InputTime.vue'
+import InputCareer from "./InputCareer.vue";
+import InputCost from "./InputCost.vue";
+import InputTime from "./InputTime.vue";
+import { onMounted } from "vue";
+import { mapActions, useStore } from "vuex";
 
 export default {
   components: {
     InputCareer,
-    InputExpense,
+    InputCost,
     InputTime,
+  },
+  setup() {
+    const store = useStore();
+
+    onMounted(() => {
+      store.dispatch("commitInstrument", "악기종류");
+      store.dispatch("commitGender", "");
+      store.dispatch("commitKeyword", "");
+    });
   },
   data() {
     return {
-      showInstrumentDropdown: false,
-      showInputCareer: false,
-      showInputExpense: false,
-      showInputTime: false,
-      selectedInstrument: null,
-      selectedCareer: null,
-      selectedExpense: null,
-      selectedTime: null
+      isDisplaySearchInputs: {
+        instrument: false,
+        career: false,
+        cost: false,
+        time: false,
+      },
+
+      genders: { 성별: 0, 남: 1, 여: 2 },
+      searchCategory: ["최신순", "별점순", "매칭순"],
+      instruments: [
+        "악기종류",
+        "피아노",
+        "기타",
+        "드럼",
+        "트럼펫",
+        "콘트라베이스",
+        "파이프오르간",
+      ],
+      days: {
+        월: true,
+        화: true,
+        수: true,
+        목: true,
+        금: true,
+        토: true,
+        일: true,
+      },
+
+      searchParams: {
+        instrument: "악기종류",
+        keyword: "",
+        orderBy: "최신순",
+        gender: "0",
+      },
     };
   },
   methods: {
-    toggleInstrumentDropdown() {
-      this.showInstrumentDropdown = !this.showInstrumentDropdown;
-      this.showInputCareer = false;
-      this.showInputExpense = false;
-      this.showInputTime = false;
+    ...mapActions([
+      "searchTeacher",
+      "commitCareer",
+      "commitCost",
+      "commitTime",
+      "commitClassDay",
+      "commitInstrument",
+      "commitGender",
+      "commitOrderBy",
+    ]),
+
+    onChangeOrderBy() {
+      this.commitOrderBy(this.searchParams.orderBy);
+      this.searchTeacher();
     },
-    toggleInputCareer() {
-      this.showInputCareer = !this.showInputCareer;
-      this.showInstrumentDropdown = false;
-      this.showInputExpense = false;
-      this.showInputTime = false;
+
+    toggleInputDropdown(targetSearchInput) {
+      console.log("toggle clicked", targetSearchInput);
+      for (const searchInput in this.isDisplaySearchInputs) {
+        if (searchInput != targetSearchInput) {
+          this.isDisplaySearchInputs[searchInput] = false;
+        }
+      }
+      this.isDisplaySearchInputs[targetSearchInput] =
+        !this.isDisplaySearchInputs[targetSearchInput];
     },
-    toggleInputExpense() {
-      this.showInputExpense = !this.showInputExpense;
-      this.showInstrumentDropdown = false;
-      this.showInputCareer = false;
-      this.showInputTime = false;
+
+    setCareer(career) {
+      console.log("경력 필터 수정", career);
+      this.commitCareer(career);
     },
-    toggleInputTime() {
-      this.showInputTime = !this.showInputTime;
-      this.showInstrumentDropdown = false;
-      this.showInputCareer = false;
-      this.showInputExpense = false;
+
+    setCost(cost) {
+      console.log("비용 필터 수정", cost);
+      this.commitCost(cost);
     },
-    selectInstrument(instrument) {
-      this.selectedInstrument = instrument;
-      this.showInstrumentDropdown = false;
+
+    setTime(time) {
+      console.log("시간 필터 수정", time);
+      this.commitTime(time);
     },
-    handleCompleteCareer(value) {
-      this.selectedCareer = value;
-      this.showInputCareer = false;
+
+    setClassDay(value, day) {
+      console.log("요일 필터 수정", value, day);
+
+      this.days[day] = value;
+      const daysBitMask = this.convertDaysToBitMask();
+
+      this.commitClassDay(daysBitMask);
     },
-    handleCompleteExpense(value) {
-      this.selectedExpense = value;
-      this.showInputExpense = false;
+
+    setInstrument() {
+      console.log("악기 종류 수정", this.searchParams.instrument);
+
+      this.commitInstrument(this.searchParams.instrument);
     },
-    handleCompleteTime(value) {
-      this.selectedTime = value;
-      this.showInputTime = false;
-    }
-  }
+
+    setGender() {
+      console.log("성별 수정", this.searchParams.gender);
+
+      this.commitGender(
+        this.searchParams.gender == 0 ? "" : this.searchParams.gender
+      );
+    },
+
+    setOrderBy() {
+      console.log("정렬 수정", this.searchParams.orderBy);
+
+      this.commitOrderBy(this.searchParams.orderBy);
+    },
+
+    setKeyword() {
+      console.log("검색 키워드 수정", this.searchParams.keyword);
+
+      this.commitKeyword(this.searchParams.keyword);
+    },
+
+    convertDaysToBitMask() {
+      console.log("ConvertDaysToBitMask");
+      let index = 0,
+        bitMaskedDays = 0;
+
+      for (const day in this.days) {
+        if (this.days[day]) {
+          bitMaskedDays ^= 1 << index;
+        }
+        index++;
+      }
+
+      console.log(bitMaskedDays.toString(2));
+      return bitMaskedDays;
+    },
+  },
 };
 </script>
 
 <style scoped>
 @import "@/assets/scss/search.scss";
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+}
 </style>

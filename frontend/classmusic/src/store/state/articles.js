@@ -5,7 +5,5 @@ export default {
   articleCreateId: null,
 
   // comment
-  commentListTotalCount: 0,
-  commentList: [],
-  commentDetail: {},
+  articleCommentsList: [],
 };

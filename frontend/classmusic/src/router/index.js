@@ -32,6 +32,8 @@ import SignUp from "../components/Login/SignUp.vue";
 import MyProfile from "../components/Profile/MyProfile.vue";
 import TeacherProfile from "../components/Profile/TeacherProfile.vue";
 import TeacherProfileUpdate from "../components/Profile/TeacherProfileUpdate.vue";
+import TeacherProfileCreate from "../components/Profile/TeacherProfileCreate.vue";
+import TeacherProfilePrompt from "../components/Profile/TeacherProfilePrompt.vue";
 import TeacherReview from "../components/Profile/TeacherReview.vue";
 
 import ChatRoomStudent from "../components/Chat/ChatRoomStudent.vue";
@@ -64,7 +66,7 @@ const routes = [
         component: NoticeDetail,
       },
       {
-        path: "/notice/update",
+        path: "/notice/update/:id",
         name: "noticeupdate",
         component: NoticeUpdate,
       },
@@ -163,6 +165,16 @@ const routes = [
         path: "/profile/teacherreview",
         name: "teacherreview",
         component: TeacherReview,
+      },
+      {
+        path: "/profile/teacherprofilecreate",
+        name: "teacherprofilecreate",
+        component: TeacherProfileCreate,
+      },
+      {
+        path: "/profile/teacherprofileprompt",
+        name: "teacherprofileprompt",
+        component: TeacherProfilePrompt,
       },
     ],
   },

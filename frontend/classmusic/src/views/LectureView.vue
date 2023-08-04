@@ -49,10 +49,9 @@
       >
         완료
       </button>
-
-      <StudentFinish v-show="studentSubTab === 'finish'"></StudentFinish>
       <StudentOngoing v-show="studentSubTab === 'ongoing'"></StudentOngoing>
       <StudentWaiting v-show="studentSubTab === 'waiting'"></StudentWaiting>
+      <StudentFinish v-show="studentSubTab === 'finish'"></StudentFinish>
     </div>
 
     <div v-show="currentTab === 'teacher'" class="centered-div">

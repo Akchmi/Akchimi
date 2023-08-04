@@ -3,6 +3,7 @@
     <div class="create__container">
       <div>
         <!-- 공지사항 글쓰기 최상단 -->
+        <button @click="$router.push('/article/list')">목록으로</button>
         <h1>자유게시판 작성</h1>
         <hr />
       </div>

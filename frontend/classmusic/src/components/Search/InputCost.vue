@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h3>career</h3>
+    <h3>Expense</h3>
     <br />
-    <Slider @change="onCareerChange" :value="career" />
+    <Slider :value="cost" @change="onCostChange" />
     <br />
-    <p>경력: {{ career[0] }}년에서 ~ {{ career[1] }}년까지</p>
+    <p>한시간당 : {{ cost[0] }}만원 에서 ~ {{ cost[1] }} 만원 까지</p>
     <button>완료</button>
   </div>
 </template>
@@ -17,12 +17,14 @@ export default {
   components: { Slider },
   data: () => ({}),
   computed: {
-    ...mapGetters({ career: "getSearchParamsCareer" }),
+    ...mapGetters({
+      cost: "getSearchParamsCost",
+    }),
   },
   methods: {
-    onCareerChange(value) {
-      console.log("InputCareer.vue career 수정");
-      this.$emit("careerChange", value);
+    onCostChange(costs) {
+      console.log("InputCost.vue cost 수정");
+      this.$emit("costChange", costs);
     },
   },
 };

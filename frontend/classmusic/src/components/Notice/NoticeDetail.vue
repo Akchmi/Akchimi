@@ -4,14 +4,12 @@
       <div>
         <button @click="$router.push('/notice/list')">목록으로</button>
         <hr />
-        글 id: {{ noticeId }}
-        {{ noticeDetail }}
+
         <div>
           <h2>{{ noticeDetail.title }}</h2>
         </div>
 
         <div>
-          <p>조회수: {{ noticeDetail.hit }}</p>
           <p>작성자: 관리자</p>
         </div>
         <hr />
@@ -22,9 +20,12 @@
         <hr />
 
         <h3>첨부파일</h3>
-
-        <button @click="$router.push('/notice/update')">수정</button>
-        <button>삭제</button>
+        <div v-if="userType == 2">
+          <button @click="$router.push(`/notice/update/${noticeId}`)">
+            수정
+          </button>
+          <button @click="noticeDelete">삭제</button>
+        </div>
       </div>
     </div>
   </div>
@@ -32,7 +33,7 @@
 
 <script>
 import { onMounted } from "vue";
-import { useStore, mapGetters } from "vuex";
+import { useStore, mapGetters, mapActions } from "vuex";
 import { useRoute } from "vue-router";
 
 export default {
@@ -41,6 +42,14 @@ export default {
   },
   computed: {
     ...mapGetters({ noticeDetail: "getNoticeDetail" }),
+    ...mapGetters({ userType: "getUsertype" }),
+  },
+  methods: {
+    ...mapActions(["deleteNoticeDelete"]),
+
+    noticeDelete() {
+      this.deleteNoticeDelete(this.noticeId);
+    },
   },
   setup() {
     const store = useStore();
