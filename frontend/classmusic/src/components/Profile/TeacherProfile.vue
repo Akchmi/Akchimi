@@ -20,7 +20,7 @@
               </div>
               <div class="gender-box">
                 <p class="label">성별</p>
-                <span class="box">{{ gender }}</span>
+                <span class="box">{{ genderText }}</span>
               </div>
             </div>
             <div class="info-container">
@@ -44,7 +44,7 @@
 
         </div>
         <div class="button-group">
-          <router-link to="/" class="button">강사 즐겨찾기</router-link>
+          <button @click="likeTeacherUpdate">강사 즐겨찾기</button>
           <router-link to="/lecture/studentwaiting" class="button">강의 신청</router-link>
         </div>
       </div>
@@ -55,7 +55,8 @@
 
 <script>
 import TeacherReview from './TeacherReview.vue'
-import { apiDetailTeacherInfo } from "@/api/profiles.js";  
+import { apiDetailTeacherInfo, } from "@/api/profiles.js";  
+import { mapActions, } from "vuex";
 
 export default {
   components: {
@@ -74,14 +75,13 @@ export default {
       classDay: '',
       instrument: '',
       attachedFiles: [],
-      userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
-      teacherId: '',
+      // userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
+      teacherId: JSON.parse(localStorage.getItem("vuex")).common.teacherId,
     }
   },
   async created() {
-    const userId = JSON.parse(localStorage.getItem("vuex")).common.userId
-    const res = await apiDetailTeacherInfo(userId);
-    console.log('티쳐정보는', res)
+    const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+    const res = await apiDetailTeacherInfo(teacherId); 
     this.teacherId = res.teacherId;
     this.name = res.name;
     this.gender = res.gender;
@@ -92,11 +92,16 @@ export default {
     this.startTime = res.startTime;
     this.endTime = res.endTime;
     this.classDay = res.classDay;
-    this.instrument = res.instrument;
-    this.attachedFiles = res.attachedFiles;
+    this.instrument = res.instruments;
+    this.attachedFiles = res.attachedFiles; 
   },
-
+  computed: {
+    genderText() {   
+      return this.gender === 1 ? '남자' : '여자';
+    }
+  },
   methods: {
+    ...mapActions(["postLikeTeacherUpdate"]),
     parseDays(classDay) {
       const days = ['월','화','수','목','금','토','일'];
       return classDay
@@ -107,6 +112,20 @@ export default {
         .map((day, index) => day === '1' ? days[index] : null)
         .filter(Boolean)
         .join(', ');
+    },
+    likeTeacherUpdate() {
+      const data = {
+        teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId
+      }
+      this.postLikeTeacherUpdate(data)   
+        .then(response => {
+          console.log(1,response)
+          alert("즐겨찾기에 성공하였습니다")
+          this.$router.push(`/profile/myprofile`)
+        })
+        .catch(error => {
+          console.log('즐찾실패', error)
+        })
     }
   },
 };

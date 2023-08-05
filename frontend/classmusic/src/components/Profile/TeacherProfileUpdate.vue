@@ -101,7 +101,7 @@
           <textarea
             class="description-input"
             v-model="description"
-            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요.\n 휴대전화 번호 공개를 권장하지 않습니다."
+            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요. 휴대전화 번호 공개를 권장하지 않습니다."
           ></textarea>
         </div>
       </div>
@@ -152,6 +152,7 @@ export default {
       selectedDays: [],
       id: JSON.parse(localStorage.getItem("vuex")).common.id,
       userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
+      teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
     };
   },
   computed: {
@@ -177,12 +178,14 @@ export default {
         startTime: this.startTime,
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
-        instruments: [...this.selectedInstruments],        
+        instruments: [...this.selectedInstruments], 
+        teacherId : this.teacherId       
       };
-      this.putTeacherProfileUpdate(data)      
+      this.putTeacherProfileUpdate(data)            
         .then(response => {    
-          this.$router.push('/profile/teacherprofile');
-          console.log(response)
+          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+          this.$router.push(`/profile/teacherprofile/${teacherId}`);         
+          console.log(this.teacherId, response)
         });
 
     },
@@ -210,8 +213,8 @@ export default {
     },
   },
   async created() {
-    const userId = JSON.parse(localStorage.getItem("vuex")).common.userId
-    const res = await apiDetailTeacherInfo(userId);
+    const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+    const res = await apiDetailTeacherInfo(teacherId);
     this.name = res.name;
     this.selectedInstruments = res.instruments;
     this.description = res.introduce;
@@ -230,5 +233,5 @@ export default {
 </script>
 
 <style scoped>
-@import "@/assets/scss/teacherprofile.scss";
+@import "@/assets/scss/teacherprofileupdate.scss";
 </style>

@@ -99,7 +99,7 @@ export default {
           password: this.password,
         });
         this.$router.push('/');
-        console.log()     
+        console.log(1)     
       } catch (error) {
         console.error(error);
         this.$router.push('/login/signin');

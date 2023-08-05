@@ -152,7 +152,7 @@ const routes = [
         component: MyProfile,
       },
       {
-        path: "/profile/teacherProfile",
+        path: "/profile/teacherProfile/:id",
         name: "teacherProfile",
         component: TeacherProfile,
       },

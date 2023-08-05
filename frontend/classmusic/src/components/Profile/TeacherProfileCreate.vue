@@ -34,7 +34,10 @@
                 </select>
                 <br />
                 선택된 악기:
-                {{ selectedInstruments }}
+               <div v-for="(instrument, index) in selectedInstruments" :key="index">
+                {{ instrument }}
+                <button @click="removeSelectedInstrument(index)">제거</button>
+              </div>
                 <!-- <div
                   v-for="(instrument, index) in selectedInstruments"
                   :key="index"
@@ -189,11 +192,10 @@ export default {
       };
 
       this.postTeacherProfileCreate(data)      
-        .then(response => {
-          console.log(response)
+        .then(response => {          
+          const teacherId = response.data.teacherId
           this.updateUserType(1)
-          this.$router.push('/profile/teacherprofile');
-          console.log(this.userInfo.userType)
+          this.$router.push(`/profile/teacherprofile/${teacherId}`);      
         });
 
     },
@@ -219,14 +221,16 @@ export default {
       }
       this.selectedInstruments.push(selectedInstrument);
     },
+    removeSelectedInstrument(index) {
+      this.selectedInstruments.splice(index, 1);
+    },
   },
   created() {
     this.getUserInfo();
-    console.log('바뀌자', this.userInfo)
   },
 };
 </script>
 
 <style scoped>
-@import "@/assets/scss/teacherprofile.scss";
+@import "@/assets/scss/teacherprofileupdate.scss";
 </style>

@@ -32,6 +32,7 @@ export default {
 
   //자유게시글 수정
   putArticleupdate(context, data) {
+    console.log('자유수정', context, data)
     apiArticleupdate(context, data);
   },
   //자유게시글 작성
