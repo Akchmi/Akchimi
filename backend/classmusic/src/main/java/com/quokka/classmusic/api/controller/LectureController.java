@@ -17,7 +17,6 @@ import io.openvidu.java.client.OpenViduJavaClientException;
 import io.openvidu.java.client.Session;
 import io.openvidu.java.client.SessionProperties;
 
-@CrossOrigin(origins = "*")
 @RequestMapping("/lectures")
 @RestController
 public class LectureController {

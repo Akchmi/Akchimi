@@ -7,7 +7,6 @@ import com.quokka.classmusic.api.response.CommentVo;
 import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.api.service.ArticleService;
 import com.quokka.classmusic.api.service.CommentService;
-import com.quokka.classmusic.common.exception.RestApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,14 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/articles")
-@CrossOrigin("*")
 @Slf4j
 public class ArticleController {
     private final ArticleService articleService;
@@ -81,10 +77,10 @@ public class ArticleController {
 
     // 자유게시판 글 삭제
     @DeleteMapping("/{articleId}")
-    public ResponseEntity deleteArticle(@PathVariable int articleId, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+    public ResponseEntity<Void> deleteArticle(@PathVariable int articleId, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
 
         articleService.deleteArticle(articleId, userDetailsVo.getUserVo().getUserId());
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // 자유게시판 게시글에서 댓글 가져오기

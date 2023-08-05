@@ -17,7 +17,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/teachers")
-@CrossOrigin("*")
 @Slf4j
 public class TeacherController {
     private final TeacherService teacherService;

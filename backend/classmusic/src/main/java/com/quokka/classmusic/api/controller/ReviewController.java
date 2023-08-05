@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reviews")
-@CrossOrigin("*")
 @Slf4j
 public class ReviewController {
     private final ReviewService reviewService;

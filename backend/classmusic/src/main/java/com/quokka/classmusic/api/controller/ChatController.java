@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/chats")
-@CrossOrigin("*")
 @Slf4j
 public class ChatController {
     private final ChatService chatService;

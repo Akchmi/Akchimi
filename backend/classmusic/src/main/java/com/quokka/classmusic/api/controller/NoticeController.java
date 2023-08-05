@@ -17,7 +17,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/notices")
-@CrossOrigin("*")
 @Slf4j
 public class NoticeController {
     private final NoticeService noticeService;

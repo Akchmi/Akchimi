@@ -21,7 +21,6 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/users")
-@CrossOrigin("*")
 public class UserController {
     private final UserService userService;
 
