@@ -6,7 +6,7 @@
         v-for="lecture in lectureList"
         :key="lecture.id"
       >
-        <div class="ongoing__contatner__box">
+        <div class="ongoing__container__box">
           <img src="" alt="Teacher profile picture" class="profileImage" />
           <div class="info-box">
             <div class="name">{{ lecture.name }}</div>

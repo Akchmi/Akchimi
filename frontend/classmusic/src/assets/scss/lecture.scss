@@ -21,13 +21,13 @@
   flex-direction: column;
   display: flex;
   width: 80%;
-  height: 250px;
+
   border: 1px dashed black;
   margin: 20px;
   padding: 20px;
 }
 
-.ongoing__contatner__box {
+.ongoing__container__box {
   display: flex;
 }
 
@@ -105,4 +105,14 @@
 
 .watingProfileName {
   margin-left: 10px;
+}
+
+.review__container__box {
+  margin: 10px;
+}
+
+.review-box {
+  width: 100%;
+  border: 1px solid black;
+  overflow: hidden;
 }
