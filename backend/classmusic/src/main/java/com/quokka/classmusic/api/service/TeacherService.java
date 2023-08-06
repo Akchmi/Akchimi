@@ -15,4 +15,6 @@ public interface TeacherService {
     int insertTeacher(TeacherDto teacherDto);
     void updateTeacher(int teacherId , TeacherDto teacherDto);
     void deleteTeacher(int teacherId);
+
+    void insertImage(String image);
 }

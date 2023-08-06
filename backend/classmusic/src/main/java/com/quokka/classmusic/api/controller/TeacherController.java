@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -58,4 +59,14 @@ public class TeacherController {
         teacherService.deleteTeacher(teacherId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+    @PostMapping("/image")
+    public ResponseEntity<Void> insertImage(@RequestBody String image , @RequestParam(value = "file") MultipartFile multipartFile){
+        System.out.println(image + " " + multipartFile.getName());
+
+        //        teacherService.deleteTeacher(teacherId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

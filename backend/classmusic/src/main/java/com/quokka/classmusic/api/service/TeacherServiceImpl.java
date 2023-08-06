@@ -127,6 +127,11 @@ public class TeacherServiceImpl implements TeacherService{
         teacherRepository.delete(teacher);
     }
 
+    @Override
+    public void insertImage(String image) {
+
+    }
+
     public int dayToInt(String classDay){
         return Integer.parseInt(classDay,2);
     }
