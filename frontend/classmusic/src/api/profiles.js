@@ -44,6 +44,18 @@
   //       console.error("POST 요청 에러 : ", error);
   //     });
   // }
+  
+    async function apiLikeTeacher(teacherId) {
+      try {
+        const response = await axios.get(`/users/${teacherId}/like`);
+        return response.data;
+      } catch (error) {
+        console.log(error);
+        return error;
+      }
+    }
+
+
 
   function apiLikeTeacherUpdate(context, data) {
     const teacherId = data.teacherId
@@ -59,16 +71,6 @@
   }
 
 
-  async function apiLikeTeacher(teacherId) {
-    try {
-      const response = await axios.get(`/users/${teacherId}/like`);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      return error;
-    }
-  }
-
   async function apiDeleteLIkeTeacher(likeId) {
     try {
       const response = await axios.delete(`users/like/${likeId}`);
@@ -79,9 +81,9 @@
     }
   }
 
-  async function apiDetailTeacherInfo(userId) {
+  async function apiDetailTeacherInfo(teacherId) {
     try {
-      const response = await axios.get(`teachers/${userId}`);
+      const response = await axios.get(`teachers/${teacherId}`);
       return response.data;
     } catch (error) {
       console.log(error);

@@ -63,6 +63,9 @@
     
     <div class="favorites">
       <h3>{{ userInfo.name }} 님이 즐겨찾기한 강사</h3>
+      <div>
+        <TeacherCard></TeacherCard>
+      </div>
       <!-- <div v-if="favoriteTeachers.length">
         <TeacherCard v-for="teacher in favoriteTeachers" :key="teacher.id" :teacher="teacher"></TeacherCard>
      </div>
@@ -73,17 +76,24 @@
 
 <script>
 // import { onMounted } from "vue";
-import { apiGetUserInfo } from "@/api/profiles.js";
-// import { useStore } from "vuex";
+import { apiGetUserInfo, apiLikeTeacher  } from "@/api/profiles.js";
+import TeacherCard from "@/components/Search/TeacherCard.vue";
 
+// import { useStore } from "vuex";
+// apiLikeTeacher
 export default {
+  components : {
+    TeacherCard
+  },
   data() {
     return { 
       userInfo : {},
       id : JSON.parse(localStorage.getItem("vuex")).common.id,
       showChangePasswordModal: false,
       currentPassword: '',
-      newPassword: ''
+      newPassword: '',
+      teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
+      teacherInfo: {},
     };
   },
 
@@ -91,16 +101,35 @@ export default {
     async getUserInfo() {  
       try {
         const data = await apiGetUserInfo(this.id);   
+        
+      
         if (data) {
-          this.userInfo = data           
+          this.userInfo = data
+      
         }
       } catch (error) {
         console.log(error)
       }
     },
+    async likeTeacher() {
+      try {
+
+        const teacherdata = await apiLikeTeacher(this.teacherId);
+        console.log('아이디', this.teacherId)
+        if (teacherdata) {
+          this.teacherInfo = teacherdata
+          console.log('dd', this.teacherInfo)
+        }
+      } catch(error) {        
+        console.log('즐찾선생', error)
+      }
+    }
+
+
   },
   created() {  
     this.getUserInfo();
+    this.likeTeacher();
   },
 };
 </script>
@@ -108,3 +137,9 @@ export default {
 <style scoped>
 @import "@/assets/scss/profile.scss";
 </style>
+
+
+
+// 즐겨찾기 목록은 숫자리스트를 줘야 되지않나?
+// 즐겨찾기 아이디  티처 pk다
+// 티쳐pk를 localStorage에서 가져오면 안된다  다른방법을 생각해보자

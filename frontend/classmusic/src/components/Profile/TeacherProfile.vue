@@ -76,7 +76,7 @@ export default {
       instrument: '',
       attachedFiles: [],
       // userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
-      teacherId: JSON.parse(localStorage.getItem("vuex")).common.teacherId,
+      teacherId: '',
     }
   },
   async created() {
@@ -116,12 +116,14 @@ export default {
     likeTeacherUpdate() {
       const data = {
         teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId
+        // teacherId : JSON.parse(localStorage.getItem("vuex")).common.id
+        
       }
       this.postLikeTeacherUpdate(data)   
         .then(response => {
-          console.log(1,response)
-          alert("즐겨찾기에 성공하였습니다")
-          this.$router.push(`/profile/myprofile`)
+          console.log('즐찾추',response)
+          // alert("즐겨찾기에 성공하였습니다")
+          // this.$router.push(`/profile/myprofile`)
         })
         .catch(error => {
           console.log('즐찾실패', error)
