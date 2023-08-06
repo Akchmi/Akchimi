@@ -8,7 +8,7 @@ import com.quokka.classmusic.db.entity.Chat;
 import java.util.List;
 
 public interface ChatService {
-    List<ChatsVo> selectAll(int contentId);
-    void insertChat(int contentId , ChatInsertDto chatInsertDto);
-    ChatUserVo selectChatUser(int chatId);
+    List<ChatsVo> selectAll(int contactId);
+    void insertChat(int contactId , ChatInsertDto chatInsertDto);
+    ChatUserVo selectChatUser(int contactId);
 }

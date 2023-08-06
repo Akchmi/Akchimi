@@ -1,6 +1,7 @@
 package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.ChatInsertDto;
+import com.quokka.classmusic.api.response.ChatUserVo;
 import com.quokka.classmusic.api.response.ChatsVo;
 import com.quokka.classmusic.api.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,15 @@ public class ChatController {
         try {
             chatService.insertChat(contactId, chatInsertDto);
             return ResponseEntity.status(200).body(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/{contactId}/profile")
+    public ResponseEntity<ChatUserVo> selectChatProfile(@PathVariable int contactId){
+        try {
+            return ResponseEntity.status(200).body(chatService.selectChatUser(contactId));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
