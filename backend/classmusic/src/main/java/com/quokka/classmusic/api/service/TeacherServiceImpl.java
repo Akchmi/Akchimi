@@ -1,10 +1,12 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.TeacherDto;
+import com.quokka.classmusic.api.response.FileVo;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
+import com.quokka.classmusic.common.util.AmazonS3ResourceStorage;
 import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.entity.Treat;
 import com.quokka.classmusic.db.entity.User;
@@ -14,6 +16,7 @@ import com.quokka.classmusic.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +28,14 @@ public class TeacherServiceImpl implements TeacherService{
     private final TeacherRepository teacherRepository;
     private final UserRepository userRepository;
     private final TreatRepository treatRepository;
+    private final AmazonS3ResourceStorage amazonS3ResourceStorage;
 
     @Autowired
-    public TeacherServiceImpl(TeacherRepository teacherRepository, UserRepository userRepository, TreatRepository treatRepository) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository, UserRepository userRepository, TreatRepository treatRepository, AmazonS3ResourceStorage amazonS3ResourceStorage) {
         this.teacherRepository = teacherRepository;
         this.userRepository = userRepository;
         this.treatRepository = treatRepository;
+        this.amazonS3ResourceStorage = amazonS3ResourceStorage;
     }
 
     @Override
@@ -128,8 +133,9 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public void insertImage(String image) {
-
+    public void insertImage(MultipartFile multipartFile) {
+        FileVo fileVo = FileVo.multipartOf(multipartFile);
+        amazonS3ResourceStorage.store(fileVo.getPath() , multipartFile);
     }
 
     public int dayToInt(String classDay){

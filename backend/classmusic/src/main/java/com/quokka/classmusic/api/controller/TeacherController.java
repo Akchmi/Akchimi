@@ -62,10 +62,8 @@ public class TeacherController {
 
 
     @PostMapping("/image")
-    public ResponseEntity<Void> insertImage(@RequestBody String image , @RequestParam(value = "file") MultipartFile multipartFile){
-        System.out.println(image + " " + multipartFile.getName());
-
-        //        teacherService.deleteTeacher(teacherId);
+    public ResponseEntity<Void> insertImage(@RequestPart MultipartFile multipartFile){
+        teacherService.insertImage(multipartFile);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
