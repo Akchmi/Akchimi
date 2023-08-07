@@ -8,6 +8,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.db.entity.Teacher;
+import com.quokka.classmusic.db.entity.TeacherFile;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -19,6 +20,7 @@ import static com.quokka.classmusic.db.entity.QContact.contact;
 import static com.quokka.classmusic.db.entity.QInstrument.instrument;
 import static com.quokka.classmusic.db.entity.QReview.review;
 import static com.quokka.classmusic.db.entity.QTeacher.teacher;
+import static com.quokka.classmusic.db.entity.QTeacherFile.teacherFile;
 import static com.quokka.classmusic.db.entity.QTreat.treat;
 import static com.quokka.classmusic.db.entity.QUser.user;
 
@@ -86,6 +88,23 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .join(contact.teacher , teacher)
                 .where(teacher.teacherId.eq(teacherId))
                 .fetchOne();
+    }
+
+    @Override
+    public void deleteImage(int teacherId) {
+        List<TeacherFile> files = query.selectFrom(teacherFile)
+                .join(teacherFile.teacher , teacher)
+                .where(teacher.teacherId.eq(teacherId))
+                .fetch();
+
+        for (TeacherFile teacherFile : files) {
+            em.remove(teacherFile);
+        }
+    }
+
+    @Override
+    public void saveImage(TeacherFile teacherFile) {
+        em.persist(teacherFile);
     }
 
     private BooleanExpression startCareerGoe(Integer startCareer){

@@ -8,6 +8,7 @@ import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.common.util.AmazonS3ResourceStorage;
 import com.quokka.classmusic.db.entity.Teacher;
+import com.quokka.classmusic.db.entity.TeacherFile;
 import com.quokka.classmusic.db.entity.Treat;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.TeacherRepository;
@@ -133,9 +134,19 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public void insertImage(MultipartFile multipartFile) {
-        FileVo fileVo = FileVo.multipartOf(multipartFile);
-        amazonS3ResourceStorage.store(fileVo.getPath() , multipartFile);
+    public void insertImage(int teacherId , List<MultipartFile> multipartFiles) {
+        teacherRepository.deleteImage(teacherId);
+        Teacher teacher = teacherRepository.findById(teacherId);
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            FileVo fileVo = FileVo.multipartOf(multipartFile);
+            amazonS3ResourceStorage.store(fileVo.getPath() , multipartFile);
+            teacherRepository
+                    .saveImage(TeacherFile.builder()
+                    .teacher(teacher)
+                    .fileUrl("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/" + fileVo.getPath())
+                    .build());
+        }
     }
 
     public int dayToInt(String classDay){

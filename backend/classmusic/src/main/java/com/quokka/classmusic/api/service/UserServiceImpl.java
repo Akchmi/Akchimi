@@ -1,11 +1,13 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.*;
+import com.quokka.classmusic.api.response.FileVo;
 import com.quokka.classmusic.api.response.LikeVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
+import com.quokka.classmusic.common.util.AmazonS3ResourceStorage;
 import com.quokka.classmusic.db.entity.Like;
 import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.LikeRepository;
@@ -19,10 +21,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -34,19 +39,17 @@ public class UserServiceImpl implements UserService{
     private final LikeRepository likeRepository;
     private final TreatRepository treatRepository;
     private final JavaMailSender mailSender;
+    private final AmazonS3ResourceStorage amazonS3ResourceStorage;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository
-            , PasswordEncoder passwordEncoder
-            , TeacherRepository teacherRepository
-            , LikeRepository likeRepository
-            , TreatRepository treatRepository
-            , JavaMailSender mailSender) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, TeacherRepository teacherRepository, LikeRepository likeRepository, TreatRepository treatRepository, JavaMailSender mailSender, AmazonS3ResourceStorage amazonS3ResourceStorage) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.teacherRepository = teacherRepository;
         this.likeRepository = likeRepository;
         this.treatRepository = treatRepository;
         this.mailSender = mailSender;
+        this.amazonS3ResourceStorage = amazonS3ResourceStorage;
     }
 
     @Override
@@ -163,6 +166,19 @@ public class UserServiceImpl implements UserService{
 
         user.setPassword(passwordEncoder.encode(tmpPassword));
         userRepository.save(user);
+    }
+
+//   유저 프로필 이미지 추가
+    @Override
+    public void insertProfileImage(String id, MultipartFile multipartFile) {
+        User user = userRepository.findUserById(id);
+        if(user.getUserProfileImage() != null && user.getUserProfileImage().length() > 10){
+            amazonS3ResourceStorage.deleteFile(user.getUserProfileImage());
+            user.setUserProfileImage(null);
+        }
+        FileVo fileVo = FileVo.multipartOf(multipartFile);
+        amazonS3ResourceStorage.store(fileVo.getPath() , multipartFile);
+        user.setUserProfileImage("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/" + fileVo.getPath());
     }
 
     public String getRandomPassword(int size) {

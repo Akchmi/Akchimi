@@ -61,9 +61,9 @@ public class TeacherController {
     }
 
 
-    @PostMapping("/image")
-    public ResponseEntity<Void> insertImage(@RequestPart MultipartFile multipartFile){
-        teacherService.insertImage(multipartFile);
+    @PostMapping("/{teacherId}/images")
+    public ResponseEntity<Void> insertImage(@PathVariable int teacherId , @RequestPart(value = "image") List<MultipartFile> multipartFiles){
+        teacherService.insertImage(teacherId , multipartFiles);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

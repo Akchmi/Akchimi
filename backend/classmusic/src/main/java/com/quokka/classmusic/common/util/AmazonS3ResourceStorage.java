@@ -35,6 +35,15 @@ public class AmazonS3ResourceStorage {
                 file.delete();
             }
         }
+    }
 
+    public void deleteFile(String fullPath) {
+        try {
+            amazonS3Client.deleteObject(bucket, fullPath.substring(59));
+        } catch (Exception e) {
+            throw new RuntimeException();
+        } finally {
+
+        }
     }
 }

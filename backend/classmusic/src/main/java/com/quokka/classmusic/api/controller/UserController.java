@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -141,8 +142,9 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
+//    유저 프로필이미지 추가
     @PostMapping("/{id}/profileImage")
-    public ResponseEntity<Void> saveProfileImage(@PathVariable String id, @RequestBody Map<String, String> param , @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+    public ResponseEntity<Void> saveProfileImage(@PathVariable String id, @RequestPart(value = "image") MultipartFile multipartFile , @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
         log.debug(userDetailsVo.getUserVo().getId());
         String currentLoginId = userDetailsVo.getUserVo().getId();
 
@@ -151,6 +153,7 @@ public class UserController {
             throw new RestApiException(ErrorCode.FORBIDDEN_ACCESS);
         }
 
+        userService.insertProfileImage(id , multipartFile);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

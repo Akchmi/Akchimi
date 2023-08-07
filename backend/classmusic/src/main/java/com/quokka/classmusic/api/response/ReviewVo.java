@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewVo {
+    private int reviewId;
     private String name;
     private String userProfileImage;
     private int startTime;
@@ -18,6 +19,7 @@ public class ReviewVo {
     private int createAt;
 
     public ReviewVo(Review review){
+        this.reviewId = review.getReviewId();
         this.name = review.getContact().getStudent().getName();
         this.userProfileImage = review.getContact().getStudent().getUserProfileImage();
         this.startTime = review.getContact().getStartTime();
