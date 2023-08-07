@@ -169,11 +169,11 @@ export default {
   },
   setup() {
     const store = useStore();
-    const userId = store.getters.getUserId;
+    const teacherId = store.getters.getTeacherId;
 
     onMounted(() => {
       store.dispatch("getLectureList", {
-        id: userId,
+        id: teacherId,
         state: 2,
         type: 1,
       });

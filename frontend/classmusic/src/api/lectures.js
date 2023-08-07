@@ -102,6 +102,37 @@ function apiDeleteReview(context, reviewId) {
     });
 }
 
+function apiChangeLectureState(context, data) {
+  const mode = data.mode;
+  axios
+    .put(`/contacts/${data.contactId}/state`, { state: data.state })
+    .then(() => {
+      if (mode == "registerLecture") {
+        router.push("/lecture/studentwaiting");
+        return;
+      }
+      if (mode == "finishLecture_teacher") {
+        router.push("/lecture/teacherfinish");
+        return;
+      }
+      if (mode == "finishLecture_student") {
+        router.push("/lecture/studentfinish");
+        return;
+      }
+      if (mode == "acceptLecture") {
+        router.push("/lecture/teacherongoing");
+        return;
+      }
+      if (mode == "refuseLecture") {
+        router.go(0);
+        return;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export {
   apiGetLectureList,
   apiGetRefusedLectureList,
@@ -111,4 +142,5 @@ export {
   apiPostReview,
   apiPutReviewUpdate,
   apiDeleteReview,
+  apiChangeLectureState,
 };

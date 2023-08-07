@@ -7,6 +7,7 @@ import {
   apiPostReview,
   apiPutReviewUpdate,
   apiDeleteReview,
+  apiChangeLectureState,
 } from "@/api/lectures";
 
 export default {
@@ -28,7 +29,9 @@ export default {
     apiDeleteContact(context, contactId);
   },
   //매칭 상태 수정
-
+  changeLectureState(context, data) {
+    apiChangeLectureState(context, data);
+  },
   //매칭 순서 수정
   //매칭 생성
   //강의실 입장

@@ -39,6 +39,7 @@ export default {
       this.postMachingCreate({
         teacherId: teacherId,
         studentId: this.loginUserId,
+        mode: "registerLecture",
       });
     },
   },

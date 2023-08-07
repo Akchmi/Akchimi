@@ -184,7 +184,7 @@ export default {
       nowReviewId: null,
       nowUpdateReview: "",
       nowUpdateReviewId: null,
-      nowUpdateRating: null,
+      nowUpdateRating: 5,
     };
   },
   computed: {

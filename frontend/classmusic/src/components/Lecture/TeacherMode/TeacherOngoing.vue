@@ -82,7 +82,9 @@
               >
                 메모수정
               </button>
-              <button>강의완료</button>
+              <button @click="finishLecture(lecture.contactId)">
+                강의완료
+              </button>
             </div>
             <div
               class="ongoing__container__button"
@@ -137,14 +139,23 @@ export default {
       this.nowUpdateMemo = "";
       this.nowUpdateMemoId = null;
     },
+
+    ...mapActions(["changeLectureState"]),
+    finishLecture(contactId) {
+      this.changeLectureState({
+        contactId: contactId,
+        state: 2,
+        mode: "finishLecture_teacher",
+      });
+    },
   },
   setup() {
     const store = useStore();
-    const userId = store.getters.getUserId;
+    const teacherId = store.getters.getTeacherId;
 
     onMounted(() => {
       store.dispatch("getLectureList", {
-        id: userId,
+        id: teacherId,
         state: 1,
         type: 1,
       });

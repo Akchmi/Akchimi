@@ -74,7 +74,7 @@
             >
               메모수정
             </button>
-            <button>강의완료</button>
+            <button @click="finishLecture(lecture.contactId)">강의완료</button>
           </div>
           <div
             class="ongoing__container__button"
@@ -126,6 +126,15 @@ export default {
     cancleUpdateMemo() {
       this.nowUpdateMemo = "";
       this.nowUpdateMemoId = null;
+    },
+
+    ...mapActions(["changeLectureState"]),
+    finishLecture(contactId) {
+      this.changeLectureState({
+        contactId: contactId,
+        state: 2,
+        mode: "finishLecture_student",
+      });
     },
   },
   setup() {

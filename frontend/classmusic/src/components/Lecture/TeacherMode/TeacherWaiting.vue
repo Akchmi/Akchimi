@@ -44,8 +44,12 @@
             </div>
 
             <div>
-              <button>수락하기</button>
-              <button>거절하기</button>
+              <button @click="acceptLecture(lecture.contactId)">
+                수락하기
+              </button>
+              <button @click="refuseLecture(lecture.contactId)">
+                거절하기
+              </button>
               <button>채팅하기</button>
             </div>
           </div>
@@ -73,15 +77,33 @@ export default {
     runDeleteContact(contactId) {
       this.deleteContact(contactId);
     },
+
+    ...mapActions(["changeLectureState"]),
+    acceptLecture(contactId) {
+      this.changeLectureState({
+        contactId: contactId,
+        state: 1,
+        mode: "acceptLecture",
+      });
+    },
+
+    refuseLecture(contactId) {
+      this.changeLectureState({
+        contactId: contactId,
+        state: 3,
+        mode: "refuseLecture",
+      });
+    },
   },
 
   setup() {
     const store = useStore();
-    const userId = store.getters.getUserId;
+
+    const teacherId = store.getters.getTeacherId;
 
     onMounted(() => {
       store.dispatch("getLectureList", {
-        id: userId,
+        id: teacherId,
         state: 0,
         type: 1,
       });

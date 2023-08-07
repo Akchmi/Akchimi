@@ -107,7 +107,7 @@ export default {
 
       store.dispatch("getRefusedLectureList", {
         id: userId,
-        state: 4,
+        state: 3,
         type: 0,
       });
     });
