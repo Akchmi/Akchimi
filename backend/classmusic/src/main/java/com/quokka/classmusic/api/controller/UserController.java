@@ -139,6 +139,18 @@ public class UserController {
             log.debug("삭제후 {} {}", teacherVo.getTeacherId(), teacherVo.getName());
         }
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
 
+    @PostMapping("/{id}/profileImage")
+    public ResponseEntity<Void> saveProfileImage(@PathVariable String id, @RequestBody Map<String, String> param , @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+        log.debug(userDetailsVo.getUserVo().getId());
+        String currentLoginId = userDetailsVo.getUserVo().getId();
+
+        if (!currentLoginId.equals(id)) {
+            log.debug("아이디가 다릅니다.");
+            throw new RestApiException(ErrorCode.FORBIDDEN_ACCESS);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

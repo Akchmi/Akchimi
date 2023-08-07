@@ -72,7 +72,8 @@ public class ReviewServiceImpl implements ReviewService{
         Review review = reviewRepository.findReviewByContactId(contactId);
 
         if(review == null){
-            throw new RestApiException(ErrorCode.NOT_FOUND);
+            return new ReviewVo();
+//            throw new RestApiException(ErrorCode.NOT_FOUND);
         }
 
         return new ReviewVo(review);

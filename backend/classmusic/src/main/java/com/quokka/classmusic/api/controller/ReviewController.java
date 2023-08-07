@@ -33,7 +33,7 @@ public class ReviewController {
     public ResponseEntity<ReviewVo> selectReviews(@RequestParam int contactId){
         ReviewVo reviewVo = reviewService.selectReview(contactId);
 
-        log.debug("{}",reviewVo.getContent());
+//        log.debug("{}",reviewVo.getContent());
         return new ResponseEntity<>(reviewVo, HttpStatus.OK);
     }
 

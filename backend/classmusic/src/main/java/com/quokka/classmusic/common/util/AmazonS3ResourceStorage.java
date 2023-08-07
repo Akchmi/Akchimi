@@ -19,6 +19,11 @@ public class AmazonS3ResourceStorage {
 
     public void store(String fullPath, MultipartFile multipartFile) {
         File file = new File(MultipartUtil.getLocalHomeDirectory(), fullPath);
+        System.out.println(bucket);
+        System.out.println(fullPath);
+        System.out.println(file);
+        System.out.println(amazonS3Client);
+
         try {
             multipartFile.transferTo(file);
             amazonS3Client.putObject(new PutObjectRequest(bucket, fullPath, file)
@@ -30,5 +35,6 @@ public class AmazonS3ResourceStorage {
                 file.delete();
             }
         }
+
     }
 }
