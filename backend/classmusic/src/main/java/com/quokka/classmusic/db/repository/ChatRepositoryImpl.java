@@ -46,7 +46,7 @@ public class ChatRepositoryImpl implements ChatRepository{
                                 chat.createdAt))
                 .from(chat)
                 .where(chat.contact.contactId.eq(contentId))
-                .orderBy(chat.createdAt.desc())
+                .orderBy(chat.createdAt.asc())
                 .fetch();
     }
 }
