@@ -23,6 +23,7 @@ public class TeacherDetailVo {
     private float avgRating;
     private Integer contactCnt;
     private List<String> instruments;
+    private List<String> images;
 
     public void setClassDay(String classDay) {
         this.classDay = classDay;

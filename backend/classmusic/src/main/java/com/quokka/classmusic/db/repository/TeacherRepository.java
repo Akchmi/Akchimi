@@ -15,4 +15,6 @@ public interface TeacherRepository {
     float findReviewSum(int teacherId);
     void deleteImage(int teacherId);
     void saveImage(TeacherFile teacherFile);
+
+    List<String> findImageByTeacherId(int teacherId);
 }

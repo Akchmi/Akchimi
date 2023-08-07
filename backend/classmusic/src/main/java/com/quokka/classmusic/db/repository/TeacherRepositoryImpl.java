@@ -107,6 +107,15 @@ public class TeacherRepositoryImpl implements TeacherRepository{
         em.persist(teacherFile);
     }
 
+    @Override
+    public List<String> findImageByTeacherId(int teacherId) {
+        return query.select(teacherFile.fileUrl)
+                .from(teacherFile)
+                .join(teacherFile.teacher , teacher)
+                .where(teacher.teacherId.eq(teacherId))
+                .fetch();
+    }
+
     private BooleanExpression startCareerGoe(Integer startCareer){
         if(startCareer == null){
             return null;

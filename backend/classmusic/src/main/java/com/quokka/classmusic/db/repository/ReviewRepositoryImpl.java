@@ -62,7 +62,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     public Review findReviewByContactId(int contactId) {
         return query.selectFrom(review)
                 .join(review.contact , contact)
-                .where(review.contact.contactId.eq(contactId))
+                .where(contact.contactId.eq(contactId))
                 .fetchOne();
     }
 }

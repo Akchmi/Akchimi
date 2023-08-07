@@ -75,7 +75,8 @@ public class TeacherServiceImpl implements TeacherService{
                 IntToday(teacher.getClassDay()),
                 teacher.getAvgRating(),
                 teacher.getContactCnt(),
-                treatRepository.findInstrumentNameByTeacherId(teacherId)
+                treatRepository.findInstrumentNameByTeacherId(teacherId),
+                teacherRepository.findImageByTeacherId(teacherId)
         );
         return teacherDetailVo;
     }
