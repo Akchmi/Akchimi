@@ -5,5 +5,5 @@ export default {
   id: null,
   userType: null,
   teacherId: null,
-  
+  name: null,
 };
