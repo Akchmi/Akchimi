@@ -5,6 +5,7 @@
         <div class="img-container">
           <img
             :src="userInfo.userProfileImage"
+            :key="userInfo.userProfileImage"
             alt="User profile picture"
             class="user-image"
           />
@@ -107,7 +108,6 @@ export default {
   methods: {
     async handleImageUpload() {
     const selectedFile = this.$refs.fileInput.files[0];
-
     let formData = new FormData();
     formData.append('image', selectedFile);
 
@@ -115,7 +115,8 @@ export default {
       let response = await axios.post(`/users/${this.id}/profileImage`, formData);
       
       if (response.data && response.data.userProfileImage) { 
-          this.userProfileImage = response.data.userProfileImage;
+          this.userInfo.userProfileImage = response.data.userProfileImage;
+          location.reload();
       }
     } catch (error) {
         console.log(error);

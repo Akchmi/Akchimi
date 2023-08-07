@@ -36,7 +36,9 @@
       
         <div class="attach-file">
           <h3>파일 첨부</h3>
-          <img v-for="(file, index) in attachedFiles" :src="file" :key="index" alt="Attached file" class="attach-image" />
+          <div>
+            <img v-for="(file, index) in attachedFiles" :src="file" :key="index" alt="Attached file" class="attach-image" />
+          </div>
           <button>첨부 파일 추가</button>
         </div>
         <div class="button-group">
