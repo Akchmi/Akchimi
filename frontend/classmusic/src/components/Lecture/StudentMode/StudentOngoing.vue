@@ -32,7 +32,7 @@
           class="ongoing__container__button"
           v-if="nowUpdateMemoId != lecture.contactId"
         >
-          <button @click="$router.push(`/chats/${lecture.contactId}`)">
+          <button @click="$router.push(`/chats/${lecture.contactId}?type=0`)">
             채팅입장
           </button>
           <button
@@ -82,12 +82,14 @@ export default {
     ...mapGetters({ lectureList: "getlectureList" }),
   },
   methods: {
+    ...mapActions(["putUpdateMemo"]),
+
     runUpdateMemo(contactId, memo) {
       this.nowUpdateMemo = memo;
       this.nowUpdateMemoId = contactId;
     },
 
-    ...mapActions(["putUpdateMemo"]),
+    moveChat() {},
 
     updateMemo(contactId) {
       this.putUpdateMemo({

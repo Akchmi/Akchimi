@@ -1,12 +1,23 @@
 <template>
   <div>
     <div>chatview</div>
-    <div id="app">
-      내용: <input v-model="content" type="text" @keyup="sendMessage" />
-      <div v-for="(item, idx) in recvList" :key="idx">
-        <h3>보낸 시간: {{ item.createdTime }}</h3>
-        <h3>샌더: {{ item.sender }}</h3>
-        <h3>내용: {{ item.content }}</h3>
+    <div>
+      <!-- 채팅 목록 -->
+      <div>
+        <TheChat
+          v-for="(chat, idx) in chats"
+          :key="idx"
+          :chat="chat"
+          :profile="
+            chat.sender == '0' ? this.studentProfile : this.teacherProfile
+          "
+          :sender="sender"
+        />
+      </div>
+      <!-- 채팅 폼 -->
+      <div>
+        <input v-model="content" type="text" @keyup.enter="sendMessage" />
+        <button @click="sendMessage">전송</button>
       </div>
     </div>
   </div>
@@ -15,77 +26,99 @@
 <script>
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
-import { apiGetChatLog } from "@/api/chats.js";
+import TheChat from "@/components/Chat/TheChat";
+import { apiGetChatLog, apiGetChatParticipant } from "@/api/chats.js";
 import { useRoute } from "vue-router";
 import { mapActions } from "vuex";
 
 export default {
   data() {
     return {
-      roomId: 0,
-      userName: JSON.parse(localStorage.getItem("vuex")).common.id,
+      roomId: null,
+      sender: null,
       content: "",
-      now: "00:00:00",
-      recvList: [],
-      sender: 0,
-      other: "상대",
+
+      studentProfile: {
+        name: "",
+        profileImage: "",
+      },
+      teacherProfile: {
+        name: "",
+        profileImage: "",
+      },
+      chats: [],
     };
   },
+  components: {
+    TheChat,
+  },
+
   created() {
-    // App.vue가 생성되면 소켓 연결을 시도합니다.
     const route = useRoute();
     this.roomId = route.params.lectureId;
+    this.sender = route.query.type;
 
-    // console.log(this.roomId + "!!!!!!!!!!!!!");
-
-    this.getChatLog();
+    // App.vue가 생성되면 소켓 연결을 시도합니다.
     this.connect();
+
+    // 채팅방 초기 설정 (참여자 및 이전 채팅 불러오기)
+    this.initializeChatRoom();
   },
 
   methods: {
     ...mapActions(["postChatCreate"]),
     async getChatLog() {
       try {
-        // console.log(this.roomId + "!!!!!!!!!!!!!");
-        // const roomid = this.roomId;
+        this.chats = await apiGetChatLog(this.roomId);
 
-        const data = await apiGetChatLog(this.roomId);
-        console.log("getChatLog : ", data);
-
-        if (data) {
-          this.recvList = data;
-        }
+        console.log("getChatLog : ", this.chats);
       } catch (error) {
         console.log(error);
       }
     },
 
-    save() {
-      // 채팅 메세지 DB에 추가
-      this.postChatCreate({
-        content: this.content,
-        sender: this.sender,
-        roomId: this.roomId,
-      });
+    async initializeChatRoom() {
+      // 채팅 참여자 정보 조회
+      await this.initializeChatParticipant();
+
+      // 이전 채팅 정보 조회
+      await this.getChatLog();
     },
 
-    sendMessage(e) {
-      if (e.keyCode === 13 && this.userName !== "" && this.message !== "") {
-        this.send();
-        this.save();
+    async initializeChatParticipant() {
+      const participantInfo = await apiGetChatParticipant(this.roomId);
+      this.teacherProfile = {
+        name: participantInfo.teacherName,
+        profileImage: participantInfo.teacherProfileImage,
+      };
+      this.studentProfile = {
+        name: participantInfo.studentName,
+        profileImage: participantInfo.studentProfileImage,
+      };
+    },
+
+    save(newChat) {
+      // 채팅 메세지 DB에 추가
+      this.postChatCreate(newChat);
+    },
+
+    sendMessage() {
+      if (this.userName !== "" && this.message !== "") {
+        const newChat = {
+          content: this.content,
+          sender: this.sender,
+          roomId: this.roomId,
+        };
+        this.send(newChat);
+        this.save(newChat);
         this.content = "";
       }
     },
 
-    send() {
+    send(newChat) {
       console.log("Send message:" + this.content);
       if (this.stompClient && this.stompClient.connected) {
-        const msg = {
-          sender: this.sender,
-          roomId: this.roomId,
-          content: this.content,
-        };
-        this.stompClient.send("/receive", JSON.stringify(msg), {});
+        this.stompClient.send("/receive", JSON.stringify(newChat), {});
       }
     },
 
@@ -104,17 +137,11 @@ export default {
 
           this.stompClient.subscribe("/send", (res) => {
             console.log("구독으로 받은 메시지 입니다.", res.body);
-            var livemessage = JSON.parse(res.body);
+            const livemessage = JSON.parse(res.body);
             if (livemessage.roomId == this.roomId) {
-              var date = new Date();
-              livemessage.createdTime =
-                date.getHours() +
-                ":" +
-                date.getMinutes() +
-                ":" +
-                date.getSeconds();
+              livemessage.createdTime = new Date() / 1000;
 
-              this.recvList.push(livemessage);
+              this.chats.push(livemessage);
             }
           });
         },

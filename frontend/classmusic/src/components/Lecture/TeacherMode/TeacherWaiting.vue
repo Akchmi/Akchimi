@@ -12,7 +12,7 @@
         </div>
         <div class="button-group">
           <button>강사 정보보기</button>
-          <button @click="$router.push(`/chats/${lecture.contactId}`)">
+          <button @click="$router.push(`/chats/${lecture.contactId}?type=1`)">
             채팅보기
           </button>
         </div>
