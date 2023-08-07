@@ -1,7 +1,7 @@
 import axios from "@/api/axios";
 
 async function apiGetChatLog(id) {
-  console.log(id + "BBBBBBBBBB");
+  console.log("apiGetChatLog id : ", id);
 
   const response = await axios.get(`/chats/${id}`);
 
@@ -14,6 +14,7 @@ async function apiGetChatLog(id) {
     return null;
   }
 }
+
 function apiChatcreate(context, data, id) {
   console.log(data.roomId + "mmmmmmmmmmmm");
   axios
@@ -25,4 +26,23 @@ function apiChatcreate(context, data, id) {
       console.error("POST 요청 에러 : ", error);
     });
 }
-export { apiGetChatLog, apiChatcreate };
+
+async function apiGetChatParticipant(contactId) {
+  console.log("apiGetChatParticipant contactId : ", contactId);
+
+  const response = await axios.get(`/chats/${contactId}/profile`);
+  try {
+    console.log(response);
+    if (response.status == 200) {
+      console.log("apiGetChatParticipant Data : ", response.data);
+      return response.data;
+    } else {
+      alert("api/chats.js apiGetChatParticipant 중 에러 발생!!!!!!");
+      return null;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export { apiGetChatLog, apiChatcreate, apiGetChatParticipant };
