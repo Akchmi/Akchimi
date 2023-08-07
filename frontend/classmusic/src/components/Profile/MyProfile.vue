@@ -4,11 +4,13 @@
       <div class="top-section">
         <div class="img-container">
           <img
-            :src="userProfileImage"
+            :src="userInfo.userProfileImage"
             alt="User profile picture"
             class="user-image"
           />
-          <button>사진 추가</button>
+          <input type="file" ref="fileInput" @change="handleImageUpload" style="display: none"/>
+          <button @click="triggerFileInput">사진 수정</button>
+
         </div>
         <div class="info-container">
           <!-- <div class="id-container">  -->
@@ -63,27 +65,29 @@
     
     <div class="favorites">
       <h3>{{ userInfo.name }} 님이 즐겨찾기한 강사</h3>
-      <div>
-        <TeacherCard></TeacherCard>
-      </div>
-      <!-- <div v-if="favoriteTeachers.length">
-        <TeacherCard v-for="teacher in favoriteTeachers" :key="teacher.id" :teacher="teacher"></TeacherCard>
-     </div>
-     <p v-else>아직 즐겨찾기한 강사가 없습니다.</p> -->
+      <div class="teacher-list">
+        <LikeTeacherCard
+        v-for="teacher in liketeachers"
+        :key="teacher.teacherId"
+        :teacher="teacher"
+        image="https://via.placeholder.com/280"
+      />
+      </div>   
     </div>
   </div>
 </template>
 
 <script>
-// import { onMounted } from "vue";
-import { apiGetUserInfo, apiLikeTeacher  } from "@/api/profiles.js";
-import TeacherCard from "@/components/Search/TeacherCard.vue";
 
-// import { useStore } from "vuex";
-// apiLikeTeacher
+import { apiGetUserInfo, apiLikeTeacher  } from "@/api/profiles.js";
+import LikeTeacherCard from "./LikeTeacherCard.vue";
+import { mapGetters, } from "vuex";
+import axios from "@/api/imageAxios.js";
+
+
 export default {
   components : {
-    TeacherCard
+    LikeTeacherCard,
   },
   data() {
     return { 
@@ -92,33 +96,54 @@ export default {
       showChangePasswordModal: false,
       currentPassword: '',
       newPassword: '',
-      teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
-      teacherInfo: {},
+      teacherId : '',
+      liketeachers: [],
+      userProfileImage:'',
     };
   },
-
+  computed: {
+    ...mapGetters({ teachers: "getLikeTeacherList"})
+  },
   methods: {
+    async handleImageUpload() {
+    const selectedFile = this.$refs.fileInput.files[0];
+
+    let formData = new FormData();
+    formData.append('image', selectedFile);
+
+    try {          
+      let response = await axios.post(`/users/${this.id}/profileImage`, formData);
+      
+      if (response.data && response.data.userProfileImage) { 
+          this.userProfileImage = response.data.userProfileImage;
+      }
+    } catch (error) {
+        console.log(error);
+    }
+  },
+
+
+
+    triggerFileInput() {
+      this.$refs.fileInput.click();
+    },
     async getUserInfo() {  
       try {
-        const data = await apiGetUserInfo(this.id);   
-        
-      
+        const data = await apiGetUserInfo(this.id); 
         if (data) {
-          this.userInfo = data
-      
+          this.userInfo = data      
         }
       } catch (error) {
         console.log(error)
       }
     },
-    async likeTeacher() {
+    async likeTeachers() {
       try {
-
-        const teacherdata = await apiLikeTeacher(this.teacherId);
-        console.log('아이디', this.teacherId)
-        if (teacherdata) {
-          this.teacherInfo = teacherdata
-          console.log('dd', this.teacherInfo)
+        const teacherData = await apiLikeTeacher(this.id);
+       
+        if (teacherData ) {
+          this.liketeachers = teacherData
+          console.log('dd', this.liketeachers )
         }
       } catch(error) {        
         console.log('즐찾선생', error)
@@ -129,17 +154,18 @@ export default {
   },
   created() {  
     this.getUserInfo();
-    this.likeTeacher();
+    this.likeTeachers();
   },
 };
 </script>
 
 <style scoped>
 @import "@/assets/scss/profile.scss";
+.teacher-list {
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 </style>
 
-
-
-// 즐겨찾기 목록은 숫자리스트를 줘야 되지않나?
-// 즐겨찾기 아이디  티처 pk다
-// 티쳐pk를 localStorage에서 가져오면 안된다  다른방법을 생각해보자

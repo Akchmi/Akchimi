@@ -4,7 +4,7 @@ const api = axios.create({
   baseURL: "http://13.125.61.45:8080/api",
 
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "multipart/form-data",
   },
 });
 

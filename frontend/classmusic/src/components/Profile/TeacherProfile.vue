@@ -1,12 +1,7 @@
 <template>
   <div>
     teacherprofile
-    <button>
-      <router-link to="/profile/TeacherProfileUpdate" class="button">강사 정보 수정</router-link>
-    </button>
-    <!-- <button v-if="userId === teacherId">
-      <router-link to="/profile/TeacherProfileUpdate" class="button">강사 정보 수정</router-link>
-   </button> -->
+  
     <!-- 남이 보는 강사 프로필 -->
     <div class="teacher-profile-container">
       <div class="teacher-profile">
@@ -38,29 +33,47 @@
             <p>{{ introduce }}</p>
           </div>
         </div>
-        <div class="attach-file">
       
+        <div class="attach-file">
+          <h3>파일 첨부</h3>
           <img v-for="(file, index) in attachedFiles" :src="file" :key="index" alt="Attached file" class="attach-image" />
-
+          <button>첨부 파일 추가</button>
         </div>
         <div class="button-group">
-          <button @click="likeTeacherUpdate">강사 즐겨찾기</button>
-          <router-link to="/lecture/studentwaiting" class="button">강의 신청</router-link>
+          <button v-if="Number(localteacherId) === Number(teacherId)">
+            <router-link to="/profile/TeacherProfileUpdate" class="button">강사 정보 수정</router-link>
+         </button>
+         <div v-else>
+            <button  @click="likeTeacherUpdate">강사 즐겨찾기</button>          
+            <button >
+              <router-link to="/lecture/studentwaiting" class="button">강의 신청</router-link>
+            </button>
+          </div>
         </div>
       </div>
-      <TeacherReview></TeacherReview>
+    <!-- <div class="review-header">
+      <h3 class="review-title">강사 리뷰</h3>
+      <p class="avg-rating">평균 별점: {{ avgRating }}</p>
+    </div>
+      <TeacherReview
+        v-for="review in reviews"
+        :key="review.reviewId"
+        :review="review"
+        image="https://via.placeholder.com/280"
+      /> -->
     </div>
   </div>
 </template>
 
 <script>
-import TeacherReview from './TeacherReview.vue'
-import { apiDetailTeacherInfo, } from "@/api/profiles.js";  
+// import TeacherReview from './TeacherReview.vue'
+import { apiDetailTeacherInfo, apiGetReview } from "@/api/profiles.js";  
 import { mapActions, } from "vuex";
+import { useRoute} from "vue-router"
 
 export default {
   components: {
-    TeacherReview
+    // TeacherReview
   },
   data() {
     return {
@@ -75,14 +88,20 @@ export default {
       classDay: '',
       instrument: '',
       attachedFiles: [],
+      reveiws : [],
+      avgRating : 0,
+      contactCnt : 0,
       // userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
-      teacherId: '',
+      id : JSON.parse(localStorage.getItem("vuex")).common.id,
+      teacherId : 0,
+      localteacherId: JSON.parse(localStorage.getItem("vuex")).common.teacherId,
     }
   },
   async created() {
-    const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+    const route = useRoute()
+    const teacherId = route.params.id
     const res = await apiDetailTeacherInfo(teacherId); 
-    this.teacherId = res.teacherId;
+    this.teacherId = teacherId;
     this.name = res.name;
     this.gender = res.gender;
     this.userProfileImage = res.userProfileImage;
@@ -93,12 +112,14 @@ export default {
     this.endTime = res.endTime;
     this.classDay = res.classDay;
     this.instrument = res.instruments;
-    this.attachedFiles = res.attachedFiles; 
+    this.attachedFiles = res.attachedFiles;
+    this.avgRating = res.avgRating
+    this.contactCnt = res.contactCnt
   },
   computed: {
     genderText() {   
       return this.gender === 1 ? '남자' : '여자';
-    }
+    },    
   },
   methods: {
     ...mapActions(["postLikeTeacherUpdate"]),
@@ -113,26 +134,45 @@ export default {
         .filter(Boolean)
         .join(', ');
     },
-    likeTeacherUpdate() {
+    likeTeacherUpdate() {  
       const data = {
-        teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId
-        // teacherId : JSON.parse(localStorage.getItem("vuex")).common.id
-        
+        id : JSON.parse(localStorage.getItem("vuex")).common.id,        
+        teacherId : this.$route.params.id,
+        // teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId        
       }
       this.postLikeTeacherUpdate(data)   
-        .then(response => {
-          console.log('즐찾추',response)
-          // alert("즐겨찾기에 성공하였습니다")
-          // this.$router.push(`/profile/myprofile`)
+        .then(()=> {   
+                
+          alert("즐겨찾기에 성공하였습니다")
+          this.$router.push(`/profile/myprofile`)
         })
         .catch(error => {
           console.log('즐찾실패', error)
         })
-    }
+    },
+    async getReview() {
+      try {
+        const route = useRoute();
+        const teacherId = route.params.id;
+        const reviewData = await apiGetReview(teacherId);
+
+        if (reviewData) {
+          this.reviews = reviewData
+          console.log('리뷰', this.review)
+        }
+      } catch(error) {
+        console.log('리뷰에러', error)
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
 @import "@/assets/scss/teacherprofile.scss";
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 </style>

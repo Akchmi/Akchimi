@@ -16,7 +16,7 @@
       >
       <p class="teacher-description">{{ teacher.introduce }}</p>
       <div class="btn">
-        <button @click="goToProfile">자세히 보기</button>
+        <button @click="goToProfile(teacher.teacherId)">자세히 보기</button>
         <button @click="goToLecture">강의 신청</button>
       </div>
     </div>
@@ -26,18 +26,11 @@
 <script>
 export default {
   props: {
-    image: String,
     teacher: Object,
-    name: { type: String, default: "박한샘" },
-    description: { type: String, default: "어리다고 놀리지말아요" },
-    rating: { type: Number, default: 5.0 },
-    count: { type: Number, default: 15 },
-    career: { type: String, default: "경력" },
-    instrument: { type: String, default: "피아노" },
   },
   methods: {
-    goToProfile() {
-      this.$router.push("/profile/teacherprofile");
+    goToProfile(teacherId) {
+      this.$router.push(`/profile/teacherprofile/${teacherId}`);
     },
     goToLecture() {
       this.$router.push("/lecture/studentwaiting");
