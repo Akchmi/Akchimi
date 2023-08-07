@@ -35,7 +35,9 @@
           <button @click="$router.push(`/chats/${lecture.contactId}?type=0`)">
             채팅입장
           </button>
-          <button @click="$router.push(`/livemeeting/${lecture.contactId}`)">
+          <button
+            @click="$router.push(`/livemeeting/${lecture.contactId}?type=0`)"
+          >
             강의실입장
           </button>
           <button

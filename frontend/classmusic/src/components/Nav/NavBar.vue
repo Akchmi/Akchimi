@@ -51,7 +51,7 @@ export default {
         this.$router.push("/login/signin");
         return;
       }
-      this.$router.push("/lecture/studentwaiting");
+      this.$router.push("/lecture");
     },
   },
   created() {

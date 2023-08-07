@@ -5,10 +5,10 @@
         <img src="@/assets/images/quokkaband.png" width="500" />
       </div>
       <div id="join-dialog" class="jumbotron vertical-center">
-        <h1>강의실 입장</h1>
+        <h1>참여자 정보</h1>
         <div class="form-group">
           <p>
-            <label>내이름</label>
+            <label>학 생</label>
             <input
               v-model="myUserName"
               class="form-control"
@@ -17,7 +17,7 @@
             />
           </p>
           <p>
-            <label>상 대</label>
+            <label>강의실 번호</label>
             <input
               v-model="mySessionId"
               class="form-control"
@@ -35,6 +35,9 @@
     </div>
 
     <div id="session" v-if="session">
+      <div>
+        <MetronomeApp />
+      </div>
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
         <input
@@ -65,7 +68,7 @@
 
         <div>
           <!-- 메세지를 입력하는 input 요소 -->
-          <input type="text" v-model="newMessage" />
+          <input type="text" v-model="newMessage" @keyup.enter="sendMessage" />
 
           <!-- 메세지를 보내는 버튼 -->
           <button @click="sendMessage">메세지 보내기</button>
@@ -95,7 +98,8 @@
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/LiveMeeting/UserVideo";
-
+import { useRoute } from "vue-router";
+import MetronomeApp from "../components/LiveMeeting/MetronomeApp";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const APPLICATION_SERVER_URL =
@@ -108,11 +112,12 @@ export default {
 
   components: {
     UserVideo,
+    MetronomeApp,
   },
 
   data() {
     return {
-      // OpenVidu objects
+      // OpenVidu objects`
       OV: undefined,
       session: undefined,
       mainStreamManager: undefined,
@@ -123,9 +128,17 @@ export default {
       newMessage: "",
 
       // Join form
-      mySessionId: "SessionA",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
+      mySessionId: "",
+      sender: 0,
+
+      myUserName: JSON.parse(localStorage.getItem("vuex")).common.name,
     };
+  },
+  created() {
+    // App.vue가 생성되면 소켓 연결을 시도합니다.
+    const route = useRoute();
+    this.mySessionId = route.params.lectureId;
+    // console.log(this.roomId + "!!!!!!!!!!!!!");
   },
 
   methods: {
@@ -143,6 +156,7 @@ export default {
           })
           .then(() => {
             console.log("Message successfully sent");
+            this.newMessage = "";
           })
           .catch((error) => {
             console.error(error);
