@@ -37,9 +37,15 @@
         <div class="attach-file">
           <h3>파일 첨부</h3>
           <div>
-            <img v-for="(file, index) in attachedFiles" :src="file" :key="index" alt="Attached file" class="attach-image" />
+            <img 
+              v-for="(file, index) in attachedFiles" 
+              :src="file" 
+              :key="index" 
+              alt="Attached file" 
+              class="attach-image" />
           </div>
-          <button>첨부 파일 추가</button>
+          <input type="file"  multiple ref="fileUploadInput" @change="handleFileUpload" style="display: none"/>
+          <button @click="triggerFileInput">첨부 파일 추가</button>
         </div>
         <div class="button-group">
           <button v-if="Number(localteacherId) === Number(teacherId)">
@@ -72,6 +78,7 @@
 import { apiDetailTeacherInfo, apiGetReview } from "@/api/profiles.js";  
 import { mapActions, } from "vuex";
 import { useRoute} from "vue-router"
+import axios from "@/api/imageAxios.js";
 
 export default {
   components: {
@@ -97,6 +104,7 @@ export default {
       id : JSON.parse(localStorage.getItem("vuex")).common.id,
       teacherId : 0,
       localteacherId: JSON.parse(localStorage.getItem("vuex")).common.teacherId,
+
     }
   },
   async created() {
@@ -125,6 +133,31 @@ export default {
   },
   methods: {
     ...mapActions(["postLikeTeacherUpdate"]),
+    triggerFileUpload() {
+      this.$refs.fileUploadInput.click();
+      console.log(111)
+    },
+    async handleFileUpload() {
+      const selectedFiles = this.$refs.fileUploadInput.files;
+      
+      for (let i = 0; i < selectedFiles.length; i++) {
+        let formData = new FormData();
+        formData.append('image', selectedFiles[i]);
+
+        try {
+          let response = await axios.post(`/teachers/${this.teacherId}/images`, formData);
+
+          if (response.data && response.data.filePath) {
+            this.attachedFiles.push(response.data.filePath);
+          }
+        } catch(error) {
+          console.log(error);
+        }
+      }
+    },
+
+
+
     parseDays(classDay) {
       const days = ['월','화','수','목','금','토','일'];
       return classDay
