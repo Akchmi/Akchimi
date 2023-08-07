@@ -196,24 +196,12 @@ const routes = [
     ],
   },
   {
-    path: "/chat",
+    path: "/chats/:lectureId",
     name: "chat",
     component: Chatview,
-    children: [
-      {
-        path: "/chat/student/:id",
-        name: "studentchat",
-        component: ChatRoomStudent,
-      },
-      {
-        path: "/chat/teacher/:id",
-        name: "teacherchat",
-        component: ChatRoomTeacher,
-      },
-    ],
   },
   {
-    path: "/livemeeting",
+    path: "/livemeeting/:lectureId",
     name: "livemeeting",
     component: LivemeetingView,
   },

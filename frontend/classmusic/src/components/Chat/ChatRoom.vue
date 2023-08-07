@@ -1,11 +1,13 @@
 <template>
-  <div>chatview</div>
-  <div id="app">
-    내용: <input v-model="content" type="text" @keyup="sendMessage" />
-    <div v-for="(item, idx) in recvList" :key="idx">
-      <h3>보낸 시간: {{ item.createdTime }}</h3>
-      <h3>샌더: {{ item.sender }}</h3>
-      <h3>내용: {{ item.content }}</h3>
+  <div>
+    <div>chatview</div>
+    <div id="app">
+      내용: <input v-model="content" type="text" @keyup="sendMessage" />
+      <div v-for="(item, idx) in recvList" :key="idx">
+        <h3>보낸 시간: {{ item.createdTime }}</h3>
+        <h3>샌더: {{ item.sender }}</h3>
+        <h3>내용: {{ item.content }}</h3>
+      </div>
     </div>
   </div>
 </template>
@@ -32,11 +34,14 @@ export default {
   created() {
     // App.vue가 생성되면 소켓 연결을 시도합니다.
     const route = useRoute();
-    this.roomId = route.params.id;
+    this.roomId = route.params.lectureId;
+
     // console.log(this.roomId + "!!!!!!!!!!!!!");
+
     this.getChatLog();
     this.connect();
   },
+
   methods: {
     ...mapActions(["postChatCreate"]),
     async getChatLog() {
@@ -54,6 +59,7 @@ export default {
         console.log(error);
       }
     },
+
     save() {
       // 채팅 메세지 DB에 추가
       this.postChatCreate({
@@ -62,6 +68,7 @@ export default {
         roomId: this.roomId,
       });
     },
+
     sendMessage(e) {
       if (e.keyCode === 13 && this.userName !== "" && this.message !== "") {
         this.send();
@@ -69,6 +76,7 @@ export default {
         this.content = "";
       }
     },
+
     send() {
       console.log("Send message:" + this.content);
       if (this.stompClient && this.stompClient.connected) {
