@@ -13,7 +13,11 @@
         <h3>제목</h3>
         <input class="input__title" type="text" v-model="title" />
         <h3>내용</h3>
-        <input class="input__content" type="text" v-model="content" />
+        <textarea
+          class="input__content"
+          type="text"
+          v-model="content"
+        ></textarea>
         <hr />
       </div>
 

@@ -25,19 +25,13 @@
 </template>
 
 <script>
-// import axios from "@/api/axios";
-// import common from "@/store/actions/common";
-
+import { mapGetters } from "vuex";
 export default {
   data() {
-    return {
-      // isLoggedIn: false
-    };
+    return {};
   },
   computed: {
-    isLoggedIn() {
-      return this.$store.state.common.isLogin;
-    },
+    ...mapGetters({ isLoggedIn: "getIsLogin" }),
   },
   methods: {
     logOut() {
@@ -51,11 +45,8 @@ export default {
         this.$router.push("/login/signin");
         return;
       }
-      this.$router.push("/lecture/studentwaiting");
+      this.$router.push("/lecture/studentongoing");
     },
-  },
-  created() {
-    this.isLoggedIn = this.$store.state.common.isLogin;
   },
 };
 </script>

@@ -40,10 +40,11 @@ function apiDeleteContact(context, contactId) {
 function apiPutUpdateMemo(context, data) {
   const contactId = data.contactId;
   const memo = data.memo;
+  const type = data.type;
 
   axios
     .put(`/contacts/${contactId}/memo`, {
-      type: 0,
+      type: type,
       memo: memo,
     })
     .then(() => {
@@ -54,9 +55,60 @@ function apiPutUpdateMemo(context, data) {
     });
 }
 
+function apiGetReview(context, params) {
+  axios
+    .get("/reviews/myreview", {
+      params: params,
+    })
+    .then(({ data }) => {
+      context.commit("GET_REVIEW", data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function apiPostReview(context, params) {
+  axios
+    .post("/reviews", params)
+    .then(() => {
+      router.go(0);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function apiPutReviewUpdate(context, params) {
+  axios
+    .put(`/reviews/${params.reviewId}`, params)
+    .then(() => {
+      router.go(0);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function apiDeleteReview(context, reviewId) {
+  console.log(reviewId);
+  axios
+    .delete(`/reviews/${reviewId}`)
+    .then(() => {
+      router.go(0);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export {
   apiGetLectureList,
   apiGetRefusedLectureList,
   apiPutUpdateMemo,
   apiDeleteContact,
+  apiGetReview,
+  apiPostReview,
+  apiPutReviewUpdate,
+  apiDeleteReview,
 };

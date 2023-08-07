@@ -1,44 +1,72 @@
 <template>
-  <div class="out__container">
-    <div class="container">
-      {{ lectureList }}
-      {{ refusedLectureList }}
-      <div>
-        <div
-          class="wating__listbox"
-          v-for="lecture in lectureList"
-          :key="lecture.id"
-        >
-          <div class="wating__info">
-            <img
-              :src="lecture.userProfileImage"
-              alt="Teacher profile picture"
-              class="watingProfileImage"
-            />
-            <span class="watingProfileName">{{ lecture.name }}</span>
-          </div>
+  <div>
+    <div>
+      <h2>강의실</h2>
+      <br />
+      <button @click="$router.push(`/lecture/studentongoing`)">수업</button>
+      |
+      <button @click="$router.push(`/lecture/teacherongoing`)">강의</button>
+      <hr />
+      <br />
+      <br />
+    </div>
 
-          <div>
-            <button>강사 정보보기</button>
-            <button>채팅하기</button>
-          </div>
-        </div>
-        <div
-          class="wating__listbox"
-          v-for="lecture in refusedLectureList"
-          :key="lecture.id"
-        >
-          <div class="wating__info">
-            <img
-              :src="lecture.userProfileImage"
-              alt="Teacher profile picture"
-              class="watingProfileImage"
-            />
-            <span class="watingProfileName">{{ lecture.name }}</span>
-          </div>
-          <div>수업요청이 거절되었습니다.</div>
+    <div>
+      <button @click="$router.push(`/lecture/studentongoing`)">진행 중</button>
+      |
+      <button
+        class="buttonWaiting"
+        @click="$router.push(`/lecture/studentwaiting`)"
+      >
+        대기 중
+      </button>
+      |
+      <button @click="$router.push(`/lecture/studentfinish`)">완료</button>
+    </div>
 
-          <button @click="runDeleteContact(lecture.contactId)">삭제하기</button>
+    <div class="out__container">
+      <div class="container">
+        {{ lectureList }}
+        {{ refusedLectureList }}
+        <div>
+          <div
+            class="wating__listbox"
+            v-for="lecture in lectureList"
+            :key="lecture.id"
+          >
+            <div class="wating__info">
+              <img
+                :src="lecture.userProfileImage"
+                alt="Teacher profile picture"
+                class="watingProfileImage"
+              />
+              <span class="watingProfileName">{{ lecture.name }}</span>
+            </div>
+
+            <div>
+              <button>강사 정보보기</button>
+              <button>채팅하기</button>
+            </div>
+          </div>
+          <div
+            class="wating__listbox"
+            v-for="lecture in refusedLectureList"
+            :key="lecture.id"
+          >
+            <div class="wating__info">
+              <img
+                :src="lecture.userProfileImage"
+                alt="Teacher profile picture"
+                class="watingProfileImage"
+              />
+              <span class="watingProfileName">{{ lecture.name }}</span>
+            </div>
+            <div>수업요청이 거절되었습니다.</div>
+
+            <button @click="runDeleteContact(lecture.contactId)">
+              삭제하기
+            </button>
+          </div>
         </div>
       </div>
     </div>

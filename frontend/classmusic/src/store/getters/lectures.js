@@ -5,4 +5,7 @@ export default {
   getRefusedLectureList(state) {
     return state.lectures.refusedLectureList;
   },
+  getReview(state) {
+    return state.lectures.review;
+  },
 };

@@ -16,24 +16,30 @@
       >
       <p class="teacher-description">{{ teacher.introduce }}</p>
       <div class="btn">
-        <button @click="goToProfile(teacher.teacherId)">자세히 보기</button>
-        <button @click="goToLecture">강의 신청</button>
+        <button @click="goToProfile">자세히 보기</button>
+        <button @click="registerLecture(teacher.teacherId)">강의 신청</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: {
     teacher: Object,
   },
+  computed: {
+    ...mapGetters({ loginUserId: "getUserId" }),
+  },
+
   methods: {
-    goToProfile(teacherId) {
-      this.$router.push(`/profile/teacherprofile/${teacherId}`);
-    },
-    goToLecture() {
-      this.$router.push("/lecture/studentwaiting");
+    ...mapActions(["postMachingCreate"]),
+    registerLecture(teacherId) {
+      this.postMachingCreate({
+        teacherId: teacherId,
+        studentId: this.loginUserId,
+      });
     },
   },
 };
