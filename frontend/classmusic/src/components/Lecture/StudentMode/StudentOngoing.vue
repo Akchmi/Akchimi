@@ -32,8 +32,12 @@
           class="ongoing__container__button"
           v-if="nowUpdateMemoId != lecture.contactId"
         >
-          <button>채팅입장</button>
-          <button>강의실입장</button>
+          <button @click="$router.push(`/chats/${lecture.contactId}`)">
+            채팅입장
+          </button>
+          <button @click="$router.push(`/livemeeting/${lecture.contactId}`)">
+            강의실입장
+          </button>
           <button
             v-if="!lecture.memo"
             @click="runUpdateMemo(lecture.contactId, lecture.memo)"

@@ -2,13 +2,13 @@
   <div id="main-container" class="container">
     <div id="join" v-if="!session">
       <div id="img-div">
-        <img src="resources/images/openvidu_grey_bg_transp_cropped.png" />
+        <img src="@/assets/images/quokkaband.png" width="500" />
       </div>
       <div id="join-dialog" class="jumbotron vertical-center">
-        <h1>Join a video session</h1>
+        <h1>강의실 입장</h1>
         <div class="form-group">
           <p>
-            <label>Participant</label>
+            <label>내이름</label>
             <input
               v-model="myUserName"
               class="form-control"
@@ -17,7 +17,7 @@
             />
           </p>
           <p>
-            <label>Session</label>
+            <label>상 대</label>
             <input
               v-model="mySessionId"
               class="form-control"
@@ -27,7 +27,7 @@
           </p>
           <p class="text-center">
             <button class="btn btn-lg btn-success" @click="joinSession()">
-              Join!
+              입장
             </button>
           </p>
         </div>
@@ -176,7 +176,6 @@ export default {
       this.session.on("signal", (event) => {
         const receivedMessage = event.data;
         console.log(event.from);
-        console.log(event.from);
         if (receivedMessage != this.myUserName + ":" + this.newMessage) {
           this.receivedMessages.push({
             message: receivedMessage,
@@ -266,7 +265,7 @@ export default {
       if (this.mainStreamManager === stream) return;
       this.mainStreamManager = stream;
     },
-  
+
     async getToken(mySessionId) {
       const sessionId = await this.createSession(mySessionId);
       return await this.createToken(sessionId);
