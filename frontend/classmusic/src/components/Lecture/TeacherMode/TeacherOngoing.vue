@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="button-group">
-          <button @click="$router.push(`/chats/${lecture.contactId}`)">
+          <button @click="$router.push(`/chats/${lecture.contactId}?type=1`)">
             채팅입장
           </button>
           <button @click="$router.push(`/livemeeting/${lecture.contactId}`)">
