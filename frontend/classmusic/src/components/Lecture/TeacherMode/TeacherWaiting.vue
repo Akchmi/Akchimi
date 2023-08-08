@@ -26,7 +26,9 @@
 
     <div class="out__container">
       <div class="container">
-        {{ lectureList }}
+        <div v-if="lectureList.length == 0">
+          <h2>아직 등록된 신청이 없습니다.</h2>
+        </div>
 
         <div>
           <div

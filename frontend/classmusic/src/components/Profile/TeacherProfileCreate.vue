@@ -34,10 +34,13 @@
                 </select>
                 <br />
                 선택된 악기:
-               <div v-for="(instrument, index) in selectedInstruments" :key="index">
-                {{ instrument }}
-                <button @click="removeSelectedInstrument(index)">제거</button>
-              </div>
+                <div
+                  v-for="(instrument, index) in selectedInstruments"
+                  :key="index"
+                >
+                  {{ instrument }}
+                  <button @click="removeSelectedInstrument(index)">제거</button>
+                </div>
                 <!-- <div
                   v-for="(instrument, index) in selectedInstruments"
                   :key="index"
@@ -103,7 +106,7 @@
           <textarea
             class="description-input"
             v-model="description"
-            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요.\n 휴대전화 번호 공개를 권장하지 않습니다."
+            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요. 휴대전화 번호 공개를 권장하지 않습니다."
           ></textarea>
         </div>
       </div>
@@ -116,7 +119,6 @@
       <div class="save-button">
         <!-- <button @click="submitForm">저장</button> -->
         <button @click="submitForm">강사 등록하기</button>
-
       </div>
     </div>
   </div>
@@ -168,9 +170,6 @@ export default {
         const data = await apiGetUserInfo(this.id);
         if (data) {
           this.userInfo = data;
-          console.log(1, data);
-          console.log(this.userInfo);
-          console.log(2);
         }
       } catch (error) {
         console.log(error);
@@ -180,24 +179,19 @@ export default {
     ...mapActions(["postTeacherProfileCreate", "updateUserType"]),
 
     submitForm() {
+      console.log("유저아이디는", this.userInfo);
       const data = {
-        userId: this.userInfo.userid,
+        userId: this.userInfo.userId,
         career: this.career,
         cost: this.cost,
         introduce: this.description,
         startTime: this.startTime,
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
-        instruments: [...this.selectedInstruments],        
+        instruments: [...this.selectedInstruments],
       };
 
-      this.postTeacherProfileCreate(data)      
-        .then(response => {          
-          const teacherId = response.data.teacherId
-          this.updateUserType(1)
-          this.$router.push(`/profile/teacherprofile/${teacherId}`);      
-        });
-
+      this.postTeacherProfileCreate(data);
     },
     convertDaysToBitMask() {
       let index = 0,

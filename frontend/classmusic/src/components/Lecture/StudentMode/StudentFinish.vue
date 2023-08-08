@@ -24,9 +24,11 @@
       </button>
     </div>
     <div>
-      {{ lectureList }}
       <div class="out__container">
         <div class="container">
+          <div v-if="lectureList.length == 0">
+            <h2>수강 완료한 강의가 없습니다.</h2>
+          </div>
           <div
             class="ongoing__container"
             v-for="lecture in lectureList"
