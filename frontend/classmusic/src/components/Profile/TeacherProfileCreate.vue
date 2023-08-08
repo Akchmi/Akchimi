@@ -34,13 +34,10 @@
                 </select>
                 <br />
                 선택된 악기:
-                <div
-                  v-for="(instrument, index) in selectedInstruments"
-                  :key="index"
-                >
-                  {{ instrument }}
-                  <button @click="removeSelectedInstrument(index)">제거</button>
-                </div>
+               <div v-for="(instrument, index) in selectedInstruments" :key="index">
+                {{ instrument }}
+                <button @click="removeSelectedInstrument(index)">제거</button>
+              </div>
                 <!-- <div
                   v-for="(instrument, index) in selectedInstruments"
                   :key="index"
@@ -187,7 +184,7 @@ export default {
         startTime: this.startTime,
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
-        instruments: [...this.selectedInstruments],
+        instruments: [...this.selectedInstruments],        
       };
 
       const teacherId = await this.postTeacherProfileCreate(data);
