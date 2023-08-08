@@ -62,14 +62,14 @@ function apiLikeTeacherUpdate(context, data) {
     .post(`/users/${id}/like`, data)
     .then(({ data }) => {
       console.log(11, data);
-      return data
+      return data;
     })
     .catch((error) => {
-      if ((error.response.data.message) == "이미 존재하는 즐겨찾기입니다."){
+      if (error.response.data.message == "이미 존재하는 즐겨찾기입니다.") {
         alert(error.response.data.message);
-        return 
+        return;
       }
-     console.log(error)
+      console.log(error);
     });
 }
 
@@ -93,16 +93,16 @@ async function apiDetailTeacherInfo(teacherId) {
   }
 }
 
-function apiTeacherProfileCreate(context, data) {
-  console.log(data);
-  axios
-    .post(`/teachers/`, data)
-    .then(({ data }) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error("POST 요청 에러 : ", error);
-    });
+async function apiTeacherProfileCreate(context, data) {
+  console.log("apiTeacherProfileCreate data : ", data);
+  try {
+    const response = await axios.post(`/teachers`, data);
+    console.log("post /teachers 결과 : ", response);
+    return response.data;
+  } catch (error) {
+    console.log("apiTeacherProfileCreate 중 에러 발생!!!", error);
+    return null;
+  }
 }
 
 function apiTeacherProfileUpdate(context, data) {
@@ -129,7 +129,7 @@ function apiTeacherProfileUpdate(context, data) {
 // }
 
 async function apiGetReview(teacherId) {
-  console.log("리뷰api", teacherId)
+  console.log("리뷰api", teacherId);
   try {
     const response = await axios.get(`/reviews?teacherId=${teacherId}`);
     return response.data;
@@ -138,7 +138,6 @@ async function apiGetReview(teacherId) {
     return error;
   }
 }
-
 
 export {
   apiGetReview,

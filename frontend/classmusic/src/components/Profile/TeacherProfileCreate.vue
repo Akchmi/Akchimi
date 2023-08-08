@@ -34,10 +34,13 @@
                 </select>
                 <br />
                 선택된 악기:
-               <div v-for="(instrument, index) in selectedInstruments" :key="index">
-                {{ instrument }}
-                <button @click="removeSelectedInstrument(index)">제거</button>
-              </div>
+                <div
+                  v-for="(instrument, index) in selectedInstruments"
+                  :key="index"
+                >
+                  {{ instrument }}
+                  <button @click="removeSelectedInstrument(index)">제거</button>
+                </div>
                 <!-- <div
                   v-for="(instrument, index) in selectedInstruments"
                   :key="index"
@@ -116,7 +119,6 @@
       <div class="save-button">
         <!-- <button @click="submitForm">저장</button> -->
         <button @click="submitForm">강사 등록하기</button>
-
       </div>
     </div>
   </div>
@@ -179,7 +181,7 @@ export default {
 
     ...mapActions(["postTeacherProfileCreate", "updateUserType"]),
 
-    submitForm() {
+    async submitForm() {
       const data = {
         userId: this.userInfo.userid,
         career: this.career,
@@ -188,16 +190,16 @@ export default {
         startTime: this.startTime,
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
-        instruments: [...this.selectedInstruments],        
+        instruments: [...this.selectedInstruments],
       };
 
-      this.postTeacherProfileCreate(data)      
-        .then(response => {          
-          const teacherId = response.data.teacherId
-          this.updateUserType(1)
-          this.$router.push(`/profile/teacherprofile/${teacherId}`);      
-        });
-
+      const teacherId = await this.postTeacherProfileCreate(data);
+      if (teacherId != null) {
+        this.updateUserType(1);
+        this.$router.push(`/profile/teacherprofile/${teacherId}`);
+      } else {
+        alert("강사 등록 중 문제 발생!");
+      }
     },
     convertDaysToBitMask() {
       let index = 0,
