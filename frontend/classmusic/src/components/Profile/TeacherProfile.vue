@@ -23,7 +23,7 @@
               <p class="info-box">경력 : {{ career }}년</p>
               <p class="info-box">가격 : {{ cost }}원</p>
               <p class="info-box">시간 : {{ classDay !== undefined ? parseDays(classDay) : '' }}, {{ startTime }} - {{ endTime }}</p>
-
+             
             </div>
           </div>
         </div>
@@ -38,8 +38,8 @@
           <h3>파일 첨부</h3>
           <div>
             <img 
-              v-for="(file, index) in attachedFiles" 
-              :src="file" 
+              v-for="(image, index) in attachedFiles" 
+              :src="image" 
               :key="index" 
               alt="Attached file" 
               class="attach-image" />
@@ -122,7 +122,7 @@ export default {
     this.endTime = res.endTime;
     this.classDay = res.classDay;
     this.instrument = res.instruments;
-    this.attachedFiles = res.attachedFiles;
+    this.attachedFiles = res.images;
     this.avgRating = res.avgRating
     this.contactCnt = res.contactCnt
   },
@@ -147,8 +147,9 @@ export default {
         try {
           let response = await axios.post(`/teachers/${this.teacherId}/images`, formData);
 
-          if (response.data && response.data.filePath) {
-            this.attachedFiles.push(response.data.filePath);
+          if (response.data && response.data.image) {
+            this.attachedFiles.push(response.data.image);
+            console.log(222)
           }
         } catch(error) {
           console.log(error);

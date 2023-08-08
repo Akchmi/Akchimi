@@ -16,7 +16,7 @@
       >
       <p class="teacher-description">{{ teacher.introduce }}</p>
       <div class="btn">
-        <button @click="goToProfile">자세히 보기</button>
+        <button @click="goToProfile(teacher.teacherId)">자세히 보기</button>
         <button @click="registerLecture(teacher.teacherId)">강의 신청</button>
       </div>
     </div>
@@ -41,6 +41,9 @@ export default {
         studentId: this.loginUserId,
         mode: "registerLecture",
       });
+    },
+    goToProfile(teacherId) {
+      this.$router.push(`/profile/teacherprofile/${teacherId}`);
     },
   },
 };
