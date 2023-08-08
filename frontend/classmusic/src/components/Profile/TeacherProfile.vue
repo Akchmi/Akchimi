@@ -119,7 +119,7 @@ export default {
       contactCnt : 0,
       // userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
       id : JSON.parse(localStorage.getItem("vuex")).common.id,
-      teacherId : 0,
+      teacherId : '',
       localteacherId: JSON.parse(localStorage.getItem("vuex")).common.teacherId,
     };
   },
