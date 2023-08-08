@@ -1,90 +1,25 @@
 <template>
   <div>
     <NavBar></NavBar>
+    <ChatRoom />
   </div>
-  <router-view></router-view>
 </template>
 
 <script>
 import NavBar from "@/components/Nav/NavBar.vue";
-import Stomp from "webstomp-client";
-import SockJS from "sockjs-client";
-import { apiGetChatLog } from "@/api/chats.js";
-import { useRoute } from "vue-router";
+import ChatRoom from "@/components/Chat/ChatRoom";
 
 export default {
   data() {
-    return {
-      roomId: 0,
-      userName: JSON.parse(localStorage.getItem("vuex")).common.id,
-      message: "",
-      recvList: [],
-    };
+    return {};
   },
   created() {
     // App.vue가 생성되면 소켓 연결을 시도합니다.
-    this.connect();
-    this.getChatLog();
-    const route = useRoute();
-    this.roomId = route.params.id;
   },
-  methods: {
-    async getChatLog() {
-      try {
-        const data = await apiGetChatLog(this.id);
-        if (data) {
-          this.allChatList = data;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    sendMessage(e) {
-      if (e.keyCode === 13 && this.userName !== "" && this.message !== "") {
-        this.send();
-        this.message = "";
-      }
-    },
-    send() {
-      console.log("Send message:" + this.message);
-      if (this.stompClient && this.stompClient.connected) {
-        const msg = {
-          senderId: this.userName,
-          roomId: this.roomId,
-          message: this.message,
-        };
-        this.stompClient.send("/receive", JSON.stringify(msg), {});
-      }
-    },
-    connect() {
-      const serverURL = "http://localhost:8080/websocket";
-      let socket = new SockJS(serverURL);
-      this.stompClient = Stomp.over(socket);
-      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
-      this.stompClient.connect(
-        {},
-        (frame) => {
-          // 소켓 연결 성공
-          this.connected = true;
-          console.log("소켓 연결 성공", frame);
-          // 서버의 메시지 전송 endpoint를 구독합니다.
-
-          this.stompClient.subscribe("/send", (res) => {
-            console.log("구독으로 받은 메시지 입니다.", res.body);
-
-            this.recvList.push(JSON.parse(res.body));
-          });
-        },
-        (error) => {
-          // 소켓 연결 실패
-          console.log("소켓 연결 실패", error);
-          this.connected = false;
-        }
-      );
-    },
-  },
+  methods: {},
   components: {
     NavBar,
+    ChatRoom,
   },
 };
 </script>
