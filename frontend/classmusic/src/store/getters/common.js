@@ -12,6 +12,9 @@ export default {
     return state.common.userType;
   },
   getUserName(state) {
-    return state.common.userName
-  }
+    return state.common.userName;
+  },
+  getTeacherId(state) {
+    return state.common.teacherId;
+  },
 };

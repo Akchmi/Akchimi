@@ -14,4 +14,5 @@ export default {
   postLikeTeacherUpdate(context, data) {
     apiLikeTeacherUpdate(context, data)
   }
+  
 };

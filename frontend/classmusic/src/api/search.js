@@ -1,4 +1,5 @@
 import axios from "@/api/axios";
+import router from "@/router/index";
 
 async function apiSearchTeachers(params, success, fail) {
   console.log("apiSearchTeachers params : ", params);
@@ -10,4 +11,16 @@ async function apiSearchTeachers(params, success, fail) {
   }
 }
 
-export { apiSearchTeachers };
+function apiPostMatchingCreate(context, data) {
+  console.log(data);
+  axios
+    .post("/contacts", data)
+    .then(() => {
+      router.push("/lecture/studentwaiting");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+export { apiSearchTeachers, apiPostMatchingCreate };

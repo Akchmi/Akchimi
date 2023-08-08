@@ -1,4 +1,4 @@
-import { apiSearchTeachers } from "@/api/search";
+import { apiSearchTeachers, apiPostMatchingCreate } from "@/api/search";
 
 export default {
   // 필요 기능
@@ -85,5 +85,9 @@ export default {
     console.log("ACTIONS : 검색 키워드 수정", keyword);
 
     commit("SET_SEARCHPARAMS_KEYWORD", keyword);
+  },
+
+  postMachingCreate(context, data) {
+    apiPostMatchingCreate(context, data);
   },
 };

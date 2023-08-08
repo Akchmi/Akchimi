@@ -1,20 +1,58 @@
 <template>
-  <div class="teacher-waiting-container">
-    <div class="teacher-waiting">
-      <div class="list-box">
-        <div class="info">
-          <img
-            :src="image"
-            alt="Teacher profile picture"
-            class="teacher-image"
-          />
-          <span class="teacher-name">{{ name }}</span>
-        </div>
-        <div class="button-group">
-          <button>강사 정보보기</button>
-          <button @click="$router.push(`/chats/${lecture.contactId}?type=1`)">
-            채팅보기
-          </button>
+  <div>
+    <div>
+      <h2>강의실</h2>
+      <br />
+      <button @click="$router.push(`/lecture/studentongoing`)">수업</button>
+      |
+      <button @click="$router.push(`/lecture/teacherongoing`)">강의</button>
+      <hr />
+      <br />
+      <br />
+    </div>
+
+    <div>
+      <button @click="$router.push(`/lecture/teacherongoing`)">진행 중</button>
+      |
+      <button
+        class="buttonWaiting"
+        @click="$router.push(`/lecture/teacherwaiting`)"
+      >
+        대기 중
+      </button>
+      |
+      <button @click="$router.push(`/lecture/teacherfinish`)">완료</button>
+    </div>
+
+    <div class="out__container">
+      <div class="container">
+        {{ lectureList }}
+
+        <div>
+          <div
+            class="wating__listbox"
+            v-for="lecture in lectureList"
+            :key="lecture.id"
+          >
+            <div class="wating__info">
+              <img
+                :src="lecture.userProfileImage"
+                alt="Teacher profile picture"
+                class="watingProfileImage"
+              />
+              <span class="watingProfileName">{{ lecture.name }}</span>
+            </div>
+
+            <div>
+              <button @click="acceptLecture(lecture.contactId)">
+                수락하기
+              </button>
+              <button @click="refuseLecture(lecture.contactId)">
+                거절하기
+              </button>
+              <button>채팅하기</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -22,60 +60,58 @@
 </template>
 
 <script>
+import { useStore, mapGetters, mapActions } from "vuex";
+import { onMounted } from "vue";
+
 export default {
-  props: {
-    image: { type: String, default: "https://via.placeholder.com/280" },
-    name: { type: String, default: "박한샘" },
+  data() {
+    return {
+      lectures: [],
+    };
+  },
+  computed: {
+    ...mapGetters({ lectureList: "getlectureList" }),
+  },
+  methods: {
+    ...mapActions(["deleteContact"]),
+    runDeleteContact(contactId) {
+      this.deleteContact(contactId);
+    },
+
+    ...mapActions(["changeLectureState"]),
+    acceptLecture(contactId) {
+      this.changeLectureState({
+        contactId: contactId,
+        state: 1,
+        mode: "acceptLecture",
+      });
+    },
+
+    refuseLecture(contactId) {
+      this.changeLectureState({
+        contactId: contactId,
+        state: 3,
+        mode: "refuseLecture",
+      });
+    },
+  },
+
+  setup() {
+    const store = useStore();
+
+    const teacherId = store.getters.getTeacherId;
+
+    onMounted(() => {
+      store.dispatch("getLectureList", {
+        id: teacherId,
+        state: 0,
+        type: 1,
+      });
+    });
   },
 };
 </script>
 
-<style scoped>
-.teacher-waiting-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.teacher-waiting {
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 800px;
-  height: 500px;
-  border: 1px solid black;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  overflow: hidden;
-  padding: 20px;
-}
-
-.list-box {
-  flex-direction: row;
-  width: 750px;
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid black;
-  overflow: hidden;
-  padding: 10px;
-}
-
-.info {
-  display: flex;
-  align-items: center;
-}
-
-.teacher-image {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-
-.teacher-name {
-  margin-left: 10px;
-}
+<style lang="scss" scoped>
+@import "@/assets/scss/lecture.scss";
 </style>
