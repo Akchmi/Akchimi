@@ -82,7 +82,7 @@
       </div>
       <TeacherReview
         v-for="review in reviews"
-        :key="review.reviewId"
+        :key="review.review"
         :review="review"
         image="https://via.placeholder.com/280"
       />
@@ -114,12 +114,12 @@ export default {
       classDay: "",
       instrument: "",
       attachedFiles: [],
-      reveiws: [],
-      avgRating: 0,
-      contactCnt: 0,
+      reveiws : [],
+      avgRating : 0,
+      contactCnt : 0,
       // userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
-      id: JSON.parse(localStorage.getItem("vuex")).common.id,
-      teacherId: 0,
+      id : JSON.parse(localStorage.getItem("vuex")).common.id,
+      teacherId : '',
       localteacherId: JSON.parse(localStorage.getItem("vuex")).common.teacherId,
     };
   },
@@ -203,14 +203,15 @@ export default {
         });
     },
     async getReview() {
+      
       try {
-        const route = useRoute();
-        const teacherId = route.params.id;
-        const reviewData = await apiGetReview(teacherId);
-
+        // const route = useRoute();
+        // const teacherId = route.params.id;
+        const reviewData = await apiGetReview(this.teacherId);
+        
         if (reviewData) {
-          this.reviews = reviewData;
-          console.log("리뷰", this.review);
+          this.reviews = reviewData
+          console.log('리뷰', this.review)
         }
       } catch (error) {
         console.log("리뷰에러", error);
