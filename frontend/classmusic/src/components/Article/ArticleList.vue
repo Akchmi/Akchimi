@@ -17,31 +17,36 @@
       </div>
       <div>
         <!-- 자유게시판 게시물 리스트 -->
-        <table>
-          <thead>
-            <tr>
-              <th>글 번호</th>
-              <th>제목</th>
-              <th>작성자</th>
-              <th>작성일자</th>
-              <th>조회수</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="article in articleList" :key="article.id">
-              <td>{{ article.articleId }}</td>
-              <td @click="$router.push(`/article/${article.articleId}`)">
-                {{ article.title }}
-              </td>
-              <td>{{ article.name }}</td>
-              <td>
-                {{ toLocalTimeStamp(article.createdAt) }}
-              </td>
-              <td>{{ article.hit }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <hr />
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>글 번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일자</th>
+                <th>조회수</th>
+              </tr>
+            </thead>
+            <div v-if="articleList.length == 0">
+              <h2>검색된 게시글이 없습니다.</h2>
+            </div>
+            <tbody>
+              <tr v-for="article in articleList" :key="article.id">
+                <td>{{ article.articleId }}</td>
+                <td @click="$router.push(`/article/${article.articleId}`)">
+                  {{ article.title }}
+                </td>
+                <td>{{ article.name }}</td>
+                <td>
+                  {{ toLocalTimeStamp(article.createdAt) }}
+                </td>
+                <td>{{ article.hit }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr />
+        </div>
       </div>
 
       <div>

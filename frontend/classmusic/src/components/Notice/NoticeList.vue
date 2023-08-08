@@ -19,14 +19,17 @@
               <th>작성일자</th>
             </tr>
           </thead>
-          <tbody>
+          <div v-if="noticeList.length == 0">
+            <h3>검색된 게시글이 없습니다.</h3>
+          </div>
+          <tbody v-else>
             <tr v-for="notice in noticeList" :key="notice.id">
               <td>{{ notice.noticeId }}</td>
               <td @click="$router.push(`/notice/${notice.noticeId}`)">
                 {{ notice.title }}
               </td>
               <td>관리자</td>
-              <td>{{ notice.createAt }}</td>
+              <td>{{ toLocalTimeStamp(notice.createAt) }}</td>
             </tr>
           </tbody>
         </table>
@@ -69,6 +72,7 @@
 <script>
 import { onMounted } from "vue";
 import { useStore, mapGetters, mapActions } from "vuex";
+import utils from "@/common/utils";
 // import axios from "@/common/axios";
 
 export default {
@@ -128,6 +132,9 @@ export default {
     },
     goNoticeCreate() {
       this.$router.push("/notice/create");
+    },
+    toLocalTimeStamp(unixTimeStamp) {
+      return utils.unixTimeStampToLocalTimeStamp(unixTimeStamp);
     },
   },
   setup() {

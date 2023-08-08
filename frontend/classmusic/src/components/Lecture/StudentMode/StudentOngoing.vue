@@ -25,6 +25,9 @@
     </div>
     <div class="out__container">
       <div class="container">
+        <div v-if="lectureList.length == 0">
+          <h2>수강중인 강의가 없습니다.</h2>
+        </div>
         <div
           class="ongoing__container"
           v-for="lecture in lectureList"
@@ -99,7 +102,6 @@
           </div>
         </div>
       </div>
-      {{ lectureList }}
     </div>
   </div>
 </template>

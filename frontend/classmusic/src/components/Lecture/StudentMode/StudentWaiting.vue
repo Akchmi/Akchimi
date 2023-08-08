@@ -26,9 +26,10 @@
 
     <div class="out__container">
       <div class="container">
-        {{ lectureList }}
-        {{ refusedLectureList }}
         <div>
+          <div v-if="lectureList.length == 0">
+            <h2>신청한 강의가 없습니다.</h2>
+          </div>
           <div
             class="wating__listbox"
             v-for="lecture in lectureList"

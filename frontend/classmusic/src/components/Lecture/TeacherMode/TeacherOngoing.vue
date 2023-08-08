@@ -14,7 +14,9 @@
     <div v-if="!loggedTeacherId" class="container">
       <div>아직 강사 등록을 하지 않으셨군요?</div>
       <br />
-      <button>강사등록하러가기</button>
+      <router-link to="/profile/teacherprofilecreate"
+        >강사 등록하러 가기</router-link
+      >
     </div>
     <div v-else>
       <div>

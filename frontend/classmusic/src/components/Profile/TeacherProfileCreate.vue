@@ -106,7 +106,7 @@
           <textarea
             class="description-input"
             v-model="description"
-            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요.\n 휴대전화 번호 공개를 권장하지 않습니다."
+            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요. 휴대전화 번호 공개를 권장하지 않습니다."
           ></textarea>
         </div>
       </div>
@@ -170,9 +170,6 @@ export default {
         const data = await apiGetUserInfo(this.id);
         if (data) {
           this.userInfo = data;
-          console.log(1, data);
-          console.log(this.userInfo);
-          console.log(2);
         }
       } catch (error) {
         console.log(error);
@@ -183,7 +180,7 @@ export default {
 
     async submitForm() {
       const data = {
-        userId: this.userInfo.userid,
+        userId: this.userInfo.userId,
         career: this.career,
         cost: this.cost,
         introduce: this.description,
