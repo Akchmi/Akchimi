@@ -23,7 +23,6 @@
               <p class="info-box">경력 : {{ career }}년</p>
               <p class="info-box">가격 : {{ cost }}원</p>
               <p class="info-box">시간 : {{ classDay !== undefined ? parseDays(classDay) : '' }}, {{ startTime }} - {{ endTime }}</p>
-             
             </div>
           </div>
         </div>
@@ -45,7 +44,7 @@
               class="attach-image" />
           </div>
           <input type="file"  multiple ref="fileUploadInput" @change="handleFileUpload" style="display: none"/>
-          <button @click="triggerFileInput">첨부 파일 추가</button>
+          <button @click="triggerFileUpload">첨부 파일 추가</button>
         </div>
         <div class="button-group">
           <button v-if="Number(localteacherId) === Number(teacherId)">
@@ -59,7 +58,7 @@
           </div>
         </div>
       </div>
-    <!-- <div class="review-header">
+    <div class="review-header">
       <h3 class="review-title">강사 리뷰</h3>
       <p class="avg-rating">평균 별점: {{ avgRating }}</p>
     </div>
@@ -68,13 +67,13 @@
         :key="review.reviewId"
         :review="review"
         image="https://via.placeholder.com/280"
-      /> -->
+      />
     </div>
   </div>
 </template>
 
 <script>
-// import TeacherReview from './TeacherReview.vue'
+import TeacherReview from './TeacherReview.vue'
 import { apiDetailTeacherInfo, apiGetReview } from "@/api/profiles.js";  
 import { mapActions, } from "vuex";
 import { useRoute} from "vue-router"
@@ -82,7 +81,7 @@ import axios from "@/api/imageAxios.js";
 
 export default {
   components: {
-    // TeacherReview
+    TeacherReview
   },
   data() {
     return {
@@ -123,8 +122,9 @@ export default {
     this.classDay = res.classDay;
     this.instrument = res.instruments;
     this.attachedFiles = res.images;
-    this.avgRating = res.avgRating
-    this.contactCnt = res.contactCnt
+    this.avgRating = res.avgRating;
+    this.contactCnt = res.contactCnt;
+    this.getReview();
   },
   computed: {
     genderText() {   
@@ -135,13 +135,12 @@ export default {
     ...mapActions(["postLikeTeacherUpdate"]),
     triggerFileUpload() {
       this.$refs.fileUploadInput.click();
-      console.log(111)
     },
     async handleFileUpload() {
       const selectedFiles = this.$refs.fileUploadInput.files;
       
+      let formData = new FormData();
       for (let i = 0; i < selectedFiles.length; i++) {
-        let formData = new FormData();
         formData.append('image', selectedFiles[i]);
 
         try {
