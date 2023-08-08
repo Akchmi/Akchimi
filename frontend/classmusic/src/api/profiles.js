@@ -129,8 +129,9 @@ function apiTeacherProfileUpdate(context, data) {
 // }
 
 async function apiGetReview(teacherId) {
+  console.log("리뷰api", teacherId)
   try {
-    const response = await axios.get(`/reveiws?teacher=${teacherId}`);
+    const response = await axios.get(`/reviews?teacherId=${teacherId}`);
     return response.data;
   } catch (error) {
     console.log(error);
