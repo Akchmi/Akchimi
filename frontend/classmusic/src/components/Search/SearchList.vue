@@ -2,6 +2,9 @@
   <div class="search-list">
     <!-- 강사 카드 컴포넌트 -->
     <div class="teacher-list">
+      <div v-if="teachers.length == 0">
+        <h2>등록된 강사가 없습니다.</h2>
+      </div>
       <TeacherCard
         v-for="teacher in teachers"
         :key="teacher.teacherId"
@@ -9,7 +12,9 @@
         image="https://via.placeholder.com/280"
       />
     </div>
-    <button @click="searchMoreTeacher">더 보기</button>
+    <button v-if="teachers.length > 20" @click="searchMoreTeacher">
+      더 보기
+    </button>
   </div>
 </template>
 

@@ -1,6 +1,10 @@
 <template>
   <div class="teacher-listcard">
-    <img :src="image" alt="Teacher profile picture" class="teacher-image" />
+    <img
+      :src="teacher.userProfileImage"
+      alt="Teacher profile picture"
+      class="teacher-image"
+    />
     <div class="teacher-info">
       <h2 class="teacher-name">{{ teacher.name }}</h2>
       <span
