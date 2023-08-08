@@ -75,7 +75,7 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
             return article.title.contains(keyWord);
         }else if(searchType.equals("내용")){
             return article.content.contains(keyWord);
-        }else if(searchType.equals("이름")){
+        }else if(searchType.equals("작성자")){
             return  article.user.name.contains(keyWord);
         }
         return null;
