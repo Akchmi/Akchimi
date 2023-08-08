@@ -3,6 +3,11 @@ import {
   apiTeacherProfileUpdate,
   apiLikeTeacherUpdate,
 } from "@/api/profiles.js";
+import {
+  apiTeacherProfileCreate,
+  apiTeacherProfileUpdate,
+  apiLikeTeacherUpdate,
+} from "@/api/profiles.js";
 
 export default {
   async postTeacherProfileCreate(context, data) {
@@ -15,7 +20,7 @@ export default {
 
   putTeacherProfileUpdate(context, data) {
     console.log("액션", context, data);
-    apiTeacherProfileUpdate(context, data);
+    apiTeacherProfileUpdate(context, data); 
   },
 
   postLikeTeacherUpdate(context, data) {

@@ -98,6 +98,7 @@ async function apiTeacherProfileCreate(context, data) {
   try {
     const response = await axios.post(`/teachers`, data);
     console.log("post /teachers 결과 : ", response);
+    context.commit('SAVE_TEACHERID', response.data)
     return response.data;
   } catch (error) {
     console.log("apiTeacherProfileCreate 중 에러 발생!!!", error);
