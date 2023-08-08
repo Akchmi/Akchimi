@@ -61,20 +61,18 @@
           class="ongoing__container__button"
           v-if="nowUpdateMemoId != lecture.contactId"
         >
-          <button @click="$router.push(`/chats/${lecture.contactId}?type=0`)">
-            채팅입장
-          </button>
-          <button
-            @click="$router.push(`/livemeeting/${lecture.contactId}?type=0`)"
-          >
-            강의실입장
-          </button>
-          <button
+          <div
             v-if="!lecture.memo"
             @click="runUpdateMemo(lecture.contactId, lecture.memo)"
           >
-            <button>채팅입장</button>
-            <button>강의실입장</button>
+            <button @click="$router.push(`/chats/${lecture.contactId}?type=0`)">
+              채팅입장
+            </button>
+            <button
+              @click="$router.push(`/livemeeting/${lecture.contactId}?type=0`)"
+            >
+              강의실입장
+            </button>
             <button
               v-if="!lecture.memo"
               @click="runUpdateMemo(lecture.contactId, lecture.memo)"
