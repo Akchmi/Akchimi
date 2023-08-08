@@ -46,7 +46,11 @@
 
             <div>
               <button>강사 정보보기</button>
-              <button>채팅하기</button>
+              <button
+                @click="$router.push(`/chats/${lecture.contactId}?type=0`)"
+              >
+                채팅하기
+              </button>
             </div>
           </div>
           <div

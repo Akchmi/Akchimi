@@ -52,7 +52,11 @@
               <button @click="refuseLecture(lecture.contactId)">
                 거절하기
               </button>
-              <button>채팅하기</button>
+              <button
+                @click="$router.push(`/chats/${lecture.contactId}?type=1`)"
+              >
+                채팅하기
+              </button>
             </div>
           </div>
         </div>

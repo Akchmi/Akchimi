@@ -3,13 +3,12 @@
  
 
     <div class="review-box">
-      <img :src="teacherImage" alt="Teacher profile picture" class="teacher-image" />
+      <img :src= "review.userProfileImage" alt="user profile picture" class="teacher-image" />
       <div class="review-content">
         <div class="student-info">
           <span>학생 이름: {{ review.name }}</span>
-          <span>별점: {{ review.rating }}</span>
-          <span>매칭수 : {{ review.contactCnt }}</span>
-          <span class="course-duration">수강 기간: {{ review.startTime }} ~ {{ review.endTime }}</span>
+          <span>별점: {{ review.rating }}</span>          
+          <span class="course-duration">수강 기간: {{ toLocalTimeStamp(review.startTime) }} ~ {{ toLocalTimeStamp(review.endTime) }}</span>
         </div>
         <div class="review-text">
           <p>{{ review.content }}</p>
@@ -20,11 +19,18 @@
 </template>
 
 <script>
+import utils from "@/common/utils";
+
+
 export default {
   props: {
     review: Object,
   },
-
+  methods:  {    
+    toLocalTimeStamp(unixTimeStamp) {
+      return utils.unixTimeStampToLocalTimeStamp(unixTimeStamp);
+    },
+  },
 };
 </script>
 

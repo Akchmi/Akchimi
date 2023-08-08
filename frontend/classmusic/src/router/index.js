@@ -7,7 +7,7 @@ import SearchView from "../views/SearchView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import LoginView from "../views/LoginView.vue";
 import Chatview from "../views/ChatView.vue";
-import LivemeetingView from "../views/LivemeetingView.vue";
+import LiveMeetingView from "../views/LiveMeetingView.vue";
 
 import NoticeList from "../components/Notice/NoticeList.vue";
 import NoticeCreate from "../components/Notice/NoticeCreate.vue";
@@ -35,9 +35,6 @@ import TeacherProfileUpdate from "../components/Profile/TeacherProfileUpdate.vue
 import TeacherProfileCreate from "../components/Profile/TeacherProfileCreate.vue";
 import TeacherProfilePrompt from "../components/Profile/TeacherProfilePrompt.vue";
 import TeacherReview from "../components/Profile/TeacherReview.vue";
-
-import ChatRoomStudent from "../components/Chat/ChatRoomStudent.vue";
-import ChatRoomTeacher from "../components/Chat/ChatRoomTeacher.vue";
 
 const routes = [
   {
@@ -196,26 +193,14 @@ const routes = [
     ],
   },
   {
-    path: "/chat",
+    path: "/chats/:lectureId",
     name: "chat",
     component: Chatview,
-    children: [
-      {
-        path: "/chat/student/:id",
-        name: "studentchat",
-        component: ChatRoomStudent,
-      },
-      {
-        path: "/chat/teacher/:id",
-        name: "teacherchat",
-        component: ChatRoomTeacher,
-      },
-    ],
   },
   {
-    path: "/livemeeting",
+    path: "/livemeeting/:lectureId",
     name: "livemeeting",
-    component: LivemeetingView,
+    component: LiveMeetingView,
   },
 ];
 

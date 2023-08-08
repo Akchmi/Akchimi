@@ -63,28 +63,42 @@
             class="ongoing__container__button"
             v-if="nowUpdateMemoId != lecture.contactId"
           >
-            <button>채팅입장</button>
-            <button>강의실입장</button>
-            <button
-              v-if="!lecture.memo"
-              @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+            <div>
+              <button
+                @click="$router.push(`/chats/${lecture.contactId}?type=0`)"
+              >
+                채팅입장
+              </button>
+              <button
+                @click="
+                  $router.push(`/livemeeting/${lecture.contactId}?type=0`)
+                "
+              >
+                강의실입장
+              </button>
+              <button
+                v-if="!lecture.memo"
+                @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+              >
+                메모하기
+              </button>
+              <button
+                v-if="lecture.memo"
+                @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+              >
+                메모수정
+              </button>
+              <button @click="finishLecture(lecture.contactId)">
+                강의완료
+              </button>
+            </div>
+            <div
+              class="ongoing__container__button"
+              v-if="nowUpdateMemoId == lecture.contactId"
             >
-              메모하기
-            </button>
-            <button
-              v-if="lecture.memo"
-              @click="runUpdateMemo(lecture.contactId, lecture.memo)"
-            >
-              메모수정
-            </button>
-            <button @click="finishLecture(lecture.contactId)">강의완료</button>
-          </div>
-          <div
-            class="ongoing__container__button"
-            v-if="nowUpdateMemoId == lecture.contactId"
-          >
-            <button @click="updateMemo(lecture.contactId)">완료</button>
-            <button @click="cancleUpdateMemo">취소</button>
+              <button @click="updateMemo(lecture.contactId)">완료</button>
+              <button @click="cancleUpdateMemo">취소</button>
+            </div>
           </div>
         </div>
       </div>
@@ -107,12 +121,14 @@ export default {
     ...mapGetters({ lectureList: "getlectureList" }),
   },
   methods: {
+    ...mapActions(["putUpdateMemo"]),
+
     runUpdateMemo(contactId, memo) {
       this.nowUpdateMemo = memo;
       this.nowUpdateMemoId = contactId;
     },
 
-    ...mapActions(["putUpdateMemo"]),
+    moveChat() {},
 
     updateMemo(contactId) {
       this.putUpdateMemo({
