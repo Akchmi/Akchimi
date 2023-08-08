@@ -13,6 +13,7 @@
       </label>
     </div>
     <br />
+    <h3>Select Time</h3>
     <br />
     <Slider @change="onTimeChange" :value="time" :max="24" />
     <br />
