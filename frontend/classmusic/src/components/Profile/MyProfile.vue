@@ -50,10 +50,10 @@
           </div>
 
           <div class="modal-body">
-            <label>현재 비밀번호:</label>
+            <label>현재 비밀번호 : </label>
             <input type="password" v-model="currentPassword" placeholder="Current Password">
             <br>
-            <label>새 비밀번호:</label>
+            <label>새 비밀번호 :   </label>
             <input type="password" v-model="newPassword" placeholder="New Password">
           </div>
 
@@ -80,9 +80,9 @@
 
 <script>
 
-import { apiGetUserInfo, apiLikeTeacher  } from "@/api/profiles.js";
+import { apiGetUserInfo, apiLikeTeacher,  apiChangePw } from "@/api/profiles.js";
 import LikeTeacherCard from "./LikeTeacherCard.vue";
-import { mapGetters, } from "vuex";
+import { mapGetters,} from "vuex";
 import axios from "@/api/imageAxios.js";
 
 
@@ -106,6 +106,27 @@ export default {
     ...mapGetters({ teachers: "getLikeTeacherList"})
   },
   methods: {
+    // ...mapActions(['putChangePw']),
+    async changePassword() {
+      const data = {
+        oldPassword: this.currentPassword,
+        newPassword: this.newPassword,
+        id: this.id,
+      };
+      const response = await apiChangePw(data);
+  
+      if (response.success) {
+        alert("비밀번호가 변경되었습니다.");
+        this.currentPassword = '';
+        this.newPassword = '';
+        this.showChangePasswordModal = false;
+      } else {
+        alert("비밀번호 변경 중 오류가 발생했습니다. 현재 비밀번호를 확인하세요.");
+        this.currentPassword = '';
+        this.newPassword = '';
+      }
+    },      
+
     async handleImageUpload() {
     const selectedFile = this.$refs.fileInput.files[0];
     let formData = new FormData();
@@ -121,9 +142,7 @@ export default {
     } catch (error) {
         console.log(error);
     }
-    },
-
-
+  },
 
     triggerFileInput() {
       this.$refs.fileInput.click();
@@ -149,10 +168,10 @@ export default {
       } catch(error) {        
         console.log('즐찾선생', error)
       }
-    }
-
-
+    },
   },
+
+  
   created() {  
     this.getUserInfo();
     this.likeTeachers();

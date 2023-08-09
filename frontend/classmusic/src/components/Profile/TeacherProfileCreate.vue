@@ -4,11 +4,10 @@
       <div class="top-section">
         <div class="img-container">
           <img
-            :src="image"
+            :src="userInfo.userProfileImage"
             alt="Teacher profile picture"
             class="teacher-image"
-          />
-          <button>이미지 수정</button>
+          />     
         </div>
         <div class="info-container">
           <div class="name-container">
@@ -167,6 +166,8 @@ export default {
       career: 0,
       cost: 0,
       selectedDays: [],
+      userProfileImage: "",
+      attachedFiles: [],
       id: JSON.parse(localStorage.getItem("vuex")).common.id,
     };
   },

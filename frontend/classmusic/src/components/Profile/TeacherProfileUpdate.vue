@@ -4,16 +4,15 @@
       <div class="top-section">
         <div class="img-container">
           <img
-            :src="image"
+            :src="userProfileImage"
             alt="Teacher profile picture"
             class="teacher-image"
-          />
-          <button>이미지 수정</button>
+          />         
         </div>
         <div class="info-container">
           <div class="name-container">
             <h3>강사 이름</h3>
-            <p>1 :{{ name }}</p>
+            <p>{{ name }}</p>
           </div>
           <div class="teacher-profile-update-container">
             <div class="left-field">
@@ -126,9 +125,7 @@
           <button @click="triggerFileUpload">첨부 파일 추가</button>
         </div>
       <div class="save-button">
- 
         <button @click="submitForm">강사 수정하기</button>
-
       </div>
     </div>
   </div>
@@ -166,6 +163,8 @@ export default {
       cost: 0,
       name: "",
       selectedDays: [],
+      attachedFiles: [],
+      userProfileImage:"",
       id: JSON.parse(localStorage.getItem("vuex")).common.id,
       userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
       teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
@@ -263,6 +262,8 @@ export default {
     this.cost = res.cost;
     this.career = res.career;
     this.classDay = res.classDay;
+    this.userProfileImage = res.userProfileImage;
+    this.attachedFiles = res.images;
 
     const classDayBinary = parseInt(res.classDay, 2).toString(2).padStart(7, '0');
     Object.keys(this.days).forEach((day, index) => {
