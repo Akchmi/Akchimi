@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="metronome-container">
     <h3 class="text-center mt-4">Metronome</h3>
     <h1 class="text-center text-info mt-3 mb-3">{{ nowBpm }} BPM</h1>
     <input

@@ -35,41 +35,39 @@
     </div>
 
     <div id="session" v-if="sessionCamera">
-      <div>
-        <MetronomeApp />
-      </div>
-      <div id="session-header">
-        <h1 id="session-title">{{ mySessionId }}</h1>
-        <input
-        class="btn btn-large btn-danger"
-        type="button"
-        id="buttonLeaveSession"
-        @click="leaveSession"
-        value="Leave session"
-        />
+      <div id="session-header" class="top-container">
+        {{ mySessionId }}번 세션
       </div>
 
-      <div class="livemeeting-container">
+      <div class="body-container">
         <div class="aditional-function">
-          <!-- <div id="main-video"> -->
-          <user-video :stream-manager="mainStreamManager" />
-          <!-- </div> -->
+          {{ subscribers }}
+          <div id="live-screens" @click="changeMainScreen">
+            <user-video
+              v-for="sub in subscribers"
+              :key="sub.stream.connection.connectionId"
+              :stream-manager="sub"
+            />
+            <user-video :stream-manager="publisher"/>
+            <div id="shared-video" class="row panel panel-default">
+              <!-- <div class="panel-heading">User Screens</div> -->
+              <div class="panel-body" id="container-screens"></div>
+            </div>
+          </div>
           <MetronomeApp />
-          <TunerApp v-if="popState" @close="changePopState()"/>
-          <p @click="changePopState()">튜너</p>
         </div>
 
         <div id="video-container" class="video-box">
           <user-video
             :stream-manager="publisher"
-            @click="updateMainVideoStreamManager(publisher)"
-          />
-          <user-video
+            />
+            <!-- @click="updateMainVideoStreamManager(publisher)" -->
+          <!-- <user-video
             v-for="sub in subscribers"
             :key="sub.stream.connection.connectionId"
             :stream-manager="sub"
             @click="updateMainVideoStreamManager(sub)"
-          />
+          /> -->
         </div>
 
         <div class="message-box">
@@ -98,20 +96,34 @@
             <button @click="sendMessage">전송</button>
           </div>
         </div>
+
+      </div>
+      <div class="bottom-container">
+        <button class="bottom-button" @click="changePopState()">튜너</button>
+          <TunerApp v-if="popState" @close="changePopState()"/>
         <button
           id="buttonScreenShare"
+          class="bottom-button"
           @click="publishScreenShare"
           v-if="sessionScreen"
         >
-          Start Screen Share
+          화면공유
         </button>
+        <button class="bottom-button">화면 녹화</button>
+        <button
+          class="bottom-close-button"
+          type="button"
+          id="buttonLeaveSession"
+          @click="leaveSession"
+        >강의 떠나기</button>
       </div>
-
-      <div id="main-video" class="col-md-6">
+      <!-- <user-video :stream-manager="mainStreamManager" />
+          <user-video :stream-manager="publisher" /> -->
+      <!-- <div id="main-video" class="col-md-6">
         <user-video :stream-manager="mainStreamManager" />
-      </div>
+      </div> -->
 
-      <div id="main-video" class="col-md-6">
+      <!-- <div id="main-video" class="col-md-6">
         <p></p>
         <video autoplay playsinline="true"></video>
       </div>
@@ -120,9 +132,9 @@
           <div class="panel-heading">User Screens</div>
           <div class="panel-body" id="container-screens"></div>
         </div>
-      </div>
+      </div> -->
 
-      <div id="video-container" class="col-md-6">
+      <!-- <div id="video-container" class="col-md-6">
         <user-video
           :stream-manager="publisher"
           @click="updateMainVideoStreamManager(publisher)"
@@ -133,7 +145,7 @@
           :stream-manager="sub"
           @click="updateMainVideoStreamManager(sub)"
         />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -182,6 +194,8 @@ export default {
 
       myUserName: JSON.parse(localStorage.getItem("vuex")).common.name,
       popState : false,
+
+      screens:[],
     };
   },
   created() {
@@ -219,9 +233,30 @@ export default {
       // Push the received message into the messages array
       this.messages.push(receivedMessage);
     },
+    changeMainScreen(event){
+      const mainVideoDiv=document.querySelector("#video-container");
+      const mainVideo=mainVideoDiv.querySelector("video");
+      const selectedVideo=event.target;
+      console.log(mainVideo);
+      console.log(mainVideo.srcObject);
+      console.log(selectedVideo);
+      console.log(selectedVideo.srcObject);
+
+      if (mainVideo.srcObject !== selectedVideo.srcObject) {
+        const mainVideoContainer = document.querySelector("#video-container");
+        mainVideoContainer.style.display = "none";
+
+        // const mainVideoText = mainVideoContainer.querySelector("p");
+        // mainVideoText.innerHTML = userData;
+
+        mainVideo.srcObject = selectedVideo.srcObject;
+        mainVideoContainer.style.display = "block";
+      }
+    },
     appendUserData(videoElement, connection) {
       var userData;
       var nodeId;
+
       if (typeof connection === "string") {
         userData = connection;
         nodeId = connection;
@@ -238,17 +273,24 @@ export default {
     },
     addClickListener(element, userData) {
       element.addEventListener("click", () => {
-        const mainVideo = document.querySelector("#main-video video");
-        if (mainVideo.srcObject !== element.srcObject) {
-          const mainVideoContainer = document.querySelector("#main-video");
-          mainVideoContainer.style.display = "none";
+        const mainVideoDiv = document.querySelector("#video-container");
+        const mainVideo = mainVideoDiv.querySelector("video");
+        console.log(mainVideo);
+        console.log(mainVideo.srcObject);
+        console.log(element);
+        console.log(element.srcObject);
+        console.log(userData);
 
-          const mainVideoText = mainVideoContainer.querySelector("p");
-          mainVideoText.innerHTML = userData;
+        // if (mainVideo.srcObject !== element.srcObject) {
+        //   const mainVideoContainer = document.querySelector("#video-container");
+        //   mainVideoContainer.style.display = "none";
 
-          mainVideo.srcObject = element.srcObject;
-          mainVideoContainer.style.display = "block";
-        }
+        //   const mainVideoText = mainVideoContainer.querySelector("p");
+        //   mainVideoText.innerHTML = userData;
+
+        //   mainVideo.srcObject = element.srcObject;
+        //   mainVideoContainer.style.display = "block";
+        // }
       });
     },
 
@@ -262,26 +304,27 @@ export default {
       publisherScreen.once("accessAllowed", (event) => {
         document.getElementById("buttonScreenShare").style.visibility =
           "hidden";
-        this.screensharing = true;
-        // event.element["muted"] = true;
-        console.log(event);
+          this.screensharing = true;
+          // event.element["muted"] = true;
+          console.log(event);
         // If the user closes the shared window or stops sharing it, unpublish the stream
         publisherScreen.stream
-          .getMediaStream()
-          .getVideoTracks()[0]
-          .addEventListener("ended", () => {
+        .getMediaStream()
+        .getVideoTracks()[0]
+        .addEventListener("ended", () => {
             console.log(
               'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
             );
             this.sessionScreen.unpublish(publisherScreen);
             document.getElementById("buttonScreenShare").style.visibility =
-              "visible";
+            "visible";
             this.screensharing = false;
           });
-        this.sessionScreen.publish(publisherScreen);
-      });
-
-      publisherScreen.on("videoElementCreated", (event) => {
+          this.sessionScreen.publish(publisherScreen);
+        });
+        
+        publisherScreen.on("videoElementCreated", (event) => {
+        console.log(event);
         this.appendUserData(event.element, this.sessionScreen.connection);
         event.element["muted"] = true;
       });
@@ -297,6 +340,11 @@ export default {
       // --- 1) Get an OpenVidu object ---
       this.OVCamera = new OpenVidu();
       this.OVScreen = new OpenVidu();
+
+      this.$data.screens.push(this.OVCamera);
+      this.$data.screens.push(this.OVScreen);
+
+      console.log(this.$data.screens);
 
       // --- 2) Init a session ---
       this.sessionCamera = this.OVCamera.initSession();
@@ -451,6 +499,7 @@ export default {
       this.OVCamera = undefined;
       this.OVScreen = undefined;
       this.screensharing = false;
+      this.screens = [];
       // Remove beforeunload listener
     },
 
@@ -498,15 +547,34 @@ export default {
 </script>
 
 <style>
-.livemeeting-container{
-  width: 100vw;
-  height: 90vh;
+.top-container{
+  width: 98vw;
+  height: 3vh;
+  border: solid 1px red;
+  font-weight: bolder;
+  font-size: larger;
+  position: relative;
+}
+.body-container{
+  width: 98vw;
+  height: 85vh;
   display: flex;
+  position: relative;
+  z-index: 5;
+}
+.bottom-container{
+  height: 10vh;
+  width: 98vw;
+  border: solid 1px red;
+  background-color: white;
+  position: relative;
+  z-index: 10;
 }
 #local-video-undefined{
   display: flex;
   width: 100%;
   justify-content: center;
+  z-index: 5;
 }
 .split-screen {
   display: flex;
@@ -514,18 +582,18 @@ export default {
   align-items: center;
 }
 .aditional-function{
-  width: 16%;
+  width: 20%;
   float: left;
   border: solid 1px red;
   box-sizing: border-box;
 }
 .video-box{
-  width: 66%;
+  width: 60%;
   border: solid 1px red;
   float: center;
 }
 .message-box{
-  width: 16%;
+  width: 20%;
   float: right;
   border: solid 1px red;
   box-sizing: border-box;
@@ -544,9 +612,23 @@ export default {
   position: absolute;
   bottom: 5px;
 }
+.metronome-container{
+  text-align: center;
+  border: solid 1px red;
+}
 .tuner-container{
   display: flex;
   justify-content: center;
+}
+.bottom-button{
+  background-color: cyan;
+  border: none;
+  border-radius: 10px;
+}
+.bottom-close-button{
+  background-color: red;
+  border: none;
+  border-radius: 10px;
 }
 .right {
   display: flex;

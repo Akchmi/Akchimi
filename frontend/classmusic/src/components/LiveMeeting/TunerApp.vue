@@ -43,9 +43,6 @@ export default {
   width: 400px;
   height: 400px;
   margin: 0 auto;
+  background-color: #333;
 }
-
-// body {
-//   background: #333;
-// }
 </style>
