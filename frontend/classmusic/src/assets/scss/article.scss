@@ -1,7 +1,6 @@
 @import "reset.scss";
 
 .container {
-  padding-top: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,7 +32,7 @@ table {
 }
 
 th {
-  background-color: #d3d3d3;
+  background-color: #edd9b7;
   border-top: 3px solid #727272;
 }
 
@@ -85,4 +84,7 @@ td {
 .commentProfileImage {
   width: 100px;
   height: 100px;
+}
+
+.noSearch {
 }

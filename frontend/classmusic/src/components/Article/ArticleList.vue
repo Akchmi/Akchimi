@@ -1,19 +1,18 @@
 <template>
   <div class="container">
+    <div class="banner">
+      <!-- 자유게시판 리스트 최상단 -->
+      <h1>자유게시판</h1>
+    </div>
     <div class="article__list">
-      <div>
-        <!-- 자유게시판 리스트 최상단 -->
-        <h1>자유게시판</h1>
-        <button @click="goArticlecreate">글 작성</button>
-        <hr />
-      </div>
-      <div>
+      <div class="article">
         <!-- 자유게시판 정렬-->
         <select v-model="selectedSorttype" @change="sortTypeChange">
           <option v-for="(item, idx) in sortType" :key="idx" :value="item">
             {{ item }}
           </option>
         </select>
+        <button class="btn" @click="goArticlecreate">글 작성</button>
       </div>
       <div>
         <!-- 자유게시판 게시물 리스트 -->
@@ -61,12 +60,12 @@
           </option>
         </select>
         <input style="margin: 10px" type="text" v-model="searchQuery" />
-        <button @click="runSearch">검색</button>
+        <button class="btn" @click="runSearch">검색</button>
       </div>
 
       <div>
         <!-- 페이지 번호-->
-        <button @click="pageDown">이전</button>
+        <button class="btn" @click="pageDown">이전</button>
         <button
           class="pageBtn"
           v-for="page in pages"
@@ -76,7 +75,7 @@
         >
           {{ page }}
         </button>
-        <button @click="pageUp">다음</button>
+        <button class="btn" @click="pageUp">다음</button>
       </div>
     </div>
   </div>
@@ -188,4 +187,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/article.scss";
+@import "@/assets/scss/templates/common.scss";
 </style>
