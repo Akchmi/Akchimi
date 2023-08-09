@@ -18,11 +18,11 @@
           <table>
             <thead>
               <tr>
-                <th>글 번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일자</th>
-                <th>조회수</th>
+                <th style="width: 10%">글 번호</th>
+                <th style="width: 45%">제목</th>
+                <th style="width: 20%">작성자</th>
+                <th style="width: 15%">작성일자</th>
+                <th style="width: 10%">조회수</th>
               </tr>
             </thead>
             <div v-if="articleList.length == 0">
@@ -31,38 +31,56 @@
             <tbody>
               <tr v-for="article in articleList" :key="article.id">
                 <td>{{ article.articleId }}</td>
-                <td @click="$router.push(`/article/${article.articleId}`)">
+                <td
+                  @click="$router.push(`/article/${article.articleId}`)"
+                  style="cursor: pointer"
+                >
                   {{ article.title }}
                 </td>
                 <td>{{ article.name }}</td>
                 <td>
                   {{ toLocalTimeStamp(article.createdAt) }}
                 </td>
-                <td>{{ article.hit }}</td>
+                <td>{{ article.hit }}회</td>
               </tr>
             </tbody>
           </table>
-          <hr />
         </div>
       </div>
 
-      <div>
-        <!-- 자유게시판 리스트 검색바 -->
-        <select v-model="selectedSearchCategory">
-          <option
-            v-for="(item, idx) in searchCategory"
-            :key="idx"
-            :value="item"
+      <!-- 자유게시판 리스트 검색바 -->
+      <div class="articleSearchBar">
+        <div class="articleSearchSelect">
+          <select
+            class="articleSearchSelectBar"
+            v-model="selectedSearchCategory"
           >
-            {{ item }}
-          </option>
-        </select>
-        <input style="margin: 10px" type="text" v-model="searchQuery" />
-        <button class="btn" @click="runSearch">검색</button>
+            <option
+              v-for="(item, idx) in searchCategory"
+              :key="idx"
+              :value="item"
+            >
+              {{ item }}
+            </option>
+          </select>
+        </div>
+        <input
+          class="articleSearchInput"
+          style="margin: 10px"
+          type="text"
+          v-model="searchQuery"
+        />
+
+        <img
+          @click="runSearch"
+          id="articleSearchButton"
+          src="@/assets/images/home/searchButton.png"
+          alt="메인검색버튼"
+        />
       </div>
 
-      <div>
-        <!-- 페이지 번호-->
+      <!-- 페이지 번호-->
+      <div class="articleSearchBar">
         <button class="btn" @click="pageDown">이전</button>
         <button
           class="pageBtn"

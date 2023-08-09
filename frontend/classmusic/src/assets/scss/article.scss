@@ -90,7 +90,48 @@ td {
 }
 
 .articleTableBanner {
+  margin-top: 30px;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
+}
+
+.articleSearchBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.articleSearchInput {
+  width: 300px;
+  height: 35px;
+  border-radius: 2em;
+  border: 3px solid #edd9b7;
+  padding-left: 80px;
+  padding-right: 50px;
+  z-index: 0;
+  border-left: 3px solid #edd9b7;
+}
+
+#articleSearchButton {
+  width: 30px;
+  height: 30px;
+  margin-left: -60px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.articleSearchSelect {
+  z-index: 1;
+  margin-right: -85px;
+  height: 27px;
+  padding-top: 10px;
+
+  border-right: 3px solid #edd9b7;
+}
+
+.articleSearchSelectBar {
+  border: transparent;
+  // border-style: none;
 }
