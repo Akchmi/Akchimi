@@ -21,16 +21,17 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .theBanner {
   width: 100%;
   height: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 .theBanner__image {
   width: 100%;
-  height: 100%;
+  margin-top: -90px;
 }
 
 .theBanner__title {
