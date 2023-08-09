@@ -22,7 +22,7 @@
                 <span class="box">{{ genderText }}</span>
               </div>
             </div>
-            <div class="info-container">
+            <div class="teacher-info-container">
               <p class="info-box">악기 : {{ instrument }}</p>
               <p class="info-box">경력 : {{ career }}년</p>
               <p class="info-box">가격 : {{ cost }}원</p>
@@ -223,9 +223,5 @@ export default {
 
 <style scoped>
 @import "@/assets/scss/teacherprofile.scss";
-.review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+
 </style>

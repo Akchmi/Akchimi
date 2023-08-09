@@ -162,11 +162,6 @@ export default {
 
 <style scoped>
 @import "@/assets/scss/profile.scss";
-.teacher-list {
-  padding-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+
 </style>
 
