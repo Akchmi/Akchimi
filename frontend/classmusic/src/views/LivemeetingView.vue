@@ -364,11 +364,6 @@ export default {
       this.OVCamera = new OpenVidu();
       this.OVScreen = new OpenVidu();
 
-      this.$data.screens.push(this.OVCamera);
-      this.$data.screens.push(this.OVScreen);
-
-      console.log(this.$data.screens);
-
       // --- 2) Init a session ---
       this.sessionCamera = this.OVCamera.initSession();
       this.sessionScreen = this.OVScreen.initSession();
