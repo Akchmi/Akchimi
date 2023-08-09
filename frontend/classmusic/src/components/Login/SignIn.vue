@@ -11,7 +11,7 @@
             <p><input type="password" placeholder="비밀번호" v-model="password" /></p>
           </div>
           <div>
-            <button @click="login">로그인</button>
+            <button @click="loginclick">로그인</button>
             <button>
               <router-link to="/login/signup">회원가입</router-link>
             </button>
@@ -28,14 +28,17 @@
         <h1>아이디 찾기</h1>
         <div class="login__content">
           <div>
+            <p>이름을 알려주세요.</p>
+            <p>
+              <input type="text" placeholder="이름" v-model="name" />
+            </p>
+          </div>
             <p>가입한 이메일을 알려주세요.</p>
             <p>
               <input type="text" placeholder="이메일" v-model="registered_email" />
             </p>
-          </div>
           <div>
-            <button @click="showLogin">로그인</button>
-            <button @click="findId">아이디 찾기</button>
+               <button @click="findUserId" :disabled="isLoading">아이디 찾기</button>
           </div>
         </div>
       </div>
@@ -56,9 +59,8 @@
               <input type="text" placeholder="이메일" v-model="registered_email" />
             </p>
           </div>
-          <div>
-            <button @click="showLogin">로그인</button>
-            <button @click="findPassword">비밀번호 찾기</button>
+          <div>        
+            <button @click="findPassword" :disabled="isLoading">비밀번호 찾기</button>
           </div>
         </div>
       </div>
@@ -67,8 +69,10 @@
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from '@/api/axios.js';
 import { mapActions } from 'vuex';
+// import { mapState } from 'vuex';
+
 
 export default {
   data() {
@@ -78,51 +82,67 @@ export default {
       registered_id: "",
       registered_email: "",
       showmode: "login",
+      name: "",
+      isLoading : false
     };
   },
+  computed: {
+
+  },
+
   methods: {
-    ...mapActions(['setToken']),
-    async login() {
+    ...mapActions(['login', 'findId', 'findPw']),
+    async loginclick() {
       try {
-        const response = await axios.post('/auth/login', {
-          loginid: this.loginid,
+        await this.login({
+          id: this.loginid,
           password: this.password,
         });
-
-        this.setToken(response.data.token);
         this.$router.push('/');
-
+        console.log(1)     
       } catch (error) {
         console.error(error);
+        this.$router.push('/login/signin');
       }
     },
     showIdFinder() {
       this.showmode = "id";
     },
-    async findId() {
+    async findUserId() {
+      this.isLoading = true;
       try {
-        const response = await axios.post('/auth/find-id', {
+        await this.findId({
+          name: this.name,
           email: this.registered_email,
         });
-
-        alert(`당신의 아이디는 ${response.data.id} 입니다.`);
+        alert(`당신의 이메일로 메일을 전송했습니다.`);
+        this.$router.push('/login/signin');
       } catch (error) {
         console.error(error);
+        alert(`정보가 잘못 되었습니다.`)
+        return;
+      }finally {
+        this.isLoading = false;
       }
     },
     showPwFinder() {
       this.showmode = "pw";
     },
     async findPassword() {
+      this.isLoading = true;
       try {
-        await axios.put('/auth/temporary-password', {
+        await this.findPw ({
           id: this.registered_id,
           email: this.registered_email,
         });
-
         alert('임시 비밀번호를 발급했습니다. 이메일을 확인하세요.');
+        this.$router.push('login/singin');
       } catch (error) {
         console.error(error);
+        alert(`정보가 잘못 되었습니다.`)
+        return
+      }finally {
+        this.isLoading = false;
       }
     },
 

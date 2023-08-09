@@ -3,54 +3,93 @@
     <div class="teacher-profile">
       <div class="top-section">
         <div class="img-container">
-          <img :src="image" alt="Teacher profile picture" class="teacher-image" />
+          <img
+            :src="image"
+            alt="Teacher profile picture"
+            class="teacher-image"
+          />
           <button>이미지 수정</button>
         </div>
         <div class="info-container">
           <div class="name-container">
-            <label for="name" class="name-label">강사 이름</label>
-            <input id="name" class="name-input" type="text" placeholder="이름을 입력해주세요" />
+            <h3>강사 이름</h3>
+            <p>1 :{{ name }}</p>
           </div>
           <div class="teacher-profile-update-container">
             <div class="left-field">
               <div class="input-field">
                 <label for="instrument">악기 : </label>
-                <select id="instrument" v-model="selectedInstrument">
-                  <option v-for="(instrument, index) in instruments" :value="instrument" :key="index">{{ instrument }}</option>
+                <select
+                  id="instrument"
+                  v-model="selectedInstrument"
+                  @change="saveToselectedInsruments"
+                >
+                  <option
+                    v-for="(instrument, index) in instruments"
+                    :value="instrument"
+                    :key="index"
+                  >
+                    {{ instrument }}
+                  </option>
                 </select>
-                <div v-for="(instrument, index) in selectedInstruments" :key="index">
-                  {{ instrument }}
-                </div>
+                <br />
+                선택된 악기:
+                <div
+    v-for="(instrument, index) in selectedInstruments"
+    :key="index"
+  >
+    {{ instrument }}
+    <button @click="removeInstrument(index)">제거</button>
+  </div>
+            
               </div>
               <div class="input-field">
                 <label for="years">경력 : </label>
-                <input id="years" type="number" min="1" />
+                <input
+                  id="years"
+                  v-model.number="career"
+                  type="number"
+                  min="1"
+                />
                 년
               </div>
               <div class="input-field">
                 <label for="cost">시간당 비용 : </label>
-                <input id="cost" type="number" min="0" />
+                <input id="cost" v-model.number="cost" type="number" min="0" />
                 만원
               </div>
             </div>
             <div class="right-field">
               <div class="input-field">
                 <label>요일:</label>
-                <div class="days-container" v-for="(day, index) in days" :key="index">
-                  <input type="checkbox" :id="day" v-model="selectedDays" :value="day">
+                <div
+                  class="days-container"
+                  v-for="(checked, day) in days"
+                  :key="day"
+                >
+                  <input type="checkbox" :id="day" v-model="days[day]" />
                   <label :for="day">{{ day }}</label>
                 </div>
               </div>
               <div class="input-field">
                 <label for="start">시작 시간 :</label>
-                <input id="start" type="time" v-model="startTime" />
+                <input
+                  id="start"
+                  v-model.number="startTime"
+                  type="number"
+                  min="0"
+                  max="23"
+                />
               </div>
               <div class="input-field">
                 <label for="end">종료 시간 :</label>
-                <input id="end" type="time" v-model="endTime" />
-              </div>
-              <div class="input-field">
-                <p>가능 시간 : {{ selectedDays.join(', ') }} {{ startTime }} ~ {{ endTime }}</p>
+                <input
+                  id="end"
+                  v-model.number="endTime"
+                  type="number"
+                  min="0"
+                  max="23"
+                />
               </div>
             </div>
           </div>
@@ -59,188 +98,180 @@
       <div class="teacher-details">
         <h2>자기 소개</h2>
         <div class="description-box">
-          <textarea class="description-input" v-model="description" placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요.\n 휴대전화 번호 공개를 권장하지 않습니다."></textarea>
+          <textarea
+            class="description-input"
+            v-model="description"
+            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요. 휴대전화 번호 공개를 권장하지 않습니다."
+          ></textarea>
         </div>
       </div>
-      <div class="attach-container">
-        <div>
-          <button>첨부 파일 추가</button>
+      <div class="attach-file">
+          <h3>파일 첨부</h3>
+          <div>
+            <img
+              v-for="(image, index) in attachedFiles"
+              :src="image"
+              :key="index"
+              alt="Attached file"
+              class="attach-image"
+            />
+          </div>
+          <input
+            type="file"
+            multiple
+            ref="fileUploadInput"
+            @change="handleFileUpload"
+            style="display: none"
+          />
+          <button @click="triggerFileUpload">첨부 파일 추가</button>
         </div>
-        첨부파일 추가 시 보여줄 공간
-      </div>
       <div class="save-button">
-        <button>
-          <router-link to="/profile/teacherprofile">저장</router-link>
-        </button>
+ 
+        <button @click="submitForm">강사 수정하기</button>
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import {  apiDetailTeacherInfo } from "@/api/profiles.js";
+import axios from "@/api/imageAxios.js";
+
+
 export default {
   props: {
     image: { type: String, default: "https://via.placeholder.com/280" },
-  
   },
   data() {
     return {
+      userInfo: {},
       selectedInstrument: null,
-      instruments: ['피아노', '기타', '드럼', '바이올린', '트럼펫'],
+      instruments: ["피아노", "기타", "드럼", "바이올린", "트럼펫"],
       selectedInstruments: [],
-      days: ['월', '화', '수', '목', '금', '토', '일'],
-      selectedDays: [],
-      startTime: '',
-      endTime: '',
+      days: {
+        월: false,
+        화: false,
+        수: false,
+        목: false,
+        금: false,
+        토: false,
+        일: false,
+      },
+      startTime: "",
+      endTime: "",
       description: "",
+      career: 0,
+      cost: 0,
+      name: "",
+      selectedDays: [],
+      id: JSON.parse(localStorage.getItem("vuex")).common.id,
+      userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
+      teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
     };
   },
-  watch: {
-    selectedInstrument(newVal) {
-      if (newVal && !this.selectedInstruments.includes(newVal)) {
-        this.selectedInstruments.push(newVal);
+  computed: {
+    selectedDaysString() {
+      return Object.keys(this.days)
+        .map((day) => (this.days[day] ? "1" : "0"))
+        .join("");
+    },
+  },
+
+  methods: {
+    triggerFileUpload() {
+      this.$refs.fileUploadInput.click();
+    },
+    async handleFileUpload() {
+      const selectedFiles = this.$refs.fileUploadInput.files;
+
+      let formData = new FormData();
+      for (let i = 0; i < selectedFiles.length; i++) {
+        formData.append("image", selectedFiles[i]);
+
+        try {
+          let response = await axios.post(
+            `/teachers/${this.teacherId}/images`,
+            formData
+          );
+
+          if (response.data && response.data.image) {
+            this.attachedFiles.push(response.data.image);
+            console.log(222);
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
-    }
-  }
+    },
+    removeInstrument(index) {
+    this.selectedInstruments.splice(index, 1);
+  },
+    ...mapActions(['putTeacherProfileUpdate']),
+
+    submitForm() {
+      const data = {       
+        career: this.career,
+        cost: this.cost,
+        introduce: this.description,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        classDay: this.convertDaysToBitMask(),
+        instruments: [...this.selectedInstruments], 
+        teacherId : this.teacherId       
+      };
+      this.putTeacherProfileUpdate(data)            
+        .then(response => {    
+          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+          this.$router.push(`/profile/teacherprofile/${teacherId}`);         
+          console.log(this.teacherId, response)
+        });
+
+    },
+    convertDaysToBitMask() {
+      let index = 0,
+        bitMaskedDays = 0;
+
+      for (const day in this.days) {
+        if (this.days[day]) {
+          bitMaskedDays ^= 1 << index;
+        }
+        index++;
+      }
+      return bitMaskedDays.toString(2);
+    },
+
+    saveToselectedInsruments() {
+      const selectedInstrument = this.selectedInstrument;
+      for (let i = 0; i < this.selectedInstruments.length; i++) {
+        if (this.selectedInstruments[i] == selectedInstrument) {
+          return;
+        }
+      }
+      this.selectedInstruments.push(selectedInstrument);
+    },
+  },
+  async created() {
+    const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+    const res = await apiDetailTeacherInfo(teacherId);
+    this.name = res.name;
+    this.selectedInstruments = res.instruments;
+    this.description = res.introduce;
+    this.startTime = res.startTime;
+    this.endTime = res.endTime;
+    this.cost = res.cost;
+    this.career = res.career;
+    this.classDay = res.classDay;
+
+    const classDayBinary = parseInt(res.classDay, 2).toString(2).padStart(7, '0');
+    Object.keys(this.days).forEach((day, index) => {
+        this.days[day] = classDayBinary[index] === '1';
+    });
+  },
 };
 </script>
 
 <style scoped>
-
-.save-button {
-    display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-
-}
-.description-input {
-  width: 100%; 
-  border: 1px solid black;
-  padding: 10px;
-  height: auto; 
-  min-height: 6em;
-  overflow: auto; 
-  overflow-x: hidden;
-  line-height:1.2em;
-  margin-bottom:20px;
-  border-radius:10px;
-  
-}
-
-.description-box {
-  border: 1px solid black;
-  padding: 10px;
-  height: auto;
-  min-height: 6em;
-  overflow: auto;
-  overflow-x :hidden;
-  line-height:1.2em;
-  margin-bottom:20px;
-  border-radius:10px;
-}
-
-.description-box textarea {
-  width: 100%;
-  height: 100%;
-  border: none;
-  outline: none;
-  resize: none;
-}
-
-
-.teacher-profile-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; 
-  align-items: center; 
-}
-
-.teacher-profile {
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 800px;
-  height: 800px;
-  border: 1px solid black;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-  padding: 20px;
-}
-
-.top-section {
-  display: flex;
-}
-
-.teacher-image {
-  width: 170px;
-  height: 220px;
-  object-fit: cover;
-}
-
-.img-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;  
-}
-
-.info-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.name-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.name-label {
-  flex: 1;
-}
-
-.name-input {
-  flex: 4;
-  width: 200px; 
-}
-
-.teacher-profile-update-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.left-field, .right-field {
-  display: flex;
-  flex-direction: column;
-  width: 45%;
-}
-
-.input-field {
-  margin: 10px 0;
-}
-
-.teacher-profile-update-container {
-  border: 1px solid black;
-  padding: 10px;
-  height: auto; 
-  min-height: 6em;
-  max-height: auto; 
-  overflow: auto; 
-  line-height: 1.2em; 
-  margin-bottom: 20px;
-  border-radius: 10px;  
-}
-
-.days-container {
-  display: inline-block;
-  margin-right: 10px;
-}
-
-
-
+@import "@/assets/scss/teacherprofileupdate.scss";
 </style>

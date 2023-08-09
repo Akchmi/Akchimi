@@ -1,32 +1,48 @@
 <template>
   <div>
     <div>
-      <nav class="navbar">
-        <div class="navbar__logo">
-          <i class="fas fa-blog"></i>
-          <a @click="$router.push('/')">Akchimi</a>
-        </div>
-
-        <ul class="navbar__menu">
-          <li @click="$router.push('/notice/list')">공지사항</li>
-          <li @click="$router.push('/article/list')">자유게시판</li>
-          <li @click="$router.push('/lecture/studentwaiting')">강의실</li>
-          <li @click="$router.push('/search')">강사검색</li>
-        </ul>
-
-        <ul class="navbar__menu">
-          <li @click="$router.push('/login/signin')">로그인</li>
-          <li @click="$router.push('/profile/myprofile')">마이페이지</li>
-        </ul>
-      </nav>
+      <NavBar></NavBar>
+    </div>
+    <router-view></router-view>
+    <div class="quokka__div">
+      <div class="quokka__indiv">
+        <img src="@/assets/images/quokkaband.png" alt="" class="quokka" />
+        <h1>"악기라는 취미에 미치다" - 쿼카in</h1>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import NavBar from "@/components/Nav/NavBar.vue";
+
+export default {
+  components: {
+    NavBar,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/templates/common.scss";
+</style>
+
+<style>
+.quokka__div {
+  display: flex;
+  justify-content: center;
+  margin: 100px;
+  text-align: center;
+}
+
+.quokka__indiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.quokka {
+  width: 650px;
+  height: 650px;
+}
 </style>

@@ -1,39 +1,46 @@
 <template>
   <div>
     <div>
-      <nav class="navbar">
-        <div class="navbar__logo">
-          <i class="fas fa-blog"></i>
-          <a @click="$router.push('/')">Akchimi</a>
-        </div>
-
-        <ul class="navbar__menu">
-          <li @click="$router.push('/notice/list')">공지사항</li>
-          <li @click="$router.push('/article/list')">자유게시판</li>
-          <li @click="$router.push('/lecture/studentwaiting')">강의실</li>
-          <li @click="$router.push('/search')">강사검색</li>
-        </ul>
-
-        <ul class="navbar__menu">
-          <li @click="$router.push('/login/signin')">로그인</li>
-          <li @click="$router.push('/profile/myprofile')">마이페이지</li>
-        </ul>
-      </nav>
+      <NavBar></NavBar>
     </div>
     <br />
     <button>
-      <router-link to="/profile/myprofile">내 프로필</router-link>
+      <router-link :to="myProfilePath">내 프로필</router-link>
     </button>
     |
-    <button>
-      <router-link to="/profile/teacherprofile">강사 프로필</router-link>
+    <button @click="navigateToTeacherProfile">
+      
+      강사 프로필
     </button>
+    <hr>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {};
+import NavBar from "@/components/Nav/NavBar.vue"
+
+export default {
+  components: {
+    NavBar
+  },
+  computed: {
+    myProfilePath() {
+      return "/profile/myprofile";
+    },
+  },
+  methods: {
+    navigateToTeacherProfile() {   
+      const userType = this.$store.state.common.userType;
+      const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
+        if (userType === 0) {
+        this.$router.push("/profile/teacherprofileprompt");
+      } else if (userType === 1) {
+        this.$router.push(`/profile/teacherprofile/${teacherId}`);
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

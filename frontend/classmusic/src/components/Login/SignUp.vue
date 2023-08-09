@@ -27,7 +27,8 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "@/api/axios.js"
+import { apiCheckId, apiRegister } from "@/api/auth.js";
 import { mapActions } from "vuex";
 import router from "@/router";
 
@@ -47,9 +48,12 @@ export default {
     ...mapActions(["setToken"]),
     async checkId() {
       try {
-        const response = await axios.get(`/auth/check-id/?id=${this.loginid}`);
-        if (response.data.isIdExists) {
+        const { data } = await apiCheckId(this.loginid);
+        if (data) {
+          console.log(data);
+          this.loginid = "";
           alert("이미 가입한 아이디입니다.");
+          this.isIdChecked = false;
         } else {
           alert("회원가입이 가능한 아이디입니다.");
           this.isIdChecked = true;
@@ -59,26 +63,40 @@ export default {
       }
     },
     async register() {
-      if (!this.isIdChecked) {
-        alert("아이디를 확인해 주세요.");
+      if (
+        !this.loginid ||
+        !this.password ||
+        !this.name ||
+        !this.email ||
+        !this.gender
+      ) {
+        alert("모든 필드를 입력해주세요.");
         return;
       }
+
+      if (!this.isIdChecked) {
+        alert("아이디 중복확인을 해 주세요.");
+        return;
+      }
+
       if (this.password !== this.confirmPassword) {
         alert("비밀번호가 일치하지 않습니다.");
         this.password = "";
         this.confirmPassword = "";
         return;
       }
+
       try {
-        const response = await axios.post("/auth/sign-up", {
-          loginid: this.loginid,
+        const response = await apiRegister({
+          id: this.loginid,
           password: this.password,
           name: this.name,
           email: this.email,
           gender: this.gender,
         });
+
         this.setToken(response.data.token);
-        router.push("/auth/login");
+        router.push("/login/signin");
       } catch (error) {
         console.error(error);
       }

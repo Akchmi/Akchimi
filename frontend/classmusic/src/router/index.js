@@ -7,7 +7,7 @@ import SearchView from "../views/SearchView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import LoginView from "../views/LoginView.vue";
 import Chatview from "../views/ChatView.vue";
-import LivemeetingView from "../views/LivemeetingView.vue";
+import LiveMeetingView from "../views/LiveMeetingView.vue";
 
 import NoticeList from "../components/Notice/NoticeList.vue";
 import NoticeCreate from "../components/Notice/NoticeCreate.vue";
@@ -32,6 +32,8 @@ import SignUp from "../components/Login/SignUp.vue";
 import MyProfile from "../components/Profile/MyProfile.vue";
 import TeacherProfile from "../components/Profile/TeacherProfile.vue";
 import TeacherProfileUpdate from "../components/Profile/TeacherProfileUpdate.vue";
+import TeacherProfileCreate from "../components/Profile/TeacherProfileCreate.vue";
+import TeacherProfilePrompt from "../components/Profile/TeacherProfilePrompt.vue";
 import TeacherReview from "../components/Profile/TeacherReview.vue";
 
 const routes = [
@@ -56,12 +58,12 @@ const routes = [
         component: NoticeCreate,
       },
       {
-        path: "/notice/detail",
+        path: "/notice/:id",
         name: "noticedetail",
         component: NoticeDetail,
       },
       {
-        path: "/notice/update",
+        path: "/notice/update/:id",
         name: "noticeupdate",
         component: NoticeUpdate,
       },
@@ -83,12 +85,12 @@ const routes = [
         component: ArticleCreate,
       },
       {
-        path: "/article/detail",
+        path: "/article/:id",
         name: "/articledetail",
         component: ArticleDetail,
       },
       {
-        path: "/article/update",
+        path: "/article/update/:id",
         name: "/articleupdate",
         component: ArticleUpdate,
       },
@@ -147,7 +149,7 @@ const routes = [
         component: MyProfile,
       },
       {
-        path: "/profile/teacherProfile",
+        path: "/profile/teacherProfile/:id",
         name: "teacherProfile",
         component: TeacherProfile,
       },
@@ -160,6 +162,16 @@ const routes = [
         path: "/profile/teacherreview",
         name: "teacherreview",
         component: TeacherReview,
+      },
+      {
+        path: "/profile/teacherprofilecreate",
+        name: "teacherprofilecreate",
+        component: TeacherProfileCreate,
+      },
+      {
+        path: "/profile/teacherprofileprompt",
+        name: "teacherprofileprompt",
+        component: TeacherProfilePrompt,
       },
     ],
   },
@@ -181,14 +193,14 @@ const routes = [
     ],
   },
   {
-    path: "/chat",
+    path: "/chats/:lectureId",
     name: "chat",
     component: Chatview,
   },
   {
-    path: "/livemeeting",
+    path: "/livemeeting/:lectureId",
     name: "livemeeting",
-    component: LivemeetingView,
+    component: LiveMeetingView,
   },
 ];
 

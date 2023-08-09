@@ -1,17 +1,32 @@
 export default {
-  getTotalTeachers(state) {
-    return state.articles.totalTeachers;
+  // 강사 목록
+  getTeacherList(state) {    
+    return state.search.teacherList;
   },
-  getListSize(state) {
-    return state.articles.listSize;
+
+  // 검색 조건
+  getSearchParams(state) {
+    return state.search.searchParams;
   },
-  getListNumber(state) {
-    return state.articles.listNumber;
+
+  getSearchParamsCareer(state) {
+    return [
+      state.search.searchParams.startCareer,
+      state.search.searchParams.endCareer,
+    ];
   },
-  getListTotalCount(state) {
-    return state.articles.listTotalCount;
+
+  getSearchParamsCost(state) {
+    return [
+      state.search.searchParams.startCost,
+      state.search.searchParams.endCost,
+    ];
   },
-  getTeacherList(state) {
-    return state.articles.teacherList;
+
+  getSearchParamsTime(state) {
+    return [
+      state.search.searchParams.startTime,
+      state.search.searchParams.endTime,
+    ];
   },
 };

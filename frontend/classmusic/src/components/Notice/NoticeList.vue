@@ -4,7 +4,7 @@
       <div>
         <!-- 공지사항 리스트 최상단 -->
         <h1>공지사항</h1>
-        <button @click="$router.push('/notice/create')">글 작성</button>
+        <button v-if="userType == 2" @click="goNoticeCreate">글 작성</button>
         <hr />
       </div>
 
@@ -19,14 +19,17 @@
               <th>작성일자</th>
             </tr>
           </thead>
-          <tbody>
+          <div v-if="noticeList.length == 0">
+            <h3>검색된 게시글이 없습니다.</h3>
+          </div>
+          <tbody v-else>
             <tr v-for="notice in noticeList" :key="notice.id">
-              <td>{{ notice.id }}</td>
-              <td @click="$router.push('/notice/detail')">
+              <td>{{ notice.noticeId }}</td>
+              <td @click="$router.push(`/notice/${notice.noticeId}`)">
                 {{ notice.title }}
               </td>
               <td>관리자</td>
-              <td>{{ notice.createdAt }}</td>
+              <td>{{ toLocalTimeStamp(notice.createAt) }}</td>
             </tr>
           </tbody>
         </table>
@@ -45,46 +48,107 @@
           </option>
         </select>
         <input style="margin: 10px" type="text" v-model="searchQuery" />
-        <button @click="searchNoticelist">검색</button>
+        <button @click="runSearch">검색</button>
+      </div>
+
+      <div>
+        <!-- 페이지 번호-->
+        <button @click="pageDown">이전</button>
+        <button
+          class="pageBtn"
+          v-for="page in pages"
+          :key="page"
+          @click="pageChange(page)"
+          v-show="page <= lastpage"
+        >
+          {{ page }}
+        </button>
+        <button @click="pageUp">다음</button>
       </div>
     </div>
-
-    {{ noticeList }}
-    {{ searchQuery }}
-    {{ selectedSearchCategory }}
-    {{ pageNo }}
   </div>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import { useStore, mapGetters } from "vuex";
+import { onMounted } from "vue";
+import { useStore, mapGetters, mapActions } from "vuex";
+import utils from "@/common/utils";
 // import axios from "@/common/axios";
 
 export default {
+  data() {
+    return {
+      pages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      pageNo: 1,
+      searchQuery: "",
+      selectedSearchCategory: "전체",
+    };
+  },
+
   computed: {
     ...mapGetters({ noticeList: "getNoticeList" }),
+    ...mapGetters({ isLogin: "getIsLogin" }),
+    ...mapGetters({ userType: "getUsertype" }),
+    ...mapGetters({ lastpage: "getEndPageNo" }),
+  },
+  methods: {
+    ...mapActions(["getNoticelist"]),
+    runSearch() {
+      this.getNoticelist({
+        pageNo: this.pageNo,
+        keyword: this.searchQuery,
+        searchType: this.selectedSearchCategory,
+      });
+    },
+
+    pageDown() {
+      if (this.pages[0] == 1) {
+        alert("최근 페이지입니다.");
+        return;
+      }
+
+      for (let i = 0; i < 10; i++) {
+        this.pages[i] -= 10;
+      }
+    },
+
+    pageUp() {
+      if (this.pages[this.pages.length - 1] >= this.lastpage) {
+        alert("마지막 페이지입니다.");
+        return;
+      }
+
+      for (let i = 0; i < 10; i++) {
+        this.pages[i] += 10;
+      }
+    },
+
+    pageChange(page) {
+      this.getNoticelist({
+        pageNo: page,
+        keyword: this.searchQuery,
+        searchType: this.selectedSearchCategory,
+      });
+    },
+    goNoticeCreate() {
+      this.$router.push("/notice/create");
+    },
+    toLocalTimeStamp(unixTimeStamp) {
+      return utils.unixTimeStampToLocalTimeStamp(unixTimeStamp);
+    },
   },
   setup() {
-    const pageNo = ref(1);
-    const searchQuery = ref("");
-    const selectedSearchCategory = ref("전체");
     const searchCategory = ["전체", "제목", "내용"];
     const store = useStore();
 
-    // const searchNoticelist = () => {
-    //   const query = searchQuery.value;
-    //   const category = selectedSearchCategory.value;
-    //   const page = pageNo.value;
-
-    //   store.dispatch("searchNoticelist", query, category, page);
-    // };
-
     onMounted(() => {
-      store.dispatch("getNoticelist");
+      store.dispatch("getNoticelist", {
+        pageNo: 1,
+        keyword: "",
+        searchType: "전체",
+      });
     });
-
-    return { searchCategory, pageNo, searchQuery, selectedSearchCategory };
+    return { searchCategory };
   },
 };
 </script>

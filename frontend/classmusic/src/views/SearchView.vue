@@ -1,27 +1,10 @@
 <template>
   <div>
     <div>
-      <nav class="navbar">
-        <div class="navbar__logo">
-          <i class="fas fa-blog"></i>
-          <a @click="$router.push('/')">Akchimi</a>
-        </div>
-
-        <ul class="navbar__menu">
-          <li @click="$router.push('/notice/list')">공지사항</li>
-          <li @click="$router.push('/article/list')">자유게시판</li>
-          <li @click="$router.push('/lecture/studentwaiting')">강의실</li>
-          <li @click="$router.push('/search')">강사검색</li>
-        </ul>
-
-        <ul class="navbar__menu">
-          <li @click="$router.push('/login/signin')">로그인</li>
-          <li @click="$router.push('/profile/myprofile')">마이페이지</li>
-        </ul>
-      </nav>
+      <NavBar></NavBar>
     </div>
     <br />
-    <SearchBar> </SearchBar>
+    <SearchBar ref="searchBar"> </SearchBar>
     <hr />
     <SearchList> </SearchList>
   </div>
@@ -30,13 +13,35 @@
 <script>
 import SearchBar from "../components/Search/SearchBar.vue";
 import SearchList from "../components/Search/SearchList.vue";
+import NavBar from "@/components/Nav/NavBar.vue";
+import { useStore } from "vuex";
+import { onMounted } from "vue";
 
 export default {
   name: "SearchView",
+  data() {
+    return {};
+  },
   components: {
     SearchBar,
     SearchList,
+    NavBar,
   },
+  setup() {
+    const store = useStore();
+
+    onMounted(() => {
+      store.dispatch("commitInstrument", "악기종류");
+      store.dispatch("commitGender", "");
+      store.dispatch("commitKeyword", "");
+      // 모든 요일 설정
+      // store.dispatch("commitClassDay", (1 << 8) - 1);
+      store.dispatch("commitClassDay", "1111111");
+
+      store.dispatch("searchTeacher");
+    });
+  },
+  methods: {},
 };
 </script>
 

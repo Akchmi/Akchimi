@@ -1,40 +1,57 @@
 <template>
   <div class="teacher-listcard">
-    <img :src="image" alt="Teacher profile picture" class="teacher-image" />
+    <img
+      :src="teacher.userProfileImage"
+      alt="Teacher profile picture"
+      class="teacher-image"
+    />
     <div class="teacher-info">
-      <h2 class="teacher-name">{{ name }}</h2>
-      <span class="teacher-instrument">{{ instrument }}</span>|<span class="teacher-career">{{ career }}</span>
-      <br>
-      <span class="teacher-avg-rating">{{ rating }}점</span>|<span class="contact-count">{{ count }}회</span>
-      <p class="teacher-description">{{ description }}</p>      
+      <h2 class="teacher-name">{{ teacher.name }}</h2>
+      <span
+        v-for="(instrument, index) in teacher.instruments"
+        :key="index"
+        class="teacher-instrument"
+        >{{ instrument }}</span
+      >|<span class="teacher-career">{{ teacher.career }}</span>
+      <br />
+      <span class="teacher-avg-rating">{{ teacher.avgRating }}점</span>|<span
+        class="contact-count"
+        >{{ teacher.contactCnt }}회</span
+      >
+      <p class="teacher-description">{{ teacher.introduce }}</p>
+
       <div class="btn">
-        <button @click="goToProfile" >자세히 보기</button>
-        <button @click="goToLecture">강의 신청</button>
+        <button @click="goToProfile(teacher.teacherId)">자세히 보기</button>
+        <button @click="registerLecture(teacher.teacherId)">강의 신청</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: {
-    image: String,
-    name: { type: String, default: '박한샘' },
-    description: { type: String, default: '어리다고 놀리지말아요' },
-    rating: { type: Number, default: 5.0 },
-    count: { type: Number, default: 15 },
-    career: { type: String, default: '경력' },
-    instrument: { type: String, default: '피아노' }
+    teacher: Object,
   },
+  computed: {
+    ...mapGetters({ loginUserId: "getUserId" }),
+  },
+
   methods: {
-    goToProfile() {
-      this.$router.push('/profile/teacherprofile')
+    ...mapActions(["postMachingCreate"]),
+    registerLecture(teacherId) {
+      this.postMachingCreate({
+        teacherId: teacherId,
+        studentId: this.loginUserId,
+        mode: "registerLecture",
+      });
     },
-    goToLecture() {
-      this.$router.push('/lecture/studentwaiting')
-    }
-  }
-}
+    goToProfile(teacherId) {
+      this.$router.push(`/profile/teacherprofile/${teacherId}`);
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -47,7 +64,7 @@ export default {
   border-radius: 8px;
   overflow: hidden;
 }
-.teacher-info {  
+.teacher-info {
   padding: 20px;
   font-size: 16px;
   flex-grow: 1;
@@ -59,8 +76,6 @@ export default {
   height: 200px;
   object-fit: cover;
 }
-
-
 
 .teacher-instrument {
   padding: 20px;
@@ -98,10 +113,4 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
-
 </style>
-
-
-
-
-

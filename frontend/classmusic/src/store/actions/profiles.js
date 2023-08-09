@@ -1,53 +1,24 @@
-import axios from "@/common/axios";
-// import utils from "@/common/utils";
+import {
+  apiTeacherProfileCreate,
+  apiTeacherProfileUpdate,
+  apiLikeTeacherUpdate,
+} from "@/api/profiles.js";
 
 export default {
-  getUser({ commit, state }) {
-    axios.get(`users/${state.id}`).then((response) => {
-      commit('SET_USER', response.data);
-      commit('SET_FAVORITE_TEACHERS', response.data.favoriteTeachers);
-    }).catch((error) => {
-      console.error(error);
-    });
+  async postTeacherProfileCreate(context, data) {
+    const result = await apiTeacherProfileCreate(context, data);
+    return result;
   },
-  updateUser({ commit, state}, userData) {
-    axios.put(`users/${state.id}`, userData).then((response) => {
-      commit('SET_USER', response.data);
-    }).catch((error) => {
-      console.error(error);
-    });
+  async updateUserType({ commit }, userType) {
+    commit("SET_USER_TYPE", userType);
   },
-  deleteUser({ commit,state }) {
-    axios.delete(`users/${state.id}`).then(() => {
-      commit('SET_USER', {
-        id: '',
-        name: '',
-        email: '',
-        userProfileImage: '',
-        type: 0,
-        createdAt: null,
-        gender: 0,
-      });
-    }).catch((error) => {
-      console.error(error);
-    });
+
+  putTeacherProfileUpdate(context, data) {
+    console.log("액션", context, data);
+    apiTeacherProfileUpdate(context, data);
   },
-  // getFavoriteTeachers({commit,state}) {
-  //   axios.get(`users/${state.id}`).then((response) => {
-  //     commit('SET_FAVORITE_TEACHERS', response.data);
-  //   }).catch((error) => {
-  //     console.error(error)
-  //   })
-  // }
 
-  
-  // createTeacherProfile({commit}, teacherProfile) {
-  //   try{
-  //     const response = await axios.post(`teachers/`).then(() => {
-  //       commit('SET_TEACHER')
-  //     })
-  //   }
-  // }
-
-
+  postLikeTeacherUpdate(context, data) {
+    apiLikeTeacherUpdate(context, data);
+  },
 };

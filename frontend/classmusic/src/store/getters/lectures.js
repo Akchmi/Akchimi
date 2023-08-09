@@ -1,14 +1,11 @@
 export default {
-  getModeNumber(state) {
-    return state.articles.modeNumber;
+  getlectureList(state) {
+    return state.lectures.lectureList;
   },
-  getWaitingList(state) {
-    return state.articles.waitingList;
+  getRefusedLectureList(state) {
+    return state.lectures.refusedLectureList;
   },
-  getMatchingList(state) {
-    return state.articles.matchingList;
-  },
-  getFinishedList(state) {
-    return state.articles.finishedList;
+  getReview(state) {
+    return state.lectures.review;
   },
 };

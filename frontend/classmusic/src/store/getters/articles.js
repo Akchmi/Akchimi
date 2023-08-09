@@ -1,15 +1,6 @@
 export default {
-  getTotalPages(state) {
-    return state.articles.totalPages;
-  },
-  getPageSize(state) {
-    return state.articles.state;
-  },
-  getPageNumber(state) {
-    return state.articles.pageNumber;
-  },
-  getArticleListTotalCount(state) {
-    return state.articles.articleListTotalCount;
+  getEndPageNo(state) {
+    return state.articles.endPageno;
   },
   getArticleList(state) {
     return state.articles.articleList;
@@ -17,13 +8,11 @@ export default {
   getArticleDetail(state) {
     return state.articles.articleDetail;
   },
-  getCommentListTotalCount(state) {
-    return state.articles.commentListTotalCount;
+  getArticleCreateId(state) {
+    return state.articles.articleCreateId;
   },
+
   getCommentList(state) {
-    return state.articles.commentList;
-  },
-  getCommentDetail(state) {
-    return state.articles.commentDetail;
+    return state.articles.articleCommentsList;
   },
 };

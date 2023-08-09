@@ -2,13 +2,13 @@
   <div id="main-container" class="container">
     <div id="join" v-if="!session">
       <div id="img-div">
-        <img src="resources/images/openvidu_grey_bg_transp_cropped.png" />
+        <img src="@/assets/images/quokkaband.png" width="500" />
       </div>
       <div id="join-dialog" class="jumbotron vertical-center">
-        <h1>Join a video session</h1>
+        <h1>참여자 정보</h1>
         <div class="form-group">
           <p>
-            <label>Participant</label>
+            <label>학 생</label>
             <input
               v-model="myUserName"
               class="form-control"
@@ -17,7 +17,7 @@
             />
           </p>
           <p>
-            <label>Session</label>
+            <label>강의실 번호</label>
             <input
               v-model="mySessionId"
               class="form-control"
@@ -27,7 +27,7 @@
           </p>
           <p class="text-center">
             <button class="btn btn-lg btn-success" @click="joinSession()">
-              Join!
+              입장
             </button>
           </p>
         </div>
@@ -35,6 +35,9 @@
     </div>
 
     <div id="session" v-if="session">
+      <div>
+        <MetronomeApp />
+      </div>
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
         <input
@@ -45,6 +48,33 @@
           value="Leave session"
         />
       </div>
+      <div>
+        <div class="messages-container">
+          <!-- Sent Messages -->
+          <div class="sent-messages">
+            <div
+              v-for="(message, index) in receivedMessages"
+              :class="message.className"
+              :key="index"
+            >
+              <div>
+                {{ message.message }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Received Messages -->
+
+        <div>
+          <!-- 메세지를 입력하는 input 요소 -->
+          <input type="text" v-model="newMessage" @keyup.enter="sendMessage" />
+
+          <!-- 메세지를 보내는 버튼 -->
+          <button @click="sendMessage">메세지 보내기</button>
+        </div>
+      </div>
+
       <div id="main-video" class="col-md-6">
         <user-video :stream-manager="mainStreamManager" />
       </div>
@@ -68,35 +98,81 @@
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/LiveMeeting/UserVideo";
-
+import { useRoute } from "vue-router";
+import MetronomeApp from "../components/LiveMeeting/MetronomeApp";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:5000/";
+  process.env.NODE_ENV === "production"
+    ? ""
+    : "http://localhost:8080/lectures/";
 
 export default {
   name: "App",
 
   components: {
     UserVideo,
+    MetronomeApp,
   },
 
   data() {
     return {
-      // OpenVidu objects
+      // OpenVidu objects`
       OV: undefined,
       session: undefined,
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
+      receivedMessages: [],
+      sentMessages: [],
+      newMessage: "",
 
       // Join form
-      mySessionId: "SessionA",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
+      mySessionId: "",
+      sender: 0,
+
+      myUserName: JSON.parse(localStorage.getItem("vuex")).common.name,
     };
+  },
+  created() {
+    // App.vue가 생성되면 소켓 연결을 시도합니다.
+    const route = useRoute();
+    this.mySessionId = route.params.lectureId;
+    // console.log(this.roomId + "!!!!!!!!!!!!!");
   },
 
   methods: {
+    setupDataChannel() {
+      // 데이터 채널 생성
+    },
+    sendMessage() {
+      if (this.session) {
+        this.session
+          .signal({
+            data: this.myUserName + ":" + this.newMessage, // Any string (optional)
+            to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+            type: "my-chat",
+            // The type of message (optional)
+          })
+          .then(() => {
+            console.log("Message successfully sent");
+            this.newMessage = "";
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        console.error("Session or data channel is not available.");
+      }
+    },
+    handleMessage(message) {
+      // Extract the message data from the incoming signal object
+      const receivedMessage = message.data;
+
+      // Push the received message into the messages array
+      this.messages.push(receivedMessage);
+    },
+
     joinSession() {
       // --- 1) Get an OpenVidu object ---
       this.OV = new OpenVidu();
@@ -110,6 +186,21 @@ export default {
       this.session.on("streamCreated", ({ stream }) => {
         const subscriber = this.session.subscribe(stream);
         this.subscribers.push(subscriber);
+      });
+      this.session.on("signal", (event) => {
+        const receivedMessage = event.data;
+        console.log(event.from);
+        if (receivedMessage != this.myUserName + ":" + this.newMessage) {
+          this.receivedMessages.push({
+            message: receivedMessage,
+            className: "left",
+          });
+        } else {
+          this.receivedMessages.push({
+            message: receivedMessage,
+            className: "right",
+          });
+        }
       });
 
       // On every Stream destroyed...
@@ -189,21 +280,6 @@ export default {
       this.mainStreamManager = stream;
     },
 
-    /**
-     * --------------------------------------------
-     * GETTING A TOKEN FROM YOUR APPLICATION SERVER
-     * --------------------------------------------
-     * The methods below request the creation of a Session and a Token to
-     * your application server. This keeps your OpenVidu deployment secure.
-     *
-     * In this sample code, there is no user control at all. Anybody could
-     * access your application server endpoints! In a real production
-     * environment, your application server must identify the user to allow
-     * access to the endpoints.
-     *
-     * Visit https://docs.openvidu.io/en/stable/application-server to learn
-     * more about the integration of OpenVidu in your application server.
-     */
     async getToken(mySessionId) {
       const sessionId = await this.createSession(mySessionId);
       return await this.createToken(sessionId);
@@ -222,7 +298,7 @@ export default {
 
     async createToken(sessionId) {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+        APPLICATION_SERVER_URL + "/sessions/" + sessionId + "/connections",
         {},
         {
           headers: { "Content-Type": "application/json" },
@@ -233,3 +309,25 @@ export default {
   },
 };
 </script>
+<style>
+.split-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.messages-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.sent-messages {
+  width: 100%;
+}
+
+.right {
+  display: flex;
+  justify-content: right;
+  align-content: center;
+}
+</style>
