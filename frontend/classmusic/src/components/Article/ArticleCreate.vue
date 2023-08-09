@@ -2,7 +2,7 @@
   <div class="container">
     <div class="create__container">
       <div>
-        <!-- 공지사항 글쓰기 최상단 -->
+        <!-- 자유게시판 글쓰기 최상단 -->
         <button class="createButton" @click="$router.push('/article/list')">
           목록으로
         </button>
