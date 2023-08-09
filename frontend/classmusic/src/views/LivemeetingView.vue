@@ -1,11 +1,9 @@
 <template>
   <div id="main-container" class="container">
     <div id="join" v-if="!sessionCamera">
-      <div id="img-div">
-        <img src="@/assets/images/quokkaband.png" width="500" />
-      </div>
       <div id="join-dialog" class="jumbotron vertical-center">
         <h1>참여자 정보</h1>
+        <video id="my-video" autoplay="true" :srcObject="myVideo"></video>
         <div class="form-group">
           <p>
             <label>학 생</label>
@@ -41,11 +39,11 @@
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
         <input
-        class="btn btn-large btn-danger"
-        type="button"
-        id="buttonLeaveSession"
-        @click="leaveSession"
-        value="Leave session"
+          class="btn btn-large btn-danger"
+          type="button"
+          id="buttonLeaveSession"
+          @click="leaveSession"
+          value="Leave session"
         />
       </div>
 
@@ -55,7 +53,7 @@
           <user-video :stream-manager="mainStreamManager" />
           <!-- </div> -->
           <MetronomeApp />
-          <TunerApp v-if="popState" @close="changePopState()"/>
+          <TunerApp v-if="popState" @close="changePopState()" />
           <p @click="changePopState()">튜너</p>
         </div>
 
@@ -92,7 +90,11 @@
 
           <div class="message-input-form">
             <!-- 메세지를 입력하는 input 요소 -->
-            <input type="text" v-model="newMessage" @keyup.enter="sendMessage" />
+            <input
+              type="text"
+              v-model="newMessage"
+              @keyup.enter="sendMessage"
+            />
 
             <!-- 메세지를 보내는 버튼 -->
             <button @click="sendMessage">전송</button>
@@ -181,17 +183,38 @@ export default {
       sender: 0,
 
       myUserName: JSON.parse(localStorage.getItem("vuex")).common.name,
-      popState : false,
+      popState: false,
+
+      // 대기 화면 내 비디오 확인
+      myVideo: null,
     };
   },
   created() {
     // App.vue가 생성되면 소켓 연결을 시도합니다.
     const route = useRoute();
     this.mySessionId = route.params.lectureId;
+
+    this.getCamera();
     // console.log(this.roomId + "!!!!!!!!!!!!!");
   },
 
   methods: {
+    // 대기화면에서 카메라 가져오는 함수
+    async getCamera() {
+      let stream = null;
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: true,
+        });
+
+        this.myVideo = stream;
+      } catch (error) {
+        alert("카메라 접근 실패");
+      }
+    },
+
     sendMessage() {
       if (this.sessionCamera) {
         this.sessionCamera
@@ -485,25 +508,39 @@ export default {
       );
       return response.data; // The token
     },
-    changePopState(){
-      this.popState=!this.popState;
-    }
+    changePopState() {
+      this.popState = !this.popState;
+    },
   },
   beforeUnmount() {
     // `this`를 통해 컴포넌트 인스턴스에 접근할 수 있습니다.
     this.leaveSession();
+    if (this.myVideo != null) {
+      const tracks = this.myVideo.getTracks();
+
+      tracks.forEach((track) => {
+        track.stop();
+      });
+
+      this.myVideo = null;
+    }
     console.log("mounted()가 호출 되었습니다:", this);
   },
 };
 </script>
 
 <style>
-.livemeeting-container{
+#my-video {
+  width: 300px;
+  height: 300px;
+}
+
+.livemeeting-container {
   width: 100vw;
   height: 90vh;
   display: flex;
 }
-#local-video-undefined{
+#local-video-undefined {
   display: flex;
   width: 100%;
   justify-content: center;
@@ -513,23 +550,23 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.aditional-function{
+.aditional-function {
   width: 16%;
   float: left;
   border: solid 1px red;
   box-sizing: border-box;
 }
-.video-box{
+.video-box {
   width: 66%;
   border: solid 1px red;
   float: center;
 }
-.message-box{
+.message-box {
   width: 16%;
   float: right;
   border: solid 1px red;
   box-sizing: border-box;
-  position:relative;
+  position: relative;
 }
 .messages-container {
   display: flex;
@@ -540,11 +577,11 @@ export default {
 .sent-messages {
   width: 100%;
 }
-.message-input-form{
+.message-input-form {
   position: absolute;
   bottom: 5px;
 }
-.tuner-container{
+.tuner-container {
   display: flex;
   justify-content: center;
 }
