@@ -1,25 +1,38 @@
 <template>
   <div class="search-bar">
     <!-- 검색바 -->
-    <!-- 성별 필터 -->
-    <select v-model="searchParams.gender" @change="setGender">
-      <option v-for="(value, gender) in genders" :key="value" :value="value">
-        {{ gender }}
-      </option>
-    </select>
+    <div>
+      <!-- 키워드 검색 -->
+      <!-- 검색 버튼 -->
+      <input
+        placeholder="검색어를 입력하세요."
+        type="text"
+        v-model="searchParams.keyword"
+        @change="setKeyword"
+      />
+      <button @click="searchTeacher">검색</button>
+    </div>
+    <!-- 필터들 -->
+    <div class="filters">
+      <!-- 성별 필터 -->
+      <select v-model="searchParams.gender" @change="setGender">
+        <option v-for="(value, gender) in genders" :key="value" :value="value">
+          {{ gender }}
+        </option>
+      </select>
 
-    <!-- 악기 필터 -->
-    <select v-model="searchParams.instrument" @change="setInstrument">
-      <option
-        v-for="instrument in instruments"
-        :key="instrument"
-        :value="instrument"
-      >
-        {{ instrument }}
-      </option>
-    </select>
+      <!-- 악기 필터 -->
+      <select v-model="searchParams.instrument" @change="setInstrument">
+        <option
+          v-for="instrument in instruments"
+          :key="instrument"
+          :value="instrument"
+        >
+          {{ instrument }}
+        </option>
+      </select>
 
-    <!-- <div class="dropdown">
+      <!-- <div class="dropdown">
       <button id="instrumentButton" @click="toggleInputDropdown('instrument')">
         악기
       </button>
@@ -33,69 +46,63 @@
       </div>
     </div> -->
 
-    <!-- 경력 필터 -->
-    <div class="dropdown">
-      <button id="careerButton" @click="toggleInputDropdown('career')">
-        경력
-      </button>
-      <div
-        id="careerDropdown"
-        class="dropdown-content"
-        v-if="isDisplaySearchInputs.career"
-      >
-        <InputCareer @careerChange="setCareer" />
+      <!-- 경력 필터 -->
+      <div class="dropdown">
+        <button id="careerButton" @click="toggleInputDropdown('career')">
+          경력
+        </button>
+        <div
+          id="careerDropdown"
+          class="dropdown-content"
+          v-if="isDisplaySearchInputs.career"
+        >
+          <InputCareer @careerChange="setCareer" />
+        </div>
       </div>
-    </div>
 
-    <!-- 비용 필터 -->
-    <div class="dropdown">
-      <button id="expenseButton" @click="toggleInputDropdown('cost')">
-        비용
-      </button>
-      <div
-        id="expenseDropdown"
-        class="dropdown-content"
-        v-if="isDisplaySearchInputs.cost"
-      >
-        <InputCost @costChange="setCost" />
+      <!-- 비용 필터 -->
+      <div class="dropdown">
+        <button id="expenseButton" @click="toggleInputDropdown('cost')">
+          비용
+        </button>
+        <div
+          id="expenseDropdown"
+          class="dropdown-content"
+          v-if="isDisplaySearchInputs.cost"
+        >
+          <InputCost @costChange="setCost" />
+        </div>
       </div>
-    </div>
 
-    <!-- 시간 필터 -->
-    <div class="dropdown">
-      <button id="timeButton" @click="toggleInputDropdown('time')">시간</button>
-      <div
-        id="timeDropdown"
-        class="dropdown-content"
-        v-if="isDisplaySearchInputs.time"
-      >
-        <InputTime
-          :days="days"
-          @timeChange="setTime"
-          @dayChange="setClassDay"
-        />
+      <!-- 시간 필터 -->
+      <div class="dropdown">
+        <button id="timeButton" @click="toggleInputDropdown('time')">
+          시간
+        </button>
+        <div
+          id="timeDropdown"
+          class="dropdown-content"
+          v-if="isDisplaySearchInputs.time"
+        >
+          <InputTime
+            :days="days"
+            @timeChange="setTime"
+            @dayChange="setClassDay"
+          />
+        </div>
       </div>
+
+      <!-- 정렬 -->
+      <select v-model="searchParams.orderBy" @change="onChangeOrderBy">
+        <option
+          v-for="category in searchCategory"
+          :key="category"
+          :value="category"
+        >
+          {{ category }}
+        </option>
+      </select>
     </div>
-
-    <!-- 키워드 검색 -->
-    <!-- 검색 버튼 -->
-    <input
-      placeholder="검색어를 입력하세요."
-      type="text"
-      v-model="searchParams.keyword"
-    />
-    <button @click="searchTeacher">검색</button>
-
-    <!-- 정렬 -->
-    <select v-model="searchParams.orderBy" @change="onChangeOrderBy">
-      <option
-        v-for="category in searchCategory"
-        :key="category"
-        :value="category"
-      >
-        {{ category }}
-      </option>
-    </select>
   </div>
 </template>
 
@@ -160,6 +167,7 @@ export default {
       "commitInstrument",
       "commitGender",
       "commitOrderBy",
+      "commitKeyword",
     ]),
 
     onChangeOrderBy() {
@@ -249,11 +257,4 @@ export default {
 
 <style scoped>
 @import "@/assets/scss/search.scss";
-
-.column {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: left;
-}
 </style>

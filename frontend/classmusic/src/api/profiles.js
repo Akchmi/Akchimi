@@ -3,6 +3,7 @@ import axios from "@/api/axios";
 async function apiGetUserInfo(id) {
   try {
     const response = await axios.get(`/users/${id}`);
+    console.log('겟유인',response)
     return response.data;
   } catch (error) {
     console.log(error);
@@ -10,17 +11,30 @@ async function apiGetUserInfo(id) {
   }
 }
 
-async function apiChangePw(id, newPassword) {
+async function apiChangePw(data) {
+  const id = data.id;
   try {
-    const response = await axios.put(`/users/${id}/password`, {
-      password: newPassword,
-    });
-    return response.data;
+    const response = await axios.put(`/users/${id}/password`, data);
+    return { success: true, data: response.data };
   } catch (error) {
-    console.log(error);
-    return error;
+    console.log("비번변경실패", error);
+    return { success: false, error: error.response ? error.response.data.message : 'Unknown Error' };
   }
 }
+
+
+// function apiChangePw(context, data) {
+//   const id = data.id
+//   axios
+//     .put(`/users/${id}/password`, data)
+//     .then(({data}) => {
+//       console.log("비번변경성공", data);
+//     })
+//     .catch((error) => {
+//       console.log("비번변경실패", error)
+//     }) 
+
+// }
 
 async function apiDeleteUser(id) {
   try {
@@ -139,6 +153,10 @@ async function apiGetReview(teacherId) {
     return error;
   }
 }
+
+
+
+
 
 export {
   apiGetReview,
