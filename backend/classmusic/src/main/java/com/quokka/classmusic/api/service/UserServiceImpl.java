@@ -21,7 +21,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
@@ -104,9 +103,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public void changePassword(String id, ChangePasswordDto changePasswordDto) {
         User user = userRepository.findUserById(id);
-        passwordEncoder.matches(user.getPassword(),changePasswordDto.getOldPassword());
-        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
-        userRepository.save(user);
+        if(passwordEncoder.matches(changePasswordDto.getOldPassword(),user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+            userRepository.save(user);
+        }else{
+            throw new RestApiException(ErrorCode.PASSWORD_MISMATCH);
+        }
     }
 
     @Override
