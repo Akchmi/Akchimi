@@ -16,3 +16,17 @@
   margin-bottom: 50px;
   padding-left: 350px;
 }
+
+.pageBtn {
+  margin: 10px;
+  background-color: transparent;
+  cursor: pointer;
+  border: transparent;
+  font-size: 13px;
+  font-family: mainFont;
+}
+
+.pageBtn:hover {
+  font-size: 15px;
+  margin: 9px;
+}
