@@ -5,14 +5,16 @@
       <h1>자유게시판</h1>
     </div>
     <div class="article__list">
-      <div class="article">
+      <div class="articleTableBanner">
         <!-- 자유게시판 정렬-->
         <select v-model="selectedSorttype" @change="sortTypeChange">
           <option v-for="(item, idx) in sortType" :key="idx" :value="item">
             {{ item }}
           </option>
         </select>
-        <button class="btn" @click="goArticlecreate">글 작성</button>
+        <button id="articleCreateButton" class="btn" @click="goArticlecreate">
+          글 작성
+        </button>
       </div>
       <div>
         <!-- 자유게시판 게시물 리스트 -->
@@ -188,4 +190,8 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/article.scss";
 @import "@/assets/scss/templates/common.scss";
+
+#articleCreateButton {
+  font-size: 16px;
+}
 </style>
