@@ -35,61 +35,68 @@
     </div>
 
     <div id="session" v-if="session">
-      <div>
-        <MetronomeApp />
-      </div>
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
         <input
-          class="btn btn-large btn-danger"
-          type="button"
-          id="buttonLeaveSession"
-          @click="leaveSession"
-          value="Leave session"
+        class="btn btn-large btn-danger"
+        type="button"
+        id="buttonLeaveSession"
+        @click="leaveSession"
+        value="Leave session"
         />
       </div>
-      <div>
-        <div class="messages-container">
-          <!-- Sent Messages -->
-          <div class="sent-messages">
-            <div
-              v-for="(message, index) in receivedMessages"
-              :class="message.className"
-              :key="index"
-            >
-              <div>
-                {{ message.message }}
+
+      <div class="livemeeting-container">
+        <div class="aditional-function">
+          <!-- <div id="main-video"> -->
+          <user-video :stream-manager="mainStreamManager" />
+          <!-- </div> -->
+          <MetronomeApp />
+          <TunerApp v-if="popState" @close="changePopState()"/>
+          <p @click="changePopState()">튜너</p>
+        </div>
+
+        <div id="video-container" class="video-box">
+          <user-video
+            :stream-manager="publisher"
+            @click="updateMainVideoStreamManager(publisher)"
+          />
+          <user-video
+            v-for="sub in subscribers"
+            :key="sub.stream.connection.connectionId"
+            :stream-manager="sub"
+            @click="updateMainVideoStreamManager(sub)"
+          />
+        </div>
+
+        <div class="message-box">
+          <div class="messages-container">
+            <!-- Sent Messages -->
+            <div class="sent-messages">
+              <div
+                v-for="(message, index) in receivedMessages"
+                :class="message.className"
+                :key="index"
+              >
+                <div>
+                  {{ message.message }}
+                </div>
               </div>
             </div>
           </div>
+
+          <!-- Received Messages -->
+
+          <div class="message-input-form">
+            <!-- 메세지를 입력하는 input 요소 -->
+            <input type="text" v-model="newMessage" @keyup.enter="sendMessage" />
+
+            <!-- 메세지를 보내는 버튼 -->
+            <button @click="sendMessage">전송</button>
+          </div>
         </div>
-
-        <!-- Received Messages -->
-
-        <div>
-          <!-- 메세지를 입력하는 input 요소 -->
-          <input type="text" v-model="newMessage" @keyup.enter="sendMessage" />
-
-          <!-- 메세지를 보내는 버튼 -->
-          <button @click="sendMessage">메세지 보내기</button>
-        </div>
       </div>
-
-      <div id="main-video" class="col-md-6">
-        <user-video :stream-manager="mainStreamManager" />
-      </div>
-      <div id="video-container" class="col-md-6">
-        <user-video
-          :stream-manager="publisher"
-          @click="updateMainVideoStreamManager(publisher)"
-        />
-        <user-video
-          v-for="sub in subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
-          @click="updateMainVideoStreamManager(sub)"
-        />
-      </div>
+      
     </div>
   </div>
 </template>
@@ -100,12 +107,13 @@ import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/LiveMeeting/UserVideo";
 import { useRoute } from "vue-router";
 import MetronomeApp from "../components/LiveMeeting/MetronomeApp";
+import TunerApp from "../components/LiveMeeting/TunerApp.vue";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
     ? ""
-    : "http://localhost:8080/lectures/";
+    : "http://localhost:8080/api/lectures/";
 
 export default {
   name: "App",
@@ -113,6 +121,7 @@ export default {
   components: {
     UserVideo,
     MetronomeApp,
+    TunerApp,
   },
 
   data() {
@@ -132,6 +141,7 @@ export default {
       sender: 0,
 
       myUserName: JSON.parse(localStorage.getItem("vuex")).common.name,
+      popState : false,
     };
   },
   created() {
@@ -287,7 +297,7 @@ export default {
 
     async createSession(sessionId) {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "api/sessions",
+        APPLICATION_SERVER_URL + "sessions",
         { customSessionId: sessionId },
         {
           headers: { "Content-Type": "application/json" },
@@ -298,7 +308,7 @@ export default {
 
     async createToken(sessionId) {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+        APPLICATION_SERVER_URL + "sessions/" + sessionId + "/connections",
         {},
         {
           headers: { "Content-Type": "application/json" },
@@ -306,25 +316,64 @@ export default {
       );
       return response.data; // The token
     },
+    changePopState(){
+      this.popState=!this.popState;
+    }
   },
 };
 </script>
+
 <style>
+.livemeeting-container{
+  width: 100vw;
+  height: 90vh;
+  display: flex;
+}
+#local-video-undefined{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 .split-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
+.aditional-function{
+  width: 16%;
+  float: left;
+  border: solid 1px red;
+  box-sizing: border-box;
+}
+.video-box{
+  width: 66%;
+  border: solid 1px red;
+  float: center;
+}
+.message-box{
+  width: 16%;
+  float: right;
+  border: solid 1px red;
+  box-sizing: border-box;
+  position:relative;
+}
 .messages-container {
   display: flex;
   width: 100%;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 .sent-messages {
   width: 100%;
 }
-
+.message-input-form{
+  position: absolute;
+  bottom: 5px;
+}
+.tuner-container{
+  display: flex;
+  justify-content: center;
+}
 .right {
   display: flex;
   justify-content: right;
