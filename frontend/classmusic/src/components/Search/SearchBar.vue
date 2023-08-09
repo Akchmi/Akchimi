@@ -56,7 +56,7 @@
           class="dropdown-content"
           v-if="isDisplaySearchInputs.career"
         >
-          <InputCareer @careerChange="setCareer" />
+          <InputCareer @careerChange="setCareer" @closeDropdown="closeCareerDropdown" />
         </div>
       </div>
 
@@ -170,6 +170,13 @@ export default {
       "commitKeyword",
     ]),
 
+    closeCareerDropdown() {
+      this.isDisplaySearchInputs.career = false;
+      console.log("닫경", this.isDisplaySearchInputs.career)
+
+    },
+
+
     onChangeOrderBy() {
       this.commitOrderBy(this.searchParams.orderBy);
       this.searchTeacher();
@@ -177,6 +184,7 @@ export default {
 
     toggleInputDropdown(targetSearchInput) {
       console.log("toggle clicked", targetSearchInput);
+
       for (const searchInput in this.isDisplaySearchInputs) {
         if (searchInput != targetSearchInput) {
           this.isDisplaySearchInputs[searchInput] = false;

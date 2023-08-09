@@ -114,6 +114,7 @@
               alt="Attached file"
               class="attach-image"
             />
+            
           </div>
           <input
             type="file"
@@ -182,34 +183,42 @@ export default {
     triggerFileUpload() {
       this.$refs.fileUploadInput.click();
     },
-    async handleFileUpload() {
+     handleFileUpload() {
       const selectedFiles = this.$refs.fileUploadInput.files;
 
-      let formData = new FormData();
+    this.attachedFiles = [];
+
       for (let i = 0; i < selectedFiles.length; i++) {
-        formData.append("image", selectedFiles[i]);
+        const fileReader = new FileReader();
 
-        try {
-          let response = await axios.post(
-            `/teachers/${this.teacherId}/images`,
-            formData
-          );
+        fileReader.onload = (e) => {
+          this.attachedFiles.push(e.target.result);  
+        };
+        
+        fileReader.readAsDataURL(selectedFiles[i]);
+      }
+    },    
+    async submitImages() {
+      let formData = new FormData();
 
-          if (response.data && response.data.image) {
-            this.attachedFiles.push(response.data.image);
-            console.log(222);
-          }
-        } catch (error) {
-          console.log(error);
-        }
+      for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
+        formData.append("image", this.$refs.fileUploadInput.files[i]);
+      }
+
+      try {
+        await axios.post(`/teachers/${this.teacherId}/images`, formData);
+      } catch (error) {
+        console.log(error);
       }
     },
+
     removeInstrument(index) {
     this.selectedInstruments.splice(index, 1);
-  },
+    },
     ...mapActions(['putTeacherProfileUpdate']),
 
-    submitForm() {
+    async submitForm() {
+      await this.submitImages();
       const data = {       
         career: this.career,
         cost: this.cost,
