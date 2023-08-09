@@ -83,6 +83,7 @@
       placeholder="검색어를 입력하세요."
       type="text"
       v-model="searchParams.keyword"
+      @change="setKeyword"
     />
     <button @click="searchTeacher">검색</button>
 
@@ -160,6 +161,7 @@ export default {
       "commitInstrument",
       "commitGender",
       "commitOrderBy",
+      "commitKeyword",
     ]),
 
     onChangeOrderBy() {
