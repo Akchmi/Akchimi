@@ -1,7 +1,10 @@
 <template>
   <div class="teacher-listcard">
-    
-    <img :src="teacher.userProfileImage" alt="Teacher profile picture" class="teacher-image" />
+    <img
+      :src="teacher.userProfileImage"
+      alt="Teacher profile picture"
+      class="teacher-image"
+    />
     <div class="teacher-info">
       <h2 class="teacher-name">{{ teacher.name }}</h2>
       <span
@@ -16,7 +19,7 @@
         >{{ teacher.contactCnt }}회</span
       >
       <p class="teacher-description">{{ teacher.introduce }}</p>
-     
+
       <div class="btn">
         <button @click="goToProfile(teacher.teacherId)">자세히 보기</button>
         <button @click="registerLecture(teacher.teacherId)">강의 신청</button>
