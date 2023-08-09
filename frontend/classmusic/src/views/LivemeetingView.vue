@@ -1,6 +1,6 @@
 <template>
   <div id="main-container" class="container">
-    <div id="join" v-if="!session">
+    <div id="join" v-if="!sessionCamera">
       <div id="img-div">
         <img src="@/assets/images/quokkaband.png" width="500" />
       </div>
@@ -34,7 +34,10 @@
       </div>
     </div>
 
-    <div id="session" v-if="session">
+    <div id="session" v-if="sessionCamera">
+      <div>
+        <MetronomeApp />
+      </div>
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
         <input
@@ -95,8 +98,42 @@
             <button @click="sendMessage">전송</button>
           </div>
         </div>
+        <button
+          id="buttonScreenShare"
+          @click="publishScreenShare"
+          v-if="sessionScreen"
+        >
+          Start Screen Share
+        </button>
       </div>
-      
+
+      <div id="main-video" class="col-md-6">
+        <user-video :stream-manager="mainStreamManager" />
+      </div>
+
+      <div id="main-video" class="col-md-6">
+        <p></p>
+        <video autoplay playsinline="true"></video>
+      </div>
+      <div class="col-md-6">
+        <div class="row panel panel-default">
+          <div class="panel-heading">User Screens</div>
+          <div class="panel-body" id="container-screens"></div>
+        </div>
+      </div>
+
+      <div id="video-container" class="col-md-6">
+        <user-video
+          :stream-manager="publisher"
+          @click="updateMainVideoStreamManager(publisher)"
+        />
+        <user-video
+          v-for="sub in subscribers"
+          :key="sub.stream.connection.connectionId"
+          :stream-manager="sub"
+          @click="updateMainVideoStreamManager(sub)"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -127,14 +164,17 @@ export default {
   data() {
     return {
       // OpenVidu objects`
-      OV: undefined,
-      session: undefined,
+      OVCamera: undefined,
+      OVScreen: undefined,
+      sessionCamera: undefined,
+      sessionScreen: undefined,
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
       receivedMessages: [],
       sentMessages: [],
       newMessage: "",
+      screensharing: false,
 
       // Join form
       mySessionId: "",
@@ -152,12 +192,9 @@ export default {
   },
 
   methods: {
-    setupDataChannel() {
-      // 데이터 채널 생성
-    },
     sendMessage() {
-      if (this.session) {
-        this.session
+      if (this.sessionCamera) {
+        this.sessionCamera
           .signal({
             data: this.myUserName + ":" + this.newMessage, // Any string (optional)
             to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
@@ -182,22 +219,124 @@ export default {
       // Push the received message into the messages array
       this.messages.push(receivedMessage);
     },
+    appendUserData(videoElement, connection) {
+      var userData;
+      var nodeId;
+      if (typeof connection === "string") {
+        userData = connection;
+        nodeId = connection;
+      } else {
+        userData = JSON.parse(connection.data).clientData;
+        nodeId = connection.connectionId;
+      }
+      var dataNode = document.createElement("div");
+      dataNode.className = "data-node";
+      dataNode.id = "data-" + nodeId;
+      dataNode.innerHTML = "<p>" + userData + "</p>";
+      videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
+      this.addClickListener(videoElement, userData);
+    },
+    addClickListener(element, userData) {
+      element.addEventListener("click", () => {
+        const mainVideo = document.querySelector("#main-video video");
+        if (mainVideo.srcObject !== element.srcObject) {
+          const mainVideoContainer = document.querySelector("#main-video");
+          mainVideoContainer.style.display = "none";
+
+          const mainVideoText = mainVideoContainer.querySelector("p");
+          mainVideoText.innerHTML = userData;
+
+          mainVideo.srcObject = element.srcObject;
+          mainVideoContainer.style.display = "block";
+        }
+      });
+    },
+
+    publishScreenShare() {
+      // --- 9.1) To create a publisherScreen set the property 'videoSource' to 'screen'
+      var publisherScreen = this.OVScreen.initPublisher("container-screens", {
+        videoSource: "screen",
+      });
+
+      // --- 9.2) Publish the screen share stream only after the user grants permission to the browser
+      publisherScreen.once("accessAllowed", (event) => {
+        document.getElementById("buttonScreenShare").style.visibility =
+          "hidden";
+        this.screensharing = true;
+        // event.element["muted"] = true;
+        console.log(event);
+        // If the user closes the shared window or stops sharing it, unpublish the stream
+        publisherScreen.stream
+          .getMediaStream()
+          .getVideoTracks()[0]
+          .addEventListener("ended", () => {
+            console.log(
+              'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
+            );
+            this.sessionScreen.unpublish(publisherScreen);
+            document.getElementById("buttonScreenShare").style.visibility =
+              "visible";
+            this.screensharing = false;
+          });
+        this.sessionScreen.publish(publisherScreen);
+      });
+
+      publisherScreen.on("videoElementCreated", (event) => {
+        this.appendUserData(event.element, this.sessionScreen.connection);
+        event.element["muted"] = true;
+      });
+
+      publisherScreen.once("accessDenied", (event) => {
+        console.error("Screen Share: Access Denied");
+
+        console.log(event);
+      });
+    },
 
     joinSession() {
       // --- 1) Get an OpenVidu object ---
-      this.OV = new OpenVidu();
+      this.OVCamera = new OpenVidu();
+      this.OVScreen = new OpenVidu();
 
       // --- 2) Init a session ---
-      this.session = this.OV.initSession();
+      this.sessionCamera = this.OVCamera.initSession();
+      this.sessionScreen = this.OVScreen.initSession();
 
       // --- 3) Specify the actions when events take place in the session ---
 
       // On every new Stream received...
-      this.session.on("streamCreated", ({ stream }) => {
-        const subscriber = this.session.subscribe(stream);
-        this.subscribers.push(subscriber);
+      this.sessionCamera.on("streamCreated", (event) => {
+        if (event.stream.typeOfVideo == "CAMERA") {
+          // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-cameras' id
+          var subscriber = this.sessionCamera.subscribe(
+            event.stream,
+            "container-cameras"
+          );
+          // When the HTML video has been appended to DOM...
+          subscriber.on("videoElementCreated", (event) => {
+            // Add a new <p> element for the user's nickname just below its video
+            this.appendUserData(event.element, subscriber.stream.connection);
+          });
+        }
       });
-      this.session.on("signal", (event) => {
+      this.sessionScreen.on("streamCreated", (event) => {
+        if (event.stream.typeOfVideo == "SCREEN") {
+          // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
+          var subscriberScreen = this.sessionScreen.subscribe(
+            event.stream,
+            "container-screens"
+          );
+          // When the HTML video has been appended to DOM...
+          subscriberScreen.on("videoElementCreated", (event) => {
+            // Add a new <p> element for the user's nickname just below its video
+            this.appendUserData(
+              event.element,
+              subscriberScreen.stream.connection
+            );
+          });
+        }
+      });
+      this.sessionCamera.on("signal", (event) => {
         const receivedMessage = event.data;
         console.log(event.from);
         if (receivedMessage != this.myUserName + ":" + this.newMessage) {
@@ -214,7 +353,7 @@ export default {
       });
 
       // On every Stream destroyed...
-      this.session.on("streamDestroyed", ({ stream }) => {
+      this.sessionCamera.on("streamDestroyed", ({ stream }) => {
         const index = this.subscribers.indexOf(stream.streamManager, 0);
         if (index >= 0) {
           this.subscribers.splice(index, 1);
@@ -222,7 +361,7 @@ export default {
       });
 
       // On every asynchronous exception...
-      this.session.on("exception", ({ exception }) => {
+      this.sessionCamera.on("exception", ({ exception }) => {
         console.warn(exception);
       });
 
@@ -232,14 +371,14 @@ export default {
       this.getToken(this.mySessionId).then((token) => {
         // First param is the token. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-        this.session
+        this.sessionCamera
           .connect(token, { clientData: this.myUserName })
           .then(() => {
             // --- 5) Get your own camera stream with the desired properties ---
 
             // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
             // element: we will manage it on our own) and with the desired properties
-            let publisher = this.OV.initPublisher(undefined, {
+            let publisher = this.OVCamera.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
               videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
@@ -250,17 +389,40 @@ export default {
               mirror: false, // Whether to mirror your local video or not
             });
 
+            publisher.on("videoElementCreated", function (event) {
+              this.initMainVideo(event.element, this.myUserName);
+              this.appendUserData(event.element, this.myUserName);
+              event.element["muted"] = true;
+            });
+
             // Set the main video in the page to display our webcam and store our Publisher
             this.mainStreamManager = publisher;
             this.publisher = publisher;
 
             // --- 6) Publish your stream ---
 
-            this.session.publish(this.publisher);
+            this.sessionCamera.publish(this.publisher);
           })
           .catch((error) => {
             console.log(
               "There was an error connecting to the session:",
+              error.code,
+              error.message
+            );
+          });
+      });
+      this.getToken(this.mySessionId).then((tokenScreen) => {
+        // Create a token for screen share
+        this.sessionScreen
+          .connect(tokenScreen, { clientData: this.myUserName })
+          .then(() => {
+            document.getElementById("buttonScreenShare").style.visibility =
+              "visible";
+            console.log("Session screen connected");
+          })
+          .catch((error) => {
+            console.warn(
+              "There was an error connecting to the session for screen share:",
               error.code,
               error.message
             );
@@ -271,18 +433,25 @@ export default {
     },
 
     leaveSession() {
+      window.removeEventListener("beforeunload", this.leaveSession);
       // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
-      if (this.session) this.session.disconnect();
+      if (this.sessionCamera) {
+        this.sessionCamera.disconnect();
+      }
+      if (this.screensharing == true) {
+        this.sessionScreen.disconnect();
+      }
 
       // Empty all properties...
-      this.session = undefined;
+      this.sessionCamera = undefined;
+      this.sessionScreen = undefined;
       this.mainStreamManager = undefined;
       this.publisher = undefined;
       this.subscribers = [];
-      this.OV = undefined;
-
+      this.OVCamera = undefined;
+      this.OVScreen = undefined;
+      this.screensharing = false;
       // Remove beforeunload listener
-      window.removeEventListener("beforeunload", this.leaveSession);
     },
 
     updateMainVideoStreamManager(stream) {
@@ -319,6 +488,11 @@ export default {
     changePopState(){
       this.popState=!this.popState;
     }
+  },
+  beforeUnmount() {
+    // `this`를 통해 컴포넌트 인스턴스에 접근할 수 있습니다.
+    this.leaveSession();
+    console.log("mounted()가 호출 되었습니다:", this);
   },
 };
 </script>
