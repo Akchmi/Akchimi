@@ -58,7 +58,7 @@
             @change="handleFileUpload"
             style="display: none"
           />
-          <button @click="triggerFileUpload">첨부 파일 추가</button>
+          <!-- <button @click="triggerFileUpload">첨부 파일 추가</button> -->
         </div>
         <div class="button-group">
           <button v-if="Number(localteacherId) === Number(teacherId)">

@@ -105,12 +105,26 @@
           ></textarea>
         </div>
       </div>
-      <div class="attach-container">
-        <div>
-          <button>첨부 파일 추가</button>
+      <div class="attach-file">
+          <h3>파일 첨부</h3>
+          <div>
+            <img
+              v-for="(image, index) in attachedFiles"
+              :src="image"
+              :key="index"
+              alt="Attached file"
+              class="attach-image"
+            />
+          </div>
+          <input
+            type="file"
+            multiple
+            ref="fileUploadInput"
+            @change="handleFileUpload"
+            style="display: none"
+          />
+          <button @click="triggerFileUpload">첨부 파일 추가</button>
         </div>
-        첨부파일 추가 시 보여줄 공간
-      </div>
       <div class="save-button">
  
         <button @click="submitForm">강사 수정하기</button>
@@ -123,6 +137,8 @@
 <script>
 import { mapActions } from "vuex";
 import {  apiDetailTeacherInfo } from "@/api/profiles.js";
+import axios from "@/api/imageAxios.js";
+
 
 export default {
   props: {
@@ -164,7 +180,31 @@ export default {
   },
 
   methods: {
+    triggerFileUpload() {
+      this.$refs.fileUploadInput.click();
+    },
+    async handleFileUpload() {
+      const selectedFiles = this.$refs.fileUploadInput.files;
 
+      let formData = new FormData();
+      for (let i = 0; i < selectedFiles.length; i++) {
+        formData.append("image", selectedFiles[i]);
+
+        try {
+          let response = await axios.post(
+            `/teachers/${this.teacherId}/images`,
+            formData
+          );
+
+          if (response.data && response.data.image) {
+            this.attachedFiles.push(response.data.image);
+            console.log(222);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
     removeInstrument(index) {
     this.selectedInstruments.splice(index, 1);
   },
