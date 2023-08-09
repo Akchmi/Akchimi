@@ -1,7 +1,5 @@
 <template>
   <div class="teacher-review-container">
- 
-
     <div class="review-box">
       <img :src= "review.userProfileImage" alt="user profile picture" class="teacher-image" />
       <div class="review-content">
@@ -31,6 +29,7 @@ export default {
       return utils.unixTimeStampToLocalTimeStamp(unixTimeStamp);
     },
   },
+  
 };
 </script>
 
