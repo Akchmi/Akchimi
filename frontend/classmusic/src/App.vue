@@ -19,6 +19,17 @@ export default {
 </script>
 "
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@/assets/scss/templates/common.scss";
+@import "@/assets/scss/reset.scss";
+
+@font-face {
+  font-family: "mainfont";
+  src: url("assets/font/BMEuljiro10yearslater.ttf") format("truetype");
+  font-weight: 100;
+}
+
+.container {
+  font-family: "mainfont";
+}
 </style>
