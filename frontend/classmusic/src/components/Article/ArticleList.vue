@@ -1,9 +1,5 @@
 <template>
   <div class="container">
-    <div class="banner">
-      <!-- 자유게시판 리스트 최상단 -->
-      <h1>자유게시판</h1>
-    </div>
     <div class="article__list">
       <div class="articleTableBanner">
         <!-- 자유게시판 정렬-->

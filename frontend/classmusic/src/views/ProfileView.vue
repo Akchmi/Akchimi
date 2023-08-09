@@ -8,21 +8,18 @@
       <router-link :to="myProfilePath">내 프로필</router-link>
     </button>
     |
-    <button @click="navigateToTeacherProfile">
-      
-      강사 프로필
-    </button>
-    <hr>
+    <button @click="navigateToTeacherProfile">강사 프로필</button>
+    <hr />
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import NavBar from "@/components/Nav/NavBar.vue"
+import NavBar from "@/components/common/NavBar.vue";
 
 export default {
   components: {
-    NavBar
+    NavBar,
   },
   computed: {
     myProfilePath() {
@@ -30,10 +27,11 @@ export default {
     },
   },
   methods: {
-    navigateToTeacherProfile() {   
+    navigateToTeacherProfile() {
       const userType = this.$store.state.common.userType;
-      const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
-        if (userType === 0) {
+      const teacherId = JSON.parse(localStorage.getItem("vuex")).common
+        .teacherId;
+      if (userType === 0) {
         this.$router.push("/profile/teacherprofileprompt");
       } else if (userType === 1) {
         this.$router.push(`/profile/teacherprofile/${teacherId}`);

@@ -13,7 +13,7 @@
 <script>
 import SearchBar from "../components/Search/SearchBar.vue";
 import SearchList from "../components/Search/SearchList.vue";
-import NavBar from "@/components/Nav/NavBar.vue";
+import NavBar from "@/components/common/NavBar.vue";
 import { useStore } from "vuex";
 import { onMounted } from "vue";
 
