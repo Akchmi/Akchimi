@@ -2,7 +2,9 @@
   <div class="container">
     <div class="create__container">
       <div>
-        <button @click="$router.push('/article/list')">목록으로</button>
+        <button class="detailButton" @click="$router.push('/article/list')">
+          목록으로
+        </button>
         <hr />
 
         <div>
@@ -23,10 +25,13 @@
         <h3>첨부파일</h3>
 
         <div v-if="articleDetail.userId === loginUser">
-          <button @click="$router.push(`/article/update/${articleId}`)">
+          <button
+            class="detailButton"
+            @click="$router.push(`/article/update/${articleId}`)"
+          >
             수정
           </button>
-          <button @click="articleDelete">삭제</button>
+          <button class="detailButton" @click="articleDelete">삭제</button>
         </div>
       </div>
       <div>
@@ -37,7 +42,7 @@
         </div>
         <div v-else>
           <input class="commentBox" type="text" v-model="nowCreateComment" />
-          <button @click="createComment">댓글작성</button>
+          <button class="detailButton" @click="createComment">댓글작성</button>
         </div>
         <hr />
 
@@ -188,4 +193,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/article.scss";
+
+.detailButton {
+  font-size: 16px;
+}
 </style>

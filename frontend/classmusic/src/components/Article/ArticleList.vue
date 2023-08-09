@@ -8,7 +8,7 @@
             {{ item }}
           </option>
         </select>
-        <button id="articleCreateButton" class="btn" @click="goArticlecreate">
+        <button id="articleCreateButton" @click="goArticlecreate">
           글 작성
         </button>
       </div>
@@ -25,9 +25,7 @@
                 <th style="width: 10%">조회수</th>
               </tr>
             </thead>
-            <div v-if="articleList.length == 0">
-              <h2>검색된 게시글이 없습니다.</h2>
-            </div>
+
             <tbody>
               <tr v-for="article in articleList" :key="article.id">
                 <td>{{ article.articleId }}</td>
@@ -80,8 +78,9 @@
       </div>
 
       <!-- 페이지 번호-->
-      <div class="articleSearchBar">
-        <button class="btn" @click="pageDown">이전</button>
+
+      <div class="articlePageBox">
+        <button @click="pageDown">이전</button>
         <button
           class="pageBtn"
           v-for="page in pages"
@@ -91,7 +90,7 @@
         >
           {{ page }}
         </button>
-        <button class="btn" @click="pageUp">다음</button>
+        <button @click="pageUp">다음</button>
       </div>
     </div>
   </div>
@@ -105,7 +104,6 @@ import utils from "@/common/utils";
 export default {
   data() {
     return {
-      lastpage: 86,
       pageNo: 1,
       pages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       searchQuery: "",
@@ -115,7 +113,7 @@ export default {
   },
   computed: {
     ...mapGetters({ articleList: "getArticleList" }),
-    ...mapGetters({ endPageno: "getEndPageNo" }),
+    ...mapGetters({ endPageno: "getArticleEndPageNo" }),
     ...mapGetters({ isLogin: "getIsLogin" }),
   },
   methods: {
@@ -196,7 +194,10 @@ export default {
       });
     });
 
-    return { searchCategory, sortType };
+    return {
+      searchCategory,
+      sortType,
+    };
   },
 };
 </script>
@@ -206,6 +207,7 @@ export default {
 @import "@/assets/scss/templates/common.scss";
 
 #articleCreateButton {
+  padding: 5px 10px;
   font-size: 16px;
 }
 </style>

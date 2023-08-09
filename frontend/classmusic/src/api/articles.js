@@ -12,6 +12,10 @@ function apiGetArticlelist(context, searchType, keyword, pageNo, sortType) {
       },
     })
     .then(({ data }) => {
+      if (data.length == 0) {
+        alert("검색된 게시글이 없습니다.");
+        return;
+      }
       context.commit("SET_ARTICLE_LIST", data);
     })
     .catch((error) => {
