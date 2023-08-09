@@ -98,6 +98,6 @@ li {
 li:hover {
   cursor: pointer;
   font-size: 22px;
-  margin: 8px;
+  margin: 6.7px;
 }
 </style>
