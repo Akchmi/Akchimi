@@ -3,6 +3,7 @@
     <div>
       <NavBar></NavBar>
     </div>
+    <TheBanner :title="'마이페이지'" />
     <br />
     <button>
       <router-link :to="myProfilePath">내 프로필</router-link>
@@ -16,10 +17,12 @@
 
 <script>
 import NavBar from "@/components/common/NavBar.vue";
+import TheBanner from "@/components/common/TheBanner";
 
 export default {
   components: {
     NavBar,
+    TheBanner,
   },
   computed: {
     myProfilePath() {

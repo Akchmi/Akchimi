@@ -3,9 +3,7 @@
     <div>
       <NavBar></NavBar>
     </div>
-    <div class="theBanner-container">
-      <TheBanner :title="'자유게시판'" />
-    </div>
+    <TheBanner :title="'자유게시판'" />
     <router-view></router-view>
   </div>
 </template>
@@ -22,9 +20,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.theBanner-container {
-  width: 100%;
-  height: 150px;
-}
-</style>
+<style lang="scss" scoped></style>

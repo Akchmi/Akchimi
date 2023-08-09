@@ -3,6 +3,7 @@
     <div>
       <NavBar></NavBar>
     </div>
+    <TheBanner :title="'강사검색'" />
     <br />
     <SearchBar ref="searchBar"> </SearchBar>
     <hr />
@@ -14,6 +15,7 @@
 import SearchBar from "../components/Search/SearchBar.vue";
 import SearchList from "../components/Search/SearchList.vue";
 import NavBar from "@/components/common/NavBar.vue";
+import TheBanner from "@/components/common/TheBanner";
 import { useStore } from "vuex";
 import { onMounted } from "vue";
 
@@ -26,6 +28,7 @@ export default {
     SearchBar,
     SearchList,
     NavBar,
+    TheBanner,
   },
   setup() {
     const store = useStore();

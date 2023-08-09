@@ -24,7 +24,7 @@ export default {
 <style lang="scss" scoped>
 .theBanner {
   width: 100%;
-  height: 100%;
+  height: 150px;
   position: relative;
   overflow: hidden;
 }
