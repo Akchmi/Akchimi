@@ -23,8 +23,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/templates/common.scss";
-
 .theBanner-container {
   width: 100%;
   height: 150px;

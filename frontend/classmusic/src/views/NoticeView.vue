@@ -17,6 +17,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import "@/assets/scss/templates/common.scss";
-</style>
+<style lang="scss" scoped></style>
