@@ -3,7 +3,6 @@
     <div class="container">
       <nav class="navbar">
         <div class="navbar__logo">
-          <i class="fas fa-blog"></i>
           <a @click="$router.push('/')">Akchimi</a>
         </div>
 
@@ -84,5 +83,21 @@ export default {
 .out__container {
   display: flex;
   justify-content: center;
+}
+
+a {
+  cursor: pointer;
+}
+
+li {
+  cursor: pointer;
+  margin: 10px;
+  font-size: 20px;
+}
+
+li:hover {
+  cursor: pointer;
+  font-size: 22px;
+  margin: 8px;
 }
 </style>
