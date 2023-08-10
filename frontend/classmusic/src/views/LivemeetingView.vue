@@ -546,7 +546,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .top-container {
   width: 98vw;
   height: 3vh;
