@@ -30,6 +30,7 @@ import TheChat from "@/components/Chat/TheChat";
 import { apiGetChatLog, apiGetChatParticipant } from "@/api/chats.js";
 import { useRoute } from "vue-router";
 import { mapActions } from "vuex";
+// import A210URL from "@/api/axios";
 
 export default {
   data() {
@@ -123,7 +124,7 @@ export default {
     },
 
     connect() {
-      const serverURL = "http://localhost:8080/api/websocket";
+      const serverURL = process.env.VUE_APP_API_URL + "/websocket";
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
