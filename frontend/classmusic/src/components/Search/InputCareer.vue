@@ -2,10 +2,10 @@
   <div>
     <h3>career</h3>
     <br />
-    <Slider @change="onCareerChange" :value="career" />
+    <Slider class="slider-brown" @change="onCareerChange" :value="career" />
     <br />
     <p>경력: {{ career[0] }}년에서 ~ {{ career[1] }}년까지</p>
-    <button @click="closeWindow">완료</button>
+    <button @click="closeFilter">완료</button>
   </div>
 </template>
 
@@ -16,9 +16,7 @@ import { mapGetters } from "vuex";
 export default {
   components: { Slider },
   data() {
-    return {
-    
-    } 
+    return {};
   },
   computed: {
     ...mapGetters({ career: "getSearchParamsCareer" }),
@@ -28,8 +26,8 @@ export default {
       console.log("InputCareer.vue career 수정");
       this.$emit("careerChange", value);
     },
-    closeWindow() {
-      this.$emit('closeCareerDropdown')
+    closeFilter() {
+      this.$emit("closeDropdown");
     },
   },
 };

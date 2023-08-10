@@ -6,6 +6,7 @@
       <label v-for="(value, day) in days" :key="day">
         <input
           type="checkbox"
+          class="day-checkbox"
           :checked="value"
           @change="onDaysChange($event, day)"
         />
@@ -17,7 +18,7 @@
     <br />
     <Slider @change="onTimeChange" :value="time" :max="24" />
     <br />
-    <button>완료</button>
+    <button @click="closeFilter">완료</button>
   </div>
 </template>
 
@@ -45,8 +46,15 @@ export default {
       console.log("InputTime.vue days 수정");
       this.$emit("dayChange", event.target.checked, day);
     },
+    closeFilter() {
+      this.$emit("closeDropdown");
+    },
   },
 };
 </script>
 
-<style src="@vueform/slider/themes/default.css"></style>
+<style src="@vueform/slider/themes/default.css">
+.day-checkbox:checked {
+  color: #edd9b7;
+}
+</style>

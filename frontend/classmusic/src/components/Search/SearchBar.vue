@@ -56,7 +56,10 @@
           class="dropdown-content"
           v-if="isDisplaySearchInputs.career"
         >
-          <InputCareer @careerChange="setCareer" @closeDropdown="closeCareerDropdown" />
+          <InputCareer
+            @careerChange="setCareer"
+            @closeDropdown="closeDropdown('career')"
+          />
         </div>
       </div>
 
@@ -70,7 +73,10 @@
           class="dropdown-content"
           v-if="isDisplaySearchInputs.cost"
         >
-          <InputCost @costChange="setCost" />
+          <InputCost
+            @costChange="setCost"
+            @closeDropdown="closeDropdown('cost')"
+          />
         </div>
       </div>
 
@@ -88,6 +94,7 @@
             :days="days"
             @timeChange="setTime"
             @dayChange="setClassDay"
+            @closeDropdown="closeDropdown('time')"
           />
         </div>
       </div>
@@ -170,12 +177,14 @@ export default {
       "commitKeyword",
     ]),
 
-    closeCareerDropdown() {
-      this.isDisplaySearchInputs.career = false;
-      console.log("닫경", this.isDisplaySearchInputs.career)
-
+    closeDropdown(targetDropDown) {
+      console.log(
+        targetDropDown,
+        " 드롭다운 닫기 ",
+        this.isDisplaySearchInputs[targetDropDown]
+      );
+      this.isDisplaySearchInputs[targetDropDown] = false;
     },
-
 
     onChangeOrderBy() {
       this.commitOrderBy(this.searchParams.orderBy);
