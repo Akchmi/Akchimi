@@ -33,20 +33,6 @@
         </option>
       </select>
 
-      <!-- <div class="dropdown">
-      <button id="instrumentButton" @click="toggleInputDropdown('instrument')">
-        악기
-      </button>
-      <div
-        id="instrumentDropdown"
-        class="dropdown-content"
-        v-if="isDisplaySearchInputs.instrument"
-      >
-      // 시간 남으면 악기 이미지 radio 버튼으로 악기 종류 선택
-      
-      </div>
-    </div> -->
-
       <!-- 경력 필터 -->
       <div class="dropdown">
         <button id="careerButton" @click="toggleInputDropdown('career')">
