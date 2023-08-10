@@ -102,7 +102,7 @@
                       v-if="nowUpdateCommentId != comment.commentId"
                       style="font-size: 12px; padding-top: 10px"
                     >
-                      작성시간: {{ comment.createdAt }}
+                      작성시간: {{ toLocalTimeStamp(comment.createdAt) }}
                     </div>
                     <div>
                       <div v-if="nowUpdateCommentId == comment.commentId">
@@ -144,6 +144,7 @@
 import { onMounted } from "vue";
 import { useStore, mapGetters, mapActions } from "vuex";
 import { useRoute } from "vue-router";
+import utils from "@/common/utils";
 
 export default {
   data() {
@@ -206,6 +207,10 @@ export default {
         articleId: this.articleDetail.articleId,
         commentId: commentId,
       });
+    },
+
+    toLocalTimeStamp(unixTimeStamp) {
+      return utils.unixTimeStampToLocalTimeStamp(unixTimeStamp);
     },
   },
 
