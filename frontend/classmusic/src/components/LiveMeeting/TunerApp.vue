@@ -1,15 +1,14 @@
 <template>
-  <div>
-    <button
-      @click.prevent="$root.$toggleGuitarTuner()"
-      :class="['button', { isActive: isTunerActive }]"
-    >
-      {{ isTunerActive ? "Stop" : "Start" }}
-    </button>
-    <div class="tuner-container">
+  <div class="tuner-container">
+    <div class="tuner">
+      <!-- <button
+        @click.prevent="$root.$toggleGuitarTuner()"
+        :class="['tuner-button', { isActive: isTunerActive }]"
+      >
+        {{ isTunerActive ? "Stop" : "Start" }}
+      </button> -->
       <GuitarTuner @statusUpdate="statusUpdate" @dataUpdate="dataUpdate" />
     </div>
-    <!-- <p @click="$emit('close, false')">닫기</p> -->
   </div>
 </template>
 
@@ -38,11 +37,21 @@ export default {
 
 <style lang="scss" scpoed>
 
-.tuner-container {
+.tuner{
   position: relative;
-  width: 400px;
-  height: 400px;
+  // width: 300px;
+  // height: 300px;
+  width: 100%;
   margin: 0 auto;
   background-color: #333;
+}
+.tuner-button{
+  height: 10%;
+  position: sticky;
+  background-color: transparent;
+  color: white;
+  font-weight: 100;
+  top: 0;
+  left: 0;
 }
 </style>

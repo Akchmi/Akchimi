@@ -1,53 +1,68 @@
 <template>
-  <div>
+  <div class="main__container">
     <div>
-      <h2>강의실</h2>
-      <br />
-      <button @click="$router.push(`/lecture/studentongoing`)">수업</button>
-      |
-      <button @click="$router.push(`/lecture/teacherongoing`)">강의</button>
-      <hr />
-      <br />
-      <br />
-    </div>
+      <div class="lectureButtonTop">
+        <!-- 수업 정보 버튼-->
+        <div>
+          <button
+            class="lectureSelectButton"
+            @click="$router.push(`/lecture/studentongoing`)"
+          >
+            수업
+          </button>
 
-    <div v-if="!loggedTeacherId" class="container">
-      <div>아직 강사 등록을 하지 않으셨군요?</div>
-      <br />
-      <router-link to="/profile/teacherprofilecreate"
-        >강사 등록하러 가기</router-link
-      >
-    </div>
-    <div v-else>
-      <div>
-        <button
-          class="buttonOngoing"
-          @click="$router.push(`/lecture/teacherongoing`)"
-        >
-          진행 중
-        </button>
-        |
-        <button @click="$router.push(`/lecture/teacherwaiting`)">
-          대기 중
-        </button>
-        |
-        <button @click="$router.push(`/lecture/teacherfinish`)">완료</button>
+          <button
+            class="lectureSelectButton buttonLecture"
+            @click="$router.push(`/lecture/teacherongoing`)"
+          >
+            강의
+          </button>
+        </div>
+        <div>
+          <button
+            class="buttonOngoing lectureSelectButton"
+            @click="$router.push(`/lecture/teacherongoing`)"
+          >
+            진행 중
+          </button>
+
+          <button
+            class="lectureSelectButton"
+            @click="$router.push(`/lecture/teacherwaiting`)"
+          >
+            대기 중
+          </button>
+
+          <button
+            class="lectureSelectButton"
+            @click="$router.push(`/lecture/teacherfinish`)"
+          >
+            완료
+          </button>
+        </div>
       </div>
       <div class="out__container">
         <div class="container">
+          <div v-if="lectureList.length == 0" class="noSearchLecture">
+            <h2>신청된 강의가 없습니다.</h2>
+          </div>
           <div
             class="ongoing__container"
             v-for="lecture in lectureList"
             :key="lecture.id"
           >
             <div class="ongoing__container__box">
-              <img
-                :src="lecture.userProfileImage"
-                alt="Student profile picture"
-                class="profileImage"
-              />
-              <div class="info-box">
+              <div class="ongoing__container__left">
+                <div style="display: flex; justify-content: center">
+                  <img
+                    :src="lecture.userProfileImage"
+                    alt="Student profile picture"
+                    class="profileImage"
+                  />
+                </div>
                 <div class="name">{{ lecture.name }}</div>
+              </div>
+              <div class="info-box">
                 <div class="memo-box">
                   <div v-if="nowUpdateMemoId != lecture.contactId">
                     <div v-if="!lecture.memo">
@@ -79,22 +94,28 @@
                 @click="
                   $router.push(`/livemeeting/${lecture.contactId}?type=1`)
                 "
+                style="margin-left: 5px"
               >
                 강의실입장
               </button>
               <button
                 v-if="!lecture.memo"
                 @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+                style="margin-left: 5px"
               >
                 메모하기
               </button>
               <button
                 v-if="lecture.memo"
                 @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+                style="margin-left: 5px"
               >
                 메모수정
               </button>
-              <button @click="finishLecture(lecture.contactId)">
+              <button
+                @click="finishLecture(lecture.contactId)"
+                style="margin-left: 5px"
+              >
                 강의완료
               </button>
             </div>
@@ -102,12 +123,18 @@
               class="ongoing__container__button"
               v-if="nowUpdateMemoId == lecture.contactId"
             >
-              <button @click="updateMemo(lecture.contactId)">완료</button>
-              <button @click="cancleUpdateMemo">취소</button>
+              <button
+                @click="updateMemo(lecture.contactId)"
+                style="margin-left: 5px"
+              >
+                완료
+              </button>
+              <button @click="cancleUpdateMemo" style="margin-left: 5px">
+                취소
+              </button>
             </div>
           </div>
         </div>
-        {{ lectureList }}
       </div>
     </div>
   </div>

@@ -3,6 +3,16 @@
     <!-- 검색바 -->
     <div>
       <!-- 키워드 검색 -->
+      <!-- 정렬 -->
+      <select v-model="searchParams.orderBy" @change="onChangeOrderBy">
+        <option
+          v-for="category in searchCategory"
+          :key="category"
+          :value="category"
+        >
+          {{ category }}
+        </option>
+      </select>
       <!-- 검색 버튼 -->
       <input
         placeholder="검색어를 입력하세요."
@@ -32,20 +42,6 @@
           {{ instrument }}
         </option>
       </select>
-
-      <!-- <div class="dropdown">
-      <button id="instrumentButton" @click="toggleInputDropdown('instrument')">
-        악기
-      </button>
-      <div
-        id="instrumentDropdown"
-        class="dropdown-content"
-        v-if="isDisplaySearchInputs.instrument"
-      >
-      // 시간 남으면 악기 이미지 radio 버튼으로 악기 종류 선택
-      
-      </div>
-    </div> -->
 
       <!-- 경력 필터 -->
       <div class="dropdown">
@@ -99,17 +95,6 @@
           />
         </div>
       </div>
-
-      <!-- 정렬 -->
-      <select v-model="searchParams.orderBy" @change="onChangeOrderBy">
-        <option
-          v-for="category in searchCategory"
-          :key="category"
-          :value="category"
-        >
-          {{ category }}
-        </option>
-      </select>
     </div>
   </div>
 </template>

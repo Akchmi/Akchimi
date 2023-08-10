@@ -3,6 +3,8 @@ import {
   apiTeacherProfileUpdate,
   apiLikeTeacherUpdate,
   apiChangePw,
+  apiDeleteAttachedImage,
+  apiDeleteMyprofileImage
 } from "@/api/profiles.js";
 
 export default {
@@ -25,6 +27,12 @@ export default {
   putChangePw(context, data) {
     console.log("비번변경", context, data)
     apiChangePw(context, data)
+  },
+  deleteAttachedImage(context, data) {
+    console.log("첨사삭제", context, data)
+    apiDeleteAttachedImage(context,data)
+  },
+  deleteMyprofileImage(context, data) {
+    apiDeleteMyprofileImage(data)
   }
-
 };

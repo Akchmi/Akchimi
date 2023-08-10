@@ -1,24 +1,27 @@
 <template>
   <div>
     <div>chatview</div>
-    <div>
+    <div class="chat-room" ref="chatroom">
       <!-- 채팅 목록 -->
-      <div>
-        <TheChat
-          v-for="(chat, idx) in chats"
-          :key="idx"
-          :chat="chat"
-          :profile="
-            chat.sender == '0' ? this.studentProfile : this.teacherProfile
-          "
-          :sender="sender"
-        />
-      </div>
-      <!-- 채팅 폼 -->
-      <div>
-        <input v-model="content" type="text" @keyup.enter="sendMessage" />
-        <button @click="sendMessage">전송</button>
-      </div>
+      <TheChat
+        v-for="(chat, idx) in chats"
+        :key="idx"
+        :chat="chat"
+        :profile="
+          chat.sender == '0' ? this.studentProfile : this.teacherProfile
+        "
+        :sender="sender"
+      />
+    </div>
+    <!-- 채팅 폼 -->
+    <div class="chat-input">
+      <input
+        class="chat-content"
+        v-model="content"
+        type="text"
+        @keyup.enter="sendMessage"
+      />
+      <button class="chat-button" @click="sendMessage">전송</button>
     </div>
   </div>
 </template>
@@ -64,6 +67,10 @@ export default {
 
     // 채팅방 초기 설정 (참여자 및 이전 채팅 불러오기)
     this.initializeChatRoom();
+    this.scrollToBottom();
+  },
+  updated() {
+    this.scrollToBottom();
   },
 
   methods: {
@@ -76,6 +83,13 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    scrollToBottom() {
+      console.log("내려가");
+      this.$nextTick(() => {
+        const chatroom = this.$refs.chatroom;
+        chatroom.scrollTop = chatroom.scrollHeight;
+      });
     },
 
     async initializeChatRoom() {
@@ -159,4 +173,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/templates/common.scss";
+@import "@/assets/scss/chat.scss";
 </style>

@@ -114,7 +114,12 @@
                           수정완료
                         </button>
                       </div>
-                      <div v-if="nowUpdateCommentId != comment.commentId">
+                      <div
+                        v-if="
+                          nowUpdateCommentId != comment.commentId &&
+                          loginUser == comment.userId
+                        "
+                      >
                         <button
                           @click="
                             commentUpdate(comment.commentId, comment.content)
