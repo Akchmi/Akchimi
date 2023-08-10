@@ -59,5 +59,13 @@ export default {
 </script>
 
 <style>
-/* 필요한 스타일을 여기에 추가하세요. */
+.metronome-container{
+  width: 90%;
+  height: 10%;
+  margin-top: 10px;
+  padding-top: 20px;
+  text-align: center;
+  background-color: #edd9b7;
+  border-radius: 10px;
+}
 </style>
