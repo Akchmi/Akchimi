@@ -1,112 +1,131 @@
 <template>
-  <div>
+  <div class="main__container">
     <div>
-      <h2>강의실</h2>
-      <br />
-      <button @click="$router.push(`/lecture/studentongoing`)">수업</button>
-      |
-      <button @click="$router.push(`/lecture/teacherongoing`)">강의</button>
-      <hr />
-      <br />
-      <br />
-    </div>
-
-    <div>
-      <button @click="$router.push(`/lecture/teacherongoing`)">진행 중</button>
-      |
-      <button @click="$router.push(`/lecture/teacherwaiting`)">대기 중</button>
-      |
-      <button
-        class="buttonFinish"
-        @click="$router.push(`/lecture/teacherfinish`)"
-      >
-        완료
-      </button>
-    </div>
-    <div>
-      <div class="out__container">
-        <div class="container">
-          <div v-if="lectureList.length == 0">
-            <h2>아직 완료된 강의가 없습니다.</h2>
-          </div>
-          <div
-            class="ongoing__container"
-            v-for="lecture in lectureList"
-            :key="lecture.id"
+      <div class="lectureButtonTop">
+        <!-- 수업 정보 버튼-->
+        <div>
+          <button
+            class="lectureSelectButton"
+            @click="$router.push(`/lecture/studentongoing`)"
           >
-            <div class="ongoing__container__box">
-              <img
-                :src="lecture.userProfileImage"
-                alt="Teacher profile picture"
-                class="profileImage"
-              />
-              <div class="info-box">
-                <div class="name">{{ lecture.name }}</div>
-                <div class="memo-box">
-                  <div v-if="nowUpdateMemoId != lecture.contactId">
-                    <div v-if="!lecture.memo">
-                      <p>메모를 입력해주세요</p>
+            수업
+          </button>
+
+          <button
+            class="lectureSelectButton buttonLecture"
+            @click="$router.push(`/lecture/teacherongoing`)"
+          >
+            강의
+          </button>
+        </div>
+        <div>
+          <button
+            class="lectureSelectButton"
+            @click="$router.push(`/lecture/teacherongoing`)"
+          >
+            진행 중
+          </button>
+
+          <button
+            class="lectureSelectButton"
+            @click="$router.push(`/lecture/teacherwaiting`)"
+          >
+            대기 중
+          </button>
+
+          <button
+            class="buttonFinish lectureSelectButton"
+            @click="$router.push(`/lecture/teacherfinish`)"
+          >
+            완료
+          </button>
+        </div>
+      </div>
+      <div>
+        <div class="out__container">
+          <div class="container">
+            <div v-if="lectureList.length == 0" class="noSearchLecture">
+              <h2>아직 완료된 강의가 없습니다.</h2>
+            </div>
+            <div
+              class="ongoing__container"
+              v-for="lecture in lectureList"
+              :key="lecture.id"
+            >
+              <div class="ongoing__container__box">
+                <img
+                  :src="lecture.userProfileImage"
+                  alt="Teacher profile picture"
+                  class="profileImage"
+                />
+                <div class="info-box">
+                  <div class="name">{{ lecture.name }}</div>
+                  <div class="memo-box">
+                    <div v-if="nowUpdateMemoId != lecture.contactId">
+                      <div v-if="!lecture.memo">
+                        <p>메모를 입력해주세요</p>
+                      </div>
+                      <div v-else>
+                        {{ lecture.memo }}
+                      </div>
                     </div>
-                    <div v-else>
-                      {{ lecture.memo }}
-                    </div>
+                    <textarea
+                      v-if="nowUpdateMemoId == lecture.contactId"
+                      class="memoInput"
+                      type="text"
+                      v-model="nowUpdateMemo"
+                    />
                   </div>
-                  <textarea
-                    v-if="nowUpdateMemoId == lecture.contactId"
-                    class="memoInput"
-                    type="text"
-                    v-model="nowUpdateMemo"
-                  />
                 </div>
               </div>
-            </div>
-            <div
-              class="ongoing__container__button"
-              v-if="nowUpdateMemoId != lecture.contactId"
-            >
-              <div>
-                <button
-                  v-if="!lecture.memo"
-                  @click="runUpdateMemo(lecture.contactId, lecture.memo)"
-                >
-                  메모하기
-                </button>
-                <button
-                  v-if="lecture.memo"
-                  @click="runUpdateMemo(lecture.contactId, lecture.memo)"
-                >
-                  메모수정
-                </button>
-                <button @click="viewReview(lecture.contactId)">
-                  내게 쓴 리뷰 보기
-                </button>
-              </div>
-            </div>
-            <div
-              class="ongoing__container__button"
-              v-if="nowUpdateMemoId == lecture.contactId"
-            >
-              <button @click="updateMemo(lecture.contactId)">완료</button>
-              <button @click="cancleUpdateMemo">취소</button>
-            </div>
-            <div
-              class="review__container__box"
-              v-if="lecture.contactId == nowReviewId"
-            >
-              <div v-if="!review.content">
-                리뷰:{{ review }}
+              <div
+                class="ongoing__container__button"
+                v-if="nowUpdateMemoId != lecture.contactId"
+              >
                 <div>
-                  <h4>아직 학생이 리뷰를 남기지 않았습니다.</h4>
+                  <button
+                    v-if="!lecture.memo"
+                    @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+                  >
+                    메모하기
+                  </button>
+                  <button
+                    v-if="lecture.memo"
+                    @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+                  >
+                    메모수정
+                  </button>
+                  <button @click="viewReview(lecture.contactId)">
+                    내게 쓴 리뷰 보기
+                  </button>
                 </div>
               </div>
-              <div v-if="review.content">
-                {{ review }}
-                <div>
-                  <div class="review-box">
-                    {{ review.content }}
-                  </div>
+              <div
+                class="ongoing__container__button"
+                v-if="nowUpdateMemoId == lecture.contactId"
+              >
+                <button @click="updateMemo(lecture.contactId)">완료</button>
+                <button @click="cancleUpdateMemo">취소</button>
+              </div>
+              <div
+                class="review__container__box"
+                v-if="lecture.contactId == nowReviewId"
+              >
+                <div v-if="!review.content">
+                  리뷰:{{ review }}
                   <div>
-                    <p>평점 : {{ review.rating }}점</p>
+                    <h4>아직 학생이 리뷰를 남기지 않았습니다.</h4>
+                  </div>
+                </div>
+                <div v-if="review.content">
+                  {{ review }}
+                  <div>
+                    <div class="review-box">
+                      {{ review.content }}
+                    </div>
+                    <div>
+                      <p>평점 : {{ review.rating }}점</p>
+                    </div>
                   </div>
                 </div>
               </div>

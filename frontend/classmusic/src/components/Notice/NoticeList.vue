@@ -3,9 +3,7 @@
     <div class="notice__list">
       <div>
         <!-- 공지사항 리스트 최상단 -->
-        <h1>공지사항</h1>
         <button v-if="userType == 2" @click="goNoticeCreate">글 작성</button>
-        <hr />
       </div>
 
       <div>
@@ -13,19 +11,20 @@
         <table>
           <thead>
             <tr>
-              <th>글 번호</th>
-              <th>제목</th>
-              <th>작성자</th>
-              <th>작성일자</th>
+              <th style="width: 10%">글 번호</th>
+              <th style="width: 50%">제목</th>
+              <th style="width: 20%">작성자</th>
+              <th style="width: 20%">작성일자</th>
             </tr>
           </thead>
-          <div v-if="noticeList.length == 0">
-            <h3>검색된 게시글이 없습니다.</h3>
-          </div>
-          <tbody v-else>
+
+          <tbody>
             <tr v-for="notice in noticeList" :key="notice.id">
               <td>{{ notice.noticeId }}</td>
-              <td @click="$router.push(`/notice/${notice.noticeId}`)">
+              <td
+                @click="$router.push(`/notice/${notice.noticeId}`)"
+                style="cursor: pointer"
+              >
                 {{ notice.title }}
               </td>
               <td>관리자</td>
@@ -33,25 +32,39 @@
             </tr>
           </tbody>
         </table>
-        <hr />
       </div>
-
-      <div>
-        <!-- 공지사항 리스트 검색바 -->
-        <select v-model="selectedSearchCategory">
-          <option
-            v-for="(item, idx) in searchCategory"
-            :key="idx"
-            :value="item"
+      <!-- 공지사항 리스트 검색바-->
+      <div class="noticeSearchBar">
+        <div class="noticeSearchSelect">
+          <select
+            class="noticeSearchSelectBar"
+            v-model="selectedSearchCategory"
           >
-            {{ item }}
-          </option>
-        </select>
-        <input style="margin: 10px" type="text" v-model="searchQuery" />
-        <button @click="runSearch">검색</button>
+            <option
+              v-for="(item, idx) in searchCategory"
+              :key="idx"
+              :value="item"
+            >
+              {{ item }}
+            </option>
+          </select>
+        </div>
+        <input
+          class="noticeSearchInput"
+          style="margin: 10px"
+          type="text"
+          v-model="searchQuery"
+        />
+
+        <img
+          @click="runSearch"
+          id="noticeSearchButton"
+          src="@/assets/images/home/searchButton.png"
+          alt="메인검색버튼"
+        />
       </div>
 
-      <div>
+      <div class="noticePageBox">
         <!-- 페이지 번호-->
         <button @click="pageDown">이전</button>
         <button
@@ -155,4 +168,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/notice.scss";
+@import "@/assets/scss/templates/common.scss";
 </style>

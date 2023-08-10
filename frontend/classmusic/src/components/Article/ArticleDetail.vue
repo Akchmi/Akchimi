@@ -2,7 +2,7 @@
   <div class="container">
     <div class="create__container">
       <!-- 글 제목, 내용 -->
-
+      {{ articleDetail }}
       <div class="create__content">
         <div style="width: 90%">
           <button class="detailButton" @click="$router.push('/article/list')">
