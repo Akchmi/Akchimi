@@ -9,11 +9,12 @@ import {
 
 export default {
   async postTeacherProfileCreate(context, data) {
-    const result = await apiTeacherProfileCreate(context, data);
-    if (result) {
-      context.commit("SAVE_TEACHERID", result);
+    const response = await apiTeacherProfileCreate(context, data);
+    if (response) {
+      context.commit("SAVE_TEACHERID", response);
+      context.commit("SET_USER_TYPE", 1);
     }
-    return result;
+    return response;
   },
   async updateUserType({ commit }, userType) {
     commit("SET_USER_TYPE", userType);

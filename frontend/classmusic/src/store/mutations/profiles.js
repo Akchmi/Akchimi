@@ -12,7 +12,6 @@ export default {
     state.profiles.teacherId = data.teacherId;
   },
   SAVE_TEACHERID(state, data) {
-    state.common.teacherId = data;
-    console.log("뮤테생성", data)
+    state.common.teacherId = data; 
   },
 };
