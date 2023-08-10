@@ -116,6 +116,7 @@
               alt="Attached file"
               class="attach-image"
             />
+            {{ attachedFiles }}
           </div>
           <input
             type="file"
@@ -186,13 +187,13 @@ export default {
      handleFileUpload() {
       const selectedFiles = this.$refs.fileUploadInput.files;
 
-    this.attachedFiles = [];
+   
 
       for (let i = 0; i < selectedFiles.length; i++) {
         const fileReader = new FileReader();
 
-        fileReader.onload = (e) => {
-          this.attachedFiles.push(e.target.result);  
+        fileReader.onload = (e) => {        
+          this.attachedFiles.push(e.target.result);        
         };
         
         fileReader.readAsDataURL(selectedFiles[i]);

@@ -106,15 +106,15 @@
       </div>
       <div class="attach-file">
           <h3>파일 첨부</h3>
-          <div>
-            <img
-              v-for="(image, index) in attachedFiles"
-              :src="image"
-              :key="index"
-              alt="Attached file"
-              class="attach-image"
-            />
-            
+          <div v-for="(image, index) in attachedFiles" :key="index" class="image-container">
+            <img :src="image" alt="Attached file" class="attach-image" />   
+            {{ attachedFiles }}     
+            <button @click="removeAttachedFile(index)">삭제</button>
+          </div>
+          <div v-for="(image, index) in newAttachedFiles" :key="index" class="image-container">
+            <img :src="image.preview" alt="Attached file" class="attach-image" />   
+            {{ newAttachedFiles }}     
+            <button @click="removeNewAttachedFile(index)">삭제</button>
           </div>
           <input
             type="file"
@@ -134,7 +134,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import {  apiDetailTeacherInfo } from "@/api/profiles.js";
+import { apiDetailTeacherInfo } from "@/api/profiles.js";
 import axios from "@/api/imageAxios.js";
 
 
@@ -169,6 +169,7 @@ export default {
       id: JSON.parse(localStorage.getItem("vuex")).common.id,
       userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
       teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
+      newAttachedFiles:[],
     };
   },
   computed: {
@@ -180,45 +181,80 @@ export default {
   },
 
   methods: {
+    removeAttachedFile(index) {
+    this.attachedFiles.splice(index, 1);
+  },
+    removeNewAttachedFile(index) {
+    this.newAttachedFiles.splice(index, 1);
+  },
+
     triggerFileUpload() {
-      this.$refs.fileUploadInput.click();
+      this.$refs.fileUploadInput.click();  
     },
      handleFileUpload() {
       const selectedFiles = this.$refs.fileUploadInput.files;
-
-    this.attachedFiles = [];
 
       for (let i = 0; i < selectedFiles.length; i++) {
         const fileReader = new FileReader();
 
         fileReader.onload = (e) => {
-          this.attachedFiles.push(e.target.result);  
+          this.newAttachedFiles.push({
+            preview : e.target.result,
+            file: selectedFiles[i]
+          });  
         };
         
         fileReader.readAsDataURL(selectedFiles[i]);
       }
     },    
-    async submitImages() {
-      let formData = new FormData();
-
-      for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
-        formData.append("image", this.$refs.fileUploadInput.files[i]);
-      }
-
-      try {
-        await axios.post(`/teachers/${this.teacherId}/images`, formData);
-      } catch (error) {
-        console.log(error);
-      }
-    },
 
     removeInstrument(index) {
     this.selectedInstruments.splice(index, 1);
     },
-    ...mapActions(['putTeacherProfileUpdate']),
+
+    ...mapActions(['putTeacherProfileUpdate', 'deleteAttachedImage',]),
+
+    async submitImages() {
+      let formData = new FormData();
+
+      // for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
+      //   formData.append("image", this.$refs.fileUploadInput.files[i]);
+      // }
+
+      this.newAttachedFiles.forEach((item) => {
+       formData.append("image", item.file);
+     });    
+
+      try {
+        await axios.post(`/teachers/${this.teacherId}/images`,formData);
+
+        console.log("폼데", formData)
+      } catch (error) {
+        console.log("폼폼", error);
+      }   
+    },
+
+    async submitAttachedFilesToDelete() {
+      let formData = new FormData();
+
+      this.attachedFiles.forEach((imageUrl) => {
+        formData.append("image", imageUrl);
+      });
+      try {
+        await axios.delete(`/teachers/${this.teacherId}/images`, formData);
+        
+      } catch(error) {
+        console.log('폼삭', error)
+      }
+
+    },
+
+
 
     async submitForm() {
       await this.submitImages();
+      await this.submitAttachedFilesToDelete();
+   
       const data = {       
         career: this.career,
         cost: this.cost,
@@ -227,16 +263,16 @@ export default {
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
         instruments: [...this.selectedInstruments], 
-        teacherId : this.teacherId       
+        teacherId : this.teacherId,             
       };
       this.putTeacherProfileUpdate(data)            
         .then(response => {    
           const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
           this.$store.commit('updateTeacherProfile', response);
-          this.$router.push(`/profile/teacherprofile/${teacherId}`);         
-          console.log(this.teacherId, response)
+          this.$router.push(`/profile/teacherprofile/${teacherId}`); 
         });
-
+      // this.deleteAttachedImage(this.teacherId, this.attachedFiles )
+        
     },
     convertDaysToBitMask() {
       let index = 0,
@@ -286,3 +322,4 @@ export default {
 <style scoped>
 @import "@/assets/scss/teacherprofileupdate.scss";
 </style>
+         

@@ -54,13 +54,17 @@
               :key="lecture.id"
             >
               <div class="ongoing__container__box">
-                <img
-                  :src="lecture.userProfileImage"
-                  alt="Teacher profile picture"
-                  class="profileImage"
-                />
-                <div class="info-box">
+                <div class="ongoing__container__left">
+                  <div style="display: flex; justify-content: center">
+                    <img
+                      :src="lecture.userProfileImage"
+                      alt="Teacher profile picture"
+                      class="profileImage"
+                    />
+                  </div>
                   <div class="name">{{ lecture.name }}</div>
+                </div>
+                <div class="info-box">
                   <div class="memo-box">
                     <div v-if="nowUpdateMemoId != lecture.contactId">
                       <div v-if="!lecture.memo">
@@ -96,7 +100,10 @@
                   >
                     메모수정
                   </button>
-                  <button @click="viewReview(lecture.contactId)">
+                  <button
+                    @click="viewReview(lecture.contactId)"
+                    style="margin-left: 10px"
+                  >
                     내가 쓴 리뷰 보기
                   </button>
                 </div>
@@ -106,18 +113,20 @@
                 v-if="nowUpdateMemoId == lecture.contactId"
               >
                 <button @click="updateMemo(lecture.contactId)">완료</button>
-                <button @click="cancleUpdateMemo">취소</button>
+                <button @click="cancleUpdateMemo" style="margin-left: 10px">
+                  취소
+                </button>
               </div>
               <div
                 class="review__container__box"
                 v-if="lecture.contactId == nowReviewId"
               >
                 <div v-if="!review.content">
-                  리뷰:{{ review }}
                   <textarea
                     placeholder="리뷰를 작성해주세요."
                     class="memoInput"
                     v-model="nowUpdateReview"
+                    style="margin: 10px"
                   ></textarea>
                   <div>
                     <input
@@ -125,6 +134,7 @@
                       min="1"
                       max="5"
                       v-model="nowUpdateRating"
+                      style="margin: 10px"
                     />
                     <button @click="runPostReview(lecture.contactId)">
                       리뷰 제출
@@ -132,29 +142,33 @@
                   </div>
                 </div>
                 <div v-if="review.content">
-                  {{ review }}
                   <div v-if="review.reviewId != nowUpdateReviewId">
                     <div class="review-box">
                       {{ review.content }}
                     </div>
-                    <div>
+                    <div style="margin: 10px">
                       <p>평점 : {{ review.rating }}점</p>
                     </div>
-                    <button
-                      @click="
-                        runUpdateReview(
-                          review.reviewId,
-                          review.content,
-                          review.rating,
-                          lecture.contactId
-                        )
-                      "
-                    >
-                      리뷰수정
-                    </button>
-                    <button @click="runDeleteReview(review.reviewId)">
-                      리뷰삭제
-                    </button>
+                    <div style="display: flex; justify-content: right">
+                      <button
+                        @click="
+                          runUpdateReview(
+                            review.reviewId,
+                            review.content,
+                            review.rating,
+                            lecture.contactId
+                          )
+                        "
+                      >
+                        리뷰수정
+                      </button>
+                      <button
+                        @click="runDeleteReview(review.reviewId)"
+                        style="margin-left: 10px"
+                      >
+                        리뷰삭제
+                      </button>
+                    </div>
                   </div>
                   <div v-if="review.reviewId == nowUpdateReviewId">
                     <textarea

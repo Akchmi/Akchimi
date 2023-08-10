@@ -5,6 +5,7 @@
     </div>
     <TheBanner :title="'마이페이지'" />
     <br />
+    
     <button>
       <router-link :to="myProfilePath">내 프로필</router-link>
     </button>

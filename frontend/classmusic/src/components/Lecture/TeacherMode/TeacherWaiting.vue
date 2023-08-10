@@ -64,14 +64,21 @@
               </div>
 
               <div>
-                <button @click="acceptLecture(lecture.contactId)">
+                <button
+                  @click="acceptLecture(lecture.contactId)"
+                  style="margin-left: 10px"
+                >
                   수락하기
                 </button>
-                <button @click="refuseLecture(lecture.contactId)">
+                <button
+                  @click="refuseLecture(lecture.contactId)"
+                  style="margin-left: 10px"
+                >
                   거절하기
                 </button>
                 <button
                   @click="$router.push(`/chats/${lecture.contactId}?type=1`)"
+                  style="margin-left: 10px"
                 >
                   채팅하기
                 </button>

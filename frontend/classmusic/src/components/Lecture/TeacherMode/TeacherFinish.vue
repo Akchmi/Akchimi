@@ -53,13 +53,17 @@
               :key="lecture.id"
             >
               <div class="ongoing__container__box">
-                <img
-                  :src="lecture.userProfileImage"
-                  alt="Teacher profile picture"
-                  class="profileImage"
-                />
-                <div class="info-box">
+                <div class="ongoing__container__left">
+                  <div style="display: flex; justify-content: center">
+                    <img
+                      :src="lecture.userProfileImage"
+                      alt="Teacher profile picture"
+                      class="profileImage"
+                    />
+                  </div>
                   <div class="name">{{ lecture.name }}</div>
+                </div>
+                <div class="info-box">
                   <div class="memo-box">
                     <div v-if="nowUpdateMemoId != lecture.contactId">
                       <div v-if="!lecture.memo">
@@ -95,7 +99,10 @@
                   >
                     메모수정
                   </button>
-                  <button @click="viewReview(lecture.contactId)">
+                  <button
+                    @click="viewReview(lecture.contactId)"
+                    style="margin-left: 10px"
+                  >
                     내게 쓴 리뷰 보기
                   </button>
                 </div>
@@ -105,25 +112,25 @@
                 v-if="nowUpdateMemoId == lecture.contactId"
               >
                 <button @click="updateMemo(lecture.contactId)">완료</button>
-                <button @click="cancleUpdateMemo">취소</button>
+                <button @click="cancleUpdateMemo" style="margin-left: 10px">
+                  취소
+                </button>
               </div>
               <div
                 class="review__container__box"
                 v-if="lecture.contactId == nowReviewId"
               >
                 <div v-if="!review.content">
-                  리뷰:{{ review }}
                   <div>
                     <h4>아직 학생이 리뷰를 남기지 않았습니다.</h4>
                   </div>
                 </div>
                 <div v-if="review.content">
-                  {{ review }}
                   <div>
                     <div class="review-box">
                       {{ review.content }}
                     </div>
-                    <div>
+                    <div style="margin: 10px">
                       <p>평점 : {{ review.rating }}점</p>
                     </div>
                   </div>

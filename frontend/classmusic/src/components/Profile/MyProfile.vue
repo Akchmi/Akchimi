@@ -11,8 +11,9 @@
           />
           <input type="file" ref="fileInput" @change="handleImageUpload" style="display: none"/>
           <button @click="triggerFileInput">사진 수정</button>
-
+          <button @click="deleteMyprofileImage(this.id)">사진 삭제</button>
         </div>
+        
         <div class="info-container">
           <!-- <div class="id-container">  -->
             <div> 
@@ -63,17 +64,17 @@
         </div>  
       </div>
     </div>
-    
+
     <div class="favorites">
       <h3>{{ userInfo.name }} 님이 즐겨찾기한 강사</h3>
       <div class="teacher-list">
         <LikeTeacherCard
-        v-for="teacher in liketeachers"
-        :key="teacher.teacherId"
-        :teacher="teacher"
-        image="https://via.placeholder.com/280"
-        @deleteLikeTeacher="deleteLikeTeacher(teacher.teacherId)"
-      />
+          v-for="teacher in liketeachers"
+          :key="teacher.teacherId"
+          :teacher="teacher"
+          image="https://via.placeholder.com/280"
+          @deleteLikeTeacher="deleteLikeTeacher(teacher.teacherId)"
+        />
       </div>   
     </div>
   </div>
@@ -83,9 +84,9 @@
 
 import { apiGetUserInfo, apiLikeTeacher,  apiChangePw, apiDeleteLIkeTeacher } from "@/api/profiles.js";
 import LikeTeacherCard from "./LikeTeacherCard.vue";
-import { mapGetters,} from "vuex";
+import { mapGetters, mapActions, } from "vuex";
 import axios from "@/api/imageAxios.js";
-
+import router from "@/router/index";
 
 export default {
   components : {
@@ -104,9 +105,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ teachers: "getLikeTeacherList"})
+    ...mapGetters({ teachers: "getLikeTeacherList",  })
   },
   methods: {
+    ...mapActions(["deleteMyprofileImage"]),
+
+    
 
     deleteLikeTeacher(teacherId) {
       apiDeleteLIkeTeacher(teacherId)
@@ -141,6 +145,9 @@ export default {
       }
     },      
 
+ 
+ 
+
     async handleImageUpload() {
     const selectedFile = this.$refs.fileInput.files[0];
     let formData = new FormData();
@@ -151,21 +158,22 @@ export default {
       
       if (response.data && response.data.userProfileImage) { 
           this.userInfo.userProfileImage = response.data.userProfileImage;
-          location.reload();
+
       }
+      router.go(0)
     } catch (error) {
         console.log(error);
     }
   },
 
     triggerFileInput() {
-      this.$refs.fileInput.click();
+      this.$refs.fileInput.click();  
     },
     async getUserInfo() {  
       try {
         const data = await apiGetUserInfo(this.id); 
         if (data) {
-          this.userInfo = data      
+          this.userInfo = data             
         }
       } catch (error) {
         console.log(error)

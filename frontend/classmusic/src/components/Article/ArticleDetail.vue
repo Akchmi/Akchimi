@@ -2,7 +2,7 @@
   <div class="container">
     <div class="create__container">
       <!-- 글 제목, 내용 -->
-      {{ articleDetail }}
+
       <div class="create__content">
         <div style="width: 90%">
           <button class="detailButton" @click="$router.push('/article/list')">
@@ -114,7 +114,12 @@
                           수정완료
                         </button>
                       </div>
-                      <div v-if="nowUpdateCommentId != comment.commentId">
+                      <div
+                        v-if="
+                          nowUpdateCommentId != comment.commentId &&
+                          loginUser == comment.userId
+                        "
+                      >
                         <button
                           @click="
                             commentUpdate(comment.commentId, comment.content)

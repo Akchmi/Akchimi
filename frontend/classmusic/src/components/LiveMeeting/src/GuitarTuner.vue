@@ -4,6 +4,12 @@
       v-if="displayGrid"
       :class="[...gridClasses, { play: isTunerActive }]"
     ></div>
+    <button
+        @click.prevent="$root.$toggleGuitarTuner()"
+        :class="['tuner-button', { isActive: isTunerActive }]"
+      >
+        {{ isTunerActive ? "Stop" : "Start" }}
+      </button>
     <div v-if="displayReferenceLine" class="referenceLine"></div>
 
     <div v-if="displayNote" class="note">

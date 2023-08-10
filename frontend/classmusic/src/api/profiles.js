@@ -1,9 +1,9 @@
 import axios from "@/api/axios";
-
+import router from "@/router/index";
 async function apiGetUserInfo(id) {
   try {
     const response = await axios.get(`/users/${id}`);
-    console.log('겟유인',response)
+    console.log("겟유인", response);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -18,10 +18,12 @@ async function apiChangePw(data) {
     return { success: true, data: response.data };
   } catch (error) {
     console.log("비번변경실패", error);
-    return { success: false, error: error.response ? error.response.data.message : 'Unknown Error' };
+    return {
+      success: false,
+      error: error.response ? error.response.data.message : "Unknown Error",
+    };
   }
 }
-
 
 // function apiChangePw(context, data) {
 //   const id = data.id
@@ -32,7 +34,7 @@ async function apiChangePw(data) {
 //     })
 //     .catch((error) => {
 //       console.log("비번변경실패", error)
-//     }) 
+//     })
 
 // }
 
@@ -71,11 +73,9 @@ async function apiLikeTeacher(id) {
 
 function apiLikeTeacherUpdate(context, data) {
   const id = data.id;
-  console.log(333, data);
   axios
     .post(`/users/${id}/like`, data)
     .then(({ data }) => {
-
       alert("즐겨찾기에 성공하였습니다");
       this.$router.push(`/profile/myprofile`);
       return data;
@@ -114,7 +114,7 @@ async function apiTeacherProfileCreate(context, data) {
   try {
     const response = await axios.post(`/teachers`, data);
     console.log("post /teachers 결과 : ", response);
-    context.commit('SAVE_TEACHERID', response.data)
+    context.commit("SAVE_TEACHERID", response.data);
     return response.data;
   } catch (error) {
     console.log("apiTeacherProfileCreate 중 에러 발생!!!", error);
@@ -145,7 +145,6 @@ function apiTeacherProfileUpdate(context, data) {
 // }
 
 async function apiGetReview(teacherId) {
-  console.log("리뷰api", teacherId);
   try {
     const response = await axios.get(`/reviews?teacherId=${teacherId}`);
     return response.data;
@@ -155,9 +154,25 @@ async function apiGetReview(teacherId) {
   }
 }
 
+async function apiDeleteAttachedImage(teacherId, data) {
+  try {
+    await axios.delete(`/teachers/${teacherId}/images`, data);
+  } catch (error) {
+    console.log("첨부파일삭제실패", error);
+    return error;
+  }
+}
 
-
-
+async function apiDeleteMyprofileImage(id) {
+  console.log("사진지", id);
+  try {
+    await axios.delete(`/users/${id}/profileImage`);
+    router.go(0);
+  } catch (error) {
+    console.log("내프사삭", error);
+    return error;
+  }
+}
 
 export {
   apiGetReview,
@@ -170,4 +185,6 @@ export {
   apiDeleteUser,
   apiDetailTeacherInfo,
   apiLikeTeacherUpdate,
+  apiDeleteAttachedImage,
+  apiDeleteMyprofileImage,
 };

@@ -40,25 +40,30 @@
       <!-- 바디 (왼쪽: 작은화면, 메트로놈 / 가운데: 큰메인화면 / 오른쪽: 채팅창) -->
       <div class="body-container">
         <!-- 바디 왼쪽: 작은화면, 메트로놈 -->
-        <div class="aditional-function">
-          {{ subscribers }}
-          <div id="live-screens" @click="changeMainScreen">
-            <user-video
-              v-for="sub in subscribers"
-              :key="sub.stream.connection.connectionId"
-              :stream-manager="sub"
-            />
-            <user-video :stream-manager="publisher" />
-            <div id="shared-video" class="row panel panel-default">
-              <!-- <div class="panel-heading">User Screens</div> -->
-              <div class="panel-body" id="container-screens"></div>
+        <div class="body-left">
+          <div class="aditional-function">
+            <!-- {{ subscribers }} -->
+            <div id="live-screens" class="" @click="changeMainScreen">
+              <user-video
+                v-for="sub in subscribers"
+                :key="sub.stream.connection.connectionId"
+                :stream-manager="sub"
+              />
+              <user-video :stream-manager="publisher"/>
+              <div id="shared-video" class="row panel panel-default">
+                <!-- <div class="panel-heading">User Screens</div> -->
+                <div class="panel-body" id="container-screens"></div>
+              </div>
             </div>
+            <MetronomeApp />
           </div>
-          <MetronomeApp />
         </div>
         <!-- 바디 가운데: 큰메인화면 -->
         <div id="video-container" class="video-box">
-          <user-video :stream-manager="publisher" />
+          <user-video
+            :stream-manager="publisher"
+            />
+          <TunerApp v-if="popState" @close="changePopState()"/>
         </div>
         <!-- 바디 오른쪽: 채팅창 -->
         <div class="message-box">
@@ -88,7 +93,6 @@
       <div class="bottom-container">
         <div class="button-box">
           <button class="bottom-button" @click="changePopState()">튜너</button>
-          <TunerApp v-if="popState" @close="changePopState()" />
           <button
             id="buttonScreenShare"
             class="bottom-button"
@@ -357,9 +361,11 @@ export default {
           });
         }
       });
+      console.log(this.sessionScreen);
       this.sessionScreen.on("streamCreated", (event) => {
+        console.log(this);
         console.log(this.sessionScreen);
-        if (event.stream.typeOfVideo == "SCREEN") {
+        if (this.sessionScreen!=null && event.stream.typeOfVideo == "SCREEN") {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
           var subscriberScreen = this.sessionScreen.subscribe(
             event.stream,
@@ -546,14 +552,19 @@ export default {
 };
 </script>
 
+<<<<<<< HEAD
 <style scoped>
 .top-container {
+=======
+<style lang="scss">
+.top-container{
+>>>>>>> 476ef1b8aaaac9449f9203c97268282ebdb0624b
   width: 98vw;
   height: 3vh;
   font-weight: bolder;
   font-size: larger;
   position: relative;
-  border: solid 1px red;
+  // border: solid 1px red;
 }
 .body-container {
   width: 98vw;
@@ -562,38 +573,54 @@ export default {
   position: relative;
   z-index: 5;
 }
-.bottom-container {
-  height: 10vh;
+.bottom-container{
+  height: 12vh;
   width: 98vw;
   background-color: white;
   position: relative;
   z-index: 10;
-  border: solid 1px red;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#local-video-undefined {
-  display: flex;
+
+video{
   width: 100%;
-  justify-content: center;
-  z-index: 5;
 }
 .split-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.aditional-function {
+.body-left{
   width: 20%;
   float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.aditional-function{
+  width: 98%;
+  height: 99%;
   box-sizing: border-box;
-  border: solid 1px red;
+  background-color: white;
+  box-shadow: 1px 2px 1px 2px rgb(199, 199, 199);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // border: solid 1px red;
+}
+#live-screens{
+  width: 90%;
+  margin-top: 10px;
+}
+.panel-body{
+  width: 100%;
 }
 .video-box {
   width: 60%;
   float: center;
-  border: solid 1px red;
+  // border: solid 1px red;
 }
 .message-box {
   width: 20%;
@@ -601,7 +628,8 @@ export default {
   float: right;
   box-sizing: border-box;
   position: relative;
-  border: solid 1px red;
+  background-color: #f5f5f5;
+  // border: solid 1px red;
 }
 .messages-container {
   width: 100%;
@@ -616,32 +644,42 @@ export default {
   bottom: 0;
   position: sticky;
   display: flex;
+  justify-content: center;
 }
-.message-input-form {
-  width: 80%;
-  height: 100%;
+.message-input-form{
+  width: 77%;
+  height: 89%;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 1px 2px 1px 2px rgb(199, 199, 199);
 }
-.message-send-btn {
+.message-send-btn{
+  width: 19%;
+  height: 90%;
+  border-radius: 10px;
+}
+.tuner-container{
+  position: absolute;
   width: 20%;
-  height: 100%;
+  height: 40%;
+  bottom: 1%;
+  left: 21%;
+  display: flex;
+  justify-content: center;
+  z-index: 20;
 }
-.metronome-container {
-  text-align: center;
-  border: solid 1px red;
-}
-.tuner-container {
+.button-box{
+  position: absolute;
+  width: 60%;
   display: flex;
   justify-content: center;
 }
-.button-box {
-  text-align: center;
-}
-.bottom-button {
+.bottom-button{
+  width: 15%;
   border-radius: 10px;
-  background-color: cyan;
 }
 .right {
-  width: 20%;
+  width: 93%;
   margin: 0px 10px 0px 10px;
   display: flex;
   justify-content: right;
