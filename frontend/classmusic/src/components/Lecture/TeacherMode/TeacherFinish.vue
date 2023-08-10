@@ -1,135 +1,189 @@
-<template lang="">
-  <div class="teacher-finish-container">
-    <div class="teacher-finish">
-      <div class="top-section">
-        <img :src="image" alt="Teacher profile picture" class="teacher-image" />
-          <div class="info-box">
-            <h3>{{name}}</h3>
-            <p>{{instrument}} | {{career}}</p>
-            <p> 별점 : {{localRating}}</p>            
+<template>
+  <div>
+    <div>
+      <h2>강의실</h2>
+      <br />
+      <button @click="$router.push(`/lecture/studentongoing`)">수업</button>
+      |
+      <button @click="$router.push(`/lecture/teacherongoing`)">강의</button>
+      <hr />
+      <br />
+      <br />
+    </div>
+
+    <div>
+      <button @click="$router.push(`/lecture/teacherongoing`)">진행 중</button>
+      |
+      <button @click="$router.push(`/lecture/teacherwaiting`)">대기 중</button>
+      |
+      <button
+        class="buttonFinish"
+        @click="$router.push(`/lecture/teacherfinish`)"
+      >
+        완료
+      </button>
+    </div>
+    <div>
+      <div class="out__container">
+        <div class="container">
+          <div v-if="lectureList.length == 0">
+            <h2>아직 완료된 강의가 없습니다.</h2>
           </div>
+          <div
+            class="ongoing__container"
+            v-for="lecture in lectureList"
+            :key="lecture.id"
+          >
+            <div class="ongoing__container__box">
+              <img
+                :src="lecture.userProfileImage"
+                alt="Teacher profile picture"
+                class="profileImage"
+              />
+              <div class="info-box">
+                <div class="name">{{ lecture.name }}</div>
+                <div class="memo-box">
+                  <div v-if="nowUpdateMemoId != lecture.contactId">
+                    <div v-if="!lecture.memo">
+                      <p>메모를 입력해주세요</p>
+                    </div>
+                    <div v-else>
+                      {{ lecture.memo }}
+                    </div>
+                  </div>
+                  <textarea
+                    v-if="nowUpdateMemoId == lecture.contactId"
+                    class="memoInput"
+                    type="text"
+                    v-model="nowUpdateMemo"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="ongoing__container__button"
+              v-if="nowUpdateMemoId != lecture.contactId"
+            >
+              <div>
+                <button
+                  v-if="!lecture.memo"
+                  @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+                >
+                  메모하기
+                </button>
+                <button
+                  v-if="lecture.memo"
+                  @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+                >
+                  메모수정
+                </button>
+                <button @click="viewReview(lecture.contactId)">
+                  내게 쓴 리뷰 보기
+                </button>
+              </div>
+            </div>
+            <div
+              class="ongoing__container__button"
+              v-if="nowUpdateMemoId == lecture.contactId"
+            >
+              <button @click="updateMemo(lecture.contactId)">완료</button>
+              <button @click="cancleUpdateMemo">취소</button>
+            </div>
+            <div
+              class="review__container__box"
+              v-if="lecture.contactId == nowReviewId"
+            >
+              <div v-if="!review.content">
+                리뷰:{{ review }}
+                <div>
+                  <h4>아직 학생이 리뷰를 남기지 않았습니다.</h4>
+                </div>
+              </div>
+              <div v-if="review.content">
+                {{ review }}
+                <div>
+                  <div class="review-box">
+                    {{ review.content }}
+                  </div>
+                  <div>
+                    <p>평점 : {{ review.rating }}점</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="button-group">
-        <button @click="toggleInput">{{showInput ? '취소' : '리뷰 작성하기'}}</button>
-        <button @click="toggleView">작성한 리뷰 보기</button>
-      </div>
-    </div>
-    <div v-if="showInput" class="input-area">
-      <textarea v-model="review" placeholder="리뷰를 작성해주세요." class="review-input"></textarea>
-      <div class="rating-submit">
-        <input type="number" min="1" max="5" v-model.number="inputRating">
-        <button @click="saveReview">리뷰 제출</button>
-      </div>
-    </div>
-    <div v-if="showReview" class="view-area">
-      <p>{{review}}</p>
-      <p>별점 : {{localRating}}</p>
     </div>
   </div>
 </template>
 
 <script>
+import { useStore, mapGetters, mapActions } from "vuex";
+import { onMounted } from "vue";
+
 export default {
-  props: {
-    image: { type: String, default:"https://via.placeholder.com/280"},
-    name: { type: String, default: '박한샘' },
-    instrument: {type:String, default: '드럼,피아노'},
-    career: {type: String, default: '카이스트 리코더 박사'},
-    rating: {type: Number, default: 0},
-  },
   data() {
     return {
-      showInput: false,
-      showReview: false,
-      review: '',
-      inputRating: 5,
-      localRating: 0,
+      nowUpdateMemo: "",
+      nowUpdateMemoId: null,
+      nowReviewId: null,
     };
   },
-  mounted() {
-    this.localRating = this.rating;
+  computed: {
+    ...mapGetters({ lectureList: "getlectureList" }),
+    ...mapGetters({ review: "getReview" }),
   },
   methods: {
-    toggleInput() {
-      this.showInput = !this.showInput;
-      this.showReview = false;
+    runUpdateMemo(contactId, memo) {
+      this.nowUpdateMemo = memo;
+      this.nowUpdateMemoId = contactId;
     },
-    toggleView() {
-      this.showReview = !this.showReview;
-      this.showInput = false;
+
+    ...mapActions(["putUpdateMemo"]),
+
+    updateMemo(contactId) {
+      this.putUpdateMemo({
+        contactId: contactId,
+        memo: this.nowUpdateMemo,
+        type: 1,
+      });
+
+      this.nowUpdateMemo = "";
+      this.nowUpdateMemoId = null;
     },
-    saveReview() {
-      this.localRating = this.inputRating;
-      this.showInput = false;
+
+    cancleUpdateMemo() {
+      this.nowUpdateMemo = "";
+      this.nowUpdateMemoId = null;
+    },
+
+    ...mapActions(["getReview"]),
+    viewReview(contactId) {
+      if (contactId != this.nowReviewId) {
+        this.getReview({ contactId: contactId }).then(() => {
+          this.nowReviewId = contactId;
+        });
+      } else {
+        this.nowReviewId = null;
+      }
     },
   },
-}
+  setup() {
+    const store = useStore();
+    const teacherId = store.getters.getTeacherId;
+
+    onMounted(() => {
+      store.dispatch("getLectureList", {
+        id: teacherId,
+        state: 2,
+        type: 1,
+      });
+    });
+  },
+};
 </script>
 
-<style scoped>
-.teacher-finish-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.teacher-finish {
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 800px;
-  height: 300px;
-  border : 1px solid black;
-  margin-bottom : 20px;
-  border-radius: 10px;
-  overflow: hidden;
-  padding:20px
-}
-
-.top-section {
-  display: flex;
-}
-
-.teacher-image {
-  width: 170px;
-  height: 220px;
-  object-fit: cover;
-  margin-right: 1em;
-}
-
-.info-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 200px;
-  flex-grow: 1;
-}
-
-.button-group {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px
-}
-
-.input-area {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-bottom: 20px;
-}
-
-.review-input {
-  width: 800px;
-  margin-bottom: 10px;
-}
-
-.rating-submit {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 800px;
-}
-
+<style lang="scss" scoped>
+@import "@/assets/scss/lecture.scss";
 </style>

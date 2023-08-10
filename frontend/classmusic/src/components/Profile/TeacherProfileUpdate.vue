@@ -4,16 +4,15 @@
       <div class="top-section">
         <div class="img-container">
           <img
-            :src="image"
+            :src="userProfileImage"
             alt="Teacher profile picture"
             class="teacher-image"
-          />
-          <button>이미지 수정</button>
+          />         
         </div>
         <div class="info-container">
           <div class="name-container">
             <h3>강사 이름</h3>
-            <p>1 :{{ name }}</p>
+            <p>{{ name }}</p>
           </div>
           <div class="teacher-profile-update-container">
             <div class="left-field">
@@ -105,16 +104,29 @@
           ></textarea>
         </div>
       </div>
-      <div class="attach-container">
-        <div>
-          <button>첨부 파일 추가</button>
+      <div class="attach-file">
+          <h3>파일 첨부</h3>
+          <div>
+            <img
+              v-for="(image, index) in attachedFiles"
+              :src="image"
+              :key="index"
+              alt="Attached file"
+              class="attach-image"
+            />
+            
+          </div>
+          <input
+            type="file"
+            multiple
+            ref="fileUploadInput"
+            @change="handleFileUpload"
+            style="display: none"
+          />
+          <button @click="triggerFileUpload">첨부 파일 추가</button>
         </div>
-        첨부파일 추가 시 보여줄 공간
-      </div>
       <div class="save-button">
- 
         <button @click="submitForm">강사 수정하기</button>
-
       </div>
     </div>
   </div>
@@ -123,6 +135,8 @@
 <script>
 import { mapActions } from "vuex";
 import {  apiDetailTeacherInfo } from "@/api/profiles.js";
+import axios from "@/api/imageAxios.js";
+
 
 export default {
   props: {
@@ -150,6 +164,8 @@ export default {
       cost: 0,
       name: "",
       selectedDays: [],
+      attachedFiles: [],
+      userProfileImage:"",
       id: JSON.parse(localStorage.getItem("vuex")).common.id,
       userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
       teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
@@ -164,13 +180,45 @@ export default {
   },
 
   methods: {
+    triggerFileUpload() {
+      this.$refs.fileUploadInput.click();
+    },
+     handleFileUpload() {
+      const selectedFiles = this.$refs.fileUploadInput.files;
+
+    this.attachedFiles = [];
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const fileReader = new FileReader();
+
+        fileReader.onload = (e) => {
+          this.attachedFiles.push(e.target.result);  
+        };
+        
+        fileReader.readAsDataURL(selectedFiles[i]);
+      }
+    },    
+    async submitImages() {
+      let formData = new FormData();
+
+      for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
+        formData.append("image", this.$refs.fileUploadInput.files[i]);
+      }
+
+      try {
+        await axios.post(`/teachers/${this.teacherId}/images`, formData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     removeInstrument(index) {
     this.selectedInstruments.splice(index, 1);
-  },
+    },
     ...mapActions(['putTeacherProfileUpdate']),
 
-    submitForm() {
+    async submitForm() {
+      await this.submitImages();
       const data = {       
         career: this.career,
         cost: this.cost,
@@ -223,6 +271,8 @@ export default {
     this.cost = res.cost;
     this.career = res.career;
     this.classDay = res.classDay;
+    this.userProfileImage = res.userProfileImage;
+    this.attachedFiles = res.images;
 
     const classDayBinary = parseInt(res.classDay, 2).toString(2).padStart(7, '0');
     Object.keys(this.days).forEach((day, index) => {

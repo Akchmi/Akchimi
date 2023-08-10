@@ -1,101 +1,138 @@
 <template>
   <div class="container">
     <div class="create__container">
-      <div>
-        <button @click="$router.push('/article/list')">목록으로</button>
-        <hr />
+      <!-- 글 제목, 내용 -->
 
-        <div>
-          <h2>{{ articleDetail.title }}</h2>
-        </div>
-
-        <div>
-          <p>조회수:{{ articleDetail.hit }}</p>
-          <p>작성자:{{ articleDetail.name }}</p>
-        </div>
-        <hr />
-
-        <div>
-          <h3>{{ articleDetail.content }}</h3>
-        </div>
-        <hr />
-
-        <h3>첨부파일</h3>
-
-        <div v-if="articleDetail.userId === loginUser">
-          <button @click="$router.push(`/article/update/${articleId}`)">
-            수정
+      <div class="create__content">
+        <div style="width: 90%">
+          <button class="detailButton" @click="$router.push('/article/list')">
+            목록으로
           </button>
-          <button @click="articleDelete">삭제</button>
+          <p style="margin: 10px; font-size: 28px">
+            {{ articleDetail.title }}
+          </p>
+          <div class="detailTitleBottom">
+            <p>작성자 : {{ articleDetail.name }}</p>
+            <p>조회수 : {{ articleDetail.hit }}</p>
+          </div>
+          <div
+            v-if="articleDetail.userId === loginUser"
+            style="display: flex; justify-content: right"
+          >
+            <button
+              style="margin-right: 10px"
+              @click="$router.push(`/article/update/${articleId}`)"
+            >
+              수정
+            </button>
+            <button @click="articleDelete">삭제</button>
+          </div>
+          <hr />
+          <h3 style="margin: 10px; font-size: 24px; min-height: 300px">
+            {{ articleDetail.content }}
+          </h3>
+
+          <hr />
+
+          <h3>첨부파일</h3>
+          <hr />
         </div>
       </div>
-      <div>
-        <hr />
-        <!--게시판 댓글-->
-        <div v-if="!isLogin">
-          <p>댓글을 작성하려면 로그인을 해주세요</p>
-        </div>
-        <div v-else>
-          <input class="commentBox" type="text" v-model="nowCreateComment" />
-          <button @click="createComment">댓글작성</button>
-        </div>
-        <hr />
+      <div style="display: flex; justify-content: center">
+        <div style="width: 90%">
+          <!--게시판 댓글-->
 
-        <div class="commentList">
-          <div v-for="comment in commentList" :key="comment.id">
-            <div class="comment">
-              <div class="commentProfile">
-                <img
-                  class="commentProfileImage"
-                  :src="comment.userProfileImage"
-                  alt=""
-                />
-              </div>
-              <div class="commentContent">
-                닉네임: {{ comment.name }}
-                <br />
-                <div>
-                  <input
-                    class="commentBox"
-                    type="text"
-                    v-if="nowUpdateCommentId == comment.commentId"
-                    v-model="nowUpdateCommentContent"
+          <div class="commentContainer" v-if="!isLogin">
+            <p>댓글을 작성하려면 로그인을 해주세요</p>
+          </div>
+          <div class="commentContainer" v-else>
+            <textarea
+              class="commentBox"
+              type="text"
+              v-model="nowCreateComment"
+              maxlength="200"
+            >
+            </textarea>
+            <button @click="createComment">댓글작성</button>
+          </div>
+
+          <hr />
+
+          <div class="commentList">
+            <div v-for="comment in commentList" :key="comment.id">
+              <div class="comment">
+                <div class="commentProfile">
+                  <img
+                    class="commentProfileImage"
+                    :src="comment.userProfileImage"
+                    alt=""
                   />
-                  <p v-if="nowUpdateCommentId != comment.commentId">
-                    {{ comment.content }}
-                  </p>
                 </div>
-                <div class="commentBottom">
-                  <div v-if="nowUpdateCommentId != comment.commentId">
-                    작성시간: {{ comment.createdAt }}
+                <div class="commentContent">
+                  <div class="commentName">
+                    <p style="margin-bottom: 4px">
+                      {{ comment.name }}
+                      <button
+                        class="writerButton"
+                        disabled
+                        v-if="articleDetail.userId == comment.userId"
+                      >
+                        작성자
+                      </button>
+                    </p>
                   </div>
+
                   <div>
-                    <div v-if="nowUpdateCommentId == comment.commentId">
-                      <button
-                        @click="
-                          commentUpdate(comment.commentId, comment.content)
-                        "
-                      >
-                        수정완료
-                      </button>
+                    <input
+                      class="commentBox"
+                      type="text"
+                      v-if="nowUpdateCommentId == comment.commentId"
+                      v-model="nowUpdateCommentContent"
+                      maxlength="200"
+                    />
+                    <p
+                      style="min-height: 24px"
+                      v-if="nowUpdateCommentId != comment.commentId"
+                    >
+                      {{ comment.content }}
+                    </p>
+                  </div>
+                  <div class="commentBottom">
+                    <div
+                      v-if="nowUpdateCommentId != comment.commentId"
+                      style="font-size: 12px; padding-top: 10px"
+                    >
+                      작성시간: {{ toLocalTimeStamp(comment.createdAt) }}
                     </div>
-                    <div v-if="nowUpdateCommentId != comment.commentId">
-                      <button
-                        @click="
-                          commentUpdate(comment.commentId, comment.content)
-                        "
-                      >
-                        수정
-                      </button>
-                      <button @click="commentDelete(comment.commentId)">
-                        삭제
-                      </button>
+                    <div>
+                      <div v-if="nowUpdateCommentId == comment.commentId">
+                        <button
+                          @click="
+                            commentUpdate(comment.commentId, comment.content)
+                          "
+                        >
+                          수정완료
+                        </button>
+                      </div>
+                      <div v-if="nowUpdateCommentId != comment.commentId">
+                        <button
+                          @click="
+                            commentUpdate(comment.commentId, comment.content)
+                          "
+                          style="margin-right: 10px"
+                        >
+                          수정
+                        </button>
+                        <button @click="commentDelete(comment.commentId)">
+                          삭제
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <hr />
             </div>
-            <hr />
           </div>
         </div>
       </div>
@@ -107,6 +144,7 @@
 import { onMounted } from "vue";
 import { useStore, mapGetters, mapActions } from "vuex";
 import { useRoute } from "vue-router";
+import utils from "@/common/utils";
 
 export default {
   data() {
@@ -170,6 +208,10 @@ export default {
         commentId: commentId,
       });
     },
+
+    toLocalTimeStamp(unixTimeStamp) {
+      return utils.unixTimeStampToLocalTimeStamp(unixTimeStamp);
+    },
   },
 
   setup() {
@@ -188,4 +230,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/article.scss";
+
+.detailButton {
+  font-size: 16px;
+  margin: 10px;
+}
+
+.detailTitleBottom {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 0px 10px 10px;
+}
+
+.writerButton {
+  background-color: transparent;
+  border: solid #edd9b7 2px;
+  color: #e6b96b;
+  cursor: default;
+}
 </style>

@@ -1,9 +1,12 @@
+@import "reset.scss";
+
 .save-button {
     display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   width: 100%;
-
+  position: absolute; 
+  bottom: 0;
 }
 .description-input {
   width: 100%; 
@@ -52,17 +55,23 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 800px;
-  height: 800px;
+  width: 800px;  
   border: 1px solid black;
   margin-bottom: 20px;
   border-radius: 8px;
   overflow: hidden;
   padding: 20px;
+ 
 }
 
 .top-section {
   display: flex;
+}
+
+.attach-image {
+  width:170px;
+  height:220px;
+  object-fit: cover;
 }
 
 .teacher-image {

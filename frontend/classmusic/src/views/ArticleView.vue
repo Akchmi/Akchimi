@@ -1,25 +1,23 @@
-<template>   
+<template>
   <div>
     <div>
       <NavBar></NavBar>
     </div>
+    <TheBanner :title="'자유게시판'" />
     <router-view></router-view>
-</div>
-
+  </div>
 </template>
 
 <script>
-import NavBar from "@/components/Nav/NavBar.vue"
-
+import NavBar from "@/components/common/NavBar.vue";
+import TheBanner from "@/components/common/TheBanner";
 
 export default {
   components: {
-    NavBar
-  }
-
+    NavBar,
+    TheBanner,
+  },
 };
 </script>
 
-<style lang="scss" scoped>
-@import "@/assets/scss/templates/common.scss";
-</style>
+<style lang="scss" scoped></style>

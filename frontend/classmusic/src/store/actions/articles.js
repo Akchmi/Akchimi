@@ -15,6 +15,7 @@ export default {
   // 필요 기능
   //자유게시글 리스트 조회
   getArticlelist(context, params) {
+    apiGetArticlePageno(context, params.searchType, params.keyword);
     apiGetArticlelist(
       context,
       params.searchType,
@@ -22,7 +23,6 @@ export default {
       params.pageNo,
       params.sortType
     );
-    apiGetArticlePageno(context, params.searchType, params.keyword);
   },
 
   //자유게시글 작성
@@ -32,7 +32,7 @@ export default {
 
   //자유게시글 수정
   putArticleupdate(context, data) {
-    console.log('자유수정', context, data)
+    console.log("자유수정", context, data);
     apiArticleupdate(context, data);
   },
   //자유게시글 작성

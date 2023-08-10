@@ -4,11 +4,10 @@
       <div class="top-section">
         <div class="img-container">
           <img
-            :src="image"
+            :src="userInfo.userProfileImage"
             alt="Teacher profile picture"
             class="teacher-image"
-          />
-          <button>이미지 수정</button>
+          />     
         </div>
         <div class="info-container">
           <div class="name-container">
@@ -103,20 +102,33 @@
           <textarea
             class="description-input"
             v-model="description"
-            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요.\n 휴대전화 번호 공개를 권장하지 않습니다."
+            placeholder="자기자신을 잘 소개할 수 있는 문구를 작성해주세요. 휴대전화 번호 공개를 권장하지 않습니다."
           ></textarea>
         </div>
       </div>
-      <div class="attach-container">
-        <div>
-          <button>첨부 파일 추가</button>
+      <div class="attach-file">
+          <h3>파일 첨부</h3>
+          <div>
+            <img
+              v-for="(image, index) in attachedFiles"
+              :src="image"
+              :key="index"
+              alt="Attached file"
+              class="attach-image"
+            />
+          </div>
+          <input
+            type="file"
+            multiple
+            ref="fileUploadInput"
+            @change="handleFileUpload"
+            style="display: none"
+          />
+          <button @click="triggerFileUpload">첨부 파일 추가</button>
         </div>
-        첨부파일 추가 시 보여줄 공간
-      </div>
       <div class="save-button">
         <!-- <button @click="submitForm">저장</button> -->
         <button @click="submitForm">강사 등록하기</button>
-
       </div>
     </div>
   </div>
@@ -125,6 +137,9 @@
 <script>
 import { mapActions } from "vuex";
 import { apiGetUserInfo } from "@/api/profiles.js";
+import axios from "@/api/imageAxios.js";
+
+
 
 export default {
   props: {
@@ -151,6 +166,8 @@ export default {
       career: 0,
       cost: 0,
       selectedDays: [],
+      userProfileImage: "",
+      attachedFiles: [],
       id: JSON.parse(localStorage.getItem("vuex")).common.id,
     };
   },
@@ -163,14 +180,42 @@ export default {
   },
 
   methods: {
+    triggerFileUpload() {
+      this.$refs.fileUploadInput.click();
+    },
+     handleFileUpload() {
+      const selectedFiles = this.$refs.fileUploadInput.files;
+
+    this.attachedFiles = [];
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const fileReader = new FileReader();
+
+        fileReader.onload = (e) => {
+          this.attachedFiles.push(e.target.result);  
+        };
+        
+        fileReader.readAsDataURL(selectedFiles[i]);
+      }
+    },    
+    async submitImages() {
+      let formData = new FormData();
+
+      for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
+        formData.append("image", this.$refs.fileUploadInput.files[i]);
+      }
+
+      try {
+        await axios.post(`/teachers/${this.teacherId}/images`, formData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getUserInfo() {
       try {
         const data = await apiGetUserInfo(this.id);
         if (data) {
           this.userInfo = data;
-          console.log(1, data);
-          console.log(this.userInfo);
-          console.log(2);
         }
       } catch (error) {
         console.log(error);
@@ -179,23 +224,23 @@ export default {
 
     ...mapActions(["postTeacherProfileCreate", "updateUserType"]),
 
-    submitForm() {
-      const data = {
-        userId: this.userInfo.userid,
+    async submitForm() {
+      await this.submitImages();
+      const data = {       
         career: this.career,
         cost: this.cost,
         introduce: this.description,
         startTime: this.startTime,
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
-        instruments: [...this.selectedInstruments],        
+        instruments: [...this.selectedInstruments], 
+        teacherId : this.teacherId       
       };
-
-      this.postTeacherProfileCreate(data)      
-        .then(response => {          
-          const teacherId = response.data.teacherId
-          this.updateUserType(1)
-          this.$router.push(`/profile/teacherprofile/${teacherId}`);      
+      this.putTeacherProfileUpdate(data)            
+        .then(response => {    
+          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+          this.$router.push(`/profile/teacherprofile/${teacherId}`);         
+          console.log(this.teacherId, response)
         });
 
     },

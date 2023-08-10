@@ -4,11 +4,14 @@
       <div class="top-section">
         <div class="img-container">
           <img
-            :src="userProfileImage"
+            :src="userInfo.userProfileImage"
+            :key="userInfo.userProfileImage"
             alt="User profile picture"
             class="user-image"
           />
-          <button>사진 추가</button>
+          <input type="file" ref="fileInput" @change="handleImageUpload" style="display: none"/>
+          <button @click="triggerFileInput">사진 수정</button>
+
         </div>
         <div class="info-container">
           <!-- <div class="id-container">  -->
@@ -47,10 +50,10 @@
           </div>
 
           <div class="modal-body">
-            <label>현재 비밀번호:</label>
+            <label>현재 비밀번호 : </label>
             <input type="password" v-model="currentPassword" placeholder="Current Password">
             <br>
-            <label>새 비밀번호:</label>
+            <label>새 비밀번호 :   </label>
             <input type="password" v-model="newPassword" placeholder="New Password">
           </div>
 
@@ -63,27 +66,29 @@
     
     <div class="favorites">
       <h3>{{ userInfo.name }} 님이 즐겨찾기한 강사</h3>
-      <div>
-        <TeacherCard></TeacherCard>
-      </div>
-      <!-- <div v-if="favoriteTeachers.length">
-        <TeacherCard v-for="teacher in favoriteTeachers" :key="teacher.id" :teacher="teacher"></TeacherCard>
-     </div>
-     <p v-else>아직 즐겨찾기한 강사가 없습니다.</p> -->
+      <div class="teacher-list">
+        <LikeTeacherCard
+        v-for="teacher in liketeachers"
+        :key="teacher.teacherId"
+        :teacher="teacher"
+        image="https://via.placeholder.com/280"
+      />
+      </div>   
     </div>
   </div>
 </template>
 
 <script>
-// import { onMounted } from "vue";
-import { apiGetUserInfo, apiLikeTeacher  } from "@/api/profiles.js";
-import TeacherCard from "@/components/Search/TeacherCard.vue";
 
-// import { useStore } from "vuex";
-// apiLikeTeacher
+import { apiGetUserInfo, apiLikeTeacher,  apiChangePw } from "@/api/profiles.js";
+import LikeTeacherCard from "./LikeTeacherCard.vue";
+import { mapGetters,} from "vuex";
+import axios from "@/api/imageAxios.js";
+
+
 export default {
   components : {
-    TeacherCard
+    LikeTeacherCard,
   },
   data() {
     return { 
@@ -92,54 +97,90 @@ export default {
       showChangePasswordModal: false,
       currentPassword: '',
       newPassword: '',
-      teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
-      teacherInfo: {},
+      teacherId : '',
+      liketeachers: [],
+      userProfileImage:'',
     };
   },
-
+  computed: {
+    ...mapGetters({ teachers: "getLikeTeacherList"})
+  },
   methods: {
+    // ...mapActions(['putChangePw']),
+    async changePassword() {
+      const data = {
+        oldPassword: this.currentPassword,
+        newPassword: this.newPassword,
+        id: this.id,
+      };
+      const response = await apiChangePw(data);
+  
+      if (response.success) {
+        alert("비밀번호가 변경되었습니다.");
+        this.currentPassword = '';
+        this.newPassword = '';
+        this.showChangePasswordModal = false;
+      } else {
+        alert("비밀번호 변경 중 오류가 발생했습니다. 현재 비밀번호를 확인하세요.");
+        this.currentPassword = '';
+        this.newPassword = '';
+      }
+    },      
+
+    async handleImageUpload() {
+    const selectedFile = this.$refs.fileInput.files[0];
+    let formData = new FormData();
+    formData.append('image', selectedFile);
+
+    try {          
+      let response = await axios.post(`/users/${this.id}/profileImage`, formData);
+      
+      if (response.data && response.data.userProfileImage) { 
+          this.userInfo.userProfileImage = response.data.userProfileImage;
+          location.reload();
+      }
+    } catch (error) {
+        console.log(error);
+    }
+  },
+
+    triggerFileInput() {
+      this.$refs.fileInput.click();
+    },
     async getUserInfo() {  
       try {
-        const data = await apiGetUserInfo(this.id);   
-        
-      
+        const data = await apiGetUserInfo(this.id); 
         if (data) {
-          this.userInfo = data
-      
+          this.userInfo = data      
         }
       } catch (error) {
         console.log(error)
       }
     },
-    async likeTeacher() {
+    async likeTeachers() {
       try {
-
-        const teacherdata = await apiLikeTeacher(this.teacherId);
-        console.log('아이디', this.teacherId)
-        if (teacherdata) {
-          this.teacherInfo = teacherdata
-          console.log('dd', this.teacherInfo)
+        const teacherData = await apiLikeTeacher(this.id);
+       
+        if (teacherData ) {
+          this.liketeachers = teacherData
+          console.log('dd', this.liketeachers )
         }
       } catch(error) {        
         console.log('즐찾선생', error)
       }
-    }
-
-
+    },
   },
+
+  
   created() {  
     this.getUserInfo();
-    this.likeTeacher();
+    this.likeTeachers();
   },
 };
 </script>
 
 <style scoped>
 @import "@/assets/scss/profile.scss";
+
 </style>
 
-
-
-// 즐겨찾기 목록은 숫자리스트를 줘야 되지않나?
-// 즐겨찾기 아이디  티처 pk다
-// 티쳐pk를 localStorage에서 가져오면 안된다  다른방법을 생각해보자

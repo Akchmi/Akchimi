@@ -1,119 +1,181 @@
 <template>
   <div>
-    <div class="teacher-ongoing-container">
-      <div class="teacher-ongoing">
-        <div class="top-section">
-          <img
-            :src="image"
-            alt="Teacher profile picture"
-            class="teacher-image"
-          />
-          <div class="info-box">
-            <h3>{{ name }}</h3>
-            <div class="memo-box">
-              <p>{{ savedMemo }}</p>
+    <div>
+      <h2>강의실</h2>
+      <br />
+      <button @click="$router.push(`/lecture/studentongoing`)">수업</button>
+      |
+      <button @click="$router.push(`/lecture/teacherongoing`)">강의</button>
+      <hr />
+      <br />
+      <br />
+    </div>
+
+    <div v-if="!loggedTeacherId" class="container">
+      <div>아직 강사 등록을 하지 않으셨군요?</div>
+      <br />
+      <router-link to="/profile/teacherprofilecreate"
+        >강사 등록하러 가기</router-link
+      >
+    </div>
+    <div v-else>
+      <div>
+        <button
+          class="buttonOngoing"
+          @click="$router.push(`/lecture/teacherongoing`)"
+        >
+          진행 중
+        </button>
+        |
+        <button @click="$router.push(`/lecture/teacherwaiting`)">
+          대기 중
+        </button>
+        |
+        <button @click="$router.push(`/lecture/teacherfinish`)">완료</button>
+      </div>
+      <div class="out__container">
+        <div class="container">
+          <div
+            class="ongoing__container"
+            v-for="lecture in lectureList"
+            :key="lecture.id"
+          >
+            <div class="ongoing__container__box">
+              <img
+                :src="lecture.userProfileImage"
+                alt="Student profile picture"
+                class="profileImage"
+              />
+              <div class="info-box">
+                <div class="name">{{ lecture.name }}</div>
+                <div class="memo-box">
+                  <div v-if="nowUpdateMemoId != lecture.contactId">
+                    <div v-if="!lecture.memo">
+                      <p>메모를 입력해주세요</p>
+                    </div>
+                    <div v-else>
+                      {{ lecture.memo }}
+                    </div>
+                  </div>
+                  <textarea
+                    v-if="nowUpdateMemoId == lecture.contactId"
+                    class="memoInput"
+                    type="text"
+                    v-model="nowUpdateMemo"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="ongoing__container__button"
+              v-if="nowUpdateMemoId != lecture.contactId"
+            >
+              <button
+                @click="$router.push(`/chats/${lecture.contactId}?type=1`)"
+              >
+                채팅입장
+              </button>
+              <button
+                @click="
+                  $router.push(`/livemeeting/${lecture.contactId}?type=1`)
+                "
+              >
+                강의실입장
+              </button>
+              <button
+                v-if="!lecture.memo"
+                @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+              >
+                메모하기
+              </button>
+              <button
+                v-if="lecture.memo"
+                @click="runUpdateMemo(lecture.contactId, lecture.memo)"
+              >
+                메모수정
+              </button>
+              <button @click="finishLecture(lecture.contactId)">
+                강의완료
+              </button>
+            </div>
+            <div
+              class="ongoing__container__button"
+              v-if="nowUpdateMemoId == lecture.contactId"
+            >
+              <button @click="updateMemo(lecture.contactId)">완료</button>
+              <button @click="cancleUpdateMemo">취소</button>
             </div>
           </div>
         </div>
-        <div class="button-group">
-          <button @click="$router.push(`/chats/${lecture.contactId}?type=1`)">
-            채팅입장
-          </button>
-          <button @click="$router.push(`/livemeeting/${lecture.contactId}`)">
-            강의실입장
-          </button>
-          <button @click="showInput = !showInput">
-            {{ showInput ? "취소" : "메모하기" }}
-          </button>
-          <button>강의완료</button>
-        </div>
-      </div>
-      <div v-if="showInput" class="input-field">
-        <textarea v-model="memo" rows="10" cols="100"></textarea>
-        <button @click="saveMemo">저장하기</button>
+        {{ lectureList }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters, useStore } from "vuex";
+import { onMounted } from "vue";
+
 export default {
-  props: {
-    image: { type: String, default: "https://via.placeholder.com/280" },
-    name: { type: String, default: "박한샘" },
-  },
   data() {
     return {
-      memo: "",
-      savedMemo: "",
-      showInput: false,
+      nowUpdateMemo: "",
+      nowUpdateMemoId: null,
     };
   },
+  computed: {
+    ...mapGetters({ lectureList: "getlectureList" }),
+    ...mapGetters({ loggedTeacherId: "getTeacherId" }),
+  },
   methods: {
-    saveMemo() {
-      this.savedMemo = this.memo;
-      this.showInput = false;
+    runUpdateMemo(contactId, memo) {
+      this.nowUpdateMemo = memo;
+      this.nowUpdateMemoId = contactId;
     },
+
+    ...mapActions(["putUpdateMemo"]),
+
+    updateMemo(contactId) {
+      this.putUpdateMemo({
+        contactId: contactId,
+        memo: this.nowUpdateMemo,
+        type: 1,
+      });
+
+      this.nowUpdateMemo = "";
+      this.nowUpdateMemoId = null;
+    },
+
+    cancleUpdateMemo() {
+      this.nowUpdateMemo = "";
+      this.nowUpdateMemoId = null;
+    },
+
+    ...mapActions(["changeLectureState"]),
+    finishLecture(contactId) {
+      this.changeLectureState({
+        contactId: contactId,
+        state: 2,
+        mode: "finishLecture_teacher",
+      });
+    },
+  },
+  setup() {
+    const store = useStore();
+    const teacherId = store.getters.getTeacherId;
+
+    onMounted(() => {
+      store.dispatch("getLectureList", {
+        id: teacherId,
+        state: 1,
+        type: 1,
+      });
+    });
   },
 };
 </script>
 
-<style scoped>
-.teacher-ongoing-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.teacher-ongoing {
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 800px;
-  height: 300px;
-  border: 1px solid black;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  overflow: hidden;
-  padding: 20px;
-}
-
-.top-section {
-  display: flex;
-}
-
-.teacher-image {
-  width: 170px;
-  height: 220px;
-  object-fit: cover;
-  margin-right: 1em;
-}
-
-.info-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 200px;
-  flex-grow: 1;
-}
-
-.memo-box {
-}
-
-.button-group {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-}
-
-.input-field {
-  width: 800px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-bottom: 20px;
-}
+<style lang="scss" scoped>
+@import "@/assets/scss/lecture.scss";
 </style>

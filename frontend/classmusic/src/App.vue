@@ -19,6 +19,16 @@ export default {
 </script>
 "
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@/assets/scss/templates/common.scss";
+@import "@/assets/scss/reset.scss";
+
+@font-face {
+  font-family: "mainfont";
+  src: url("assets/font/Maplestory.ttf") format("truetype");
+}
+
+.container {
+  font-family: "mainfont";
+}
 </style>

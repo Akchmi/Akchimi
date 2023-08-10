@@ -1,17 +1,30 @@
-import { apiTeacherProfileCreate, apiTeacherProfileUpdate, apiLikeTeacherUpdate } from "@/api/profiles.js";
+import {
+  apiTeacherProfileCreate,
+  apiTeacherProfileUpdate,
+  apiLikeTeacherUpdate,
+  apiChangePw,
+} from "@/api/profiles.js";
 
 export default {
-  postTeacherProfileCreate(context, data) {
-    apiTeacherProfileCreate(context, data);
+  async postTeacherProfileCreate(context, data) {
+    const result = await apiTeacherProfileCreate(context, data);
+    return result;
   },
-  async updateUserType({ commit }, userType) {   
-    commit('SET_USER_TYPE', userType);
+  async updateUserType({ commit }, userType) {
+    commit("SET_USER_TYPE", userType);
   },
+
   putTeacherProfileUpdate(context, data) {
-    console.log('액션',context, data)
-    apiTeacherProfileUpdate(context,data);
+    console.log("액션", context, data);
+    apiTeacherProfileUpdate(context, data);
   },
+
   postLikeTeacherUpdate(context, data) {
-    apiLikeTeacherUpdate(context, data)
+    apiLikeTeacherUpdate(context, data);
+  },
+  putChangePw(context, data) {
+    console.log("비번변경", context, data)
+    apiChangePw(context, data)
   }
+
 };

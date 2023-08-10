@@ -1,6 +1,6 @@
 export default {
   // 강사 목록
-  getTeacherList(state) {
+  getTeacherList(state) {    
     return state.search.teacherList;
   },
 

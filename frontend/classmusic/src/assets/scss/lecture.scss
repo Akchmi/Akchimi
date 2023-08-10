@@ -1,3 +1,20 @@
+.main__container {
+  width: 1024px;
+  margin: 0 auto;
+}
+
+.buttonOngoing {
+  color: green;
+}
+
+.buttonWaiting {
+  color: yellow;
+}
+
+.buttonFinish {
+  color: red;
+}
+
 .out__container {
   display: flex;
   flex-direction: column;
@@ -113,6 +130,7 @@
 
 .review-box {
   width: 100%;
+  min-height: 50px;
   border: 1px solid black;
   overflow: hidden;
 }
