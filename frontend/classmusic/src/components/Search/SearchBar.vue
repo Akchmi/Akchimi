@@ -7,6 +7,7 @@
       <input
         placeholder="검색어를 입력하세요."
         type="text"
+        class="search-bar__keyword"
         v-model="searchParams.keyword"
         @change="setKeyword"
       />

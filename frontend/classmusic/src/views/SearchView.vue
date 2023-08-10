@@ -4,7 +4,6 @@
       <NavBar></NavBar>
     </div>
     <TheBanner :title="'강사검색'" />
-    <br />
     <SearchBar ref="searchBar"> </SearchBar>
     <hr />
     <SearchList> </SearchList>

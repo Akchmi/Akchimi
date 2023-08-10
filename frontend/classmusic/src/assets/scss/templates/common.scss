@@ -6,11 +6,19 @@
 }
 
 button {
+  // 버튼 텍스트 가운데 정렬
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   background-color: #edd9b7;
   border-radius: 0.5em;
   border-color: transparent;
   cursor: pointer;
   font-family: mainfont;
+  text-align: center;
+  padding: 5px 10px;
 }
 
 .banner {
