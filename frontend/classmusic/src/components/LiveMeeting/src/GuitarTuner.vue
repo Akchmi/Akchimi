@@ -148,6 +148,20 @@ export default {
         this.pitch = Math.round(ac);
         this.note = soundService.noteFromPitch(this.pitch);
         this.detune = soundService.centsOffFromPitch(this.pitch, this.note);
+        // console.log(this.notes[this.note%12]);
+        const isTuned=this.notes[this.note%12];
+        console.log(isTuned);
+        if(isTuned=="E"){
+          console.log("6번줄 O");
+        }else if(isTuned=="A"){
+          console.log("5번줄 O");
+        }else if(isTuned=="D"){
+          console.log("4번줄 O");
+        }else if(isTuned=="G"){
+          console.log("3번줄 O");
+        }else if(isTuned=="B"){
+          console.log("2번줄 O");
+        }
       }
       this.$emit("dataUpdate", {
         pitch: this.pitch,
@@ -155,6 +169,21 @@ export default {
         detune: this.detune,
       });
     },
+
+    getMode(array){
+      const counts = array.reduce((pv, cv)=>{
+        pv[cv] = (pv[cv] || 0) + 1;
+        return pv;
+      }, {});
+      const keys = Object.keys(counts);
+      let mode = keys[0];
+      keys.forEach((val)=>{
+          if(counts[val] > counts[mode]){
+              mode = val;
+          }
+      });
+      return mode;
+    }
   },
 };
 </script>

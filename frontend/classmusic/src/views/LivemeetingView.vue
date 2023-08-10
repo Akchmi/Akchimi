@@ -33,11 +33,13 @@
     </div>
 
     <div id="session" v-if="sessionCamera">
+      <!-- 탑 (세션번호) -->
       <div id="session-header" class="top-container">
         {{ mySessionId }}번 세션
       </div>
-
+      <!-- 바디 (왼쪽: 작은화면, 메트로놈 / 가운데: 큰메인화면 / 오른쪽: 채팅창) -->
       <div class="body-container">
+        <!-- 바디 왼쪽: 작은화면, 메트로놈 -->
         <div class="aditional-function">
           {{ subscribers }}
           <div id="live-screens" @click="changeMainScreen">
@@ -53,73 +55,56 @@
             </div>
           </div>
           <MetronomeApp />
-          <TunerApp v-if="popState" @close="changePopState()" />
-          <p @click="changePopState()">튜너</p>
         </div>
-
+        <!-- 바디 가운데: 큰메인화면 -->
         <div id="video-container" class="video-box">
           <user-video
             :stream-manager="publisher"
             />
-            <!-- @click="updateMainVideoStreamManager(publisher)" -->
-          <!-- <user-video
-            v-for="sub in subscribers"
-            :key="sub.stream.connection.connectionId"
-            :stream-manager="sub"
-            @click="updateMainVideoStreamManager(sub)"
-          /> -->
         </div>
-
+        <!-- 바디 오른쪽: 채팅창 -->
         <div class="message-box">
           <div class="messages-container">
-            <!-- Sent Messages -->
-            <div class="sent-messages">
-              <div
-                v-for="(message, index) in receivedMessages"
-                :class="message.className"
-                :key="index"
-              >
-                <div>
-                  {{ message.message }}
-                </div>
+            <div
+              v-for="(message, index) in receivedMessages"
+              :class="message.className"
+              :key="index"
+            >
+              <div>
+                {{ message.message }}
               </div>
             </div>
           </div>
-
-          <!-- Received Messages -->
-
-          <div class="message-input-form">
-            <!-- 메세지를 입력하는 input 요소 -->
+          <div class="message-input-container">
             <input
+              class="message-input-form"
               type="text"
               v-model="newMessage"
               @keyup.enter="sendMessage"
             />
-
-            <!-- 메세지를 보내는 버튼 -->
-            <button @click="sendMessage">전송</button>
+            <button class="message-send-btn" @click="sendMessage">전송</button>
           </div>
         </div>
-
       </div>
+      <!-- 바텀: 튜너, 화면공유, 나가기 버튼 -->
       <div class="bottom-container">
-        <button class="bottom-button" @click="changePopState()">튜너</button>
-          <TunerApp v-if="popState" @close="changePopState()"/>
-        <button
-          id="buttonScreenShare"
-          class="bottom-button"
-          @click="publishScreenShare"
-          v-if="sessionScreen"
-        >
-          화면공유
-        </button>
-        <button class="bottom-button">화면 녹화</button>
-        <button
-          class="bottom-close-button"
-          type="button"
-          id="buttonLeaveSession"
-          @click="leaveSession"
-        >강의 떠나기</button>
+        <div class="button-box">
+          <button class="bottom-button" @click="changePopState()">튜너</button>
+            <TunerApp v-if="popState" @close="changePopState()"/>
+          <button
+            id="buttonScreenShare"
+            class="bottom-button"
+            @click="publishScreenShare"
+            v-if="sessionScreen"
+          >
+            화면공유
+          </button>
+          <button
+            class="bottom-button"
+            id="buttonLeaveSession"
+            @click="leaveSession"
+          >강의 떠나기</button>
+        </div>
       </div>
       <!-- <user-video :stream-manager="mainStreamManager" />
           <user-video :stream-manager="publisher" /> -->
@@ -150,6 +135,12 @@
           @click="updateMainVideoStreamManager(sub)"
         />
       </div> -->
+      <!-- <user-video
+        v-for="sub in subscribers"
+        :key="sub.stream.connection.connectionId"
+        :stream-manager="sub"
+        @click="updateMainVideoStreamManager(sub)"
+      /> -->
     </div>
   </div>
 </template>
@@ -260,61 +251,27 @@ export default {
       const mainVideoDiv=document.querySelector("#video-container");
       const mainVideo=mainVideoDiv.querySelector("video");
       const selectedVideo=event.target;
-      console.log(mainVideo);
-      console.log(mainVideo.srcObject);
-      console.log(selectedVideo);
-      console.log(selectedVideo.srcObject);
 
-      if (mainVideo.srcObject !== selectedVideo.srcObject) {
+      if (selectedVideo.srcObject!=null && mainVideo.srcObject !== selectedVideo.srcObject) {
         const mainVideoContainer = document.querySelector("#video-container");
         mainVideoContainer.style.display = "none";
-
-        // const mainVideoText = mainVideoContainer.querySelector("p");
-        // mainVideoText.innerHTML = userData;
 
         mainVideo.srcObject = selectedVideo.srcObject;
         mainVideoContainer.style.display = "block";
       }
     },
     appendUserData(videoElement, connection) {
-      var userData;
       var nodeId;
 
       if (typeof connection === "string") {
-        userData = connection;
         nodeId = connection;
       } else {
-        userData = JSON.parse(connection.data).clientData;
         nodeId = connection.connectionId;
       }
       var dataNode = document.createElement("div");
       dataNode.className = "data-node";
       dataNode.id = "data-" + nodeId;
-      dataNode.innerHTML = "<p>" + userData + "</p>";
       videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
-      this.addClickListener(videoElement, userData);
-    },
-    addClickListener(element, userData) {
-      element.addEventListener("click", () => {
-        const mainVideoDiv = document.querySelector("#video-container");
-        const mainVideo = mainVideoDiv.querySelector("video");
-        console.log(mainVideo);
-        console.log(mainVideo.srcObject);
-        console.log(element);
-        console.log(element.srcObject);
-        console.log(userData);
-
-        // if (mainVideo.srcObject !== element.srcObject) {
-        //   const mainVideoContainer = document.querySelector("#video-container");
-        //   mainVideoContainer.style.display = "none";
-
-        //   const mainVideoText = mainVideoContainer.querySelector("p");
-        //   mainVideoText.innerHTML = userData;
-
-        //   mainVideo.srcObject = element.srcObject;
-        //   mainVideoContainer.style.display = "block";
-        // }
-      });
     },
 
     publishScreenShare() {
@@ -335,6 +292,7 @@ export default {
         .getMediaStream()
         .getVideoTracks()[0]
         .addEventListener("ended", () => {
+          // 공유중지 버튼 누르면
             console.log(
               'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
             );
@@ -342,6 +300,14 @@ export default {
             document.getElementById("buttonScreenShare").style.visibility =
             "visible";
             this.screensharing = false;
+            const screenDiv = document.querySelector("#live-screens");
+            const screen = screenDiv.querySelector("#user-video").querySelector("video");
+            const mainVideoContainer = document.querySelector("#video-container");
+            const mainVideo = mainVideoContainer.querySelector("video");
+            mainVideoContainer.style.display = "none";
+
+            mainVideo.srcObject = screen.srcObject;
+            mainVideoContainer.style.display = "block";
           });
           this.sessionScreen.publish(publisherScreen);
         });
@@ -374,6 +340,7 @@ export default {
       this.sessionCamera.on("streamCreated", (event) => {
         if (event.stream.typeOfVideo == "CAMERA") {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-cameras' id
+          console.log(this.sessionCamera);
           var subscriber = this.sessionCamera.subscribe(
             event.stream,
             "container-cameras"
@@ -386,6 +353,7 @@ export default {
         }
       });
       this.sessionScreen.on("streamCreated", (event) => {
+        console.log(this.sessionScreen);
         if (event.stream.typeOfVideo == "SCREEN") {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
           var subscriberScreen = this.sessionScreen.subscribe(
@@ -577,10 +545,10 @@ export default {
 .top-container{
   width: 98vw;
   height: 3vh;
-  border: solid 1px red;
   font-weight: bolder;
   font-size: larger;
   position: relative;
+  border: solid 1px red;
 }
 .body-container{
   width: 98vw;
@@ -592,10 +560,13 @@ export default {
 .bottom-container{
   height: 10vh;
   width: 98vw;
-  border: solid 1px red;
   background-color: white;
   position: relative;
   z-index: 10;
+  border: solid 1px red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #local-video-undefined {
   display: flex;
@@ -611,33 +582,43 @@ export default {
 .aditional-function{
   width: 20%;
   float: left;
-  border: solid 1px red;
   box-sizing: border-box;
+  border: solid 1px red;
 }
 .video-box{
   width: 60%;
-  border: solid 1px red;
   float: center;
+  border: solid 1px red;
 }
 .message-box{
   width: 20%;
+  height: 100%;
   float: right;
-  border: solid 1px red;
   box-sizing: border-box;
   position: relative;
+  border: solid 1px red;
 }
 .messages-container {
-  display: flex;
   width: 100%;
+  height: 90%;
   justify-content: space-between;
   box-sizing: border-box;
+  overflow: auto;
+  /* border: solid 5px black; */
 }
-.sent-messages {
-  width: 100%;
+.message-input-container {
+  height: 10%;
+  bottom: 0;
+  position: sticky;
+  display: flex;
 }
-.message-input-form {
-  position: absolute;
-  bottom: 5px;
+.message-input-form{
+  width: 80%;
+  height: 100%;
+}
+.message-send-btn{
+  width: 20%;
+  height: 100%;
 }
 .metronome-container{
   text-align: center;
@@ -647,17 +628,16 @@ export default {
   display: flex;
   justify-content: center;
 }
-.bottom-button{
-  background-color: cyan;
-  border: none;
-  border-radius: 10px;
+.button-box{
+  text-align: center;
 }
-.bottom-close-button{
-  background-color: red;
-  border: none;
+.bottom-button{
   border-radius: 10px;
+  background-color: cyan;
 }
 .right {
+  width: 20%;
+  margin: 0px 10px 0px 10px;
   display: flex;
   justify-content: right;
   align-content: center;
