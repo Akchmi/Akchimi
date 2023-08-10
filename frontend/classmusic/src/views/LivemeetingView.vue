@@ -1,33 +1,35 @@
 <template>
   <div id="main-container" class="container">
     <div id="join" v-if="!sessionCamera">
-      <div id="join-dialog" class="jumbotron vertical-center">
-        <h1>참여자 정보</h1>
-        <video id="my-video" autoplay="true" :srcObject="myVideo"></video>
-        <div class="form-group">
-          <p>
-            <label>학 생</label>
-            <input
-              v-model="myUserName"
-              class="form-control"
-              type="text"
-              required
-            />
-          </p>
-          <p>
-            <label>강의실 번호</label>
-            <input
-              v-model="mySessionId"
-              class="form-control"
-              type="text"
-              required
-            />
-          </p>
-          <p class="text-center">
-            <button class="btn btn-lg btn-success" @click="joinSession()">
-              입장
-            </button>
-          </p>
+      <div id="join-dialog" class="enterRoom__container">
+        <div>
+          <button @click="$router.push('/')">나가기</button>
+          <video id="my-video" autoplay="true" :srcObject="myVideo"></video>
+          <div class="form-group">
+            <div class="enterInfo">
+              <div>
+                <label>학생 ID</label>
+                <input
+                  v-model="myUserName"
+                  class="enterInfoInput"
+                  type="text"
+                  required
+                />
+              </div>
+              <div>
+                <label>강의실 번호</label>
+                <input
+                  v-model="mySessionId"
+                  class="enterInfoInput"
+                  type="text"
+                  required
+                />
+              </div>
+            </div>
+            <div class="enterButton">
+              <button @click="joinSession()">입장</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -49,7 +51,7 @@
                 :key="sub.stream.connection.connectionId"
                 :stream-manager="sub"
               />
-              <user-video :stream-manager="publisher"/>
+              <user-video :stream-manager="publisher" />
               <div id="shared-video" class="row panel panel-default">
                 <!-- <div class="panel-heading">User Screens</div> -->
                 <div class="panel-body" id="container-screens"></div>
@@ -60,10 +62,8 @@
         </div>
         <!-- 바디 가운데: 큰메인화면 -->
         <div id="video-container" class="video-box">
-          <user-video
-            :stream-manager="publisher"
-            />
-          <TunerApp v-if="popState" @close="changePopState()"/>
+          <user-video :stream-manager="publisher" />
+          <TunerApp v-if="popState" @close="changePopState()" />
         </div>
         <!-- 바디 오른쪽: 채팅창 -->
         <div class="message-box">
@@ -365,7 +365,10 @@ export default {
       this.sessionScreen.on("streamCreated", (event) => {
         console.log(this);
         console.log(this.sessionScreen);
-        if (this.sessionScreen!=null && event.stream.typeOfVideo == "SCREEN") {
+        if (
+          this.sessionScreen != null &&
+          event.stream.typeOfVideo == "SCREEN"
+        ) {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
           var subscriberScreen = this.sessionScreen.subscribe(
             event.stream,
@@ -552,14 +555,58 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.top-container{
+<style>
+#join {
+  display: flex;
+  justify-content: center;
+}
+
+#my-video {
+  width: 600px;
+  height: 450px;
+  margin: 10px;
+}
+
+.enterRoom__container {
+  width: 550px;
+  border: 3px #edd9b7 solid;
+  border-radius: 20px;
+  padding: 20px 50px 30px 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.enterInfoInput {
+  border: 3px #edd9b7 solid;
+  border-radius: 2em;
+  margin-left: 10px;
+  padding-left: 15px;
+}
+
+.enterInfo {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
+}
+
+.enterButton {
+  display: flex;
+  justify-content: right;
+  margin-right: 40px;
+}
+
+.top-container {
   width: 98vw;
   height: 3vh;
   font-weight: bolder;
   font-size: larger;
   position: relative;
-  // border: solid 1px red;
+  /* // border: solid 1px red; */
 }
 .body-container {
   width: 98vw;
@@ -568,7 +615,7 @@ export default {
   position: relative;
   z-index: 5;
 }
-.bottom-container{
+.bottom-container {
   height: 12vh;
   width: 98vw;
   background-color: white;
@@ -579,7 +626,7 @@ export default {
   align-items: center;
 }
 
-video{
+video {
   width: 100%;
 }
 .split-screen {
@@ -587,14 +634,14 @@ video{
   flex-direction: column;
   align-items: center;
 }
-.body-left{
+.body-left {
   width: 20%;
   float: left;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.aditional-function{
+.aditional-function {
   width: 98%;
   height: 99%;
   box-sizing: border-box;
@@ -603,19 +650,19 @@ video{
   display: flex;
   flex-direction: column;
   align-items: center;
-  // border: solid 1px red;
+  /* // border: solid 1px red; */
 }
-#live-screens{
+#live-screens {
   width: 90%;
   margin-top: 10px;
 }
-.panel-body{
+.panel-body {
   width: 100%;
 }
 .video-box {
   width: 60%;
   float: center;
-  // border: solid 1px red;
+  /* // border: solid 1px red; */
 }
 .message-box {
   width: 20%;
@@ -624,7 +671,7 @@ video{
   box-sizing: border-box;
   position: relative;
   background-color: #f5f5f5;
-  // border: solid 1px red;
+  /* // border: solid 1px red; */
 }
 .messages-container {
   width: 100%;
@@ -641,19 +688,19 @@ video{
   display: flex;
   justify-content: center;
 }
-.message-input-form{
+.message-input-form {
   width: 77%;
   height: 89%;
   border: none;
   border-radius: 10px;
   box-shadow: 1px 2px 1px 2px rgb(199, 199, 199);
 }
-.message-send-btn{
+.message-send-btn {
   width: 19%;
   height: 90%;
   border-radius: 10px;
 }
-.tuner-container{
+.tuner-container {
   position: absolute;
   width: 20%;
   height: 40%;
@@ -663,13 +710,13 @@ video{
   justify-content: center;
   z-index: 20;
 }
-.button-box{
+.button-box {
   position: absolute;
   width: 60%;
   display: flex;
   justify-content: center;
 }
-.bottom-button{
+.bottom-button {
   width: 15%;
   border-radius: 10px;
 }

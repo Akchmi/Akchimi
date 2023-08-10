@@ -13,5 +13,6 @@ export default {
   },
   SAVE_TEACHERID(state, data) {
     state.common.teacherId = data;
+    console.log("뮤테생성", data)
   },
 };

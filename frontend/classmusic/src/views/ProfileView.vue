@@ -3,7 +3,7 @@
     <div>
       <NavBar></NavBar>
     </div>
-    <TheBanner :title="'마이페이지'" />
+    <TheBanner :title="'프로필'" />
     <br />
     <div class="top-button-container">
       <button>

@@ -10,6 +10,9 @@ import {
 export default {
   async postTeacherProfileCreate(context, data) {
     const result = await apiTeacherProfileCreate(context, data);
+    if (result) {
+      context.commit("SAVE_TEACHERID", result);
+    }
     return result;
   },
   async updateUserType({ commit }, userType) {
