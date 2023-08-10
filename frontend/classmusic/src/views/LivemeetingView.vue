@@ -555,9 +555,8 @@ export default {
 };
 </script>
 
-<<<<<<< Updated upstream
-<style scoped>
-======= <style lang="scss" > #join {
+<style>
+#join {
   display: flex;
   justify-content: center;
 }
@@ -601,7 +600,7 @@ export default {
   margin-right: 40px;
 }
 
->>>>>>>Stashed changes .top-container {
+.top-container {
   width: 98vw;
   height: 3vh;
   font-weight: bolder;
