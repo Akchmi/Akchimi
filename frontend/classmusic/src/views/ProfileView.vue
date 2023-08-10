@@ -5,13 +5,14 @@
     </div>
     <TheBanner :title="'마이페이지'" />
     <br />
-    
-    <button>
-      <router-link :to="myProfilePath">내 프로필</router-link>
-    </button>
-    |
-    <button @click="navigateToTeacherProfile">강사 프로필</button>
-    <hr />
+    <div class="top-button-container">
+      <button>
+        <router-link :to="myProfilePath">내 프로필</router-link>
+      </button>
+      |
+      <button @click="navigateToTeacherProfile">강사 프로필</button>
+    </div>
+    <br />
     <router-view></router-view>
   </div>
 </template>
@@ -45,4 +46,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.top-button-container{
+  width: 800px;
+  margin: 0 auto;
+}
+</style>
