@@ -3,6 +3,16 @@
     <!-- 검색바 -->
     <div>
       <!-- 키워드 검색 -->
+      <!-- 정렬 -->
+      <select v-model="searchParams.orderBy" @change="onChangeOrderBy">
+        <option
+          v-for="category in searchCategory"
+          :key="category"
+          :value="category"
+        >
+          {{ category }}
+        </option>
+      </select>
       <!-- 검색 버튼 -->
       <input
         placeholder="검색어를 입력하세요."
@@ -85,17 +95,6 @@
           />
         </div>
       </div>
-
-      <!-- 정렬 -->
-      <select v-model="searchParams.orderBy" @change="onChangeOrderBy">
-        <option
-          v-for="category in searchCategory"
-          :key="category"
-          :value="category"
-        >
-          {{ category }}
-        </option>
-      </select>
     </div>
   </div>
 </template>
