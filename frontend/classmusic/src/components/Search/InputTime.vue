@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h3>Select Days</h3>
+  <div class="time-filter">
+    <h3>요일</h3>
 
     <div>
       <label v-for="(value, day) in days" :key="day">
@@ -13,11 +13,16 @@
         {{ day }}
       </label>
     </div>
-    <br />
-    <h3>Select Time</h3>
-    <br />
-    <Slider @change="onTimeChange" :value="time" :max="24" />
-    <br />
+
+    <h3>시간</h3>
+
+    <Slider
+      class="time-filter__slider"
+      @change="onTimeChange"
+      :value="time"
+      :max="24"
+    />
+
     <button @click="closeFilter">완료</button>
   </div>
 </template>
@@ -53,8 +58,25 @@ export default {
 };
 </script>
 
-<style src="@vueform/slider/themes/default.css">
+<style src="@vueform/slider/themes/default.css"></style>
+<style lang="scss" scoped>
+h3 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.time-filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 200px;
+}
+
+.time-filter__slider {
+  margin-top: 35px;
+}
+
 .day-checkbox:checked {
-  color: #edd9b7;
+  background-color: #edd9b7;
 }
 </style>

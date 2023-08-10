@@ -21,14 +21,17 @@
                 <span class="box">{{ genderText }}</span>
               </div>
             </div>
-            <div class="teacher-info-container">
-              <p class="info-box">악기 : {{ instrument }}</p>
-              <p class="info-box">경력 : {{ career }}년</p>
-              <p class="info-box">가격 : {{ cost }}만원</p>
-              <p class="info-box">
-                시간 : {{ classDay !== undefined ? parseDays(classDay) : "" }},
-                {{ startTime }} - {{ endTime }}
-              </p>
+            <div> 
+              <p>강사 정보</p>
+              <div class="teacher-info-container">
+                <p class="info-box">악기 : {{ instrument }}</p>
+                <p class="info-box">경력 : {{ career }}년</p>
+                <p class="info-box">가격 : 시간당 {{ cost }}만원</p>
+                <p class="info-box">
+                  가능 요일 : {{ classDay !== undefined ? parseDays(classDay) : "" }}</p>
+                <p class="info-box">가능 시간 : {{ startTime }}시 ~ {{ endTime }}시</p>
+          
+              </div>
             </div>
           </div>
         </div>
@@ -40,7 +43,7 @@
         </div>
 
         <div class="attach-file">
-          <h3>파일 첨부</h3>
+          <h3>강사 자랑</h3>
           <div>
             <img
               v-for="(image, index) in attachedFiles"
@@ -194,9 +197,7 @@ export default {
        
       };
       this.postLikeTeacherUpdate(data)
-        .then(() => {
-          alert("즐겨찾기에 성공하였습니다");
-          this.$router.push(`/profile/myprofile`);
+        .then(() => {       
         })
         .catch((error) => {
           console.log("즐찾실패", error);

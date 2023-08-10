@@ -12,7 +12,7 @@
         image="https://via.placeholder.com/280"
       />
     </div>
-    <button v-if="teachers.length > 20" @click="searchMoreTeacher">
+    <button v-if="teachers.length >= 20" @click="searchMoreTeacher">
       더 보기
     </button>
   </div>

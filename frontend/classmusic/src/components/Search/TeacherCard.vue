@@ -1,27 +1,41 @@
 <template>
-  <div class="teacher-listcard">
+  <div class="teacher-card">
     <img
       :src="teacher.userProfileImage"
       alt="Teacher profile picture"
-      class="teacher-image"
+      class="teacher-card__image"
     />
-    <div class="teacher-info">
-      <h2 class="teacher-name">{{ teacher.name }}</h2>
-      <span
-        v-for="(instrument, index) in teacher.instruments"
-        :key="index"
-        class="teacher-instrument"
-        >{{ instrument }}</span
-      >|<span class="teacher-career">{{ teacher.career }}</span>
-      <br />
-      <span class="teacher-avg-rating">{{ teacher.avgRating }}점</span>|<span
-        class="contact-count"
-        >{{ teacher.contactCnt }}회</span
-      >
-      <p class="teacher-description">{{ teacher.introduce }}</p>
+    <div class="teacher-card__info">
+      <div class="teacher-card__info__title">
+        <h2 class="teacher-name">{{ teacher.name }}</h2>
+        <div class="teacher-card__info__grade">
+          <span class="teacher-avg-rating"
+            >평점 : {{ teacher.avgRating }}점</span
+          >|
+          <div class="contact-count">수업 : {{ teacher.contactCnt }}회</div>
+        </div>
+      </div>
+      <div class="teacher-card__info__sub">
+        <span
+          v-for="(instrument, index) in teacher.instruments"
+          :key="index"
+          class="teacher-card__instrument"
+          >{{ instrument }}</span
+        >|
+        <div class="teacher-career">경력 : {{ teacher.career }}년</div>
+      </div>
 
-      <div class="btn">
-        <button @click="goToProfile(teacher.teacherId)">자세히 보기</button>
+      <div>
+        <div class="teacher-description">{{ teacher.introduce }}</div>
+      </div>
+
+      <div class="teacher-card__buttons">
+        <button
+          class="teacher-card__button"
+          @click="goToProfile(teacher.teacherId)"
+        >
+          자세히 보기
+        </button>
         <button @click="registerLecture(teacher.teacherId)">강의 신청</button>
       </div>
     </div>
@@ -55,62 +69,101 @@ export default {
 </script>
 
 <style scoped>
-.teacher-listcard {
+.teacher-card {
   display: flex;
   width: 800px;
-  height: 200px;
-  border: 1px solid black;
+  height: 140px;
+  border: 1px solid #e8c68c;
   margin-bottom: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.teacher-info {
-  padding: 20px;
-  font-size: 16px;
-  flex-grow: 1;
-  position: relatvie;
+  border-radius: 10px;
+  padding: 10px;
 }
 
-.teacher-image {
+.teacher-card__image {
   width: 140px;
-  height: 200px;
+  height: 140px;
+  margin-right: 20px;
+  border-radius: 10px;
   object-fit: cover;
 }
 
-.teacher-instrument {
-  padding: 20px;
+.teacher-card__info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
   font-size: 16px;
+  flex-grow: 1;
+}
+
+.teacher-card__info__grade {
+  display: flex;
+  flex-direction: row;
+}
+
+.teacher-card__info__title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.teacher-card__info__sub {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+}
+
+.teacher-card__instrument {
+  font-size: 16px;
+  margin-right: 10px;
 }
 
 .teacher-career {
-  padding: 20px;
+  width: 80px;
+  margin-left: 10px;
   font-size: 16px;
 }
 
 .teacher-avg-rating {
-  padding: 20px;
+  margin-right: 10px;
   font-size: 16px;
 }
 
 .contact-count {
-  padding: 20px;
+  width: 80px;
+  margin-left: 10px;
   font-size: 16px;
 }
 
 .teacher-name {
-  margin: 0;
   margin-bottom: 10px;
   font-size: 24px;
 }
 
 .teacher-description {
-  margin: 0;
   font-size: 16px;
-  height: 3em;
+  margin: 5px 0px;
+  height: 50px;
+  width: 640px;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
-.btn {
+.teacher-card__buttons {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+}
+
+.teacher-card__button {
+  margin-right: 20px;
 }
 </style>

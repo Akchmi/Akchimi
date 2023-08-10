@@ -72,6 +72,7 @@
         :key="teacher.teacherId"
         :teacher="teacher"
         image="https://via.placeholder.com/280"
+        @deleteLikeTeacher="deleteLikeTeacher(teacher.teacherId)"
       />
       </div>   
     </div>
@@ -80,7 +81,7 @@
 
 <script>
 
-import { apiGetUserInfo, apiLikeTeacher,  apiChangePw } from "@/api/profiles.js";
+import { apiGetUserInfo, apiLikeTeacher,  apiChangePw, apiDeleteLIkeTeacher } from "@/api/profiles.js";
 import LikeTeacherCard from "./LikeTeacherCard.vue";
 import { mapGetters,} from "vuex";
 import axios from "@/api/imageAxios.js";
@@ -106,7 +107,20 @@ export default {
     ...mapGetters({ teachers: "getLikeTeacherList"})
   },
   methods: {
-    // ...mapActions(['putChangePw']),
+
+    deleteLikeTeacher(teacherId) {
+      apiDeleteLIkeTeacher(teacherId)
+      .then(response => {
+        if (response.success) {
+          this.liketeachers = this.liketeachers.filter(teacher => teacher.teacherId !== teacherId);
+      } else {
+        alert("즐겨찾기 제거 중 오류 발생");
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  },
+
     async changePassword() {
       const data = {
         oldPassword: this.currentPassword,

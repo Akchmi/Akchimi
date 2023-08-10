@@ -1,62 +1,81 @@
 <template>
-  <div>
+  <div class="main__container">
     <div>
-      <h2>강의실</h2>
-      <br />
-      <button @click="$router.push(`/lecture/studentongoing`)">수업</button>
-      |
-      <button @click="$router.push(`/lecture/teacherongoing`)">강의</button>
-      <hr />
-      <br />
-      <br />
-    </div>
-
-    <div>
-      <button @click="$router.push(`/lecture/teacherongoing`)">진행 중</button>
-      |
-      <button
-        class="buttonWaiting"
-        @click="$router.push(`/lecture/teacherwaiting`)"
-      >
-        대기 중
-      </button>
-      |
-      <button @click="$router.push(`/lecture/teacherfinish`)">완료</button>
-    </div>
-
-    <div class="out__container">
-      <div class="container">
-        <div v-if="lectureList.length == 0">
-          <h2>아직 등록된 신청이 없습니다.</h2>
-        </div>
-
+      <div class="lectureButtonTop">
+        <!-- 수업 정보 버튼-->
         <div>
-          <div
-            class="wating__listbox"
-            v-for="lecture in lectureList"
-            :key="lecture.id"
+          <button
+            class="lectureSelectButton"
+            @click="$router.push(`/lecture/studentongoing`)"
           >
-            <div class="wating__info">
-              <img
-                :src="lecture.userProfileImage"
-                alt="Teacher profile picture"
-                class="watingProfileImage"
-              />
-              <span class="watingProfileName">{{ lecture.name }}</span>
-            </div>
+            수업
+          </button>
 
-            <div>
-              <button @click="acceptLecture(lecture.contactId)">
-                수락하기
-              </button>
-              <button @click="refuseLecture(lecture.contactId)">
-                거절하기
-              </button>
-              <button
-                @click="$router.push(`/chats/${lecture.contactId}?type=1`)"
-              >
-                채팅하기
-              </button>
+          <button
+            class="lectureSelectButton buttonLecture"
+            @click="$router.push(`/lecture/teacherongoing`)"
+          >
+            강의
+          </button>
+        </div>
+        <div>
+          <button
+            class="lectureSelectButton"
+            @click="$router.push(`/lecture/teacherongoing`)"
+          >
+            진행 중
+          </button>
+
+          <button
+            class="lectureSelectButton buttonWaiting"
+            @click="$router.push(`/lecture/teacherwaiting`)"
+          >
+            대기 중
+          </button>
+
+          <button
+            class="lectureSelectButton"
+            @click="$router.push(`/lecture/teacherfinish`)"
+          >
+            완료
+          </button>
+        </div>
+      </div>
+
+      <div class="out__container">
+        <div class="container">
+          <div v-if="lectureList.length == 0" class="noSearchLecture">
+            <h2>아직 등록된 신청이 없습니다.</h2>
+          </div>
+
+          <div>
+            <div
+              class="wating__listbox"
+              v-for="lecture in lectureList"
+              :key="lecture.id"
+            >
+              <div class="wating__info">
+                <img
+                  :src="lecture.userProfileImage"
+                  alt="Teacher profile picture"
+                  class="watingProfileImage"
+                />
+                <span class="watingProfileName">{{ lecture.name }}</span>
+              </div>
+
+              <div>
+                <button @click="acceptLecture(lecture.contactId)">
+                  수락하기
+                </button>
+                <button @click="refuseLecture(lecture.contactId)">
+                  거절하기
+                </button>
+                <button
+                  @click="$router.push(`/chats/${lecture.contactId}?type=1`)"
+                >
+                  채팅하기
+                </button>
+              </div>
             </div>
           </div>
         </div>

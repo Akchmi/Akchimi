@@ -105,7 +105,9 @@
             class="bottom-button"
             id="buttonLeaveSession"
             @click="leaveSession"
-          >강의 떠나기</button>
+          >
+            강의 떠나기
+          </button>
         </div>
       </div>
       <!-- <user-video :stream-manager="mainStreamManager" />
@@ -148,18 +150,17 @@
 </template>
 
 <script>
-import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/LiveMeeting/UserVideo";
 import { useRoute } from "vue-router";
 import MetronomeApp from "../components/LiveMeeting/MetronomeApp";
 import TunerApp from "../components/LiveMeeting/TunerApp.vue";
+import axios from "axios";
+// import api from "@/api/axios";
+// import A210URL from "@/api/axios";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production"
-    ? ""
-    : "http://localhost:8080/api/lectures/";
+const APPLICATION_SERVER_URL = process.env.VUE_APP_API_URL + "/lectures/";
 
 export default {
   name: "App",
@@ -249,12 +250,15 @@ export default {
       // Push the received message into the messages array
       this.messages.push(receivedMessage);
     },
-    changeMainScreen(event){
-      const mainVideoDiv=document.querySelector("#video-container");
-      const mainVideo=mainVideoDiv.querySelector("video");
-      const selectedVideo=event.target;
+    changeMainScreen(event) {
+      const mainVideoDiv = document.querySelector("#video-container");
+      const mainVideo = mainVideoDiv.querySelector("video");
+      const selectedVideo = event.target;
 
-      if (selectedVideo.srcObject!=null && mainVideo.srcObject !== selectedVideo.srcObject) {
+      if (
+        selectedVideo.srcObject != null &&
+        mainVideo.srcObject !== selectedVideo.srcObject
+      ) {
         const mainVideoContainer = document.querySelector("#video-container");
         mainVideoContainer.style.display = "none";
 
@@ -286,35 +290,38 @@ export default {
       publisherScreen.once("accessAllowed", (event) => {
         document.getElementById("buttonScreenShare").style.visibility =
           "hidden";
-          this.screensharing = true;
-          // event.element["muted"] = true;
-          console.log(event);
+        this.screensharing = true;
+        // event.element["muted"] = true;
+        console.log(event);
         // If the user closes the shared window or stops sharing it, unpublish the stream
         publisherScreen.stream
-        .getMediaStream()
-        .getVideoTracks()[0]
-        .addEventListener("ended", () => {
-          // 공유중지 버튼 누르면
+          .getMediaStream()
+          .getVideoTracks()[0]
+          .addEventListener("ended", () => {
+            // 공유중지 버튼 누르면
             console.log(
               'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
             );
             this.sessionScreen.unpublish(publisherScreen);
             document.getElementById("buttonScreenShare").style.visibility =
-            "visible";
+              "visible";
             this.screensharing = false;
             const screenDiv = document.querySelector("#live-screens");
-            const screen = screenDiv.querySelector("#user-video").querySelector("video");
-            const mainVideoContainer = document.querySelector("#video-container");
+            const screen = screenDiv
+              .querySelector("#user-video")
+              .querySelector("video");
+            const mainVideoContainer =
+              document.querySelector("#video-container");
             const mainVideo = mainVideoContainer.querySelector("video");
             mainVideoContainer.style.display = "none";
 
             mainVideo.srcObject = screen.srcObject;
             mainVideoContainer.style.display = "block";
           });
-          this.sessionScreen.publish(publisherScreen);
-        });
-        
-        publisherScreen.on("videoElementCreated", (event) => {
+        this.sessionScreen.publish(publisherScreen);
+      });
+
+      publisherScreen.on("videoElementCreated", (event) => {
         console.log(event);
         this.appendUserData(event.element, this.sessionScreen.connection);
         event.element["muted"] = true;
@@ -554,7 +561,7 @@ export default {
   position: relative;
   // border: solid 1px red;
 }
-.body-container{
+.body-container {
   width: 98vw;
   height: 85vh;
   display: flex;
@@ -605,12 +612,12 @@ video{
 .panel-body{
   width: 100%;
 }
-.video-box{
+.video-box {
   width: 60%;
   float: center;
   // border: solid 1px red;
 }
-.message-box{
+.message-box {
   width: 20%;
   height: 100%;
   float: right;
