@@ -232,6 +232,7 @@ export default {
       this.putTeacherProfileUpdate(data)            
         .then(response => {    
           const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+          this.$store.commit('updateTeacherProfile', response);
           this.$router.push(`/profile/teacherprofile/${teacherId}`);         
           console.log(this.teacherId, response)
         });
