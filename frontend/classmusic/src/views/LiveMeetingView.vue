@@ -157,7 +157,7 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
     ? ""
-    : "http://localhost:8080/api/lectures/";
+    : "https://i9a210.p.ssafy.io:3000/api/lectures/";
 
 export default {
   name: "App",
@@ -501,7 +501,7 @@ export default {
 
     async createSession(sessionId) {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "sessions",
+        "https://i9a210.p.ssafy.io:3000/api/lectures/sessions",
         { customSessionId: sessionId },
         {
           headers: { "Content-Type": "application/json" },
@@ -512,7 +512,7 @@ export default {
 
     async createToken(sessionId) {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "sessions/" + sessionId + "/connections",
+        "https://i9a210.p.ssafy.io:3000/api/lectures/sessions/" + sessionId + "/connections",
         {},
         {
           headers: { "Content-Type": "application/json" },
