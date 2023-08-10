@@ -1,9 +1,9 @@
 .container {
-  padding-top: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-top: 30px;
 }
 
 .notice__list {
@@ -16,12 +16,17 @@
   display: flex;
   flex-direction: column;
   width: 800px;
-  height: 800px;
-  border: 1px solid black;
+  margin-top: 20px;
+  border: 3px solid #edd9b7;
   margin-bottom: 20px;
   border-radius: 8px;
   overflow: hidden;
   padding: 20px;
+}
+
+.create__content {
+  display: flex;
+  justify-content: center;
 }
 
 table {
@@ -31,7 +36,7 @@ table {
 }
 
 th {
-  background-color: #d3d3d3;
+  background-color: #edd9b7;
   border-top: 3px solid #727272;
 }
 
@@ -54,4 +59,47 @@ td {
 
 .pageBtn {
   margin: 5px;
+}
+
+.noticeSearchBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.noticeSearchInput {
+  width: 300px;
+  height: 35px;
+  border-radius: 2em;
+  border: 3px solid #edd9b7;
+  padding-left: 80px;
+  padding-right: 50px;
+  z-index: 0;
+}
+
+#noticeSearchButton {
+  width: 30px;
+  height: 30px;
+  margin-left: -60px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.noticeSearchSelect {
+  z-index: 1;
+
+  height: 27px;
+  padding-top: 10px;
+}
+
+.noticeSearchSelectBar {
+  border: transparent;
+  margin-top: -10px;
+}
+
+.noticePageBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

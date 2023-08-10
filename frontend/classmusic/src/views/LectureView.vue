@@ -4,9 +4,8 @@
       <NavBar></NavBar>
     </div>
     <TheBanner :title="'강의실'" />
-    <div class="main__container">
-      <router-view></router-view>
-    </div>
+
+    <router-view></router-view>
   </div>
 </template>
 
@@ -18,13 +17,6 @@ export default {
   components: {
     NavBar,
     TheBanner,
-  },
-  data() {
-    return {
-      currentTab: "student",
-      studentSubTab: "ongoing",
-      teacherSubTab: "ongoing",
-    };
   },
 };
 </script>

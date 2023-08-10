@@ -27,6 +27,7 @@ function apiGetRefusedLectureList(context, data) {
 }
 
 function apiDeleteContact(context, contactId) {
+  console.log(contactId);
   axios
     .delete(`/contacts/${contactId}`)
     .then(() => {

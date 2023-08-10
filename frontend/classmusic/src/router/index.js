@@ -7,7 +7,7 @@ import SearchView from "../views/SearchView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import LoginView from "../views/LoginView.vue";
 import Chatview from "../views/ChatView.vue";
-import LiveMeetingView from "../views/LiveMeetingView.vue";
+import LiveMeetingView from "../views/LivemeetingView.vue";
 
 import NoticeList from "../components/Notice/NoticeList.vue";
 import NoticeCreate from "../components/Notice/NoticeCreate.vue";
