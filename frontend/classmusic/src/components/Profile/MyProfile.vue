@@ -50,10 +50,10 @@
           </div>
 
           <div class="modal-body">
-            <label>현재 비밀번호:</label>
+            <label>현재 비밀번호 : </label>
             <input type="password" v-model="currentPassword" placeholder="Current Password">
             <br>
-            <label>새 비밀번호:</label>
+            <label>새 비밀번호 :   </label>
             <input type="password" v-model="newPassword" placeholder="New Password">
           </div>
 
@@ -72,6 +72,7 @@
         :key="teacher.teacherId"
         :teacher="teacher"
         image="https://via.placeholder.com/280"
+        @deleteLikeTeacher="deleteLikeTeacher(teacher.teacherId)"
       />
       </div>   
     </div>
@@ -80,9 +81,9 @@
 
 <script>
 
-import { apiGetUserInfo, apiLikeTeacher  } from "@/api/profiles.js";
+import { apiGetUserInfo, apiLikeTeacher,  apiChangePw, apiDeleteLIkeTeacher } from "@/api/profiles.js";
 import LikeTeacherCard from "./LikeTeacherCard.vue";
-import { mapGetters, } from "vuex";
+import { mapGetters,} from "vuex";
 import axios from "@/api/imageAxios.js";
 
 
@@ -106,6 +107,40 @@ export default {
     ...mapGetters({ teachers: "getLikeTeacherList"})
   },
   methods: {
+
+    deleteLikeTeacher(teacherId) {
+      apiDeleteLIkeTeacher(teacherId)
+      .then(response => {
+        if (response.success) {
+          this.liketeachers = this.liketeachers.filter(teacher => teacher.teacherId !== teacherId);
+      } else {
+        alert("즐겨찾기 제거 중 오류 발생");
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  },
+
+    async changePassword() {
+      const data = {
+        oldPassword: this.currentPassword,
+        newPassword: this.newPassword,
+        id: this.id,
+      };
+      const response = await apiChangePw(data);
+  
+      if (response.success) {
+        alert("비밀번호가 변경되었습니다.");
+        this.currentPassword = '';
+        this.newPassword = '';
+        this.showChangePasswordModal = false;
+      } else {
+        alert("비밀번호 변경 중 오류가 발생했습니다. 현재 비밀번호를 확인하세요.");
+        this.currentPassword = '';
+        this.newPassword = '';
+      }
+    },      
+
     async handleImageUpload() {
     const selectedFile = this.$refs.fileInput.files[0];
     let formData = new FormData();
@@ -121,9 +156,7 @@ export default {
     } catch (error) {
         console.log(error);
     }
-    },
-
-
+  },
 
     triggerFileInput() {
       this.$refs.fileInput.click();
@@ -149,10 +182,10 @@ export default {
       } catch(error) {        
         console.log('즐찾선생', error)
       }
-    }
-
-
+    },
   },
+
+  
   created() {  
     this.getUserInfo();
     this.likeTeachers();
@@ -162,11 +195,6 @@ export default {
 
 <style scoped>
 @import "@/assets/scss/profile.scss";
-.teacher-list {
-  padding-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+
 </style>
 

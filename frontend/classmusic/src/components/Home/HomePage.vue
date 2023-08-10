@@ -1,10 +1,14 @@
 <template>
   <div class="container">
     <div>
-      <img
+      <!-- <img
         id="mainImage"
         src="@/assets/images/home/mainImage.png"
         alt="메인이미지"
+      /> -->
+      <TheBanner
+        :title="'악기라는 취미에 미치다.'"
+        :subTitle="'메인페이지입니다.'"
       />
     </div>
 
@@ -68,7 +72,13 @@
 </template>
 
 <script>
-export default {};
+import TheBanner from "@/components/common/TheMainBanner";
+
+export default {
+  components: {
+    TheBanner,
+  },
+};
 </script>
 
 <style lang="scss" scoped>

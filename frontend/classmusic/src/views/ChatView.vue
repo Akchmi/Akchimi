@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import NavBar from "@/components/Nav/NavBar.vue";
+import NavBar from "@/components/common/NavBar.vue";
 import ChatRoom from "@/components/Chat/ChatRoom";
 
 export default {
@@ -24,6 +24,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import "@/assets/scss/templates/common.scss";
-</style>
+<style lang="scss" scoped></style>

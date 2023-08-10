@@ -25,8 +25,7 @@ export default {
 
 @font-face {
   font-family: "mainfont";
-  src: url("assets/font/BMEuljiro10yearslater.ttf") format("truetype");
-  font-weight: 100;
+  src: url("assets/font/Maplestory.ttf") format("truetype");
 }
 
 .container {

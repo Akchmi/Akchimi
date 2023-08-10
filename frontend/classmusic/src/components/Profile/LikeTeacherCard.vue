@@ -1,6 +1,6 @@
 <template>
-    <div class="teacher-listcard">
-      <img :src="image" alt="Teacher profile picture" class="teacher-image" />
+  <div class="teacher-listcard">
+    <img :src="teacher.userProfileImage" alt="Teacher profile picture" class="teacher-image" />
       <div class="teacher-info">
         <h2 class="teacher-name">{{ teacher.name }}</h2>
         <span
@@ -8,7 +8,7 @@
           :key="index"
           class="teacher-instrument"
           >{{ instrument }}</span
-        >|<span class="teacher-career">{{ teacher.career }}</span>
+        >|<span class="teacher-career">{{ teacher.career }}년</span>
         <br />
         <span class="teacher-avg-rating">{{ teacher.avgRating }}점</span>|<span
           class="contact-count"
@@ -16,6 +16,7 @@
         >
         <p class="teacher-description">{{ teacher.introduce }}</p>
         <div class="btn">
+          <button @click="deleteLikeTeacher">즐겨찾기 취소</button>
           <button @click="goToProfile(teacher.teacherId)">자세히 보기</button>
           <button @click="goToLecture">강의 신청</button>
         </div>
@@ -35,6 +36,9 @@
       },
       goToLecture() {
         this.$router.push("/lecture/studentwaiting");
+      },
+      deleteLikeTeacher() {
+        this.$emit('deleteLikeTeacher', this.teacher.teacherId); 
       },
     },
 

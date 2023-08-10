@@ -2,6 +2,7 @@ import {
   apiTeacherProfileCreate,
   apiTeacherProfileUpdate,
   apiLikeTeacherUpdate,
+  apiChangePw,
 } from "@/api/profiles.js";
 
 export default {
@@ -21,4 +22,9 @@ export default {
   postLikeTeacherUpdate(context, data) {
     apiLikeTeacherUpdate(context, data);
   },
+  putChangePw(context, data) {
+    console.log("비번변경", context, data)
+    apiChangePw(context, data)
+  }
+
 };

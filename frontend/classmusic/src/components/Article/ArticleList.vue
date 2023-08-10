@@ -1,19 +1,16 @@
 <template>
   <div class="container">
     <div class="article__list">
-      <div>
-        <!-- 자유게시판 리스트 최상단 -->
-        <h1>자유게시판</h1>
-        <button @click="goArticlecreate">글 작성</button>
-        <hr />
-      </div>
-      <div>
+      <div class="articleTableBanner">
         <!-- 자유게시판 정렬-->
         <select v-model="selectedSorttype" @change="sortTypeChange">
           <option v-for="(item, idx) in sortType" :key="idx" :value="item">
             {{ item }}
           </option>
         </select>
+        <button id="articleCreateButton" @click="goArticlecreate">
+          글 작성
+        </button>
       </div>
       <div>
         <!-- 자유게시판 게시물 리스트 -->
@@ -21,51 +18,68 @@
           <table>
             <thead>
               <tr>
-                <th>글 번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일자</th>
-                <th>조회수</th>
+                <th style="width: 10%">글 번호</th>
+                <th style="width: 45%">제목</th>
+                <th style="width: 20%">작성자</th>
+                <th style="width: 15%">작성일자</th>
+                <th style="width: 10%">조회수</th>
               </tr>
             </thead>
-            <div v-if="articleList.length == 0">
-              <h2>검색된 게시글이 없습니다.</h2>
-            </div>
+
             <tbody>
               <tr v-for="article in articleList" :key="article.id">
                 <td>{{ article.articleId }}</td>
-                <td @click="$router.push(`/article/${article.articleId}`)">
+                <td
+                  @click="$router.push(`/article/${article.articleId}`)"
+                  style="cursor: pointer"
+                >
                   {{ article.title }}
                 </td>
                 <td>{{ article.name }}</td>
                 <td>
                   {{ toLocalTimeStamp(article.createdAt) }}
                 </td>
-                <td>{{ article.hit }}</td>
+                <td>{{ article.hit }}회</td>
               </tr>
             </tbody>
           </table>
-          <hr />
         </div>
       </div>
 
-      <div>
-        <!-- 자유게시판 리스트 검색바 -->
-        <select v-model="selectedSearchCategory">
-          <option
-            v-for="(item, idx) in searchCategory"
-            :key="idx"
-            :value="item"
+      <!-- 자유게시판 리스트 검색바 -->
+      <div class="articleSearchBar">
+        <div class="articleSearchSelect">
+          <select
+            class="articleSearchSelectBar"
+            v-model="selectedSearchCategory"
           >
-            {{ item }}
-          </option>
-        </select>
-        <input style="margin: 10px" type="text" v-model="searchQuery" />
-        <button @click="runSearch">검색</button>
+            <option
+              v-for="(item, idx) in searchCategory"
+              :key="idx"
+              :value="item"
+            >
+              {{ item }}
+            </option>
+          </select>
+        </div>
+        <input
+          class="articleSearchInput"
+          style="margin: 10px"
+          type="text"
+          v-model="searchQuery"
+        />
+
+        <img
+          @click="runSearch"
+          id="articleSearchButton"
+          src="@/assets/images/home/searchButton.png"
+          alt="메인검색버튼"
+        />
       </div>
 
-      <div>
-        <!-- 페이지 번호-->
+      <!-- 페이지 번호-->
+
+      <div class="articlePageBox">
         <button @click="pageDown">이전</button>
         <button
           class="pageBtn"
@@ -90,7 +104,6 @@ import utils from "@/common/utils";
 export default {
   data() {
     return {
-      lastpage: 86,
       pageNo: 1,
       pages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       searchQuery: "",
@@ -100,7 +113,7 @@ export default {
   },
   computed: {
     ...mapGetters({ articleList: "getArticleList" }),
-    ...mapGetters({ endPageno: "getEndPageNo" }),
+    ...mapGetters({ endPageno: "getArticleEndPageNo" }),
     ...mapGetters({ isLogin: "getIsLogin" }),
   },
   methods: {
@@ -181,11 +194,20 @@ export default {
       });
     });
 
-    return { searchCategory, sortType };
+    return {
+      searchCategory,
+      sortType,
+    };
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/article.scss";
+@import "@/assets/scss/templates/common.scss";
+
+#articleCreateButton {
+  padding: 5px 10px;
+  font-size: 16px;
+}
 </style>

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import NavBar from "@/components/Nav/NavBar.vue";
+import NavBar from "@/components/common/NavBar.vue";
 import HomePage from "@/components/Home/HomePage.vue";
 
 export default {

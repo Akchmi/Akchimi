@@ -4,11 +4,10 @@
       <div class="top-section">
         <div class="img-container">
           <img
-            :src="image"
+            :src="userInfo.userProfileImage"
             alt="Teacher profile picture"
             class="teacher-image"
-          />
-          <button>이미지 수정</button>
+          />     
         </div>
         <div class="info-container">
           <div class="name-container">
@@ -167,6 +166,8 @@ export default {
       career: 0,
       cost: 0,
       selectedDays: [],
+      userProfileImage: "",
+      attachedFiles: [],
       id: JSON.parse(localStorage.getItem("vuex")).common.id,
     };
   },
@@ -182,26 +183,32 @@ export default {
     triggerFileUpload() {
       this.$refs.fileUploadInput.click();
     },
-    async handleFileUpload() {
+     handleFileUpload() {
       const selectedFiles = this.$refs.fileUploadInput.files;
 
-      let formData = new FormData();
+    this.attachedFiles = [];
+
       for (let i = 0; i < selectedFiles.length; i++) {
-        formData.append("image", selectedFiles[i]);
+        const fileReader = new FileReader();
 
-        try {
-          let response = await axios.post(
-            `/teachers/${this.teacherId}/images`,
-            formData
-          );
+        fileReader.onload = (e) => {
+          this.attachedFiles.push(e.target.result);  
+        };
+        
+        fileReader.readAsDataURL(selectedFiles[i]);
+      }
+    },    
+    async submitImages() {
+      let formData = new FormData();
 
-          if (response.data && response.data.image) {
-            this.attachedFiles.push(response.data.image);
-            console.log(222);
-          }
-        } catch (error) {
-          console.log(error);
-        }
+      for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
+        formData.append("image", this.$refs.fileUploadInput.files[i]);
+      }
+
+      try {
+        await axios.post(`/teachers/${this.teacherId}/images`, formData);
+      } catch (error) {
+        console.log(error);
       }
     },
     async getUserInfo() {
@@ -218,24 +225,24 @@ export default {
     ...mapActions(["postTeacherProfileCreate", "updateUserType"]),
 
     async submitForm() {
-      const data = {
-        userId: this.userInfo.userId,
+      await this.submitImages();
+      const data = {       
         career: this.career,
         cost: this.cost,
         introduce: this.description,
         startTime: this.startTime,
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
-        instruments: [...this.selectedInstruments],        
+        instruments: [...this.selectedInstruments], 
+        teacherId : this.teacherId       
       };
+      this.putTeacherProfileUpdate(data)            
+        .then(response => {    
+          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+          this.$router.push(`/profile/teacherprofile/${teacherId}`);         
+          console.log(this.teacherId, response)
+        });
 
-      const teacherId = await this.postTeacherProfileCreate(data);
-      if (teacherId != null) {
-        this.updateUserType(1);
-        this.$router.push(`/profile/teacherprofile/${teacherId}`);
-      } else {
-        alert("강사 등록 중 문제 발생!");
-      }
     },
     convertDaysToBitMask() {
       let index = 0,

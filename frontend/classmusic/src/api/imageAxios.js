@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://13.125.61.45:8080/api",
+  baseURL: process.env.VUE_APP_API_URL,
 
   headers: {
     "Content-Type": "multipart/form-data",

@@ -3,7 +3,12 @@
     <div class="container">
       <nav class="navbar">
         <div class="navbar__logo">
-          <a @click="$router.push('/')">Akchimi</a>
+          <img
+            class="mainLogo"
+            src="@/assets/images/home/mainLogo2.png"
+            @click="$router.push('/')"
+            alt=""
+          />
         </div>
 
         <ul class="navbar__menu">
@@ -57,8 +62,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  padding: 8px 12px;
 }
 
 .navbar__logo {
@@ -99,5 +102,10 @@ li:hover {
   cursor: pointer;
   font-size: 22px;
   margin: 6.7px;
+}
+
+.mainLogo {
+  height: 70px;
+  cursor: pointer;
 }
 </style>
