@@ -154,11 +154,6 @@ import MetronomeApp from "../components/LiveMeeting/MetronomeApp";
 import TunerApp from "../components/LiveMeeting/TunerApp.vue";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production"
-    ? ""
-    : "https://i9a210.p.ssafy.io:3000/api/lectures/";
-
 export default {
   name: "App",
 
