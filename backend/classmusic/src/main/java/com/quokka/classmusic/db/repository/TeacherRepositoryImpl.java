@@ -91,15 +91,11 @@ public class TeacherRepositoryImpl implements TeacherRepository{
     }
 
     @Override
-    public void deleteImage(int teacherId) {
-        List<TeacherFile> files = query.selectFrom(teacherFile)
+    public void deleteImage(int teacherId , String file) {
+        em.remove(query.selectFrom(teacherFile)
                 .join(teacherFile.teacher , teacher)
-                .where(teacher.teacherId.eq(teacherId))
-                .fetch();
-
-        for (TeacherFile teacherFile : files) {
-            em.remove(teacherFile);
-        }
+                .where(teacher.teacherId.eq(teacherId).and(teacherFile.fileUrl.eq(file)))
+                .fetch());
     }
 
     @Override

@@ -50,6 +50,7 @@ public class AuthServiceImpl implements AuthService{
                 .id(signupDto.getId())
                 .name(signupDto.getName())
                 .email(signupDto.getEmail())
+                .userProfileImage("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/20b17a31-a4a1-4dbb-8556-93bdf1c58329.webp")
                 .gender(signupDto.getGender())
                 .password(passwordEncoder.encode(signupDto.getPassword()))
                 .build();

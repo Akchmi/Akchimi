@@ -61,6 +61,7 @@ public class ArticleServiceImpl implements ArticleService{
             log.debug("{} / {} / {} / {} / {} / {}"
                     ,article.getArticleId()
                     ,article.getUser().getName()
+                    ,article.getUser().getUserProfileImage()
                     ,article.getTitle()
                     ,article.getContent(),
                     article.getCreatedAt(),
