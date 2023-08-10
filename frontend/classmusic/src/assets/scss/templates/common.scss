@@ -1,9 +1,24 @@
+:root {
+  // 강사 검색 필터 슬라이더 색상
+  --slider-connect-bg: #edd9b7;
+  --slider-tooltip-bg: #edd9b7;
+  --slider-handle-ring-color: #edd9b7;
+}
+
 button {
+  // 버튼 텍스트 가운데 정렬
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   background-color: #edd9b7;
   border-radius: 0.5em;
   border-color: transparent;
   cursor: pointer;
   font-family: mainfont;
+  text-align: center;
+  padding: 5px 10px;
 }
 
 .banner {

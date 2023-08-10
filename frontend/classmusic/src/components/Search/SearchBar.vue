@@ -7,6 +7,7 @@
       <input
         placeholder="검색어를 입력하세요."
         type="text"
+        class="search-bar__keyword"
         v-model="searchParams.keyword"
         @change="setKeyword"
       />
@@ -56,7 +57,10 @@
           class="dropdown-content"
           v-if="isDisplaySearchInputs.career"
         >
-          <InputCareer @careerChange="setCareer" />
+          <InputCareer
+            @careerChange="setCareer"
+            @closeDropdown="closeDropdown('career')"
+          />
         </div>
       </div>
 
@@ -70,7 +74,10 @@
           class="dropdown-content"
           v-if="isDisplaySearchInputs.cost"
         >
-          <InputCost @costChange="setCost" />
+          <InputCost
+            @costChange="setCost"
+            @closeDropdown="closeDropdown('cost')"
+          />
         </div>
       </div>
 
@@ -88,6 +95,7 @@
             :days="days"
             @timeChange="setTime"
             @dayChange="setClassDay"
+            @closeDropdown="closeDropdown('time')"
           />
         </div>
       </div>
@@ -170,6 +178,15 @@ export default {
       "commitKeyword",
     ]),
 
+    closeDropdown(targetDropDown) {
+      console.log(
+        targetDropDown,
+        " 드롭다운 닫기 ",
+        this.isDisplaySearchInputs[targetDropDown]
+      );
+      this.isDisplaySearchInputs[targetDropDown] = false;
+    },
+
     onChangeOrderBy() {
       this.commitOrderBy(this.searchParams.orderBy);
       this.searchTeacher();
@@ -177,6 +194,7 @@ export default {
 
     toggleInputDropdown(targetSearchInput) {
       console.log("toggle clicked", targetSearchInput);
+
       for (const searchInput in this.isDisplaySearchInputs) {
         if (searchInput != targetSearchInput) {
           this.isDisplaySearchInputs[searchInput] = false;

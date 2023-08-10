@@ -1,11 +1,9 @@
 <template>
   <div id="main-container" class="container">
-    <div id="join" v-if="!session">
-      <div id="img-div">
-        <img src="@/assets/images/quokkaband.png" width="500" />
-      </div>
+    <div id="join" v-if="!sessionCamera">
       <div id="join-dialog" class="jumbotron vertical-center">
         <h1>참여자 정보</h1>
+        <video id="my-video" autoplay="true" :srcObject="myVideo"></video>
         <div class="form-group">
           <p>
             <label>학 생</label>
@@ -34,24 +32,39 @@
       </div>
     </div>
 
-    <div id="session" v-if="session">
-      <div>
-        <MetronomeApp />
+    <div id="session" v-if="sessionCamera">
+      <!-- 탑 (세션번호) -->
+      <div id="session-header" class="top-container">
+        {{ mySessionId }}번 세션
       </div>
-      <div id="session-header">
-        <h1 id="session-title">{{ mySessionId }}</h1>
-        <input
-          class="btn btn-large btn-danger"
-          type="button"
-          id="buttonLeaveSession"
-          @click="leaveSession"
-          value="Leave session"
-        />
-      </div>
-      <div>
-        <div class="messages-container">
-          <!-- Sent Messages -->
-          <div class="sent-messages">
+      <!-- 바디 (왼쪽: 작은화면, 메트로놈 / 가운데: 큰메인화면 / 오른쪽: 채팅창) -->
+      <div class="body-container">
+        <!-- 바디 왼쪽: 작은화면, 메트로놈 -->
+        <div class="aditional-function">
+          {{ subscribers }}
+          <div id="live-screens" @click="changeMainScreen">
+            <user-video
+              v-for="sub in subscribers"
+              :key="sub.stream.connection.connectionId"
+              :stream-manager="sub"
+            />
+            <user-video :stream-manager="publisher"/>
+            <div id="shared-video" class="row panel panel-default">
+              <!-- <div class="panel-heading">User Screens</div> -->
+              <div class="panel-body" id="container-screens"></div>
+            </div>
+          </div>
+          <MetronomeApp />
+        </div>
+        <!-- 바디 가운데: 큰메인화면 -->
+        <div id="video-container" class="video-box">
+          <user-video
+            :stream-manager="publisher"
+            />
+        </div>
+        <!-- 바디 오른쪽: 채팅창 -->
+        <div class="message-box">
+          <div class="messages-container">
             <div
               v-for="(message, index) in receivedMessages"
               :class="message.className"
@@ -62,23 +75,55 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Received Messages -->
-
-        <div>
-          <!-- 메세지를 입력하는 input 요소 -->
-          <input type="text" v-model="newMessage" @keyup.enter="sendMessage" />
-
-          <!-- 메세지를 보내는 버튼 -->
-          <button @click="sendMessage">메세지 보내기</button>
+          <div class="message-input-container">
+            <input
+              class="message-input-form"
+              type="text"
+              v-model="newMessage"
+              @keyup.enter="sendMessage"
+            />
+            <button class="message-send-btn" @click="sendMessage">전송</button>
+          </div>
         </div>
       </div>
-
-      <div id="main-video" class="col-md-6">
+      <!-- 바텀: 튜너, 화면공유, 나가기 버튼 -->
+      <div class="bottom-container">
+        <div class="button-box">
+          <button class="bottom-button" @click="changePopState()">튜너</button>
+            <TunerApp v-if="popState" @close="changePopState()"/>
+          <button
+            id="buttonScreenShare"
+            class="bottom-button"
+            @click="publishScreenShare"
+            v-if="sessionScreen"
+          >
+            화면공유
+          </button>
+          <button
+            class="bottom-button"
+            id="buttonLeaveSession"
+            @click="leaveSession"
+          >강의 떠나기</button>
+        </div>
+      </div>
+      <!-- <user-video :stream-manager="mainStreamManager" />
+          <user-video :stream-manager="publisher" /> -->
+      <!-- <div id="main-video" class="col-md-6">
         <user-video :stream-manager="mainStreamManager" />
+      </div> -->
+
+      <!-- <div id="main-video" class="col-md-6">
+        <p></p>
+        <video autoplay playsinline="true"></video>
       </div>
-      <div id="video-container" class="col-md-6">
+      <div class="col-md-6">
+        <div class="row panel panel-default">
+          <div class="panel-heading">User Screens</div>
+          <div class="panel-body" id="container-screens"></div>
+        </div>
+      </div> -->
+
+      <!-- <div id="video-container" class="col-md-6">
         <user-video
           :stream-manager="publisher"
           @click="updateMainVideoStreamManager(publisher)"
@@ -89,7 +134,13 @@
           :stream-manager="sub"
           @click="updateMainVideoStreamManager(sub)"
         />
-      </div>
+      </div> -->
+      <!-- <user-video
+        v-for="sub in subscribers"
+        :key="sub.stream.connection.connectionId"
+        :stream-manager="sub"
+        @click="updateMainVideoStreamManager(sub)"
+      /> -->
     </div>
   </div>
 </template>
@@ -100,12 +151,13 @@ import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/LiveMeeting/UserVideo";
 import { useRoute } from "vue-router";
 import MetronomeApp from "../components/LiveMeeting/MetronomeApp";
+import TunerApp from "../components/LiveMeeting/TunerApp.vue";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
     ? ""
-    : "http://localhost:8080/lectures/";
+    : "http://localhost:8080/api/lectures/";
 
 export default {
   name: "App",
@@ -113,41 +165,64 @@ export default {
   components: {
     UserVideo,
     MetronomeApp,
+    TunerApp,
   },
 
   data() {
     return {
       // OpenVidu objects`
-      OV: undefined,
-      session: undefined,
+      OVCamera: undefined,
+      OVScreen: undefined,
+      sessionCamera: undefined,
+      sessionScreen: undefined,
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
       receivedMessages: [],
       sentMessages: [],
       newMessage: "",
+      screensharing: false,
 
       // Join form
       mySessionId: "",
       sender: 0,
 
       myUserName: JSON.parse(localStorage.getItem("vuex")).common.name,
+      popState: false,
+
+      // 대기 화면 내 비디오 확인
+      myVideo: null,
     };
   },
   created() {
     // App.vue가 생성되면 소켓 연결을 시도합니다.
     const route = useRoute();
     this.mySessionId = route.params.lectureId;
+
+    this.getCamera();
     // console.log(this.roomId + "!!!!!!!!!!!!!");
   },
 
   methods: {
-    setupDataChannel() {
-      // 데이터 채널 생성
+    // 대기화면에서 카메라 가져오는 함수
+    async getCamera() {
+      let stream = null;
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: true,
+        });
+
+        this.myVideo = stream;
+      } catch (error) {
+        alert("카메라 접근 실패");
+      }
     },
+
     sendMessage() {
-      if (this.session) {
-        this.session
+      if (this.sessionCamera) {
+        this.sessionCamera
           .signal({
             data: this.myUserName + ":" + this.newMessage, // Any string (optional)
             to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
@@ -172,22 +247,130 @@ export default {
       // Push the received message into the messages array
       this.messages.push(receivedMessage);
     },
+    changeMainScreen(event){
+      const mainVideoDiv=document.querySelector("#video-container");
+      const mainVideo=mainVideoDiv.querySelector("video");
+      const selectedVideo=event.target;
+
+      if (selectedVideo.srcObject!=null && mainVideo.srcObject !== selectedVideo.srcObject) {
+        const mainVideoContainer = document.querySelector("#video-container");
+        mainVideoContainer.style.display = "none";
+
+        mainVideo.srcObject = selectedVideo.srcObject;
+        mainVideoContainer.style.display = "block";
+      }
+    },
+    appendUserData(videoElement, connection) {
+      var nodeId;
+
+      if (typeof connection === "string") {
+        nodeId = connection;
+      } else {
+        nodeId = connection.connectionId;
+      }
+      var dataNode = document.createElement("div");
+      dataNode.className = "data-node";
+      dataNode.id = "data-" + nodeId;
+      videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
+    },
+
+    publishScreenShare() {
+      // --- 9.1) To create a publisherScreen set the property 'videoSource' to 'screen'
+      var publisherScreen = this.OVScreen.initPublisher("container-screens", {
+        videoSource: "screen",
+      });
+
+      // --- 9.2) Publish the screen share stream only after the user grants permission to the browser
+      publisherScreen.once("accessAllowed", (event) => {
+        document.getElementById("buttonScreenShare").style.visibility =
+          "hidden";
+          this.screensharing = true;
+          // event.element["muted"] = true;
+          console.log(event);
+        // If the user closes the shared window or stops sharing it, unpublish the stream
+        publisherScreen.stream
+        .getMediaStream()
+        .getVideoTracks()[0]
+        .addEventListener("ended", () => {
+          // 공유중지 버튼 누르면
+            console.log(
+              'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
+            );
+            this.sessionScreen.unpublish(publisherScreen);
+            document.getElementById("buttonScreenShare").style.visibility =
+            "visible";
+            this.screensharing = false;
+            const screenDiv = document.querySelector("#live-screens");
+            const screen = screenDiv.querySelector("#user-video").querySelector("video");
+            const mainVideoContainer = document.querySelector("#video-container");
+            const mainVideo = mainVideoContainer.querySelector("video");
+            mainVideoContainer.style.display = "none";
+
+            mainVideo.srcObject = screen.srcObject;
+            mainVideoContainer.style.display = "block";
+          });
+          this.sessionScreen.publish(publisherScreen);
+        });
+        
+        publisherScreen.on("videoElementCreated", (event) => {
+        console.log(event);
+        this.appendUserData(event.element, this.sessionScreen.connection);
+        event.element["muted"] = true;
+      });
+
+      publisherScreen.once("accessDenied", (event) => {
+        console.error("Screen Share: Access Denied");
+
+        console.log(event);
+      });
+    },
 
     joinSession() {
       // --- 1) Get an OpenVidu object ---
-      this.OV = new OpenVidu();
+      this.OVCamera = new OpenVidu();
+      this.OVScreen = new OpenVidu();
 
       // --- 2) Init a session ---
-      this.session = this.OV.initSession();
+      this.sessionCamera = this.OVCamera.initSession();
+      this.sessionScreen = this.OVScreen.initSession();
 
       // --- 3) Specify the actions when events take place in the session ---
 
       // On every new Stream received...
-      this.session.on("streamCreated", ({ stream }) => {
-        const subscriber = this.session.subscribe(stream);
-        this.subscribers.push(subscriber);
+      this.sessionCamera.on("streamCreated", (event) => {
+        if (event.stream.typeOfVideo == "CAMERA") {
+          // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-cameras' id
+          console.log(this.sessionCamera);
+          var subscriber = this.sessionCamera.subscribe(
+            event.stream,
+            "container-cameras"
+          );
+          // When the HTML video has been appended to DOM...
+          subscriber.on("videoElementCreated", (event) => {
+            // Add a new <p> element for the user's nickname just below its video
+            this.appendUserData(event.element, subscriber.stream.connection);
+          });
+        }
       });
-      this.session.on("signal", (event) => {
+      this.sessionScreen.on("streamCreated", (event) => {
+        console.log(this.sessionScreen);
+        if (event.stream.typeOfVideo == "SCREEN") {
+          // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
+          var subscriberScreen = this.sessionScreen.subscribe(
+            event.stream,
+            "container-screens"
+          );
+          // When the HTML video has been appended to DOM...
+          subscriberScreen.on("videoElementCreated", (event) => {
+            // Add a new <p> element for the user's nickname just below its video
+            this.appendUserData(
+              event.element,
+              subscriberScreen.stream.connection
+            );
+          });
+        }
+      });
+      this.sessionCamera.on("signal", (event) => {
         const receivedMessage = event.data;
         console.log(event.from);
         if (receivedMessage != this.myUserName + ":" + this.newMessage) {
@@ -204,7 +387,7 @@ export default {
       });
 
       // On every Stream destroyed...
-      this.session.on("streamDestroyed", ({ stream }) => {
+      this.sessionCamera.on("streamDestroyed", ({ stream }) => {
         const index = this.subscribers.indexOf(stream.streamManager, 0);
         if (index >= 0) {
           this.subscribers.splice(index, 1);
@@ -212,7 +395,7 @@ export default {
       });
 
       // On every asynchronous exception...
-      this.session.on("exception", ({ exception }) => {
+      this.sessionCamera.on("exception", ({ exception }) => {
         console.warn(exception);
       });
 
@@ -222,14 +405,14 @@ export default {
       this.getToken(this.mySessionId).then((token) => {
         // First param is the token. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-        this.session
+        this.sessionCamera
           .connect(token, { clientData: this.myUserName })
           .then(() => {
             // --- 5) Get your own camera stream with the desired properties ---
 
             // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
             // element: we will manage it on our own) and with the desired properties
-            let publisher = this.OV.initPublisher(undefined, {
+            let publisher = this.OVCamera.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
               videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
@@ -240,17 +423,40 @@ export default {
               mirror: false, // Whether to mirror your local video or not
             });
 
+            publisher.on("videoElementCreated", function (event) {
+              this.initMainVideo(event.element, this.myUserName);
+              this.appendUserData(event.element, this.myUserName);
+              event.element["muted"] = true;
+            });
+
             // Set the main video in the page to display our webcam and store our Publisher
             this.mainStreamManager = publisher;
             this.publisher = publisher;
 
             // --- 6) Publish your stream ---
 
-            this.session.publish(this.publisher);
+            this.sessionCamera.publish(this.publisher);
           })
           .catch((error) => {
             console.log(
               "There was an error connecting to the session:",
+              error.code,
+              error.message
+            );
+          });
+      });
+      this.getToken(this.mySessionId).then((tokenScreen) => {
+        // Create a token for screen share
+        this.sessionScreen
+          .connect(tokenScreen, { clientData: this.myUserName })
+          .then(() => {
+            document.getElementById("buttonScreenShare").style.visibility =
+              "visible";
+            console.log("Session screen connected");
+          })
+          .catch((error) => {
+            console.warn(
+              "There was an error connecting to the session for screen share:",
               error.code,
               error.message
             );
@@ -261,18 +467,26 @@ export default {
     },
 
     leaveSession() {
+      window.removeEventListener("beforeunload", this.leaveSession);
       // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
-      if (this.session) this.session.disconnect();
+      if (this.sessionCamera) {
+        this.sessionCamera.disconnect();
+      }
+      if (this.screensharing == true) {
+        this.sessionScreen.disconnect();
+      }
 
       // Empty all properties...
-      this.session = undefined;
+      this.sessionCamera = undefined;
+      this.sessionScreen = undefined;
       this.mainStreamManager = undefined;
       this.publisher = undefined;
       this.subscribers = [];
-      this.OV = undefined;
-
+      this.OVCamera = undefined;
+      this.OVScreen = undefined;
+      this.screensharing = false;
+      this.screens = [];
       // Remove beforeunload listener
-      window.removeEventListener("beforeunload", this.leaveSession);
     },
 
     updateMainVideoStreamManager(stream) {
@@ -287,7 +501,7 @@ export default {
 
     async createSession(sessionId) {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "api/sessions",
+        APPLICATION_SERVER_URL + "sessions",
         { customSessionId: sessionId },
         {
           headers: { "Content-Type": "application/json" },
@@ -298,7 +512,7 @@ export default {
 
     async createToken(sessionId) {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "/sessions/" + sessionId + "/connections",
+        APPLICATION_SERVER_URL + "sessions/" + sessionId + "/connections",
         {},
         {
           headers: { "Content-Type": "application/json" },
@@ -306,26 +520,124 @@ export default {
       );
       return response.data; // The token
     },
+    changePopState() {
+      this.popState = !this.popState;
+    },
+  },
+  beforeUnmount() {
+    // `this`를 통해 컴포넌트 인스턴스에 접근할 수 있습니다.
+    this.leaveSession();
+    if (this.myVideo != null) {
+      const tracks = this.myVideo.getTracks();
+
+      tracks.forEach((track) => {
+        track.stop();
+      });
+
+      this.myVideo = null;
+    }
+    console.log("mounted()가 호출 되었습니다:", this);
   },
 };
 </script>
+
 <style>
+.top-container{
+  width: 98vw;
+  height: 3vh;
+  font-weight: bolder;
+  font-size: larger;
+  position: relative;
+  border: solid 1px red;
+}
+.body-container{
+  width: 98vw;
+  height: 85vh;
+  display: flex;
+  position: relative;
+  z-index: 5;
+}
+.bottom-container{
+  height: 10vh;
+  width: 98vw;
+  background-color: white;
+  position: relative;
+  z-index: 10;
+  border: solid 1px red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#local-video-undefined {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  z-index: 5;
+}
 .split-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
+.aditional-function{
+  width: 20%;
+  float: left;
+  box-sizing: border-box;
+  border: solid 1px red;
+}
+.video-box{
+  width: 60%;
+  float: center;
+  border: solid 1px red;
+}
+.message-box{
+  width: 20%;
+  height: 100%;
+  float: right;
+  box-sizing: border-box;
+  position: relative;
+  border: solid 1px red;
+}
 .messages-container {
-  display: flex;
   width: 100%;
+  height: 90%;
   justify-content: space-between;
+  box-sizing: border-box;
+  overflow: auto;
+  /* border: solid 5px black; */
 }
-.sent-messages {
-  width: 100%;
+.message-input-container {
+  height: 10%;
+  bottom: 0;
+  position: sticky;
+  display: flex;
 }
-
+.message-input-form{
+  width: 80%;
+  height: 100%;
+}
+.message-send-btn{
+  width: 20%;
+  height: 100%;
+}
+.metronome-container{
+  text-align: center;
+  border: solid 1px red;
+}
+.tuner-container{
+  display: flex;
+  justify-content: center;
+}
+.button-box{
+  text-align: center;
+}
+.bottom-button{
+  border-radius: 10px;
+  background-color: cyan;
+}
 .right {
+  width: 20%;
+  margin: 0px 10px 0px 10px;
   display: flex;
   justify-content: right;
   align-content: center;
