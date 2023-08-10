@@ -49,7 +49,7 @@
                 :key="sub.stream.connection.connectionId"
                 :stream-manager="sub"
               />
-              <user-video :stream-manager="publisher"/>
+              <user-video :stream-manager="publisher" />
               <div id="shared-video" class="row panel panel-default">
                 <!-- <div class="panel-heading">User Screens</div> -->
                 <div class="panel-body" id="container-screens"></div>
@@ -60,10 +60,8 @@
         </div>
         <!-- 바디 가운데: 큰메인화면 -->
         <div id="video-container" class="video-box">
-          <user-video
-            :stream-manager="publisher"
-            />
-          <TunerApp v-if="popState" @close="changePopState()"/>
+          <user-video :stream-manager="publisher" />
+          <TunerApp v-if="popState" @close="changePopState()" />
         </div>
         <!-- 바디 오른쪽: 채팅창 -->
         <div class="message-box">
@@ -365,7 +363,10 @@ export default {
       this.sessionScreen.on("streamCreated", (event) => {
         console.log(this);
         console.log(this.sessionScreen);
-        if (this.sessionScreen!=null && event.stream.typeOfVideo == "SCREEN") {
+        if (
+          this.sessionScreen != null &&
+          event.stream.typeOfVideo == "SCREEN"
+        ) {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
           var subscriberScreen = this.sessionScreen.subscribe(
             event.stream,
@@ -552,14 +553,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.top-container{
+<style scoped>
+.top-container {
   width: 98vw;
   height: 3vh;
   font-weight: bolder;
   font-size: larger;
   position: relative;
-  // border: solid 1px red;
+  /* // border: solid 1px red; */
 }
 .body-container {
   width: 98vw;
@@ -568,7 +569,7 @@ export default {
   position: relative;
   z-index: 5;
 }
-.bottom-container{
+.bottom-container {
   height: 12vh;
   width: 98vw;
   background-color: white;
@@ -579,7 +580,7 @@ export default {
   align-items: center;
 }
 
-video{
+video {
   width: 100%;
 }
 .split-screen {
@@ -587,14 +588,14 @@ video{
   flex-direction: column;
   align-items: center;
 }
-.body-left{
+.body-left {
   width: 20%;
   float: left;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.aditional-function{
+.aditional-function {
   width: 98%;
   height: 99%;
   box-sizing: border-box;
@@ -603,19 +604,19 @@ video{
   display: flex;
   flex-direction: column;
   align-items: center;
-  // border: solid 1px red;
+  /* // border: solid 1px red; */
 }
-#live-screens{
+#live-screens {
   width: 90%;
   margin-top: 10px;
 }
-.panel-body{
+.panel-body {
   width: 100%;
 }
 .video-box {
   width: 60%;
   float: center;
-  // border: solid 1px red;
+  /* // border: solid 1px red; */
 }
 .message-box {
   width: 20%;
@@ -624,7 +625,7 @@ video{
   box-sizing: border-box;
   position: relative;
   background-color: #f5f5f5;
-  // border: solid 1px red;
+  /* // border: solid 1px red; */
 }
 .messages-container {
   width: 100%;
@@ -641,19 +642,19 @@ video{
   display: flex;
   justify-content: center;
 }
-.message-input-form{
+.message-input-form {
   width: 77%;
   height: 89%;
   border: none;
   border-radius: 10px;
   box-shadow: 1px 2px 1px 2px rgb(199, 199, 199);
 }
-.message-send-btn{
+.message-send-btn {
   width: 19%;
   height: 90%;
   border-radius: 10px;
 }
-.tuner-container{
+.tuner-container {
   position: absolute;
   width: 20%;
   height: 40%;
@@ -663,13 +664,13 @@ video{
   justify-content: center;
   z-index: 20;
 }
-.button-box{
+.button-box {
   position: absolute;
   width: 60%;
   display: flex;
   justify-content: center;
 }
-.bottom-button{
+.bottom-button {
   width: 15%;
   border-radius: 10px;
 }

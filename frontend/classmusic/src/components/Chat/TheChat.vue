@@ -3,10 +3,10 @@
     <img :src="profile.profileImage" />
     <div>
       <span>보낸이: {{ profile.name }}</span>
-      <div>
-        <span>내용: {{ chat.content }}</span>
-        <span>보낸 시간: {{ toLocalTimeStamp(chat.createdTime) }}</span>
-      </div>
+      <div></div>
+      <span>내용: {{ chat.content }}</span>
+      <div></div>
+      <span>보낸 시간: {{ toLocalTimeStamp(chat.createdTime) }}</span>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/templates/common.scss";
-
+@import "@/assets/scss/chat.scss";
 img {
   width: 40px;
   border-radius: 50%;
