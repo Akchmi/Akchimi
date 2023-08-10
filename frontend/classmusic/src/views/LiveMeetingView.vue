@@ -48,7 +48,7 @@
               :key="sub.stream.connection.connectionId"
               :stream-manager="sub"
             />
-            <user-video :stream-manager="publisher"/>
+            <user-video :stream-manager="publisher" />
             <div id="shared-video" class="row panel panel-default">
               <!-- <div class="panel-heading">User Screens</div> -->
               <div class="panel-body" id="container-screens"></div>
@@ -58,9 +58,7 @@
         </div>
         <!-- 바디 가운데: 큰메인화면 -->
         <div id="video-container" class="video-box">
-          <user-video
-            :stream-manager="publisher"
-            />
+          <user-video :stream-manager="publisher" />
         </div>
         <!-- 바디 오른쪽: 채팅창 -->
         <div class="message-box">
@@ -90,7 +88,7 @@
       <div class="bottom-container">
         <div class="button-box">
           <button class="bottom-button" @click="changePopState()">튜너</button>
-            <TunerApp v-if="popState" @close="changePopState()"/>
+          <TunerApp v-if="popState" @close="changePopState()" />
           <button
             id="buttonScreenShare"
             class="bottom-button"
@@ -103,7 +101,9 @@
             class="bottom-button"
             id="buttonLeaveSession"
             @click="leaveSession"
-          >강의 떠나기</button>
+          >
+            강의 떠나기
+          </button>
         </div>
       </div>
       <!-- <user-video :stream-manager="mainStreamManager" />
@@ -146,13 +146,17 @@
 </template>
 
 <script>
-import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/LiveMeeting/UserVideo";
 import { useRoute } from "vue-router";
 import MetronomeApp from "../components/LiveMeeting/MetronomeApp";
 import TunerApp from "../components/LiveMeeting/TunerApp.vue";
+import axios from "axios";
+// import api from "@/api/axios";
+// import A210URL from "@/api/axios";
 axios.defaults.headers.post["Content-Type"] = "application/json";
+
+const APPLICATION_SERVER_URL = process.env.VUE_APP_API_URL + "/lectures/";
 
 export default {
   name: "App",
@@ -242,12 +246,15 @@ export default {
       // Push the received message into the messages array
       this.messages.push(receivedMessage);
     },
-    changeMainScreen(event){
-      const mainVideoDiv=document.querySelector("#video-container");
-      const mainVideo=mainVideoDiv.querySelector("video");
-      const selectedVideo=event.target;
+    changeMainScreen(event) {
+      const mainVideoDiv = document.querySelector("#video-container");
+      const mainVideo = mainVideoDiv.querySelector("video");
+      const selectedVideo = event.target;
 
-      if (selectedVideo.srcObject!=null && mainVideo.srcObject !== selectedVideo.srcObject) {
+      if (
+        selectedVideo.srcObject != null &&
+        mainVideo.srcObject !== selectedVideo.srcObject
+      ) {
         const mainVideoContainer = document.querySelector("#video-container");
         mainVideoContainer.style.display = "none";
 
@@ -279,35 +286,38 @@ export default {
       publisherScreen.once("accessAllowed", (event) => {
         document.getElementById("buttonScreenShare").style.visibility =
           "hidden";
-          this.screensharing = true;
-          // event.element["muted"] = true;
-          console.log(event);
+        this.screensharing = true;
+        // event.element["muted"] = true;
+        console.log(event);
         // If the user closes the shared window or stops sharing it, unpublish the stream
         publisherScreen.stream
-        .getMediaStream()
-        .getVideoTracks()[0]
-        .addEventListener("ended", () => {
-          // 공유중지 버튼 누르면
+          .getMediaStream()
+          .getVideoTracks()[0]
+          .addEventListener("ended", () => {
+            // 공유중지 버튼 누르면
             console.log(
               'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
             );
             this.sessionScreen.unpublish(publisherScreen);
             document.getElementById("buttonScreenShare").style.visibility =
-            "visible";
+              "visible";
             this.screensharing = false;
             const screenDiv = document.querySelector("#live-screens");
-            const screen = screenDiv.querySelector("#user-video").querySelector("video");
-            const mainVideoContainer = document.querySelector("#video-container");
+            const screen = screenDiv
+              .querySelector("#user-video")
+              .querySelector("video");
+            const mainVideoContainer =
+              document.querySelector("#video-container");
             const mainVideo = mainVideoContainer.querySelector("video");
             mainVideoContainer.style.display = "none";
 
             mainVideo.srcObject = screen.srcObject;
             mainVideoContainer.style.display = "block";
           });
-          this.sessionScreen.publish(publisherScreen);
-        });
-        
-        publisherScreen.on("videoElementCreated", (event) => {
+        this.sessionScreen.publish(publisherScreen);
+      });
+
+      publisherScreen.on("videoElementCreated", (event) => {
         console.log(event);
         this.appendUserData(event.element, this.sessionScreen.connection);
         event.element["muted"] = true;
@@ -496,7 +506,7 @@ export default {
 
     async createSession(sessionId) {
       const response = await axios.post(
-        "https://i9a210.p.ssafy.io:3000/api/lectures/sessions",
+        APPLICATION_SERVER_URL + "sessions",
         { customSessionId: sessionId },
         {
           headers: { "Content-Type": "application/json" },
@@ -507,7 +517,7 @@ export default {
 
     async createToken(sessionId) {
       const response = await axios.post(
-        "https://i9a210.p.ssafy.io:3000/api/lectures/sessions/" + sessionId + "/connections",
+        APPLICATION_SERVER_URL + "sessions/" + sessionId + "/connections",
         {},
         {
           headers: { "Content-Type": "application/json" },
@@ -537,7 +547,7 @@ export default {
 </script>
 
 <style>
-.top-container{
+.top-container {
   width: 98vw;
   height: 3vh;
   font-weight: bolder;
@@ -545,14 +555,14 @@ export default {
   position: relative;
   border: solid 1px red;
 }
-.body-container{
+.body-container {
   width: 98vw;
   height: 85vh;
   display: flex;
   position: relative;
   z-index: 5;
 }
-.bottom-container{
+.bottom-container {
   height: 10vh;
   width: 98vw;
   background-color: white;
@@ -574,18 +584,18 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.aditional-function{
+.aditional-function {
   width: 20%;
   float: left;
   box-sizing: border-box;
   border: solid 1px red;
 }
-.video-box{
+.video-box {
   width: 60%;
   float: center;
   border: solid 1px red;
 }
-.message-box{
+.message-box {
   width: 20%;
   height: 100%;
   float: right;
@@ -607,26 +617,26 @@ export default {
   position: sticky;
   display: flex;
 }
-.message-input-form{
+.message-input-form {
   width: 80%;
   height: 100%;
 }
-.message-send-btn{
+.message-send-btn {
   width: 20%;
   height: 100%;
 }
-.metronome-container{
+.metronome-container {
   text-align: center;
   border: solid 1px red;
 }
-.tuner-container{
+.tuner-container {
   display: flex;
   justify-content: center;
 }
-.button-box{
+.button-box {
   text-align: center;
 }
-.bottom-button{
+.bottom-button {
   border-radius: 10px;
   background-color: cyan;
 }

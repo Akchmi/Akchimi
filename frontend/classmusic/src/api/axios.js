@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https:i9a210.p.ssafy.io:3000/api",
+  baseURL: process.env.VUE_APP_API_URL,
   // baseURL: "http://localhost:8080/api",
 
   headers: {
