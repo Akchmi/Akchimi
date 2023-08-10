@@ -158,7 +158,7 @@ import axios from "axios";
 // import A210URL from "@/api/axios";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const APPLICATION_SERVER_URL = process.env.VUE_APP_API_URL + "/lectures/";
+const APPLICATION_SERVER_URL = "https://i9a210.p.ssafy.io:3000/api/lectures/";
 
 export default {
   name: "App",
