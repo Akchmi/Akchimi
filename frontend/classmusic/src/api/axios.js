@@ -11,12 +11,12 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    console.log("axios bearer token 설정");
+    // console.log("axios bearer token 설정");
     const vuexStorage = JSON.parse(localStorage.getItem("vuex"));
 
     if (vuexStorage != null) {
       const accessToken = vuexStorage.common.accessToken;
-      console.log("access token : " + accessToken);
+      // console.log("access token : " + accessToken);
       if (accessToken != null)
         config.headers.Authorization = `Bearer ${accessToken}`;
     }
