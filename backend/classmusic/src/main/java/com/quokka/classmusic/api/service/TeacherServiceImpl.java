@@ -136,7 +136,6 @@ public class TeacherServiceImpl implements TeacherService{
 
     @Override
     public void insertImage(int teacherId , List<MultipartFile> multipartFiles) {
-        teacherRepository.deleteImage(teacherId);
         Teacher teacher = teacherRepository.findById(teacherId);
 
         for (MultipartFile multipartFile : multipartFiles) {
@@ -147,6 +146,14 @@ public class TeacherServiceImpl implements TeacherService{
                     .teacher(teacher)
                     .fileUrl("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/" + fileVo.getPath())
                     .build());
+        }
+    }
+
+    @Override
+    public void deleteImage(int teacherId, List<String> files) {
+        for (String file : files) {
+            amazonS3ResourceStorage.deleteFile(file);
+            teacherRepository.deleteImage(teacherId , file);
         }
     }
 

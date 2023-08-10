@@ -1,10 +1,7 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.*;
-import com.quokka.classmusic.api.response.FileVo;
-import com.quokka.classmusic.api.response.LikeVo;
-import com.quokka.classmusic.api.response.TeacherVo;
-import com.quokka.classmusic.api.response.UserVo;
+import com.quokka.classmusic.api.response.*;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.common.util.AmazonS3ResourceStorage;
@@ -128,10 +125,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<TeacherVo> findAllLike(String id) {
+    public List<TeacherLikeVo> findAllLike(String id) {
         int userId = userRepository.findUserById(id).getUserId();
-        List<TeacherVo> teacherVoList = likeRepository.findAll(userId);
-        for (TeacherVo teacherVo:teacherVoList){
+        List<TeacherLikeVo> teacherVoList = likeRepository.findAll(userId);
+        for (TeacherLikeVo teacherVo:teacherVoList){
             teacherVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherVo.getTeacherId()));
         }
         return teacherVoList;
@@ -174,7 +171,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void insertProfileImage(String id, MultipartFile multipartFile) {
         User user = userRepository.findUserById(id);
-        if(user.getUserProfileImage() != null && user.getUserProfileImage().length() > 10){
+        if(!user.getUserProfileImage().equals("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/20b17a31-a4a1-4dbb-8556-93bdf1c58329.webp")){
             amazonS3ResourceStorage.deleteFile(user.getUserProfileImage());
             user.setUserProfileImage(null);
         }
@@ -186,11 +183,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteProfileImage(String id) {
         User user = userRepository.findUserById(id);
-        if(user.getUserProfileImage() != null && user.getUserProfileImage().length() > 10){
+        if(!user.getUserProfileImage().equals("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/20b17a31-a4a1-4dbb-8556-93bdf1c58329.webp")){
             amazonS3ResourceStorage.deleteFile(user.getUserProfileImage());
-            user.setUserProfileImage(null);
+            user.setUserProfileImage("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/20b17a31-a4a1-4dbb-8556-93bdf1c58329.webp");
         }
-        user.setUserProfileImage("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/20b17a31-a4a1-4dbb-8556-93bdf1c58329.webp");
+
     }
 
     public String getRandomPassword(int size) {

@@ -2,6 +2,7 @@ package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.*;
 import com.quokka.classmusic.api.response.LikeVo;
+import com.quokka.classmusic.api.response.TeacherLikeVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserVo;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public interface UserService {
     void deleteUser(int userId);
     void changePassword(String id, ChangePasswordDto changePasswordDto);
     LikeVo addLike(LikeInsertDto likeInsertDto);
-    List<TeacherVo> findAllLike(String id);
+    List<TeacherLikeVo> findAllLike(String id);
     void deleteLike(int likeId);
     void sendTemporaryPassword(MailDto mailDto);
     void insertProfileImage(String id , MultipartFile multipartFile);
