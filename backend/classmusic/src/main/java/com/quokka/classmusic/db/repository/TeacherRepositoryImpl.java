@@ -208,7 +208,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
 
 
     private OrderSpecifier orderType(String orderBy){
-        if(orderBy.equals("별점수")){
+        if(orderBy.equals("별점순")){
             return new OrderSpecifier(Order.DESC , teacher.avgRating);
         } else if(orderBy.equals("매칭순")){
             return new OrderSpecifier(Order.DESC , teacher.contactCnt);

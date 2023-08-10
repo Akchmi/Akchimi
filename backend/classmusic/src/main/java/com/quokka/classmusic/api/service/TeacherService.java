@@ -1,12 +1,9 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.TeacherDto;
-import com.quokka.classmusic.api.request.TeacherSelectDto;
+import com.quokka.classmusic.api.request.ImageDto;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -19,5 +16,5 @@ public interface TeacherService {
     void updateTeacher(int teacherId , TeacherDto teacherDto);
     void deleteTeacher(int teacherId);
     void insertImage(int teacherId , List<MultipartFile> multipartFiles);
-    void deleteImage(int teacherId , List<String> files);
+    void deleteImage(int teacherId , List<ImageDto> files);
 }
