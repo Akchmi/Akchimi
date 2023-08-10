@@ -156,4 +156,17 @@ public class UserController {
         userService.insertProfileImage(id , multipartFile);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}/profileImage")
+    public ResponseEntity<Void> deleteProfileImage(@PathVariable String id , @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+        log.debug(userDetailsVo.getUserVo().getId());
+        String currentLoginId = userDetailsVo.getUserVo().getId();
+        if (!currentLoginId.equals(id)) {
+            log.debug("아이디가 다릅니다.");
+            throw new RestApiException(ErrorCode.FORBIDDEN_ACCESS);
+        }
+
+        userService.deleteProfileImage(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

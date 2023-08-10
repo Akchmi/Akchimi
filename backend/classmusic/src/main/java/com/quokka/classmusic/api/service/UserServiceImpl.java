@@ -183,6 +183,16 @@ public class UserServiceImpl implements UserService{
         user.setUserProfileImage("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/" + fileVo.getPath());
     }
 
+    @Override
+    public void deleteProfileImage(String id) {
+        User user = userRepository.findUserById(id);
+        if(user.getUserProfileImage() != null && user.getUserProfileImage().length() > 10){
+            amazonS3ResourceStorage.deleteFile(user.getUserProfileImage());
+            user.setUserProfileImage(null);
+        }
+        user.setUserProfileImage("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/20b17a31-a4a1-4dbb-8556-93bdf1c58329.webp");
+    }
+
     public String getRandomPassword(int size) {
         char[] charSet = new char[] {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

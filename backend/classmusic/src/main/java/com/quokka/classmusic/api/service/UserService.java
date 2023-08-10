@@ -23,4 +23,5 @@ public interface UserService {
     void deleteLike(int likeId);
     void sendTemporaryPassword(MailDto mailDto);
     void insertProfileImage(String id , MultipartFile multipartFile);
+    void deleteProfileImage(String id);
 }
