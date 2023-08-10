@@ -3,9 +3,9 @@
     <div>
       <NavBar></NavBar>
     </div>
-    <TheBanner :title="'마이페이지'" />
+    <TheBanner :title="'프로필'" />
     <br />
-    
+
     <button>
       <router-link :to="myProfilePath">내 프로필</router-link>
     </button>
