@@ -151,10 +151,11 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public void deleteImage(int teacherId, List<ImageDto> files) {
-        for (ImageDto file : files) {
-            amazonS3ResourceStorage.deleteFile(file.getUrl());
-            teacherRepository.deleteImage(teacherId , file.getUrl());
+    public void deleteImage(int teacherId, ImageDto imageDto) {
+        for (String fileUrl : imageDto.getImages()) {
+            System.out.println(fileUrl);
+            amazonS3ResourceStorage.deleteFile(fileUrl);
+            teacherRepository.deleteImage(teacherId , fileUrl);
         }
     }
 

@@ -95,7 +95,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
         em.remove(query.selectFrom(teacherFile)
                 .join(teacherFile.teacher , teacher)
                 .where(teacher.teacherId.eq(teacherId).and(teacherFile.fileUrl.eq(file)))
-                .fetch());
+                .fetchOne());
     }
 
     @Override

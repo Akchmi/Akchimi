@@ -3,7 +3,9 @@ package com.quokka.classmusic.api.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter @Setter
 public class ImageDto {
-    String url;
+    List<String> images;
 }

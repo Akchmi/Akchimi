@@ -69,9 +69,9 @@ public class TeacherController {
     }
 
 
-    @PostMapping("/{teacherId}/imagesdelete")
-    public ResponseEntity<Void> deleteImage(@PathVariable int teacherId , @RequestBody List<ImageDto> images){
-        teacherService.deleteImage(teacherId , images);
+    @PostMapping("/{teacherId}/images/delete")
+    public ResponseEntity<Void> deleteImage(@PathVariable int teacherId , @RequestBody ImageDto imageDto){
+        teacherService.deleteImage(teacherId , imageDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

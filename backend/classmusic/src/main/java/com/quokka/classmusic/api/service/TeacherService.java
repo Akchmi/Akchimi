@@ -16,5 +16,5 @@ public interface TeacherService {
     void updateTeacher(int teacherId , TeacherDto teacherDto);
     void deleteTeacher(int teacherId);
     void insertImage(int teacherId , List<MultipartFile> multipartFiles);
-    void deleteImage(int teacherId , List<ImageDto> files);
+    void deleteImage(int teacherId , ImageDto imageDto);
 }
