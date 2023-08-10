@@ -5,8 +5,8 @@ export default {
   getUserInfo: state => state.userInfo,
   getLikeTeacherList(state) {
     return state.profiles.liketeachers;
-  }
-
+  },
+  
 
 
 };

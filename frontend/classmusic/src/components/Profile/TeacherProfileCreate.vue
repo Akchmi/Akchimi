@@ -178,9 +178,11 @@ export default {
         .map((day) => (this.days[day] ? "1" : "0"))
         .join("");
     },
+
   },
 
   methods: {
+   
     triggerFileUpload() {
       this.$refs.fileUploadInput.click();
     },
@@ -205,6 +207,9 @@ export default {
       for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
         formData.append("image", this.$refs.fileUploadInput.files[i]);
       }
+    //   this.newAttachedFiles.forEach((item) => {
+    //    formData.append("image", item.file);
+    //  });  
 
       try {
         await axios.post(`/teachers/${this.teacherId}/images`, formData);
@@ -235,13 +240,14 @@ export default {
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
         instruments: [...this.selectedInstruments], 
-        teacherId : this.teacherId       
+        teacherId : this.teacherId    
       };
-      this.putTeacherProfileUpdate(data)            
+      console.log("데이터악기희도",data)
+      this.postTeacherProfileCreate(data)            
         .then(response => {    
-          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
           this.$router.push(`/profile/teacherprofile/${teacherId}`);         
-          console.log(this.teacherId, response)
+          console.log('우왁', response)
         });
 
     },
