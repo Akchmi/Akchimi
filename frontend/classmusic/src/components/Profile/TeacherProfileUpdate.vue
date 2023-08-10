@@ -212,7 +212,7 @@ export default {
     this.selectedInstruments.splice(index, 1);
     },
 
-    ...mapActions(['putTeacherProfileUpdate', 'deleteAttachedImage',]),
+    ...mapActions(['putTeacherProfileUpdate', ]),
 
     async submitImages() {
       let formData = new FormData();
@@ -224,10 +224,9 @@ export default {
       this.newAttachedFiles.forEach((item) => {
        formData.append("image", item.file);
      });    
-
+    
       try {
         await axios.post(`/teachers/${this.teacherId}/images`,formData);
-
         console.log("폼데", formData)
       } catch (error) {
         console.log("폼폼", error);
@@ -235,13 +234,12 @@ export default {
     },
 
     async submitAttachedFilesToDelete() {
-      let formData = new FormData();
-
-      this.attachedFiles.forEach((imageUrl) => {
-        formData.append("image", imageUrl);
-      });
+      const data = {
+        images : this.attachedFiles,
+      }
+      console.log('ㅎㄷ', data)
       try {
-        await axios.delete(`/teachers/${this.teacherId}/images`, formData);
+        await axios.post(`/teachers/${this.teacherId}/images/delete`, data);
         
       } catch(error) {
         console.log('폼삭', error)
@@ -268,10 +266,11 @@ export default {
       this.putTeacherProfileUpdate(data)            
         .then(response => {    
           const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
-          this.$store.commit('updateTeacherProfile', response);
+          // this.$store.commit('updateTeacherProfile', response);
           this.$router.push(`/profile/teacherprofile/${teacherId}`); 
+          console.log(response)
         });
-      // this.deleteAttachedImage(this.teacherId, this.attachedFiles )
+
         
     },
     convertDaysToBitMask() {
