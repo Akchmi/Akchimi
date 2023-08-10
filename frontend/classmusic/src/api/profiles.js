@@ -75,7 +75,9 @@ function apiLikeTeacherUpdate(context, data) {
   axios
     .post(`/users/${id}/like`, data)
     .then(({ data }) => {
-      console.log(11, data);
+
+      alert("즐겨찾기에 성공하였습니다");
+      this.$router.push(`/profile/myprofile`);
       return data;
     })
     .catch((error) => {
@@ -87,9 +89,9 @@ function apiLikeTeacherUpdate(context, data) {
     });
 }
 
-async function apiDeleteLIkeTeacher(likeId) {
+async function apiDeleteLIkeTeacher(teacherId) {
   try {
-    const response = await axios.delete(`users/like/${likeId}`);
+    const response = await axios.delete(`users/like/${teacherId}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -122,7 +124,6 @@ async function apiTeacherProfileCreate(context, data) {
 
 function apiTeacherProfileUpdate(context, data) {
   const teacherId = data.teacherId;
-  console.log("수정은 ", data, teacherId);
   axios
     .put(`/teachers/${teacherId}`, data)
     .then(({ data }) => {

@@ -12,7 +12,7 @@
         :key="index"
         class="teacher-instrument"
         >{{ instrument }}</span
-      >|<span class="teacher-career">{{ teacher.career }}</span>
+      >|<span class="teacher-career">{{ teacher.career }}년</span>
       <br />
       <span class="teacher-avg-rating">{{ teacher.avgRating }}점</span>|<span
         class="contact-count"

@@ -2,31 +2,42 @@
   <div class="container">
     <div class="create__container">
       <div>
-        <!-- 자유게판 글쓰기 최상단 -->
-        <h1>자유게시판 수정</h1>
+        <!-- 수정 최상단 -->
+        <button class="createButton" @click="$router.go(-1)">돌아가기</button>
+
+        <h1 style="margin: 20px; font-size: 28px">자유게시판 수정</h1>
         <hr />
       </div>
 
-      <div>
-        <!-- 글 제목, 내용 -->
-        <h3>제목</h3>
-        <input class="input__title" type="text" v-model="articleDetail.title" />
-        <h3>내용</h3>
-        <input
-          class="input__content"
-          type="text"
-          v-model="articleDetail.content"
-        />
+      <!-- 글 제목, 내용 -->
+      <div class="create__content">
+        <div style="width: 90%">
+          <h3 style="margin: 10px; font-size: 24px">제목</h3>
+          <input
+            class="input__title"
+            type="text"
+            v-model="articleDetail.title"
+            maxlength="50"
+          />
+          <h3 style="margin: 10px; font-size: 24px">내용</h3>
+          <textarea
+            class="input__content"
+            type="text"
+            v-model="articleDetail.content"
+            maxlength="200"
+          ></textarea>
+        </div>
       </div>
-      <hr />
-      <div>
-        <!-- 첨부파일 -->
-        <button>첨부파일 추가</button>
-      </div>
+      <div class="create__content__bottom">
+        <div>
+          <!-- 첨부파일 -->
+          <button class="createButton">첨부파일 추가</button>
+        </div>
 
-      <div>
-        <!-- 수정완료 버튼 -->
-        <button @click="articleUpdate">수정완료</button>
+        <div>
+          <!-- 작성완료 버튼 -->
+          <button class="createButton" @click="articleUpdate">수정완료</button>
+        </div>
       </div>
     </div>
   </div>

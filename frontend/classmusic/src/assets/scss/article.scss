@@ -69,9 +69,11 @@ td {
 }
 
 .commentBox {
-  width: 500px;
-  height: 40px;
+  width: 550px;
+  min-height: 40px;
   margin: 10px;
+  overflow: wrap;
+  resize: none;
 }
 
 .commentList {
@@ -84,7 +86,18 @@ td {
 }
 
 .commentProfile {
-  flex: 2;
+  flex: 1.5;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  margin-right: -20px;
+}
+
+.commentProfileImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  border: solid gray 1px;
 }
 
 .commentContent {
@@ -94,11 +107,6 @@ td {
 .commentBottom {
   display: flex;
   justify-content: space-between;
-}
-
-.commentProfileImage {
-  width: 100px;
-  height: 100px;
 }
 
 .articleTableBanner {
@@ -152,4 +160,9 @@ td {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.commentContainer {
+  display: flex;
+  align-items: center;
 }

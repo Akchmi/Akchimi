@@ -25,7 +25,7 @@ export default {
 
 @font-face {
   font-family: "mainfont";
-  src: url("assets/font/BMEULJIROTTF.ttf") format("truetype");
+  src: url("assets/font/Maplestory.ttf") format("truetype");
 }
 
 .container {
