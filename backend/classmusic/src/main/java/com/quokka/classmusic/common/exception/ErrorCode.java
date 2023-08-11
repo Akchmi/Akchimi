@@ -19,6 +19,7 @@ public enum ErrorCode {
      * 401 UNAUTHORIZED: 인증되지 않은 사용자의 요청
      */
     UNAUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "인증된 사용자가 아닙니다."),
+    ACCESS_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT 토큰이 만료되었습니다."),
 
     /*
      * 403 FORBIDDEN: 권한이 없는 사용자의 요청
