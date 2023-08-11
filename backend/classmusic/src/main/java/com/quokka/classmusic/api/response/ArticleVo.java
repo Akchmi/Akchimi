@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class ArticleVo {
     private int articleId;
     private String name;
+    private String userProfileImage;
     private int userId;
     private String title;
     private String content;
@@ -21,6 +22,7 @@ public class ArticleVo {
     public ArticleVo(Article article){
         this.articleId = article.getArticleId();
         this.name = article.getUser().getName();
+        this.userProfileImage = article.getUser().getUserProfileImage();
         this.userId = article.getUser().getUserId();
         this.title = article.getTitle();
         this.content = article.getContent();

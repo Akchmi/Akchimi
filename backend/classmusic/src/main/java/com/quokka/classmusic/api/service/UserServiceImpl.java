@@ -1,10 +1,7 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.*;
-import com.quokka.classmusic.api.response.FileVo;
-import com.quokka.classmusic.api.response.LikeVo;
-import com.quokka.classmusic.api.response.TeacherVo;
-import com.quokka.classmusic.api.response.UserVo;
+import com.quokka.classmusic.api.response.*;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.common.util.AmazonS3ResourceStorage;
@@ -21,7 +18,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
@@ -104,9 +100,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public void changePassword(String id, ChangePasswordDto changePasswordDto) {
         User user = userRepository.findUserById(id);
-        passwordEncoder.matches(user.getPassword(),changePasswordDto.getOldPassword());
-        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
-        userRepository.save(user);
+        if(passwordEncoder.matches(changePasswordDto.getOldPassword(),user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+            userRepository.save(user);
+        }else{
+            throw new RestApiException(ErrorCode.PASSWORD_MISMATCH);
+        }
     }
 
     @Override
@@ -126,10 +125,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<TeacherVo> findAllLike(String id) {
+    public List<TeacherLikeVo> findAllLike(String id) {
         int userId = userRepository.findUserById(id).getUserId();
-        List<TeacherVo> teacherVoList = likeRepository.findAll(userId);
-        for (TeacherVo teacherVo:teacherVoList){
+        List<TeacherLikeVo> teacherVoList = likeRepository.findAll(userId);
+        for (TeacherLikeVo teacherVo:teacherVoList){
             teacherVo.setInstruments(treatRepository.findInstrumentNameByTeacherId(teacherVo.getTeacherId()));
         }
         return teacherVoList;
@@ -172,13 +171,23 @@ public class UserServiceImpl implements UserService{
     @Override
     public void insertProfileImage(String id, MultipartFile multipartFile) {
         User user = userRepository.findUserById(id);
-        if(user.getUserProfileImage() != null && user.getUserProfileImage().length() > 10){
+        if(!user.getUserProfileImage().equals("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/20b17a31-a4a1-4dbb-8556-93bdf1c58329.webp")){
             amazonS3ResourceStorage.deleteFile(user.getUserProfileImage());
             user.setUserProfileImage(null);
         }
         FileVo fileVo = FileVo.multipartOf(multipartFile);
         amazonS3ResourceStorage.store(fileVo.getPath() , multipartFile);
         user.setUserProfileImage("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/" + fileVo.getPath());
+    }
+
+    @Override
+    public void deleteProfileImage(String id) {
+        User user = userRepository.findUserById(id);
+        if(!user.getUserProfileImage().equals("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/20b17a31-a4a1-4dbb-8556-93bdf1c58329.webp")){
+            amazonS3ResourceStorage.deleteFile(user.getUserProfileImage());
+            user.setUserProfileImage("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/20b17a31-a4a1-4dbb-8556-93bdf1c58329.webp");
+        }
+
     }
 
     public String getRandomPassword(int size) {

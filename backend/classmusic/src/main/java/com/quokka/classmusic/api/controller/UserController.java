@@ -1,10 +1,7 @@
 package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.*;
-import com.quokka.classmusic.api.response.LikeVo;
-import com.quokka.classmusic.api.response.TeacherVo;
-import com.quokka.classmusic.api.response.UserDetailsVo;
-import com.quokka.classmusic.api.response.UserVo;
+import com.quokka.classmusic.api.response.*;
 import com.quokka.classmusic.api.service.UserService;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
@@ -111,7 +108,7 @@ public class UserController {
 
     // 즐겨찾기 목록
     @GetMapping("/{id}/like")
-    public ResponseEntity<List<TeacherVo>> findAllLike(@PathVariable String id, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+    public ResponseEntity<List<TeacherLikeVo>> findAllLike(@PathVariable String id, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
         log.debug(userDetailsVo.getUserVo().getId());
         String currentLoginId = userDetailsVo.getUserVo().getId();
 
@@ -120,7 +117,7 @@ public class UserController {
             throw new RestApiException(ErrorCode.FORBIDDEN_ACCESS);
         }
 
-        List<TeacherVo> likeList = userService.findAllLike(id);
+        List<TeacherLikeVo> likeList = userService.findAllLike(id);
         return new ResponseEntity<>(likeList, HttpStatus.OK);
     }
 
@@ -136,8 +133,8 @@ public class UserController {
         }
 
         userService.deleteLike(likeId);
-        for (TeacherVo teacherVo : userService.findAllLike(id)) {
-            log.debug("삭제후 {} {}", teacherVo.getTeacherId(), teacherVo.getName());
+        for (TeacherLikeVo TeacherLikeVo : userService.findAllLike(id)) {
+            log.debug("삭제후 {} {}", TeacherLikeVo.getTeacherId(), TeacherLikeVo.getName());
         }
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
@@ -154,6 +151,19 @@ public class UserController {
         }
 
         userService.insertProfileImage(id , multipartFile);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}/profileImage")
+    public ResponseEntity<Void> deleteProfileImage(@PathVariable String id , @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+        log.debug(userDetailsVo.getUserVo().getId());
+        String currentLoginId = userDetailsVo.getUserVo().getId();
+        if (!currentLoginId.equals(id)) {
+            log.debug("아이디가 다릅니다.");
+            throw new RestApiException(ErrorCode.FORBIDDEN_ACCESS);
+        }
+
+        userService.deleteProfileImage(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

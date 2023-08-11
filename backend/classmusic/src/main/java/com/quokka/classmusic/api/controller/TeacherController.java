@@ -67,4 +67,10 @@ public class TeacherController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/{teacherId}/images")
+    public ResponseEntity<Void> deleteImage(@PathVariable int teacherId , @RequestPart(value = "image") List<String> files){
+        teacherService.deleteImage(teacherId , files);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

@@ -28,6 +28,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     @Override
     public List<ReviewVo> findAll(int teacherId) {
         return query.select(Projections.constructor(ReviewVo.class ,
+                review.reviewId,
                 user.name,
                 user.userProfileImage,
                 contact.startTime,

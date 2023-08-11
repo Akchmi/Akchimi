@@ -13,8 +13,7 @@ public interface TeacherRepository {
     void delete(Teacher teacher);
     long findReviewCount(int teacherId);
     float findReviewSum(int teacherId);
-    void deleteImage(int teacherId);
+    void deleteImage(int teacherId , String file);
     void saveImage(TeacherFile teacherFile);
-
     List<String> findImageByTeacherId(int teacherId);
 }

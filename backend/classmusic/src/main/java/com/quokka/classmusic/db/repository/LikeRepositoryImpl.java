@@ -2,6 +2,7 @@ package com.quokka.classmusic.db.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.quokka.classmusic.api.response.TeacherLikeVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.db.entity.Like;
 import com.quokka.classmusic.db.entity.Teacher;
@@ -37,8 +38,9 @@ public class LikeRepositoryImpl implements LikeRepository{
     }
 
     @Override
-    public List<TeacherVo> findAll(int userId) {
-        return query.select(Projections.constructor(TeacherVo.class,
+    public List<TeacherLikeVo> findAll(int userId) {
+        return query.select(Projections.constructor(TeacherLikeVo.class,
+                    like.favoriteId,
                     user.name,
                     user.userProfileImage,
                     teacher.teacherId,
