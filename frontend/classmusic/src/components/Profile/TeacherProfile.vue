@@ -141,6 +141,7 @@ export default {
     this.endTime = res.endTime;
     this.classDay = res.classDay;
     this.instrument = res.instruments.join(" ");
+    // this.instrument = res.instruments;
     this.attachedFiles = res.images;
     this.avgRating = res.avgRating;
     this.contactCnt = res.contactCnt;

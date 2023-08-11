@@ -12,6 +12,6 @@ export default {
     state.profiles.teacherId = data.teacherId;
   },
   SAVE_TEACHERID(state, data) {
-    state.common.teacherId = data;
+    state.common.teacherId = data; 
   },
 };
