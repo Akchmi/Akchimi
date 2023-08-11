@@ -14,6 +14,7 @@ import java.util.Map;
 
 public interface UserService {
     UserVo findUserById(String id);
+    UserVo findUserByEmail(String email);
     UserVo findUserByUserId(int userId);
     UserVo findId(FindIdDto findIdDto);
     UserVo modifyUser(String id, ModifyUserDto modifyUserDto);

@@ -58,6 +58,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserVo findUserByEmail(String email) {
+        User user = userRepository.findUserByEmail(email);
+        if(user == null){
+            throw new RestApiException(ErrorCode.ID_NOT_FOUND);
+        }
+        return new UserVo(user);
+    }
+
+    @Override
     public UserVo findUserByUserId(int userId) {
          User user = userRepository.findById(userId);
         if(user == null){

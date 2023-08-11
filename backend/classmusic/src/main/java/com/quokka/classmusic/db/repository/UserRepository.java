@@ -5,6 +5,7 @@ import com.quokka.classmusic.db.entity.User;
 
 public interface UserRepository{
     User findUserById(String id);
+    User findUserByEmail(String email);
     User findById(int userId);
     User findId(FindIdDto findIdDto);
     void save(User user);

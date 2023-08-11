@@ -64,6 +64,24 @@ public class AuthController {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
+    @GetMapping("/check-email")
+    public ResponseEntity<Boolean> checkIsDuplicateEmail(@RequestParam String email){
+        log.info("GET /auth/check-id id : {}", email);
+
+        try {
+            userService.findUserByEmail(email);
+        }catch(RestApiException e){
+            if(e.getErrorCode() == ErrorCode.ID_NOT_FOUND){
+                log.debug("이메일 중복체크 {}와 일치하는 이메일이 없습니다. 결과 : false", email);
+                return new ResponseEntity<>(false, HttpStatus.OK);
+            }else{
+                throw e;
+            }
+        }
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
     // 이름과 이메일로 아이디 찾기
     @PostMapping("/find-id")
     public ResponseEntity<String> findId(@RequestBody FindIdDto findIdDto){

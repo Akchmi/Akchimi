@@ -80,9 +80,12 @@ public class NoticeRepositoryImpl implements NoticeRepository {
     private BooleanExpression likeKeywordInSearchType(String searchType, String keyword){
         if(searchType != null && keyword != null){
             if("제목".equals(searchType)){
-                return notice.title.like(new StringBuilder().append("%").append(keyword).append("%").toString());
+                return notice.title.contains(keyword);
             }else if("내용".equals(searchType)){
-                return notice.content.like(new StringBuilder().append("%").append(keyword).append("%").toString());
+                return notice.content.contains(keyword);
+            }else if(searchType.equals("전체")) {
+                return notice.title.contains(keyword)
+                        .or(notice.content.contains(keyword));
             }
         }
         return null;

@@ -1,11 +1,16 @@
 package com.quokka.classmusic.common.auth;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.api.response.UserVo;
 import com.quokka.classmusic.api.service.UserService;
+import com.quokka.classmusic.common.exception.ErrorCode;
+import com.quokka.classmusic.common.exception.ErrorResponse;
 import com.quokka.classmusic.common.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,11 +27,13 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
     private UserService userService;
+    private ObjectMapper objectMapper;
 
 
     public JwtAuthenticationFilter(JwtTokenUtil jwtTokenUtil, UserService userService) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userService = userService;
+        this.objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
 
     @Override
@@ -42,13 +49,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             Authentication authentication = getAuthentication(header.replace(jwtTokenUtil.TOKEN_PREFIX, ""));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            filterChain.doFilter(request, response);
         } catch (Exception e){
             // Exception 처리
             log.debug("JWT 토큰 인증 과정 Exception 발생");
-            return;
-        }
 
-        filterChain.doFilter(request, response);
+            // 응답 처리
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType("application/json; charset=UTF-8");
+
+            ErrorResponse errorResponse = new ErrorResponse(ErrorCode.ACCESS_TOKEN_EXPIRED);
+            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+        }
     }
 
     @Transactional(readOnly = true)
