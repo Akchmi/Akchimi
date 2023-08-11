@@ -70,7 +70,7 @@
     
     <div class="favorites">
       <br /><hr /> <br />
-      <h1>{{ userInfo.name }} 님이 즐겨찾기한 강사</h1>
+      <div class="favorite-title">{{ userInfo.name }} 님이 즐겨찾기한 강사</div>
       <div class="teacher-list">
         <LikeTeacherCard
           v-for="teacher in liketeachers"

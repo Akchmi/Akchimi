@@ -36,7 +36,7 @@ export default {
       }
     },
     movePage(path) {
-      this.$router.push(path);
+      this.$$router.push(path);
     },
   },
 };
@@ -46,5 +46,8 @@ export default {
 .top-button-container {
   width: 800px;
   margin: 0 auto;
+}
+button {
+  margin-left: 10px;
 }
 </style>

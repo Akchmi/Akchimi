@@ -21,10 +21,11 @@
                 <span class="box">{{ genderText }}</span>
               </div>
             </div>
-            <div> 
+            <div class="teacher-info-container"> 
               <p>강사 정보</p>
-              <div class="teacher-info-container">
-                <p class="info-box">악기 : {{ instrument }}</p>
+              <div class="teacher-info-box">
+                <!-- <p class="info-box">악기 : {{ instrument }}</p> -->
+                <span>악기 : <span class="inst" v-for="inst in instrument" :key="inst.index">{{ inst }}  </span> </span> 
                 <p class="info-box">경력 : {{ career }}년</p>
                 <p class="info-box">가격 : 시간당 {{ cost }}만원</p>
                 <p class="info-box">
@@ -43,7 +44,7 @@
         </div>
 
         <div class="attach-file">
-          <h3>강사 자랑</h3>
+          <h2>강사 자랑</h2>
           <div>
             <img
               v-for="(image, index) in attachedFiles"
@@ -63,14 +64,14 @@
          
         </div>
         <div class="button-group">
-          <button v-if="Number(localteacherId) === Number(teacherId)">
+          <button class="teacher-bottom-button" v-if="Number(localteacherId) === Number(teacherId)">
             <router-link to="/profile/TeacherProfileUpdate" class="button"
               >강사 정보 수정</router-link
             >
           </button>
           <div v-else>
-            <button @click="likeTeacherUpdate">강사 즐겨찾기</button>
-            <button>
+            <button class="teacher-bottom-button" @click="likeTeacherUpdate">강사 즐겨찾기</button>
+            <button class="teacher-bottom-button" >
               <router-link to="/lecture/studentwaiting" class="button"
                 >강의 신청</router-link
               >
@@ -79,9 +80,17 @@
         </div>
       </div>
       <div class="review-header">
-        <h3 class="review-title">강사 리뷰</h3>
-       
-        <p class="avg-rating">평균 별점: {{ avgRating }}</p>
+        <hr /> <br />
+        <div class="review-title">강사 리뷰</div>
+        <div class="avg-rating">평균 별점: 
+          <span v-if="0<=avgRating && avgRating<=0.5"> </span>
+          <span v-else-if="0.5<avgRating && avgRating<1.5"> ⭐</span>
+          <span v-if="1.5<=avgRating && avgRating<2.5"> ⭐⭐</span>
+          <span v-if="2.5<=avgRating && avgRating<3.5"> ⭐⭐⭐</span>
+          <span v-if="3.5<=avgRating && avgRating<4.5"> ⭐⭐⭐⭐</span>
+          <span v-if="4.5<=avgRating && avgRating<=5"> ⭐⭐⭐⭐⭐</span>
+          ( {{ avgRating }} )
+        </div>
       </div>
       <TeacherReview
         v-for="review in reviews"
@@ -220,7 +229,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @import "@/assets/scss/teacherprofile.scss";
 
 </style>
