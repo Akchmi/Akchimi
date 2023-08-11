@@ -66,7 +66,7 @@
             강사 정보 수정
           </button>
           <div v-else>            
-            <button v-if="likeId !==0" class="teacher-bottom-button" @click="likeTeacherUpdate">강사 즐겨찾기 </button>
+            <button v-if="likeId === null" class="teacher-bottom-button" @click="likeTeacherUpdate">강사 즐겨찾기 </button>
             <button v-else class="teacher-bottom-button" @click="deleteLikeTeacher(likeId)">즐겨찾기 취소</button>
             <button class="teacher-bottom-button" @click="goToLectureRequest">강의 신청</button>       
            
@@ -99,6 +99,7 @@
 <script>
 import TeacherReview from "./TeacherReview.vue";
 import { apiDetailTeacherInfo, apiGetReview, apiDeleteLIkeTeacher } from "@/api/profiles.js";
+import router from "@/router";
 import { mapActions } from "vuex";
 // import { useRoute } from "vue-router";
 // import axios from "@/api/imageAxios.js";
@@ -178,7 +179,8 @@ export default {
       }      
       apiDeleteLIkeTeacher(data)
       .then(() => {   
-          this.liketeachers = this.liketeachers.filter(teacher => teacher.likeId !== likeId);
+          // this.liketeachers = this.liketeachers.filter(teacher => teacher.likeId !== likeId);
+          router.go(0)
       }).catch(error => {
         console.log(error);
       });
