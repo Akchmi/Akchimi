@@ -8,7 +8,7 @@
           <div class="form-group">
             <div class="enterInfo">
               <div>
-                <label>학생 ID</label>
+                <label>참여자 이름</label>
                 <input
                   v-model="myUserName"
                   class="enterInfoInput"
@@ -16,7 +16,7 @@
                   required
                 />
               </div>
-              <div>
+              <!-- <div>
                 <label>강의실 번호</label>
                 <input
                   v-model="mySessionId"
@@ -24,10 +24,10 @@
                   type="text"
                   required
                 />
-              </div>
+              </div> -->
             </div>
             <div class="enterButton">
-              <button @click="joinSession()">입장</button>
+              <button @click="joinSession()">강의실 입장</button>
             </div>
           </div>
         </div>
@@ -395,7 +395,7 @@ export default {
         } else {
           this.receivedMessages.push({
             message: receivedMessage,
-            className: "right",
+            className: "rightviduchat",
           });
         }
       });
@@ -596,8 +596,8 @@ export default {
 
 .enterButton {
   display: flex;
-  justify-content: right;
-  margin-right: 40px;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .top-container {
@@ -720,7 +720,7 @@ video {
   width: 15%;
   border-radius: 10px;
 }
-.right {
+.rightviduchat {
   width: 93%;
   margin: 0px 10px 0px 10px;
   display: flex;

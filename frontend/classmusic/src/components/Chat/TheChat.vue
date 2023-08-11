@@ -1,13 +1,9 @@
 <template>
   <div :class="chat.sender == sender ? 'right' : 'left'">
-    <img :src="profile.profileImage" />
-    <div>
-      <span>보낸이: {{ profile.name }}</span>
-      <div></div>
-      <span>내용: {{ chat.content }}</span>
-      <div></div>
-      <span>보낸 시간: {{ toLocalTimeStamp(chat.createdTime) }}</span>
-    </div>
+    <!-- <div class="chat-name">보낸이: {{ profile.name }}</div> -->
+    <img class="chat-img" :src="profile.profileImage" />
+    <span class="chat-content"> {{ chat.content }}</span>
+    <span class="chat-sendtime">{{ toLocalTimeStamp(chat.createdTime) }}</span>
   </div>
 </template>
 
@@ -40,8 +36,8 @@ export default {
 @import "@/assets/scss/templates/common.scss";
 @import "@/assets/scss/chat.scss";
 img {
-  width: 40px;
-  border-radius: 50%;
+  width: 50px;
+  border-radius: 70%;
 }
 
 .left {
