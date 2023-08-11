@@ -6,10 +6,10 @@
     <TheBanner :title="'프로필'" />
     <br />
     <div class="top-button-container">
-      <button>
-        <router-link :to="myProfilePath">내 프로필</router-link>
-      </button>
-      |
+      <!-- <button>
+        <router-link :to=myProfilePath>내 프로필</router-link>
+      </button> -->
+      <button @click="navigateToMyprofile">내 프로필</button>
       <button @click="navigateToTeacherProfile">강사 프로필</button>
     </div>
     <br />
@@ -26,11 +26,11 @@ export default {
     NavBar,
     TheBanner,
   },
-  computed: {
-    myProfilePath() {
-      return "/profile/myprofile";
-    },
-  },
+  // computed: {
+  //   myProfilePath() {
+  //     return "/profile/myprofile";
+  //   },
+  // },
   methods: {
     navigateToTeacherProfile() {
       const userType = this.$store.state.common.userType;
@@ -42,6 +42,9 @@ export default {
         this.$router.push(`/profile/teacherprofile/${teacherId}`);
       }
     },
+    navigateToMyprofile(){
+      this.$router.push(`/profile/myprofile`);
+    }
   },
 };
 </script>
@@ -50,5 +53,8 @@ export default {
 .top-button-container{
   width: 800px;
   margin: 0 auto;
+}
+button{
+  margin-left: 10px;
 }
 </style>
