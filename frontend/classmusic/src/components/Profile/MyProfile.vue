@@ -10,30 +10,32 @@
             class="user-image"
           />
           <input type="file" ref="fileInput" @change="handleImageUpload" style="display: none"/>
-          <button @click="triggerFileInput">사진 수정</button>
-          <button @click="deleteMyprofileImage(this.id)">사진 삭제</button>
+          <div class="img-button-container">
+            <button @click="triggerFileInput">사진 수정</button>
+            <button @click="deleteMyprofileImage(this.id)">사진 삭제</button>
+          </div>
         </div>
         
         <div class="info-container">
           <!-- <div class="id-container">  -->
-            <div> 
+          <div class="info-field"> 
             <label>ID:</label>
-            <div class="info-field">{{ userInfo.id }}</div>
-          </div>
-          <!-- <div class="email-container"> -->
-            <div>
-            <label>Email:</label>
-            <div class="info-field">{{ userInfo.email }}</div>
+            <div class="info-content">{{ userInfo.id }}</div>
           </div>
           <!-- <div class="name-container"> -->
-            <div>
-            <label>Name:</label>
-            <div class="info-field">{{ userInfo.name }}</div>
+            <div class="info-field">
+              <label>Name:</label>
+              <div class="info-content">{{ userInfo.name }}</div>
+            </div>
+          <!-- <div class="email-container"> -->
+          <div class="info-field">
+            <label>Email:</label>
+            <div class="info-content">{{ userInfo.email }}</div>
           </div>
-          <div>
           <!-- <div class="gender-container"> -->
+          <div class="info-field">
             <label>Gender:</label>
-            <div class="info-field">{{ userInfo.gender === 1 ? '남자' : '여자' }}</div>
+            <div class="info-content">{{ userInfo.gender === 1 ? '남자' : '여자' }}</div>
           </div>
         </div>
       </div>
@@ -65,8 +67,10 @@
       </div>
     </div>
 
+    
     <div class="favorites">
-      <h3>{{ userInfo.name }} 님이 즐겨찾기한 강사</h3>
+      <br /><hr /> <br />
+      <h1>{{ userInfo.name }} 님이 즐겨찾기한 강사</h1>
       <div class="teacher-list">
         <LikeTeacherCard
           v-for="teacher in liketeachers"

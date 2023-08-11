@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://i9a210.p.ssafy.io:3000/api",
+  baseURL: "https:i9a210.p.ssafy.io:3000/api",
   // baseURL: "http://localhost:8080/api",
 
   headers: {
@@ -11,12 +11,12 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    console.log("axios bearer token 설정");
+    // console.log("axios bearer token 설정");
     const vuexStorage = JSON.parse(localStorage.getItem("vuex"));
 
     if (vuexStorage != null) {
       const accessToken = vuexStorage.common.accessToken;
-      console.log("access token : " + accessToken);
+      // console.log("access token : " + accessToken);
       if (accessToken != null)
         config.headers.Authorization = `Bearer ${accessToken}`;
     }

@@ -1,33 +1,35 @@
 <template>
   <div id="main-container" class="container">
     <div id="join" v-if="!sessionCamera">
-      <div id="join-dialog" class="jumbotron vertical-center">
-        <h1>참여자 정보</h1>
-        <video id="my-video" autoplay="true" :srcObject="myVideo"></video>
-        <div class="form-group">
-          <p>
-            <label>학 생</label>
-            <input
-              v-model="myUserName"
-              class="form-control"
-              type="text"
-              required
-            />
-          </p>
-          <p>
-            <label>강의실 번호</label>
-            <input
-              v-model="mySessionId"
-              class="form-control"
-              type="text"
-              required
-            />
-          </p>
-          <p class="text-center">
-            <button class="btn btn-lg btn-success" @click="joinSession()">
-              입장
-            </button>
-          </p>
+      <div id="join-dialog" class="enterRoom__container">
+        <div>
+          <button @click="$router.push('/')">나가기</button>
+          <video id="my-video" autoplay="true" :srcObject="myVideo"></video>
+          <div class="form-group">
+            <div class="enterInfo">
+              <div>
+                <label>학생 ID</label>
+                <input
+                  v-model="myUserName"
+                  class="enterInfoInput"
+                  type="text"
+                  required
+                />
+              </div>
+              <div>
+                <label>강의실 번호</label>
+                <input
+                  v-model="mySessionId"
+                  class="enterInfoInput"
+                  type="text"
+                  required
+                />
+              </div>
+            </div>
+            <div class="enterButton">
+              <button @click="joinSession()">입장</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -553,7 +555,51 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+#join {
+  display: flex;
+  justify-content: center;
+}
+
+#my-video {
+  width: 600px;
+  height: 450px;
+  margin: 10px;
+}
+
+.enterRoom__container {
+  width: 550px;
+  border: 3px #edd9b7 solid;
+  border-radius: 20px;
+  padding: 20px 50px 30px 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.enterInfoInput {
+  border: 3px #edd9b7 solid;
+  border-radius: 2em;
+  margin-left: 10px;
+  padding-left: 15px;
+}
+
+.enterInfo {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
+}
+
+.enterButton {
+  display: flex;
+  justify-content: right;
+  margin-right: 40px;
+}
+
 .top-container {
   width: 98vw;
   height: 3vh;

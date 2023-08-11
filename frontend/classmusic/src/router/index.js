@@ -35,6 +35,7 @@ import TeacherProfileUpdate from "../components/Profile/TeacherProfileUpdate.vue
 import TeacherProfileCreate from "../components/Profile/TeacherProfileCreate.vue";
 import TeacherProfilePrompt from "../components/Profile/TeacherProfilePrompt.vue";
 import TeacherReview from "../components/Profile/TeacherReview.vue";
+import ErrorPage from "../components/common/ErrorPage.vue";
 
 const routes = [
   {
@@ -201,6 +202,11 @@ const routes = [
     path: "/livemeeting/:lectureId",
     name: "livemeeting",
     component: LiveMeetingView,
+  },
+  {
+    path: "/:pathMatch(.*)",
+    name: "error",
+    component: ErrorPage,
   },
 ];
 

@@ -10,6 +10,8 @@ export default {
     state.common.name = data.name;
   },
   SET_USER_TYPE(state, userType) {
+    console.log('abxp', userType)
     state.common.userType = userType;
+   
   },
 };
