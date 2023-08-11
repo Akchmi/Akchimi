@@ -4,6 +4,7 @@ import com.quokka.classmusic.api.request.TeacherDto;
 import com.quokka.classmusic.api.response.FileVo;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
+import com.quokka.classmusic.api.response.UserDetailsVo;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.common.util.AmazonS3ResourceStorage;
@@ -59,9 +60,16 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public TeacherDetailVo selectDetailTeacher(int teacherId) {
+    public TeacherDetailVo selectDetailTeacher(int teacherId , UserDetailsVo userDetailsVo) {
         Teacher teacher = teacherRepository.findById(teacherId);
         User user = teacher.getUser();
+        Integer likeId = null;
+        System.out.println("ddddddddddddddddddddddd" + userDetailsVo.getUserVo().getUserId());
+        if(userDetailsVo != null){
+            System.out.println(likeId);
+            likeId = teacherRepository.findLikeById(userDetailsVo.getUserVo().getUserId() , teacherId);
+            System.out.println("asdfasdf" + likeId);
+        }
         TeacherDetailVo teacherDetailVo = new TeacherDetailVo(
                 user.getUserId(),
                 user.getName(),
@@ -76,7 +84,8 @@ public class TeacherServiceImpl implements TeacherService{
                 teacher.getAvgRating(),
                 teacher.getContactCnt(),
                 treatRepository.findInstrumentNameByTeacherId(teacherId),
-                teacherRepository.findImageByTeacherId(teacherId)
+                teacherRepository.findImageByTeacherId(teacherId),
+                likeId
         );
         return teacherDetailVo;
     }

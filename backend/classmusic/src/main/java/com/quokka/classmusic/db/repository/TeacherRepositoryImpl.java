@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static com.quokka.classmusic.db.entity.QContact.contact;
 import static com.quokka.classmusic.db.entity.QInstrument.instrument;
+import static com.quokka.classmusic.db.entity.QLike.like;
 import static com.quokka.classmusic.db.entity.QReview.review;
 import static com.quokka.classmusic.db.entity.QTeacher.teacher;
 import static com.quokka.classmusic.db.entity.QTeacherFile.teacherFile;
@@ -110,6 +111,14 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .join(teacherFile.teacher , teacher)
                 .where(teacher.teacherId.eq(teacherId))
                 .fetch();
+    }
+
+    @Override
+    public Integer findLikeById(int userId , int teacherId) {
+        return query.select(like.favoriteId)
+                .from(like)
+                .where(like.student.userId.eq(userId) , like.teacher.teacherId.eq(teacherId))
+                .fetchOne();
     }
 
     private BooleanExpression startCareerGoe(Integer startCareer){

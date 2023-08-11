@@ -35,9 +35,8 @@ public class TeacherController {
     }
 
     @GetMapping("/{teacherId}")
-    public ResponseEntity<TeacherDetailVo> selectDetailTeacher(@PathVariable int teacherId){
-
-        return new ResponseEntity<>(teacherService.selectDetailTeacher(teacherId), HttpStatus.OK);
+    public ResponseEntity<TeacherDetailVo> selectDetailTeacher(@PathVariable int teacherId , @AuthenticationPrincipal UserDetailsVo userDetailsVo){
+        return new ResponseEntity<>(teacherService.selectDetailTeacher(teacherId , userDetailsVo), HttpStatus.OK);
     }
 
     @PostMapping()

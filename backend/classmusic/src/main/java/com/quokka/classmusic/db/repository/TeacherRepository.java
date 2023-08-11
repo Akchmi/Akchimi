@@ -16,4 +16,6 @@ public interface TeacherRepository {
     void deleteImage(int teacherId , String file);
     void saveImage(TeacherFile teacherFile);
     List<String> findImageByTeacherId(int teacherId);
+
+    Integer findLikeById(int userId , int teacherId);
 }
