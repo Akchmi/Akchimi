@@ -22,7 +22,7 @@
               </div>
             </div>
             <div class="teacher-info-container"> 
-              <p>강사 정보</p>
+              <p class="label">강사 정보</p>
               <div class="teacher-info-box">
                 <!-- <p class="info-box">악기 : {{ instrument }}</p> -->
                 <span>악기 : <span class="inst" v-for="inst in instrument" :key="inst.index">{{ inst }}  </span> </span> 
@@ -37,14 +37,14 @@
           </div>
         </div>
         <div class="teacher-details">
-          <h2>자기 소개</h2>
+          <h2 class="label">자기 소개</h2>
           <div class="description-box">
             <p>{{ introduce }}</p>
           </div>
         </div>
 
         <div class="attach-file">
-          <h2>강사 자랑</h2>
+          <h2 class="label">강사 자랑</h2>
           <div>
             <img
               v-for="(image, index) in attachedFiles"

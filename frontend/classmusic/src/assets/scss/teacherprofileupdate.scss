@@ -56,12 +56,11 @@
   display: flex;
   flex-direction: column;
   width: 800px;  
-  border: 1px solid black;
+  border: 3px solid #edd9b7;
   margin-bottom: 20px;
   border-radius: 8px;
   overflow: hidden;
   padding: 20px;
- 
 }
 
 .top-section {
@@ -89,6 +88,7 @@
 .info-container {
   display: flex;
   flex-direction: column;
+  margin-left: 20px;
   justify-content: space-between;
   width: 100%;
 }
@@ -97,6 +97,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .name-label {
@@ -110,22 +111,22 @@
 
 .teacher-profile-update-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
 }
 
-.left-field, .right-field {
+/*.left-field, .right-field {
   display: flex;
   flex-direction: column;
   width: 45%;
-}
+}*/
 
 .input-field {
-  margin: 10px 0;
+  margin: 5px;
 }
 
 .teacher-profile-update-container {
-  border: 1px solid black;
+  border: 2px solid #edd9b7;
   padding: 10px;
   height: auto; 
   min-height: 6em;
@@ -135,8 +136,25 @@
   margin-bottom: 20px;
   border-radius: 10px;  
 }
-
+.instrument-selected{
+  background-color: #edd9b7;
+  border-radius: 10px;
+  margin-left: 5px;
+  font-size: smaller;
+}
+.button-delete{
+  width: 5px;
+  height: 5px;
+}
 .days-container {
   display: inline-block;
   margin-right: 10px;
+}
+#start, #end, #years, #cost{
+  height: 23px;
+  width: 50px;
+  background-color: #edd9b7;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
 }

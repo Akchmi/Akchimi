@@ -12,10 +12,10 @@
         <div class="info-container">
           <div class="name-container">
             <h3>강사 이름</h3>
-            <p>{{ name }}</p>
+            <p class="name-form">{{ name }}</p>
           </div>
           <div class="teacher-profile-update-container">
-            <div class="left-field">
+            <!-- <div class="left-field"> -->
               <div class="input-field">
                 <label for="instrument">악기 : </label>
                 <select
@@ -31,34 +31,11 @@
                     {{ instrument }}
                   </option>
                 </select>
-                <br />
-                선택된 악기:
-                <div
-    v-for="(instrument, index) in selectedInstruments"
-    :key="index"
-  >
-    {{ instrument }}
-    <button @click="removeInstrument(index)">제거</button>
-  </div>
-            
+                <!-- 선택된 악기: -->
+                <span class="instrument-selected" v-for="(instrument, index) in selectedInstruments" :key="index">
+                  {{ instrument }} <button class="button-delete" @click="removeInstrument(index)">x</button>
+                </span>
               </div>
-              <div class="input-field">
-                <label for="years">경력 : </label>
-                <input
-                  id="years"
-                  v-model.number="career"
-                  type="number"
-                  min="1"
-                />
-                년
-              </div>
-              <div class="input-field">
-                <label for="cost">시간당 비용 : </label>
-                <input id="cost" v-model.number="cost" type="number" min="0" />
-                만원
-              </div>
-            </div>
-            <div class="right-field">
               <div class="input-field">
                 <label>요일:</label>
                 <div
@@ -79,8 +56,6 @@
                   min="0"
                   max="23"
                 />
-              </div>
-              <div class="input-field">
                 <label for="end">종료 시간 :</label>
                 <input
                   id="end"
@@ -90,7 +65,27 @@
                   max="23"
                 />
               </div>
-            </div>
+              <div class="input-field">
+                <div class="carrier-input">
+                  <label for="years">경력 : </label>
+                  <input
+                    id="years"
+                    v-model.number="career"
+                    type="number"
+                    min="1"
+                  />
+                  년
+                </div>
+                <div class="cost-input">
+                  <label for="cost">시간당 비용 : </label>
+                  <input id="cost" v-model.number="cost" type="number" min="0" />
+                  만원
+                </div>
+              </div>
+            <!-- </div> -->
+            <!-- <div class="right-field"> -->
+              
+            <!-- </div> -->
           </div>
         </div>
       </div>
@@ -241,8 +236,6 @@ export default {
         console.log('첨부 파일 삭제 실패', error);
       }
     },
-
-
 
     async submitForm() {
       await this.submitImages();
