@@ -6,10 +6,8 @@
     <TheBanner :title="'프로필'" />
     <br />
     <div class="top-button-container">
-      <!-- <button>
-        <router-link :to=myProfilePath>내 프로필</router-link>
-      </button> -->
-      <button @click="navigateToMyprofile">내 프로필</button>
+      <button @click="movePage('/profile/myprofile')">내 프로필</button>
+      |
       <button @click="navigateToTeacherProfile">강사 프로필</button>
     </div>
     <br />
@@ -26,37 +24,30 @@ export default {
     NavBar,
     TheBanner,
   },
-  // computed: {
-  //   myProfilePath() {
-  //     return "/profile/myprofile";
-  //   },
-  // },
   methods: {
     navigateToTeacherProfile() {
-      const userType = this.$store.state.common.userType;     
+      const userType = this.$store.state.common.userType;
       const teacherId = JSON.parse(localStorage.getItem("vuex")).common
         .teacherId;
       if (userType === 0) {
         this.$router.push("/profile/teacherprofileprompt");
-        
       } else if (userType === 1) {
-        this.$router.push(`/profile/teacherprofile/${teacherId}`);     
-       
+        this.$router.push(`/profile/teacherprofile/${teacherId}`);
       }
     },
-    navigateToMyprofile(){
-      this.$router.push(`/profile/myprofile`);
-    }
+    movePage(path) {
+      this.$$router.push(path);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.top-button-container{
+.top-button-container {
   width: 800px;
   margin: 0 auto;
 }
-button{
+button {
   margin-left: 10px;
 }
 </style>

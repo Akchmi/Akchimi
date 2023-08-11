@@ -8,13 +8,17 @@
             <p><input type="text" placeholder="아이디" v-model="loginid" /></p>
           </div>
           <div>
-            <p><input type="password" placeholder="비밀번호" v-model="password" /></p>
+            <p>
+              <input
+                type="password"
+                placeholder="비밀번호"
+                v-model="password"
+              />
+            </p>
           </div>
           <div>
             <button @click="loginclick">로그인</button>
-            <button>
-              <router-link to="/login/signup">회원가입</router-link>
-            </button>
+            <button @click="movePage('/login/signup')">회원가입</button>
           </div>
           <div>
             <button @click="showIdFinder">아이디 찾기</button>
@@ -33,12 +37,18 @@
               <input type="text" placeholder="이름" v-model="name" />
             </p>
           </div>
-            <p>가입한 이메일을 알려주세요.</p>
-            <p>
-              <input type="text" placeholder="이메일" v-model="registered_email" />
-            </p>
+          <p>가입한 이메일을 알려주세요.</p>
+          <p>
+            <input
+              type="text"
+              placeholder="이메일"
+              v-model="registered_email"
+            />
+          </p>
           <div>
-               <button @click="findUserId" :disabled="isLoading">아이디 찾기</button>
+            <button @click="findUserId" :disabled="isLoading">
+              아이디 찾기
+            </button>
           </div>
         </div>
       </div>
@@ -56,11 +66,17 @@
           <div>
             <p>가입한 이메일을 알려주세요.</p>
             <p>
-              <input type="text" placeholder="이메일" v-model="registered_email" />
+              <input
+                type="text"
+                placeholder="이메일"
+                v-model="registered_email"
+              />
             </p>
           </div>
-          <div>        
-            <button @click="findPassword" :disabled="isLoading">비밀번호 찾기</button>
+          <div>
+            <button @click="findPassword" :disabled="isLoading">
+              비밀번호 찾기
+            </button>
           </div>
         </div>
       </div>
@@ -70,9 +86,8 @@
 
 <script>
 // import axios from '@/api/axios.js';
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 // import { mapState } from 'vuex';
-
 
 export default {
   data() {
@@ -83,27 +98,28 @@ export default {
       registered_email: "",
       showmode: "login",
       name: "",
-      isLoading : false
+      isLoading: false,
     };
   },
-  computed: {
-
-  },
+  computed: {},
 
   methods: {
-    ...mapActions(['login', 'findId', 'findPw']),
+    ...mapActions(["login", "findId", "findPw"]),
     async loginclick() {
       try {
         await this.login({
           id: this.loginid,
           password: this.password,
         });
-        this.$router.push('/');
-        console.log(1)     
+        this.$router.push("/");
+        console.log(1);
       } catch (error) {
         console.error(error);
-        this.$router.push('/login/signin');
+        this.$router.push("/login/signin");
       }
+    },
+    movePage(path) {
+      this.$router.push(path);
     },
     showIdFinder() {
       this.showmode = "id";
@@ -116,12 +132,12 @@ export default {
           email: this.registered_email,
         });
         alert(`당신의 이메일로 메일을 전송했습니다.`);
-        this.$router.push('/login/signin');
+        this.$router.push("/login/signin");
       } catch (error) {
         console.error(error);
-        alert(`정보가 잘못 되었습니다.`)
+        alert(`정보가 잘못 되었습니다.`);
         return;
-      }finally {
+      } finally {
         this.isLoading = false;
       }
     },
@@ -131,17 +147,17 @@ export default {
     async findPassword() {
       this.isLoading = true;
       try {
-        await this.findPw ({
+        await this.findPw({
           id: this.registered_id,
           email: this.registered_email,
         });
-        alert('임시 비밀번호를 발급했습니다. 이메일을 확인하세요.');
-        this.$router.push('login/singin');
+        alert("임시 비밀번호를 발급했습니다. 이메일을 확인하세요.");
+        this.$router.push("login/singin");
       } catch (error) {
         console.error(error);
-        alert(`정보가 잘못 되었습니다.`)
-        return
-      }finally {
+        alert(`정보가 잘못 되었습니다.`);
+        return;
+      } finally {
         this.isLoading = false;
       }
     },

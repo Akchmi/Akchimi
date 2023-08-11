@@ -7,7 +7,7 @@
             :src="userInfo.userProfileImage"
             alt="Teacher profile picture"
             class="teacher-image"
-          />     
+          />
         </div>
         <div class="info-container">
           <div class="name-container">
@@ -33,10 +33,13 @@
                 </select>
                 <br />
                 선택된 악기:
-               <div v-for="(instrument, index) in selectedInstruments" :key="index">
-                {{ instrument }}
-                <button @click="removeSelectedInstrument(index)">제거</button>
-              </div>
+                <div
+                  v-for="(instrument, index) in selectedInstruments"
+                  :key="index"
+                >
+                  {{ instrument }}
+                  <button @click="removeSelectedInstrument(index)">제거</button>
+                </div>
                 <!-- <div
                   v-for="(instrument, index) in selectedInstruments"
                   :key="index"
@@ -107,20 +110,24 @@
         </div>
       </div>
       <div class="attach-file">
-          <h3>파일 첨부</h3>
-          <div v-for="(image, index) in attachedFiles" :key="index" class="image-container">
-            <img :src="image" alt="Attached file" class="attach-image" />             
-            <button @click="removeAttachedFile(index)">삭제</button>
-          </div>
-          <input
-            type="file"
-            multiple
-            ref="fileUploadInput"
-            @change="handleFileUpload"
-            style="display: none"
-          />
-          <button @click="triggerFileUpload">첨부 파일 추가</button>
+        <h3>파일 첨부</h3>
+        <div
+          v-for="(image, index) in attachedFiles"
+          :key="index"
+          class="image-container"
+        >
+          <img :src="image.preview" alt="Attached file" class="attach-image" />
+          <button @click="removeAttachedFile(index)">삭제</button>
         </div>
+        <input
+          type="file"
+          multiple
+          ref="fileUploadInput"
+          @change="handleFileUpload"
+          style="display: none"
+        />
+        <button @click="triggerFileUpload">첨부 파일 추가</button>
+      </div>
       <div class="save-button">
         <!-- <button @click="submitForm">저장</button> -->
         <button @click="submitForm">강사 등록하기</button>
@@ -133,8 +140,6 @@
 import { mapActions } from "vuex";
 import { apiGetUserInfo } from "@/api/profiles.js";
 import axios from "@/api/imageAxios.js";
-
-
 
 export default {
   props: {
@@ -172,7 +177,6 @@ export default {
         .map((day) => (this.days[day] ? "1" : "0"))
         .join("");
     },
-
   },
 
   methods: {
@@ -182,38 +186,23 @@ export default {
     triggerFileUpload() {
       this.$refs.fileUploadInput.click();
     },
-     handleFileUpload() {
+    handleFileUpload() {
       const selectedFiles = this.$refs.fileUploadInput.files;
 
       for (let i = 0; i < selectedFiles.length; i++) {
         const fileReader = new FileReader();
 
-        fileReader.onload = (e) => {        
+        fileReader.onload = (e) => {
           this.attachedFiles.push({
-            preview : e.target.result,
-            file: selectedFiles[i]
-          });      
+            preview: e.target.result,
+            file: selectedFiles[i],
+          });
         };
-        
+
         fileReader.readAsDataURL(selectedFiles[i]);
       }
-    },    
-    async submitImages() {
-      let formData = new FormData();
-
-    //  for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
-    //    formData.append("image", this.$refs.fileUploadInput.files[i]);
-    //  }
-      this.attachedFiles.forEach((item) => {
-        formData.append("image", item.file);
-      });  
-
-      try {
-        await axios.post(`/teachers/${this.teacherId}/images`, formData);
-      } catch (error) {
-        console.log(error);
-      }
     },
+  
     async getUserInfo() {
       try {
         const data = await apiGetUserInfo(this.id);
@@ -228,26 +217,45 @@ export default {
     ...mapActions(["postTeacherProfileCreate", "updateUserType"]),
 
     async submitForm() {
-      await this.submitImages();
-      const data = {       
+      const data = {
         career: this.career,
         cost: this.cost,
         introduce: this.description,
         startTime: this.startTime,
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
-        instruments: [...this.selectedInstruments], 
-        teacherId : this.teacherId    
-      };      
-      this.postTeacherProfileCreate(data)            
-        .then(response => {    
-          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
-          this.updateUserType(1)
-          this.$router.push(`/profile/teacherprofile/${teacherId}`);         
-          console.log('우왁', response)
-        });
+        instruments: [...this.selectedInstruments],
+        teacherId: this.teacherId,
+      };
 
+      await this.postTeacherProfileCreate(data).then(() => {
+
+        const teacherId = JSON.parse(localStorage.getItem("vuex")).common
+          .teacherId;
+        this.updateUserType(1);
+        this.$store.commit('updateTeacherProfile');
+        this.$router.push(`/profile/teacherprofile/${teacherId}`);
+        this.submitImages(teacherId);
+      });
     },
+
+    async submitImages(teacherId) {
+      let formData = new FormData();
+
+      //  for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
+      //    formData.append("image", this.$refs.fileUploadInput.files[i]);
+      //  }
+      this.attachedFiles.forEach((item) => {
+        formData.append("image", item.file);
+      });
+
+      try {
+        await axios.post(`/teachers/${teacherId}/images`, formData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     convertDaysToBitMask() {
       let index = 0,
         bitMaskedDays = 0;

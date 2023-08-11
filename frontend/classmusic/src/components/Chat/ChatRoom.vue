@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div>chatview</div>
     <div class="chat-room" ref="chatroom">
       <!-- 채팅 목록 -->
       <TheChat

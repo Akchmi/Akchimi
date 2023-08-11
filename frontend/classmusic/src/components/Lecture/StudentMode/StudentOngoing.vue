@@ -8,14 +8,14 @@
             class="buttonLecture lectureSelectButton"
             @click="$router.push(`/lecture/studentongoing`)"
           >
-            수업
+            배우기
           </button>
 
           <button
             class="lectureSelectButton"
             @click="$router.push(`/lecture/teacherongoing`)"
           >
-            강의
+            가르치기
           </button>
         </div>
         <div>

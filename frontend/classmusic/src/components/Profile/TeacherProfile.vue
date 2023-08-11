@@ -54,28 +54,22 @@
               class="attach-image"
             />
           </div>
-          <input
-            type="file"
-            multiple
-            ref="fileUploadInput"
-            @change="handleFileUpload"
-            style="display: none"
-          />
+  
          
         </div>
         <div class="button-group">
-          <button class="teacher-bottom-button" v-if="Number(localteacherId) === Number(teacherId)">
-            <router-link to="/profile/TeacherProfileUpdate" class="button"
-              >강사 정보 수정</router-link
-            >
+          <button 
+            class="teacher-bottom-button" 
+            v-if="Number(localteacherId) === Number(teacherId)"
+            @click="goToTeacherProfileUpdate"
+          >
+            강사 정보 수정
           </button>
-          <div v-else>
-            <button class="teacher-bottom-button" @click="likeTeacherUpdate">강사 즐겨찾기</button>
-            <button class="teacher-bottom-button" >
-              <router-link to="/lecture/studentwaiting" class="button"
-                >강의 신청</router-link
-              >
-            </button>
+          <div v-else>            
+            <button v-if="likeId !==0" class="teacher-bottom-button" @click="likeTeacherUpdate">강사 즐겨찾기 </button>
+            <button v-else class="teacher-bottom-button" @click="deleteLikeTeacher(likeId)">즐겨찾기 취소</button>
+            <button class="teacher-bottom-button" @click="goToLectureRequest">강의 신청</button>       
+           
           </div>
         </div>
       </div>
@@ -104,10 +98,10 @@
 
 <script>
 import TeacherReview from "./TeacherReview.vue";
-import { apiDetailTeacherInfo, apiGetReview } from "@/api/profiles.js";
+import { apiDetailTeacherInfo, apiGetReview, apiDeleteLIkeTeacher } from "@/api/profiles.js";
 import { mapActions } from "vuex";
-import { useRoute } from "vue-router";
-import axios from "@/api/imageAxios.js";
+// import { useRoute } from "vue-router";
+// import axios from "@/api/imageAxios.js";
 
 export default {
   components: {
@@ -133,13 +127,15 @@ export default {
       id : JSON.parse(localStorage.getItem("vuex")).common.id,
       teacherId : '',
       localteacherId: JSON.parse(localStorage.getItem("vuex")).common.teacherId,
+      likeId: '',
     };
   },
+
   async created() {
-    const route = useRoute();
-    const teacherId = route.params.id;
+    // const route = useRoute();
+    const teacherId = this.$route.params.id;
     const res = await apiDetailTeacherInfo(teacherId);
-    this.teacherId = teacherId;
+    this.teacherId = teacherId;   
     this.name = res.name;
     this.gender = res.gender;
     this.userProfileImage = res.userProfileImage;
@@ -154,6 +150,8 @@ export default {
     this.attachedFiles = res.images;
     this.avgRating = res.avgRating;
     this.contactCnt = res.contactCnt;
+    this.likeId = res.likeId;
+    console.log('크라아',this.likeId)
     this.getReview();
    
   },
@@ -163,31 +161,29 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["postLikeTeacherUpdate"]),
-    triggerFileUpload() {
-      this.$refs.fileUploadInput.click();
+    ...mapActions(["postLikeTeacherUpdate"]),     
+
+    goToTeacherProfileUpdate() {
+        this.$router.push("/profile/TeacherProfileUpdate");
     },
-    async handleFileUpload() {
-      const selectedFiles = this.$refs.fileUploadInput.files;
 
-      let formData = new FormData();
-      for (let i = 0; i < selectedFiles.length; i++) {
-        formData.append("image", selectedFiles[i]);
-
-        try {
-          let response = await axios.post(
-            `/teachers/${this.teacherId}/images`,
-            formData
-          );
-
-          if (response.data && response.data.image) {
-            this.attachedFiles.push(response.data.image);      
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
+    goToLectureRequest() {
+        this.$router.push("/lecture/studentwaiting");
     },
+
+    deleteLikeTeacher(likeId) {
+      const data = {
+        id: this.id,
+        likeId: likeId
+      }      
+      apiDeleteLIkeTeacher(data)
+      .then(() => {   
+          this.liketeachers = this.liketeachers.filter(teacher => teacher.likeId !== likeId);
+      }).catch(error => {
+        console.log(error);
+      });
+    },
+
 
     parseDays(classDay) {
       const days = ["월", "화", "수", "목", "금", "토", "일"];
@@ -203,11 +199,12 @@ export default {
     likeTeacherUpdate() {
       const data = {
         id: JSON.parse(localStorage.getItem("vuex")).common.id,
-        teacherId: this.$route.params.id,
-       
+        teacherId: this.$route.params.id,       
       };
       this.postLikeTeacherUpdate(data)
-        .then(() => {       
+        .then(() => { 
+          alert("즐겨찾기에 성공하였습니다");
+          this.$router.push(`/profile/myprofile`);
         })
         .catch((error) => {
           console.log("즐찾실패", error);

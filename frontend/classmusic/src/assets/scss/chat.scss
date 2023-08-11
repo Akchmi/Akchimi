@@ -50,12 +50,18 @@
 }
 .chat-content {
   width: 90%;
-  height: 40px;
+  // height: 40px;
   border: none;
   outline: none;
   // border-bottom: 1px solid black;
   font-family: "mainfont";
   font-size: 20px;
+  border-radius: 1.15rem;
+  line-height: 1.25;
+  max-width: 280px;
+  padding: 0.5rem 0.875rem;
+  position: relative;
+  word-wrap: break-word;
 }
 .chat-content :focus {
   border: none;
@@ -66,33 +72,66 @@
   font-size: 15px;
 }
 
-/* 상대방 */
 .chat-room .left {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.chat-room .right {
+  align-self: flex-end;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* 채팅내용 */
+.chat-room .left .chat-content {
   align-items: flex-start;
   background-color: #edd9b7;
   color: #ffffff;
   width: fit-content;
   border-radius: 1.15rem;
   line-height: 1.25;
-  max-width: 75%;
+  // max-width: 75%;
   padding: 0.5rem 0.875rem;
   position: relative;
   word-wrap: break-word;
-  margin-bottom: 10px;
+  margin-left: 10px;
 }
-.chat-room .right {
+.chat-room .right .chat-content {
   align-self: flex-end;
   background-color: #edd9b7;
+  width: fit-content;
   color: #fff;
   border-radius: 1.15rem;
   line-height: 1.25;
-  max-width: 100%;
+  // max-width: 75%;
   padding: 0.5rem 0.875rem;
   position: relative;
   word-wrap: break-word;
-  margin-bottom: 10px;
+  margin-right: 10px;
 }
-.chat-room .left::after {
+
+// 채팅자 이미지
+.chat-room .left .chat-img {
+  width: 60px;
+  height: 60px;
+  align-self: flex-end;
+}
+.chat-room .right .chat-img {
+  width: 60px;
+  height: 60px;
+  align-self: flex-end;
+}
+
+//  채팅 시간
+.chat-room .left .chat-sendtime {
+  font-size: small;
+}
+.chat-room .right .chat-sendtime {
+  font-size: small;
+  align-self: flex-end;
+}
+
+.chat-room .left .chat-content::after {
   background-color: #fff;
   border-bottom-right-radius: 0.5rem;
   left: 20px;
@@ -103,7 +142,7 @@
   height: 1rem;
   position: absolute;
 }
-.chat-room .left::before {
+.chat-room .left .chat-content::before {
   border-bottom-right-radius: 0.8rem 0.7rem;
   border-left: 1rem solid #edd9b7;
   left: -0.35rem;
@@ -114,7 +153,7 @@
   position: absolute;
 }
 /* 나 */
-.chat-room .right::after {
+.chat-room .right .chat-content::after {
   background-color: #fff;
   border-bottom-left-radius: 0.5rem;
   right: -40px;
@@ -125,7 +164,7 @@
   height: 1rem;
   position: absolute;
 }
-.chat-room .right::before {
+.chat-room .right .chat-content::before {
   border-bottom-left-radius: 0.8rem 0.7rem;
   border-right: 1rem solid #edd9b7;
   right: -0.35rem;
