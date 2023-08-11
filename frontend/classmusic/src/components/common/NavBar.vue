@@ -6,7 +6,7 @@
           <img
             class="mainLogo"
             src="@/assets/images/home/mainLogo2.png"
-            @click="$router.push('/')"
+            @click="$router.push('/main')"
             alt=""
           />
         </div>
@@ -42,7 +42,7 @@ export default {
   methods: {
     logOut() {
       this.$store.commit("LOGOUT");
-      this.$router.push("/");
+      this.$router.push("/main");
     },
 
     goLecture() {

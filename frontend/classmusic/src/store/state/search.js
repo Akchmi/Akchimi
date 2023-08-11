@@ -3,7 +3,7 @@ export default {
 
   searchParams: {
     startCareer: 0,
-    endCareer: 90,
+    endCareer: 100,
     startCost: 0,
     endCost: 100,
     startTime: 0,

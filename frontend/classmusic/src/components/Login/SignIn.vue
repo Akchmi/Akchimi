@@ -5,7 +5,14 @@
         <h1>로그인</h1>
         <div class="login__content">
           <div>
-            <p><input type="text" placeholder="아이디" v-model="loginid" /></p>
+            <p>
+              <input
+                type="text"
+                placeholder="아이디"
+                v-model="loginid"
+                @keyup.enter="loginclick"
+              />
+            </p>
           </div>
           <div>
             <p>
@@ -13,6 +20,7 @@
                 type="password"
                 placeholder="비밀번호"
                 v-model="password"
+                @keyup.enter="loginclick"
               />
             </p>
           </div>
@@ -111,7 +119,7 @@ export default {
           id: this.loginid,
           password: this.password,
         });
-        this.$router.push("/");
+        this.$router.push("/main");
         console.log(1);
       } catch (error) {
         console.error(error);

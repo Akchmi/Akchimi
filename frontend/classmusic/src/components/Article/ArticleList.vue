@@ -67,6 +67,7 @@
           style="margin: 10px"
           type="text"
           v-model="searchQuery"
+          @keyup.enter="runSearch"
         />
 
         <img

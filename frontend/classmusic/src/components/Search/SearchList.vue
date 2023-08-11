@@ -20,6 +20,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
 import TeacherCard from "./TeacherCard.vue";
 
 export default {

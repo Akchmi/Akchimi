@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useStore } from "vuex";
 import HomeView from "../views/HomeView.vue";
 import NoticeView from "../views/NoticeView.vue";
 import ArticleView from "../views/ArticleView.vue";
@@ -39,7 +40,7 @@ import ErrorPage from "../components/common/ErrorPage.vue";
 
 const routes = [
   {
-    path: "/",
+    path: "/main",
     name: "home",
     component: HomeView,
   },
@@ -138,7 +139,35 @@ const routes = [
     path: "/search",
     name: "search",
     component: SearchView,
+    beforeEnter(to, from, next) {
+      console.log("이전 페이지는", from.path);
+      console.log("다음 페이지는", to.path);
+      if (to.path == "/search" && from.path == "/") {
+        console.log("새로고침");
+        const store = useStore();
+        const params = {
+          startCareer: 0,
+          endCareer: 100,
+          startCost: 0,
+          endCost: 100,
+          startTime: 0,
+          endTime: 23,
+          classDay: 1111111,
+          instrument: "악기종류",
+          keyword: "",
+          orderBy: "최신순",
+          page: 1,
+          gender: "",
+        };
+        store.dispatch("getTeacherList", params);
+        next();
+      } else {
+        console.log("새로고침아님");
+        next();
+      }
+    },
   },
+
   {
     path: "/profile",
     name: "profile",

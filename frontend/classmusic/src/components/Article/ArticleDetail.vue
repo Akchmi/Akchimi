@@ -12,8 +12,16 @@
             {{ articleDetail.title }}
           </p>
           <div class="detailTitleBottom">
-            <p>작성자 : {{ articleDetail.name }}</p>
-            <p>조회수 : {{ articleDetail.hit }}</p>
+            <div style="display: flex; align-items: center">
+              <img
+                :src="articleDetail.userProfileImage"
+                class="articleDetailProfileimage"
+              />
+              <p style="margin-left: 10px">{{ articleDetail.name }}</p>
+            </div>
+            <div>
+              <p>조회수 : {{ articleDetail.hit }}</p>
+            </div>
           </div>
           <div
             v-if="articleDetail.userId === loginUser"
@@ -245,6 +253,7 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 0px 0px 10px 10px;
+  align-items: center;
 }
 
 .writerButton {
@@ -252,5 +261,11 @@ export default {
   border: solid #edd9b7 2px;
   color: #e6b96b;
   cursor: default;
+}
+
+.articleDetailProfileimage {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
 }
 </style>

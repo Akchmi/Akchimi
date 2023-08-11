@@ -44,6 +44,15 @@ export default {
     ...mapActions(["postNoticeCreate"]),
 
     postNotice() {
+      if (
+        this.title.split("\n").join("").length == 0 ||
+        this.title.split(" ").join("").length == 0 ||
+        this.content.split("\n").join("").length == 0 ||
+        this.content.split(" ").join("").length == 0
+      ) {
+        alert("모든 내용을 입력해주세요!");
+        return;
+      }
       this.postNoticeCreate({
         title: this.title,
         content: this.content,
