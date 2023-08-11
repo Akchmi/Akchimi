@@ -33,13 +33,15 @@ export default {
   // },
   methods: {
     navigateToTeacherProfile() {
-      const userType = this.$store.state.common.userType;
+      const userType = this.$store.state.common.userType;     
       const teacherId = JSON.parse(localStorage.getItem("vuex")).common
         .teacherId;
       if (userType === 0) {
         this.$router.push("/profile/teacherprofileprompt");
+        
       } else if (userType === 1) {
-        this.$router.push(`/profile/teacherprofile/${teacherId}`);
+        this.$router.push(`/profile/teacherprofile/${teacherId}`);     
+       
       }
     },
     navigateToMyprofile(){

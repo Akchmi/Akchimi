@@ -110,11 +110,10 @@ async function apiDetailTeacherInfo(teacherId) {
 }
 
 async function apiTeacherProfileCreate(context, data) {
-  console.log("메피아크: ", data);
   try {
     const response = await axios.post(`/teachers`, data);
     context.commit("SAVE_TEACHERID", response.data);
-    // return response.data;
+
   } catch (error) {
     console.log("apiTeacherProfileCreate 중 에러 발생!!!", error);
     return null;
@@ -155,7 +154,7 @@ async function apiGetReview(teacherId) {
 
 async function apiDeleteAttachedImage(teacherId, data) {
   try {
-    await axios.post(`/teachers/${teacherId}/delete`, data);
+    await axios.post(`/teachers/${teacherId}/images/delete`, data);
   } catch (error) {
     console.log("첨부파일삭제실패", error);
     return error;

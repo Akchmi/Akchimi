@@ -108,12 +108,12 @@
           <h3>파일 첨부</h3>
           <div v-for="(image, index) in attachedFiles" :key="index" class="image-container">
             <img :src="image" alt="Attached file" class="attach-image" />   
-            {{ attachedFiles }}     
+            
             <button @click="removeAttachedFile(index)">삭제</button>
           </div>
           <div v-for="(image, index) in newAttachedFiles" :key="index" class="image-container">
             <img :src="image.preview" alt="Attached file" class="attach-image" />   
-            {{ newAttachedFiles }}     
+        
             <button @click="removeNewAttachedFile(index)">삭제</button>
           </div>
           <input
@@ -134,7 +134,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import { apiDetailTeacherInfo } from "@/api/profiles.js";
+import { apiDetailTeacherInfo, apiDeleteAttachedImage } from "@/api/profiles.js";
 import axios from "@/api/imageAxios.js";
 
 
@@ -169,7 +169,8 @@ export default {
       id: JSON.parse(localStorage.getItem("vuex")).common.id,
       userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
       teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
-      newAttachedFiles:[],
+      newAttachedFiles:[],      
+      deleteAttachedFiles:[],
     };
   },
   computed: {
@@ -182,16 +183,16 @@ export default {
 
   methods: {
     removeAttachedFile(index) {
-    this.attachedFiles.splice(index, 1);
-  },
+      this.deleteAttachedFiles.push(this.attachedFiles[index]);
+      this.attachedFiles.splice(index, 1);
+    },
     removeNewAttachedFile(index) {
-    this.newAttachedFiles.splice(index, 1);
-  },
-
+      this.newAttachedFiles.splice(index, 1);
+    },
     triggerFileUpload() {
       this.$refs.fileUploadInput.click();  
     },
-     handleFileUpload() {
+    handleFileUpload() {
       const selectedFiles = this.$refs.fileUploadInput.files;
 
       for (let i = 0; i < selectedFiles.length; i++) {
@@ -209,7 +210,7 @@ export default {
     },    
 
     removeInstrument(index) {
-    this.selectedInstruments.splice(index, 1);
+      this.selectedInstruments.splice(index, 1);
     },
 
     ...mapActions(['putTeacherProfileUpdate', ]),
@@ -226,25 +227,19 @@ export default {
      });    
     
       try {
-        await axios.post(`/teachers/${this.teacherId}/images`,formData);
-        console.log("폼데", formData)
+        await axios.post(`/teachers/${this.teacherId}/images`,formData);   
       } catch (error) {
         console.log("폼폼", error);
       }   
     },
 
     async submitAttachedFilesToDelete() {
-      const data = {
-        images : this.attachedFiles,
-      }
-      console.log('ㅎㄷ', data)
       try {
-        await axios.post(`/teachers/${this.teacherId}/images/delete`, data);
-        
-      } catch(error) {
-        console.log('폼삭', error)
+        await apiDeleteAttachedImage(this.teacherId, { images: this.deleteAttachedFiles });
+        console.log('첨부 파일 삭제 성공');
+      } catch (error) {
+        console.log('첨부 파일 삭제 실패', error);
       }
-
     },
 
 
