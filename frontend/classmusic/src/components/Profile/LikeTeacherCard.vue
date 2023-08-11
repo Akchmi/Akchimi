@@ -33,6 +33,7 @@
         <button class="teacher-card__button" @click="deleteLikeTeacher">
           즐겨찾기 취소
         </button>
+        
         <button
           class="teacher-card__button"
           @click="goToProfile(teacher.teacherId)"
@@ -51,14 +52,15 @@ export default {
     teacher: Object,
   },
   methods: {
-    goToProfile(teacherId) {
+    goToProfile(teacherId) {  
       this.$router.push(`/profile/teacherprofile/${teacherId}`);
     },
     goToLecture() {
       this.$router.push("/lecture/studentwaiting");
     },
     deleteLikeTeacher() {
-      this.$emit("deleteLikeTeacher", this.teacher.teacherId);
+      this.$emit("deleteLikeTeacher", this.teacher.likeId);
+      
     },
   },
 };
