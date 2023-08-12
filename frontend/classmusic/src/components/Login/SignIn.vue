@@ -3,7 +3,7 @@
 		<div v-if="showmode == 'login'">
 			<div class="login__container">
 				<h1>로그인</h1>
-				<div class="login__content">
+				<div class="login__form">
 					<input
 						class="login__form__input"
 						type="text"
@@ -18,11 +18,11 @@
 						v-model="password"
 						@keyup.enter="loginclick"
 					/>
-					<div>
-						<button @click="loginclick">로그인</button>
+					<div class="login__form__buttons">
 						<button @click="movePage('/login/signup')">회원가입</button>
+						<button @click="loginclick">로그인</button>
 					</div>
-					<div>
+					<div class="login__form__buttons">
 						<button @click="showIdFinder">아이디 찾기</button>
 						<button @click="showPwFinder">비밀번호 찾기</button>
 					</div>
@@ -32,18 +32,22 @@
 		<div v-if="showmode == 'id'">
 			<div class="login__container">
 				<h1>아이디 찾기</h1>
-				<div class="login__content">
-					<div>
-						<p>이름을 알려주세요.</p>
-						<p>
-							<input type="text" placeholder="이름" v-model="name" />
-						</p>
+				<div class="login__form">
+					<div class="login__form__label">
+						<label for="findId-name">이름을 알려주세요.</label>
 					</div>
-					<p>가입한 이메일을 알려주세요.</p>
-					<p>
-						<input type="text" placeholder="이메일" v-model="registered_email" />
-					</p>
-					<div>
+					<input id="findId-name" type="text" placeholder="이름" v-model="name" />
+					<div class="login__form__label">
+						<label for="findId-email">가입한 이메일을 알려주세요.</label>
+					</div>
+					<input
+						id="findId-email"
+						type="text"
+						placeholder="이메일"
+						v-model="registered_email"
+					/>
+					<div class="login__form__buttons">
+						<button @click="showmode = 'login'">취소</button>
 						<button @click="findUserId" :disabled="isLoading">아이디 찾기</button>
 					</div>
 				</div>
