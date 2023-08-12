@@ -1,11 +1,9 @@
 <template>
 	<div class="container">
 		<div class="notice__list">
-			<div>
+			<div class="notiec__list__buttons">
 				<!-- 공지사항 리스트 최상단 -->
-				<button v-if="userType == 2" @click="goNoticeCreate">
-					글 작성
-				</button>
+				<button v-if="userType == 2" @click="goNoticeCreate">글 작성</button>
 			</div>
 
 			<div>
@@ -24,9 +22,7 @@
 						<tr v-for="notice in noticeList" :key="notice.id">
 							<td>{{ notice.noticeId }}</td>
 							<td
-								@click="
-									$router.push(`/notice/${notice.noticeId}`)
-								"
+								@click="$router.push(`/notice/${notice.noticeId}`)"
 								style="cursor: pointer"
 							>
 								{{ notice.title }}
@@ -40,15 +36,8 @@
 			<!-- 공지사항 리스트 검색바-->
 			<div class="noticeSearchBar">
 				<div class="noticeSearchSelect">
-					<select
-						class="noticeSearchSelectBar"
-						v-model="selectedSearchCategory"
-					>
-						<option
-							v-for="(item, idx) in searchCategory"
-							:key="idx"
-							:value="item"
-						>
+					<select class="noticeSearchSelectBar" v-model="selectedSearchCategory">
+						<option v-for="(item, idx) in searchCategory" :key="idx" :value="item">
 							{{ item }}
 						</option>
 					</select>
@@ -173,4 +162,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/notice.scss";
+
+.notiec__list__buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: right;
+	align-items: center;
+	margin-bottom: 10px;
+}
 </style>

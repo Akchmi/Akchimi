@@ -4,17 +4,11 @@
 			<div class="articleTableBanner">
 				<!-- 자유게시판 정렬-->
 				<select v-model="selectedSorttype" @change="sortTypeChange">
-					<option
-						v-for="(item, idx) in sortType"
-						:key="idx"
-						:value="item"
-					>
+					<option v-for="(item, idx) in sortType" :key="idx" :value="item">
 						{{ item }}
 					</option>
 				</select>
-				<button id="articleCreateButton" @click="goArticlecreate">
-					글 작성
-				</button>
+				<button id="articleCreateButton" @click="goArticlecreate">글 작성</button>
 			</div>
 			<div>
 				<!-- 자유게시판 게시물 리스트 -->
@@ -31,17 +25,10 @@
 						</thead>
 
 						<tbody>
-							<tr
-								v-for="article in articleList"
-								:key="article.id"
-							>
+							<tr v-for="article in articleList" :key="article.id">
 								<td>{{ article.articleId }}</td>
 								<td
-									@click="
-										$router.push(
-											`/article/${article.articleId}`
-										)
-									"
+									@click="$router.push(`/article/${article.articleId}`)"
 									style="cursor: pointer"
 								>
 									{{ article.title }}
@@ -60,15 +47,8 @@
 			<!-- 자유게시판 리스트 검색바 -->
 			<div class="articleSearchBar">
 				<div class="articleSearchSelect">
-					<select
-						class="articleSearchSelectBar"
-						v-model="selectedSearchCategory"
-					>
-						<option
-							v-for="(item, idx) in searchCategory"
-							:key="idx"
-							:value="item"
-						>
+					<select class="articleSearchSelectBar" v-model="selectedSearchCategory">
+						<option v-for="(item, idx) in searchCategory" :key="idx" :value="item">
 							{{ item }}
 						</option>
 					</select>
@@ -219,6 +199,6 @@ export default {
 
 #articleCreateButton {
 	padding: 5px 10px;
-	font-size: 16px;
+	// font-size: 16px;
 }
 </style>
