@@ -26,29 +26,74 @@
 .signup__container {
   box-sizing: border-box;
   position: relative;
+  width: 400px;
+  height: 460px;
+  border: 1px solid #edd9b7;
+  border-radius: 10px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  width: 400px;
-  height: 600px;
-  border: 1px solid black;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-  padding: 20px;
   justify-content: center;
   align-items: center;
 }
 
-input {
-  border: 1px solid black;
-  border-radius: 8px;
-  width: 200px;
-  height: 30px;
-  margin-bottom: 10px;
+.signup__form{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin-top: 40px;
 }
 
-button {
-  margin: 10px;
+// input {
+//   border: 1px solid #edd9b7;
+//   border-radius: 10px;
+//   padding-left: 10px;
+//   outline: none;
+//   width: 200px;
+//   height: 30px;
+//   margin-bottom: 10px;
+// }
+
+.signup__form__input{
+  border: 1px solid #edd9b7;
+  border-radius: 10px;
+  padding-left: 10px;
+  outline: none;
+  width: 200px;
+  height: 30px;
+  margin: 7px 20px;
+}
+
+// 회원가입 성별 라디오 버튼
+.signup__form__radios{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin-left: 10px;
+  width: 70%;
+
+  div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.signup__form__radio{
+  width: 20px;
+  margin-right: 10px;
+}
+
+.signup__form__buttons{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .pwCheck {
