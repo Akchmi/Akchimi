@@ -27,8 +27,7 @@ export default {
 	methods: {
 		navigateToTeacherProfile() {
 			const userType = this.$store.state.common.userType;
-			const teacherId = JSON.parse(localStorage.getItem("vuex")).common
-				.teacherId;
+			const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
 			if (userType === 0) {
 				this.$router.push("/profile/teacherprofileprompt");
 			} else if (userType === 1) {
@@ -46,8 +45,10 @@ export default {
 .top-button-container {
 	width: 800px;
 	margin: 0 auto;
-}
-button {
-	margin-left: 10px;
+
+	button {
+		width: 90px;
+		margin: 0px 5px;
+	}
 }
 </style>
