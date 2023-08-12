@@ -183,6 +183,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/templates/common.scss";
 @import "@/assets/scss/chat.scss";
 </style>

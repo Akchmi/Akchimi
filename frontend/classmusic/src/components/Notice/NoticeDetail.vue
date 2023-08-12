@@ -1,41 +1,51 @@
 <template>
-  <div class="container">
-    <div class="create__container">
-      <div class="create__content">
-        <div style="width: 90%">
-          <button class="detailButton" @click="$router.push('/notice/list')">
-            목록으로
-          </button>
-          <p style="margin: 10px; font-size: 28px">
-            {{ noticeDetail.title }}
-          </p>
-          <div class="detailTitleBottom">
-            <p>작성자 : 관리자</p>
-          </div>
-          <div
-            v-if="userType == 2"
-            style="display: flex; justify-content: right"
-          >
-            <button
-              style="margin-right: 10px"
-              @click="$router.push(`/notice/update/${noticeId}`)"
-            >
-              수정
-            </button>
-            <button @click="noticeDelete">삭제</button>
-          </div>
-          <hr />
-          <h3 style="margin: 10px; font-size: 24px; min-height: 300px">
-            {{ noticeDetail.content }}
-          </h3>
+	<div class="container">
+		<div class="create__container">
+			<div class="create__content">
+				<div style="width: 95%; padding: 10px">
+					<div class="notice-detail__header">
+						<h1>
+							{{ noticeDetail.title }}
+						</h1>
+						<span>작성자 : 관리자</span>
+					</div>
+					<hr />
+					<h3
+						style="
+							margin: 20px 5px;
+							min-height: 300px;
+							white-space: pre-line;
+						"
+					>
+						{{ noticeDetail.content }}
+					</h3>
 
-          <hr />
+					<hr />
+					<div class="notice-detail__buttons">
+						<button @click="$router.push('/notice/list')">
+							목록으로
+						</button>
+						<div
+							v-if="userType == 2"
+							style="display: flex; justify-content: right"
+						>
+							<button
+								style="margin-right: 10px"
+								@click="
+									$router.push(`/notice/update/${noticeId}`)
+								"
+							>
+								수정
+							</button>
+							<button @click="noticeDelete">삭제</button>
+						</div>
+					</div>
 
-          <h3>첨부파일</h3>
-        </div>
-      </div>
-    </div>
-  </div>
+					<!-- <h3>첨부파일</h3> -->
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -44,45 +54,49 @@ import { useStore, mapGetters, mapActions } from "vuex";
 import { useRoute } from "vue-router";
 
 export default {
-  data() {
-    return {};
-  },
-  computed: {
-    ...mapGetters({ noticeDetail: "getNoticeDetail" }),
-    ...mapGetters({ userType: "getUsertype" }),
-  },
-  methods: {
-    ...mapActions(["deleteNoticeDelete"]),
+	data() {
+		return {};
+	},
+	computed: {
+		...mapGetters({ noticeDetail: "getNoticeDetail" }),
+		...mapGetters({ userType: "getUsertype" }),
+	},
+	methods: {
+		...mapActions(["deleteNoticeDelete"]),
 
-    noticeDelete() {
-      this.deleteNoticeDelete(this.noticeId);
-    },
-  },
-  setup() {
-    const store = useStore();
-    const route = useRoute();
-    const noticeId = route.params.id;
+		noticeDelete() {
+			this.deleteNoticeDelete(this.noticeId);
+		},
+	},
+	setup() {
+		const store = useStore();
+		const route = useRoute();
+		const noticeId = route.params.id;
 
-    onMounted(() => {
-      store.dispatch("getNoticedetail", noticeId);
-    });
+		onMounted(() => {
+			store.dispatch("getNoticedetail", noticeId);
+		});
 
-    return { noticeId };
-  },
+		return { noticeId };
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/notice.scss";
 
-.detailButton {
-  font-size: 16px;
-  margin: 10px;
+.notice-detail__buttons {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
 }
 
-.detailTitleBottom {
-  display: flex;
-  justify-content: space-between;
-  padding: 0px 0px 10px 10px;
+.notice-detail__header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 15px;
 }
 </style>
