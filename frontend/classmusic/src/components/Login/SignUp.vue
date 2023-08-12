@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="signup__container">
-      <h1>회원가입</h1>
-      <form @submit.prevent="register">
+      <h1 style="margin-bottom: 50px">회원가입</h1>
+      <form @submit.prevent="register" style="padding-left: 20px">
         <input type="text" v-model="loginid" placeholder="아이디" />
         <button @click.prevent="checkId">아이디 중복확인</button>
         <input type="password" v-model="password" placeholder="비밀번호" />
@@ -20,7 +20,9 @@
           <option value="2">여자</option>
         </select>
         <br />
-        <button type="submit">회원가입</button>
+        <div style="display: flex; justify-content: center; margin-top: 20px">
+          <button type="submit">회원가입</button>
+        </div>
       </form>
     </div>
   </div>
@@ -42,11 +44,13 @@ export default {
       email: "",
       gender: "",
       isIdChecked: false,
+      checkedId: "",
     };
   },
   methods: {
     ...mapActions(["setToken"]),
     async checkId() {
+      this.checkedId = this.loginid;
       try {
         const { data } = await apiCheckId(this.loginid);
         if (data) {
@@ -63,6 +67,10 @@ export default {
       }
     },
     async register() {
+      if (this.checkedId != this.loginid) {
+        alert("중복체크한 아이디와 일치하지 않습니다.");
+        return;
+      }
       if (
         !this.loginid ||
         !this.password ||

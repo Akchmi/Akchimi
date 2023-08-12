@@ -5,9 +5,6 @@ export default {
   ADD_TEACHER_LIST(state, data) {
     state.search.teacherList.push(...data);
   },
-  SET_LECTURE_LIST(state, data) {
-    state.search.teacherList = data;
-  },
 
   // searchParams
   SET_SEARCHPARAMS_START_CAREER(state, data) {

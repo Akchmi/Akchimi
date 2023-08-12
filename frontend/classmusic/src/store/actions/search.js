@@ -1,37 +1,24 @@
-import {
-  apiSearchTeachers,
-  apiPostMatchingCreate,
-  apiGetTeacherList,
-} from "@/api/search";
+import { apiSearchTeachers, apiPostMatchingCreate } from "@/api/search";
 
 export default {
   // 필요 기능
 
-  //강사 목록 조회(처음)
-  getTeacherList(context, data) {
-    apiGetTeacherList(context, data);
-  },
-
-  searchTeacher(context) {
-    apiGetTeacherList(context, context.state.search.searchParams);
-  },
-
   //강사 목록 조회(검색)
-  // searchTeacher({ commit, state }) {
-  //   console.log("searchTeacher actions called");
-  //   commit("SET_SEARCHPARAMS_PAGE", 1);
-  //   apiSearchTeachers(
-  //     state.search.searchParams,
-  //     ({ data }) => {
-  //       console.log("teachers : ", data);
-  //       commit("REPLACE_TEACHER_LIST", data);
-  //       commit("INCREASE_SEARCHPARAMS_PAGE");
-  //     },
-  //     (error) => {
-  //       console.log(error);
-  //     }
-  //   );
-  // },
+  searchTeacher({ commit, state }) {
+    console.log("searchTeacher actions called");
+    commit("SET_SEARCHPARAMS_PAGE", 1);
+    apiSearchTeachers(
+      state.search.searchParams,
+      ({ data }) => {
+        console.log("teachers : ", data);
+        commit("REPLACE_TEACHER_LIST", data);
+        commit("INCREASE_SEARCHPARAMS_PAGE");
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  },
 
   searchMoreTeacher({ commit, state }) {
     console.log("searchMoreTeacher : ", state.search.searchParams);
