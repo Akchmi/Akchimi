@@ -56,20 +56,27 @@
 		<div v-if="showmode == 'pw'">
 			<div class="login__container">
 				<h1>비밀번호 찾기</h1>
-				<div class="login__content">
-					<div>
-						<p>가입한 아이디를 알려주세요.</p>
-						<p>
-							<input type="text" placeholder="아이디" v-model="registered_id" />
-						</p>
+				<div class="login__form">
+					<div class="login__form__label">
+						<label for="findPw-id">가입한 아이디를 알려주세요.</label>
 					</div>
-					<div>
-						<p>가입한 이메일을 알려주세요.</p>
-						<p>
-							<input type="text" placeholder="이메일" v-model="registered_email" />
-						</p>
+					<input
+						id="findPw-id"
+						type="text"
+						placeholder="아이디"
+						v-model="registered_id"
+					/>
+					<div class="login__form__label">
+						<label for="findPw-email">가입한 이메일을 알려주세요.</label>
 					</div>
-					<div>
+					<input
+						id="findPw-email"
+						type="text"
+						placeholder="이메일"
+						v-model="registered_email"
+					/>
+					<div class="login__form__buttons">
+						<button @click="showmode = 'login'">취소</button>
 						<button @click="findPassword" :disabled="isLoading">비밀번호 찾기</button>
 					</div>
 				</div>
