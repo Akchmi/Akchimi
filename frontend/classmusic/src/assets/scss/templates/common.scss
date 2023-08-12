@@ -6,7 +6,25 @@
 }
 
 h1{
+  font-size: 28px;
+}
+
+h2{
   font-size: 24px;
+}
+
+h3{
+  font-size: 20px;
+}
+
+input, textarea{
+  font-family: "mainfont";
+}
+
+hr{
+  background-color: #edd9b7;
+  height: 1px;
+  border: 0px;
 }
 
 button {
