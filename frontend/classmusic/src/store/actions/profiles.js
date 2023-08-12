@@ -4,7 +4,8 @@ import {
   apiLikeTeacherUpdate,
   apiChangePw,
   apiDeleteAttachedImage,
-  apiDeleteMyprofileImage
+  apiDeleteMyprofileImage,
+  apiDeleteTeacher,
 } from "@/api/profiles.js";
 
 export default {
@@ -29,14 +30,17 @@ export default {
     apiLikeTeacherUpdate(context, data);
   },
   putChangePw(context, data) {
-    console.log("비번변경", context, data)
-    apiChangePw(context, data)
+    console.log("비번변경", context, data);
+    apiChangePw(context, data);
   },
   deleteAttachedImage(context, data) {
-    console.log("첨사삭제", context, data)
-    apiDeleteAttachedImage(context,data)
+    console.log("첨사삭제", context, data);
+    apiDeleteAttachedImage(context, data);
   },
   deleteMyprofileImage(context, data) {
-    apiDeleteMyprofileImage(data)
-  }
+    apiDeleteMyprofileImage(data);
+  },
+  deleteTeacher(context, teacherId) {
+    apiDeleteTeacher(context, teacherId);
+  },
 };

@@ -167,6 +167,17 @@ async function apiDeleteMyprofileImage(id) {
   }
 }
 
+function apiDeleteTeacher(context, teacherId) {
+  axios
+    .delete(`/teachers/${teacherId}`)
+    .then(() => {
+      router.push(`/profile/myprofile`);
+    })
+    .catch((error) => {
+      console.error("DELETE 요청 에러 : ", error);
+    });
+}
+
 export {
   apiGetReview,
   apiTeacherProfileUpdate,
@@ -180,4 +191,5 @@ export {
   apiLikeTeacherUpdate,
   apiDeleteAttachedImage,
   apiDeleteMyprofileImage,
+  apiDeleteTeacher,
 };

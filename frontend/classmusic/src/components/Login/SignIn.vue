@@ -5,7 +5,7 @@
         <h1>로그인</h1>
         <div class="login__content">
           <div>
-            <p>
+            <p class="login__content">
               <input
                 type="text"
                 placeholder="아이디"
@@ -15,7 +15,7 @@
             </p>
           </div>
           <div>
-            <p>
+            <p class="login__content">
               <input
                 type="password"
                 placeholder="비밀번호"
@@ -38,15 +38,15 @@
     <div v-if="showmode == 'id'">
       <div class="login__container">
         <h1>아이디 찾기</h1>
-        <div class="login__content">
+        <div>
           <div>
-            <p>이름을 알려주세요.</p>
-            <p>
+            <p class="login__content">이름을 알려주세요.</p>
+            <p class="login__content">
               <input type="text" placeholder="이름" v-model="name" />
             </p>
           </div>
-          <p>가입한 이메일을 알려주세요.</p>
-          <p>
+          <p class="login__content">가입한 이메일을 알려주세요.</p>
+          <p class="login__content">
             <input
               type="text"
               placeholder="이메일"
@@ -54,6 +54,7 @@
             />
           </p>
           <div>
+            <button @click="showLogin">로그인가기</button>
             <button @click="findUserId" :disabled="isLoading">
               아이디 찾기
             </button>
@@ -66,14 +67,14 @@
         <h1>비밀번호 찾기</h1>
         <div class="login__content">
           <div>
-            <p>가입한 아이디를 알려주세요.</p>
-            <p>
+            <p class="login__content">가입한 아이디를 알려주세요.</p>
+            <p class="login__content">
               <input type="text" placeholder="아이디" v-model="registered_id" />
             </p>
           </div>
           <div>
-            <p>가입한 이메일을 알려주세요.</p>
-            <p>
+            <p class="login__content">가입한 이메일을 알려주세요.</p>
+            <p class="login__content">
               <input
                 type="text"
                 placeholder="이메일"
@@ -82,6 +83,7 @@
             </p>
           </div>
           <div>
+            <button @click="showLogin">로그인가기</button>
             <button @click="findPassword" :disabled="isLoading">
               비밀번호 찾기
             </button>

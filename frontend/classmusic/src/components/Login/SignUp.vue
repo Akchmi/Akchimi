@@ -87,13 +87,15 @@ export default {
 			confirmPassword: "",
 			name: "",
 			email: "",
-			gender: "2",
+			gender: "",
 			isIdChecked: false,
+			checkedId: "",
 		};
 	},
 	methods: {
 		...mapActions(["setToken"]),
 		async checkId() {
+			this.checkedId = this.loginid;
 			try {
 				const { data } = await apiCheckId(this.loginid);
 				if (data) {
@@ -110,8 +112,12 @@ export default {
 			}
 		},
 		async register() {
+			if (this.checkedId != this.loginid) {
+				alert("중복체크한 아이디와 일치하지 않습니다.");
+				return;
+			}
 			if (!this.loginid || !this.password || !this.name || !this.email || !this.gender) {
-				alert("모든 필드를 입력해주세요." + this.gender);
+				alert("모든 필드를 입력해주세요.");
 				return;
 			}
 
