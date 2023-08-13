@@ -2,11 +2,11 @@ import { apiSearchTeachers, apiPostMatchingCreate } from "@/api/search";
 
 export default {
   // 필요 기능
-  //강사 목록 조회
+
+  //강사 목록 조회(검색)
   searchTeacher({ commit, state }) {
     console.log("searchTeacher actions called");
     commit("SET_SEARCHPARAMS_PAGE", 1);
-
     apiSearchTeachers(
       state.search.searchParams,
       ({ data }) => {

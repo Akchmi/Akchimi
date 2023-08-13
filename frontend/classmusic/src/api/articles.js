@@ -89,7 +89,7 @@ function apiArticledelete(context, articleId) {
       router.push(`/article/list`);
     })
     .catch((error) => {
-      console.error("POST 요청 에러 : ", error);
+      console.error("DELETE 요청 에러 : ", error);
     });
 }
 

@@ -33,12 +33,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/templates/common.scss";
 @import "@/assets/scss/chat.scss";
-img {
-  width: 50px;
-  border-radius: 70%;
-}
 
 .left {
   display: flex;

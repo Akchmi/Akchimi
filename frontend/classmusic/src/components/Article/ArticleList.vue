@@ -21,7 +21,7 @@
                 <th style="width: 10%">글 번호</th>
                 <th style="width: 45%">제목</th>
                 <th style="width: 20%">작성자</th>
-                <th style="width: 15%">작성일자</th>
+                <th style="width: 15%">작성시간</th>
                 <th style="width: 10%">조회수</th>
               </tr>
             </thead>
@@ -67,6 +67,7 @@
           style="margin: 10px"
           type="text"
           v-model="searchQuery"
+          @keyup.enter="runSearch"
         />
 
         <img
@@ -204,10 +205,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/article.scss";
-@import "@/assets/scss/templates/common.scss";
 
 #articleCreateButton {
   padding: 5px 10px;
-  font-size: 16px;
+  // font-size: 16px;
 }
 </style>

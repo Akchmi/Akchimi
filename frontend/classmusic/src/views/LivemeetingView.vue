@@ -3,7 +3,7 @@
     <div id="join" v-if="!sessionCamera">
       <div id="join-dialog" class="enterRoom__container">
         <div>
-          <button @click="$router.push('/')">나가기</button>
+          <button @click="$router.push('/main')">나가기</button>
           <video id="my-video" autoplay="true" :srcObject="myVideo"></video>
           <div class="form-group">
             <div class="enterInfo">

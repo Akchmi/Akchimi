@@ -5,6 +5,29 @@
   --slider-handle-ring-color: #edd9b7;
 }
 
+h1{
+  font-size: 28px;
+}
+
+h2{
+  font-size: 24px;
+}
+
+h3{
+  font-size: 20px;
+}
+
+input, textarea{
+  padding-left: 5px;
+  font-family: "mainfont";
+}
+
+hr{
+  background-color: #edd9b7;
+  height: 1px;
+  border: 0px;
+}
+
 button {
   // 버튼 텍스트 가운데 정렬
   display: inline-flex;
