@@ -46,12 +46,13 @@
           <div class="aditional-function">
             <!-- {{ subscribers }} -->
             <div id="live-screens" class="" @click="changeMainScreen">
+              <!-- {{ subscribers }} -->
               <user-video
                 v-for="sub in subscribers"
                 :key="sub.stream.connection.connectionId"
                 :stream-manager="sub"
               />
-              <user-video :stream-manager="publisher" />
+              <!-- <user-video :stream-manager="publisher" /> -->
               <div id="shared-video" class="row panel panel-default">
                 <!-- <div class="panel-heading">User Screens</div> -->
                 <div class="panel-body" id="container-screens"></div>
@@ -251,6 +252,8 @@ export default {
       this.messages.push(receivedMessage);
     },
     changeMainScreen(event) {
+      console.log("##########we did click!###########");
+      console.log(event.target);
       const mainVideoDiv = document.querySelector("#video-container");
       const mainVideo = mainVideoDiv.querySelector("video");
       const selectedVideo = event.target;
@@ -322,7 +325,6 @@ export default {
       });
 
       publisherScreen.on("videoElementCreated", (event) => {
-        console.log(event);
         this.appendUserData(event.element, this.sessionScreen.connection);
         event.element["muted"] = true;
       });
@@ -343,10 +345,16 @@ export default {
       this.sessionCamera = this.OVCamera.initSession();
       this.sessionScreen = this.OVScreen.initSession();
 
+      console.log("########## when joinsession##############");
+      console.log(this.sessionCamera);
+
       // --- 3) Specify the actions when events take place in the session ---
 
       // On every new Stream received...
       this.sessionCamera.on("streamCreated", (event) => {
+        console.log("############ when join session with camera###########");
+        console.log(event);
+        console.log(this.sessionScreen);
         if (event.stream.typeOfVideo == "CAMERA") {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-cameras' id
           console.log(this.sessionCamera);
@@ -354,6 +362,10 @@ export default {
             event.stream,
             "container-cameras"
           );
+          console.log("###########subscriber!############");
+          this.subscribers.push(subscriber);
+          console.log(this.subscribers);
+          // this.subscribers.push(subscriber);
           // When the HTML video has been appended to DOM...
           subscriber.on("videoElementCreated", (event) => {
             // Add a new <p> element for the user's nickname just below its video
