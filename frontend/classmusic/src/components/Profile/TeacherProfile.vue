@@ -173,8 +173,7 @@ export default {
 		this.attachedFiles = res.images;
 		this.avgRating = res.avgRating;
 		this.contactCnt = res.contactCnt;
-		this.likeId = res.likeId;
-		console.log("크라아", this.likeId);
+		this.likeId = res.likeId;	
 		this.getReview();
 	},
 	computed: {

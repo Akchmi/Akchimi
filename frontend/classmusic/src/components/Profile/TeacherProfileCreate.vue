@@ -208,17 +208,19 @@ export default {
 				endTime: this.endTime,
 				classDay: this.convertDaysToBitMask(),
 				instruments: this.selectedInstruments,
-				teacherId: this.teacherId,
+		
 			};
-			await this.postTeacherProfileCreate(data).then(() => {
-				const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
-				this.updateUserType(1);
-				this.$store.commit("updateTeacherProfile");
-				this.$router.push(`/profile/teacherprofile/${teacherId}`);
-        if (this.attachedFiles.length > 0) { 
-          this.submitImages(teacherId);
-        }
-			});
+      try {
+          await this.postTeacherProfileCreate(data);
+          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
+          if (this.attachedFiles.length > 0) { 
+            await this.submitImages(teacherId);
+          }
+          this.updateUserType(1);	
+          this.$router.push(`/profile/teacherprofile/${teacherId}`);
+      } catch (error) {
+          console.error("Error while submitting the form:", error);
+      }
 		},
 
 		async submitImages(teacherId) {
