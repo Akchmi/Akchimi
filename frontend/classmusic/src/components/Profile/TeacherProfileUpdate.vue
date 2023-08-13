@@ -7,7 +7,7 @@
             :src="userProfileImage"
             alt="Teacher profile picture"
             class="teacher-image"
-          />         
+          />
         </div>
         <div class="info-container">
           <div class="name-container">
@@ -16,75 +16,89 @@
           </div>
           <div class="teacher-profile-update-container">
             <!-- <div class="left-field"> -->
-              <div class="input-field">
-                <label for="instrument">악기 : </label>
-                <select
-                  id="instrument"
-                  v-model="selectedInstrument"
-                  @change="saveToselectedInsruments"
+            <div class="input-field">
+              <label for="instrument">악기 : </label>
+              <select
+                id="instrument"
+                v-model="selectedInstrument"
+                @change="saveToselectedInsruments"
+              >
+                <option
+                  v-for="(instrument, index) in instruments"
+                  :value="instrument"
+                  :key="index"
                 >
-                  <option
-                    v-for="(instrument, index) in instruments"
-                    :value="instrument"
-                    :key="index"
-                  >
-                    {{ instrument }}
-                  </option>
-                </select>
-                <!-- 선택된 악기: -->
-                <span class="instrument-selected" v-for="(instrument, index) in selectedInstruments" :key="index">
-                  {{ instrument }} <button class="button-delete" @click="removeInstrument(index)">x</button>
-                </span>
+                  {{ instrument }}
+                </option>
+              </select>
+              <!-- 선택된 악기: -->
+              <span
+                class="instrument-selected"
+                v-for="(instrument, index) in selectedInstruments"
+                :key="index"
+              >
+                {{ instrument }}
+                <button class="button-delete" @click="removeInstrument(index)">
+                  x
+                </button>
+              </span>
+            </div>
+            <div class="input-field">
+              <label>요일:</label>
+              <div
+                class="days-container"
+                v-for="(checked, day) in days"
+                :key="day"
+              >
+                <input type="checkbox" :id="day" v-model="days[day]" />
+                <label :for="day">{{ day }}</label>
               </div>
-              <div class="input-field">
-                <label>요일:</label>
-                <div
-                  class="days-container"
-                  v-for="(checked, day) in days"
-                  :key="day"
-                >
-                  <input type="checkbox" :id="day" v-model="days[day]" />
-                  <label :for="day">{{ day }}</label>
-                </div>
-              </div>
-              <div class="input-field">
-                <label for="start">시작 시간 :</label>
+            </div>
+            <div class="input-field">
+              <label for="start">시작 시간 :</label>
+              <input
+                id="start"
+                v-model.number="startTime"
+                type="number"
+                min="0"
+                max="23"
+              />
+              <label for="end">종료 시간 :</label>
+              <input
+                id="end"
+                v-model.number="endTime"
+                type="number"
+                min="0"
+                max="23"
+              />
+            </div>
+            <div class="input-field">
+              <div class="carrier-input">
+                <label for="years">경력 : </label>
                 <input
-                  id="start"
-                  v-model.number="startTime"
+                  id="years"
+                  v-model.number="career"
+                  type="number"
+                  min="1"
+                  max="99"
+                />
+                년
+              </div>
+              <div class="cost-input">
+                <label for="cost">시간당 비용 : </label>
+                <input
+                  id="cost"
+                  v-model.number="cost"
                   type="number"
                   min="0"
-                  max="23"
+                  max="99"
                 />
-                <label for="end">종료 시간 :</label>
-                <input
-                  id="end"
-                  v-model.number="endTime"
-                  type="number"
-                  min="0"
-                  max="23"
-                />
+                만원
               </div>
-              <div class="input-field">
-                <div class="carrier-input">
-                  <label for="years">경력 : </label>
-                  <input
-                    id="years"
-                    v-model.number="career"
-                    type="number"
-                    min="1"
-                  />
-                  년
-                </div>
-                <div class="cost-input">
-                  <label for="cost">시간당 비용 : </label>
-                  <input id="cost" v-model.number="cost" type="number" min="0" />
-                  만원
-                </div>
-              </div>
+            </div>
             <!-- </div> -->
             <!-- <div class="right-field"> -->
-              
+
             <!-- </div> -->
           </div>
         </div>
@@ -100,26 +114,34 @@
         </div>
       </div>
       <div class="attach-file">
-          <h3>파일 첨부</h3>
-          <div v-for="(image, index) in attachedFiles" :key="index" class="image-container">
-            <img :src="image" alt="Attached file" class="attach-image" />   
-            
-            <button @click="removeAttachedFile(index)">삭제</button>
-          </div>
-          <div v-for="(image, index) in newAttachedFiles" :key="index" class="image-container">
-            <img :src="image.preview" alt="Attached file" class="attach-image" />   
-        
-            <button @click="removeNewAttachedFile(index)">삭제</button>
-          </div>
-          <input
-            type="file"
-            multiple
-            ref="fileUploadInput"
-            @change="handleFileUpload"
-            style="display: none"
-          />
-          <button @click="triggerFileUpload">첨부 파일 추가</button>
+        <h3>파일 첨부</h3>
+        <div
+          v-for="(image, index) in attachedFiles"
+          :key="index"
+          class="image-container"
+        >
+          <img :src="image" alt="Attached file" class="attach-image" />
+
+          <button @click="removeAttachedFile(index)">삭제</button>
         </div>
+        <div
+          v-for="(image, index) in newAttachedFiles"
+          :key="index"
+          class="image-container"
+        >
+          <img :src="image.preview" alt="Attached file" class="attach-image" />
+
+          <button @click="removeNewAttachedFile(index)">삭제</button>
+        </div>
+        <input
+          type="file"
+          multiple
+          ref="fileUploadInput"
+          @change="handleFileUpload"
+          style="display: none"
+        />
+        <button @click="triggerFileUpload">첨부 파일 추가</button>
+      </div>
       <div class="save-button">
         <button @click="submitForm">강사 수정하기</button>
       </div>
@@ -129,9 +151,11 @@
 
 <script>
 import { mapActions } from "vuex";
-import { apiDetailTeacherInfo, apiDeleteAttachedImage } from "@/api/profiles.js";
+import {
+  apiDetailTeacherInfo,
+  apiDeleteAttachedImage,
+} from "@/api/profiles.js";
 import axios from "@/api/imageAxios.js";
-
 
 export default {
   props: {
@@ -160,12 +184,12 @@ export default {
       name: "",
       selectedDays: [],
       attachedFiles: [],
-      userProfileImage:"",
+      userProfileImage: "",
       id: JSON.parse(localStorage.getItem("vuex")).common.id,
-      userId : JSON.parse(localStorage.getItem("vuex")).common.userId,
-      teacherId : JSON.parse(localStorage.getItem("vuex")).common.teacherId,
-      newAttachedFiles:[],      
-      deleteAttachedFiles:[],
+      userId: JSON.parse(localStorage.getItem("vuex")).common.userId,
+      teacherId: JSON.parse(localStorage.getItem("vuex")).common.teacherId,
+      newAttachedFiles: [],
+      deleteAttachedFiles: [],
     };
   },
   computed: {
@@ -185,7 +209,7 @@ export default {
       this.newAttachedFiles.splice(index, 1);
     },
     triggerFileUpload() {
-      this.$refs.fileUploadInput.click();  
+      this.$refs.fileUploadInput.click();
     },
     handleFileUpload() {
       const selectedFiles = this.$refs.fileUploadInput.files;
@@ -195,20 +219,20 @@ export default {
 
         fileReader.onload = (e) => {
           this.newAttachedFiles.push({
-            preview : e.target.result,
-            file: selectedFiles[i]
-          });  
+            preview: e.target.result,
+            file: selectedFiles[i],
+          });
         };
-        
+
         fileReader.readAsDataURL(selectedFiles[i]);
       }
-    },    
+    },
 
     removeInstrument(index) {
       this.selectedInstruments.splice(index, 1);
     },
 
-    ...mapActions(['putTeacherProfileUpdate', ]),
+    ...mapActions(["putTeacherProfileUpdate"]),
 
     async submitImages() {
       let formData = new FormData();
@@ -218,47 +242,47 @@ export default {
       // }
 
       this.newAttachedFiles.forEach((item) => {
-       formData.append("image", item.file);
-     });    
-    
+        formData.append("image", item.file);
+      });
+
       try {
-        await axios.post(`/teachers/${this.teacherId}/images`,formData);   
+        await axios.post(`/teachers/${this.teacherId}/images`, formData);
       } catch (error) {
         console.log("폼폼", error);
-      }   
+      }
     },
 
     async submitAttachedFilesToDelete() {
       try {
-        await apiDeleteAttachedImage(this.teacherId, { images: this.deleteAttachedFiles });
-        console.log('첨부 파일 삭제 성공');
+        await apiDeleteAttachedImage(this.teacherId, {
+          images: this.deleteAttachedFiles,
+        });
+        console.log("첨부 파일 삭제 성공");
       } catch (error) {
-        console.log('첨부 파일 삭제 실패', error);
+        console.log("첨부 파일 삭제 실패", error);
       }
     },
 
     async submitForm() {
       await this.submitImages();
       await this.submitAttachedFilesToDelete();
-   
-      const data = {       
+
+      const data = {
         career: this.career,
         cost: this.cost,
         introduce: this.description,
         startTime: this.startTime,
         endTime: this.endTime,
         classDay: this.convertDaysToBitMask(),
-        instruments: [...this.selectedInstruments], 
-        teacherId : this.teacherId,             
+        instruments: [...this.selectedInstruments],
+        teacherId: this.teacherId,
       };
-      this.putTeacherProfileUpdate(data)            
-        .then(response => {    
-          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
-          this.$store.commit('updateTeacherProfile', response);
-          this.$router.push(`/profile/teacherprofile/${teacherId}`);   
-        });
-
-        
+      this.putTeacherProfileUpdate(data).then((response) => {
+        const teacherId = JSON.parse(localStorage.getItem("vuex")).common
+          .teacherId;
+        this.$store.commit("updateTeacherProfile", response);
+        this.$router.push(`/profile/teacherprofile/${teacherId}`);
+      });
     },
     convertDaysToBitMask() {
       let index = 0,
@@ -284,7 +308,7 @@ export default {
     },
   },
   async created() {
-    const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId
+    const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
     const res = await apiDetailTeacherInfo(teacherId);
     this.name = res.name;
     this.selectedInstruments = res.instruments;
@@ -297,9 +321,11 @@ export default {
     this.userProfileImage = res.userProfileImage;
     this.attachedFiles = res.images;
 
-    const classDayBinary = parseInt(res.classDay, 2).toString(2).padStart(7, '0');
+    const classDayBinary = parseInt(res.classDay, 2)
+      .toString(2)
+      .padStart(7, "0");
     Object.keys(this.days).forEach((day, index) => {
-        this.days[day] = classDayBinary[index] === '1';
+      this.days[day] = classDayBinary[index] === "1";
     });
   },
 };
@@ -308,4 +334,3 @@ export default {
 <style scoped>
 @import "@/assets/scss/teacherprofileupdate.scss";
 </style>
-         

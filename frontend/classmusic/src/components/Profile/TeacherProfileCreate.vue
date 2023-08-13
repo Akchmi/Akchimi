@@ -54,12 +54,19 @@
                   v-model.number="career"
                   type="number"
                   min="1"
+                  max="99"
                 />
                 년
               </div>
               <div class="input-field">
                 <label for="cost">시간당 비용 : </label>
-                <input id="cost" v-model.number="cost" type="number" min="0" />
+                <input
+                  id="cost"
+                  v-model.number="cost"
+                  type="number"
+                  min="0"
+                  max="99"
+                />
                 만원
               </div>
             </div>
@@ -202,7 +209,7 @@ export default {
         fileReader.readAsDataURL(selectedFiles[i]);
       }
     },
-  
+
     async getUserInfo() {
       try {
         const data = await apiGetUserInfo(this.id);
@@ -229,11 +236,10 @@ export default {
       };
 
       await this.postTeacherProfileCreate(data).then(() => {
-
         const teacherId = JSON.parse(localStorage.getItem("vuex")).common
           .teacherId;
         this.updateUserType(1);
-        this.$store.commit('updateTeacherProfile');
+        this.$store.commit("updateTeacherProfile");
         this.$router.push(`/profile/teacherprofile/${teacherId}`);
         this.submitImages(teacherId);
       });
