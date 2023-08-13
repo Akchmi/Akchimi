@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="notice__list">
-      <div>
+      <div class="notiec__list__buttons">
         <!-- 공지사항 리스트 최상단 -->
         <button v-if="userType == 2" @click="goNoticeCreate">글 작성</button>
       </div>
@@ -14,7 +14,7 @@
               <th style="width: 10%">글 번호</th>
               <th style="width: 50%">제목</th>
               <th style="width: 20%">작성자</th>
-              <th style="width: 20%">작성일자</th>
+              <th style="width: 20%">작성시간</th>
             </tr>
           </thead>
 
@@ -54,6 +54,7 @@
           style="margin: 10px"
           type="text"
           v-model="searchQuery"
+          @keyup.enter="runSearch"
         />
 
         <img
@@ -168,5 +169,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/notice.scss";
-@import "@/assets/scss/templates/common.scss";
+
+.notiec__list__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  margin-bottom: 10px;
+}
 </style>

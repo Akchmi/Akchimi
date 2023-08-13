@@ -20,6 +20,7 @@
         class="search-bar__keyword"
         v-model="searchParams.keyword"
         @change="setKeyword"
+        @keyup.enter="searchTeacher"
       />
       <button @click="searchTeacher">검색</button>
     </div>
@@ -104,7 +105,8 @@ import InputCareer from "./InputCareer.vue";
 import InputCost from "./InputCost.vue";
 import InputTime from "./InputTime.vue";
 import { mapActions } from "vuex";
-
+// import { useStore } from "vuex";
+import { onMounted } from "vue";
 export default {
   components: {
     InputCareer,
@@ -254,6 +256,22 @@ export default {
       console.log(bitMaskedDays.toString(2));
       return bitMaskedDays.toString(2);
     },
+  },
+  setup() {
+    // const store = useStore();
+
+    onMounted(() => {
+      // store.dispatch("commitInstrument", "악기종류");
+      // store.dispatch("commitGender", "");
+      // store.dispatch("commitKeyword", "");
+      // store.dispatch("commitClassDay", "1111111");
+      // store.dispatch("searchTeacher");
+      // store.dispatch("commitCost", [0, 100]);
+      // store.dispatch("commitTime", [0, 100]);
+      // store.dispatch("commitCareer", [0, 100]);
+      // 모든 요일 설정
+      // store.dispatch("commitClassDay", (1 << 8) - 1);
+    });
   },
 };
 </script>

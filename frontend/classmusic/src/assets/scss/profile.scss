@@ -11,13 +11,14 @@
 }
 
 .myprofile {
+  box-sizing: border-box;
   width: 800px;
   display: flex;
   flex-direction: column;
   border: 3px solid #edd9b7;
-  padding: 10px;
+  padding: 20px;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 10px;;
 }
 
 .top-section {
@@ -40,6 +41,8 @@
 }
 
 .img-button-container{
+  width: 170px;
+  padding-top: 10px;
   display: flex;
   justify-content: space-between;
 }
@@ -49,6 +52,7 @@
   text-align: center;
   flex-wrap: wrap;
   display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -68,14 +72,21 @@
 }
 
 .button {
+  bottom: 10px;
+  right: 10px;
   display: flex;
   justify-content: center;
+  margin-top: 5px;
   gap: 10px;
-  margin-top: 20px;
 }
 
 .button button {
   width: 100px;
+}
+
+.favorite-title{
+  font-size: larger;
+  font-weight: bold;
 }
 
 .modal {

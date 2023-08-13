@@ -1,11 +1,19 @@
 <template>
-  <img class="errorimg" src="@/assets/images/error404img.jpg" alt="" />
+  <div class="error-img">
+    <img class="errorimg" src="@/assets/images/error404_2.jpg" alt="" />
+  </div>
 </template>
 
 <script></script>
 
-<style>
+<style scoped>
+.error-img {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
 .errorimg {
-  width: 100%;
+  width: 80%;
 }
 </style>

@@ -1,6 +1,17 @@
 <template>
   <div>
-    <div>chatview</div>
+    <div class="chat-profile">
+      <div class="chat-left">강사:</div>
+      <img class="chat-img" :src="teacherProfile.profileImage" />
+      <div class="chat-teachername">
+        {{ teacherProfile.name }}
+      </div>
+      <div class="chat-studentname">
+        {{ studentProfile.name }}
+      </div>
+      <img class="chat-img" :src="studentProfile.profileImage" />
+      <div class="chat-right">:학생</div>
+    </div>
     <div class="chat-room" ref="chatroom">
       <!-- 채팅 목록 -->
       <TheChat
@@ -172,6 +183,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/templates/common.scss";
 @import "@/assets/scss/chat.scss";
 </style>

@@ -6,7 +6,7 @@
           <img
             class="mainLogo"
             src="@/assets/images/home/mainLogo2.png"
-            @click="$router.push('/')"
+            @click="$router.push('/main')"
             alt=""
           />
         </div>
@@ -15,7 +15,7 @@
           <li @click="$router.push('/notice/list')">공지사항</li>
           <li @click="$router.push('/article/list')">자유게시판</li>
           <li @click="goLecture">강의실</li>
-          <li @click="$router.push('/search')">강사검색</li>
+          <li @click="goSearch">강사검색</li>
         </ul>
 
         <ul class="navbar__menu">
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {};
@@ -42,7 +42,7 @@ export default {
   methods: {
     logOut() {
       this.$store.commit("LOGOUT");
-      this.$router.push("/");
+      this.$router.push("/main");
     },
 
     goLecture() {
@@ -52,6 +52,29 @@ export default {
         return;
       }
       this.$router.push("/lecture/studentongoing");
+    },
+
+    ...mapActions(["commitInstrument"]),
+    ...mapActions(["commitGender"]),
+    ...mapActions(["commitKeyword"]),
+    ...mapActions(["commitClassDay"]),
+    ...mapActions(["commitCost"]),
+    ...mapActions(["commitTime"]),
+    ...mapActions(["commitCareer"]),
+    ...mapActions(["searchTeacher"]),
+
+    goSearch() {
+      this.commitInstrument("악기종류");
+      this.commitGender("");
+      this.commitKeyword("");
+      this.commitClassDay("1111111");
+      this.commitCost([0, 100]);
+      this.commitTime([0, 100]);
+      this.commitCareer([0, 100]);
+
+      this.searchTeacher();
+
+      this.$router.push("/search");
     },
   },
 };

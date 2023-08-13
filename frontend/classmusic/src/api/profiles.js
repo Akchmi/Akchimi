@@ -73,25 +73,19 @@ async function apiLikeTeacher(id) {
 
 function apiLikeTeacherUpdate(context, data) {
   const id = data.id;
-  axios
+  return axios
     .post(`/users/${id}/like`, data)
     .then(({ data }) => {
-      alert("즐겨찾기에 성공하였습니다");
-      this.$router.push(`/profile/myprofile`);
       return data;
     })
     .catch((error) => {
-      if (error.response.data.message == "이미 존재하는 즐겨찾기입니다.") {
-        alert(error.response.data.message);
-        return;
-      }
-      console.log(error);
+      throw error;
     });
 }
 
-async function apiDeleteLIkeTeacher(teacherId) {
+async function apiDeleteLIkeTeacher(data) {
   try {
-    const response = await axios.delete(`users/like/${teacherId}`);
+    const response = await axios.delete(`users/${data.id}/like/${data.likeId}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -112,8 +106,9 @@ async function apiDetailTeacherInfo(teacherId) {
 async function apiTeacherProfileCreate(context, data) {
   try {
     const response = await axios.post(`/teachers`, data);
+    console.log("axios실행", response);
     context.commit("SAVE_TEACHERID", response.data);
-
+    // router.push(`/profile/teacherProfile/${response.data}`);
   } catch (error) {
     console.log("apiTeacherProfileCreate 중 에러 발생!!!", error);
     return null;
@@ -172,6 +167,17 @@ async function apiDeleteMyprofileImage(id) {
   }
 }
 
+function apiDeleteTeacher(context, teacherId) {
+  axios
+    .delete(`/teachers/${teacherId}`)
+    .then(() => {
+      router.push(`/profile/myprofile`);
+    })
+    .catch((error) => {
+      console.error("DELETE 요청 에러 : ", error);
+    });
+}
+
 export {
   apiGetReview,
   apiTeacherProfileUpdate,
@@ -185,4 +191,5 @@ export {
   apiLikeTeacherUpdate,
   apiDeleteAttachedImage,
   apiDeleteMyprofileImage,
+  apiDeleteTeacher,
 };
