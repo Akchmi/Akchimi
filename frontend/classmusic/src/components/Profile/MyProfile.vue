@@ -70,14 +70,14 @@
     
     <div class="favorites">
       <br /><hr /> <br />
-      <h1>{{ userInfo.name }} 님이 즐겨찾기한 강사</h1>
+      <div class="favorite-title">{{ userInfo.name }} 님이 즐겨찾기한 강사</div>
       <div class="teacher-list">
         <LikeTeacherCard
           v-for="teacher in liketeachers"
           :key="teacher.teacherId"
           :teacher="teacher"
           image="https://via.placeholder.com/280"
-          @deleteLikeTeacher="deleteLikeTeacher(teacher.teacherId)"
+          @deleteLikeTeacher="deleteLikeTeacher(teacher.likeId)"
         />
       </div>   
     </div>
@@ -106,6 +106,7 @@ export default {
       teacherId : '',
       liketeachers: [],
       userProfileImage:'',
+      // likeId: '',
     };
   },
   computed: {
@@ -116,18 +117,18 @@ export default {
 
     
 
-    deleteLikeTeacher(teacherId) {
-      apiDeleteLIkeTeacher(teacherId)
-      .then(response => {
-        if (response.success) {
-          this.liketeachers = this.liketeachers.filter(teacher => teacher.teacherId !== teacherId);
-      } else {
-        alert("즐겨찾기 제거 중 오류 발생");
-      }
-    }).catch(error => {
-      console.log(error);
-    });
-  },
+    deleteLikeTeacher(likeId) {
+      const data = {
+        id: this.id,
+        likeId: likeId
+      }      
+      apiDeleteLIkeTeacher(data)
+      .then(() => {   
+          this.liketeachers = this.liketeachers.filter(teacher => teacher.likeId !== likeId);
+      }).catch(error => {
+        console.log(error);
+      });
+    },
 
     async changePassword() {
       const data = {
@@ -205,7 +206,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @import "@/assets/scss/profile.scss";
 
 </style>
