@@ -256,11 +256,11 @@ export default {
         instruments: [...this.selectedInstruments],
         teacherId: this.teacherId,
       };
-      this.putTeacherProfileUpdate(data).then((response) => {
+      this.putTeacherProfileUpdate(data).then(() => {
         const teacherId = JSON.parse(localStorage.getItem("vuex")).common
           .teacherId;
-        this.$store.commit("updateTeacherProfile", response);
-        this.$router.push(`/profile/teacherprofile/${teacherId}`);
+        
+        this.$router.push(`/profile/teacherprofile/${teacherId}`)      
       });
     },
     convertDaysToBitMask() {

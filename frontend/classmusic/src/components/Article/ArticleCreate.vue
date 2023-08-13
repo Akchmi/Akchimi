@@ -32,9 +32,25 @@
       <div class="create__content__bottom">
         <div>
           <!-- 첨부파일 -->
-          <button class="createButton">첨부파일 추가</button>
+          <button class="createButton" @click="triggerFileUpload">첨부파일 추가</button>
         </div>
-
+        <div 
+          v-for="(image, index) in attachedFiles"
+          :key="index"
+          class="image-container"        
+        >
+          <img :src="image.preview" alt="Attached file" class="attach-image" />
+          <button class="image-remove" @click="removeAttachedFile(index)">
+            삭제
+          </button>
+        </div>
+          <input
+            type="file"
+            multiple
+            ref="fileUploadInput"
+            @change="handleFileUpload"
+            style="display: none"
+          />
         <div>
           <!-- 작성완료 버튼 -->
           <button class="createButton" @click="postArticle">작성완료</button>
@@ -46,12 +62,16 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import axios from "@/api/imageAxios.js";
+
+
 
 export default {
   data() {
     return {
       title: "",
       content: "",
+      attachedFiles: [],
     };
   },
   computed: {
@@ -60,7 +80,7 @@ export default {
   methods: {
     ...mapActions(["postArticleCreate"]),
 
-    postArticle() {
+    async postArticle() {
       if (
         this.title.split("\n").join("").length == 0 ||
         this.title.split(" ").join("").length == 0 ||
@@ -72,9 +92,54 @@ export default {
       }
       this.postArticleCreate({
         title: this.title,
-        content: this.content,
+        content: this.content,       
       });
+      if (this.attachedFiles.length > 0) { 
+        await this.submitImages();
+      }
     },
+
+		triggerFileUpload() {
+			this.$refs.fileUploadInput.click();
+		},
+
+    removeAttachedFile(index) {
+			this.attachedFiles.splice(index, 1);
+		},
+
+    handleFileUpload() {
+			const selectedFiles = this.$refs.fileUploadInput.files;
+
+			for (let i = 0; i < selectedFiles.length; i++) {
+				const fileReader = new FileReader();
+
+				fileReader.onload = (e) => {
+					this.attachedFiles.push({
+						preview: e.target.result,
+						file: selectedFiles[i],
+					});
+				};
+
+				fileReader.readAsDataURL(selectedFiles[i]);
+			}
+		},
+
+    async submitImages(teacherId) {
+			let formData = new FormData();
+
+			this.attachedFiles.forEach((item) => {
+				formData.append("image", item.file);
+			});
+
+			try {
+				await axios.post(`/teachers/${teacherId}/images`, formData);
+			} catch (error) {
+				console.log(error);
+			}
+		},
+
+
+
   },
 };
 </script>
