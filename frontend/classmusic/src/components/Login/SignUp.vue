@@ -87,7 +87,7 @@ export default {
 			confirmPassword: "",
 			name: "",
 			email: "",
-			gender: "",
+			gender: "2",
 			isIdChecked: false,
 			checkedId: "",
 		};
