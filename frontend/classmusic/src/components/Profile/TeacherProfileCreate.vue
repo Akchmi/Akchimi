@@ -186,7 +186,7 @@ export default {
 		},
 
 		async getUserInfo() {
-			try {
+			try {	
 				const data = await apiGetUserInfo(this.id);
 				if (data) {
 					this.userInfo = data;
@@ -210,17 +210,17 @@ export default {
 				instruments: this.selectedInstruments,
 		
 			};
-      try {
-          await this.postTeacherProfileCreate(data);
-          const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
-          if (this.attachedFiles.length > 0) { 
-            await this.submitImages(teacherId);
-          }
-          this.updateUserType(1);	
-          this.$router.push(`/profile/teacherprofile/${teacherId}`);
-      } catch (error) {
-          console.error("Error while submitting the form:", error);
-      }
+			try {
+				await this.postTeacherProfileCreate(data);
+				const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
+				if (this.attachedFiles.length > 0) { 
+					await this.submitImages(teacherId);
+				}
+				this.updateUserType(1);	
+				this.$router.push(`/profile/teacherprofile/${teacherId}`);
+			} catch (error) {
+				console.error("Error while submitting the form:", error);
+			}
 		},
 
 		async submitImages(teacherId) {
