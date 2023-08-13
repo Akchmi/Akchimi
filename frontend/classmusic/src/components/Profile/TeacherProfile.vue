@@ -46,7 +46,7 @@
 				<div class="teacher-details">
 					<h3 class="label">강사 소개</h3>
 					<div class="description-box">
-						<p>{{ introduce }}</p>
+						{{ introduce }}
 					</div>
 				</div>
 
