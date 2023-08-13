@@ -215,7 +215,9 @@ export default {
 				this.updateUserType(1);
 				this.$store.commit("updateTeacherProfile");
 				this.$router.push(`/profile/teacherprofile/${teacherId}`);
-				this.submitImages(teacherId);
+        if (this.attachedFiles.length > 0) { 
+          this.submitImages(teacherId);
+        }
 			});
 		},
 
