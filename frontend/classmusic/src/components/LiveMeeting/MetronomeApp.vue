@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import soundFile from "@/assets/sounds/sound.wav";
+import soundFile from "@/assets/sounds/Impact8.mp3";
 export default {
   data() {
     return {
@@ -59,11 +59,11 @@ export default {
 </script>
 
 <style>
-.metronome-container{
+.metronome-container {
   width: 90%;
-  height: 10%;
+  height: 15%;
   margin-top: 10px;
-  padding-top: 20px;
+  padding-top: 10px;
   text-align: center;
   background-color: #edd9b7;
   border-radius: 10px;
