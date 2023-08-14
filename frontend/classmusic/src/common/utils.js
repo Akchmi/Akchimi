@@ -70,12 +70,21 @@ export default {
   },
 
   formatFullDate(date) {
-    const year = date.getFullYear().toString().substr(2, 4);
+    const year = date.getFullYear().toString().substr(0, 4);
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
     const hour = date.getHours().toString().padStart(2, "0");
     const minute = date.getMinutes().toString().padStart(2, "0");
 
     return `${year}.${month}.${day} ${hour}:${minute}`;
+  },
+
+  todayDate() {
+    const todayDate = new Date();
+    const year = todayDate.getFullYear().toString();
+    const month = "0" + (todayDate.getMonth() + 1).toString();
+    const date = todayDate.getDate().toString();
+
+    return year + "." + month + "." + date;
   },
 };

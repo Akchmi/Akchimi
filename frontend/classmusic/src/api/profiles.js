@@ -79,6 +79,7 @@ function apiLikeTeacherUpdate(context, data) {
       return data;
     })
     .catch((error) => {
+      console.log('즐찾이 안되나요?', )
       throw error;
     });
 }
@@ -105,10 +106,8 @@ async function apiDetailTeacherInfo(teacherId) {
 
 async function apiTeacherProfileCreate(context, data) {
   try {
-    const response = await axios.post(`/teachers`, data);
-    console.log("axios실행", response);
-    context.commit("SAVE_TEACHERID", response.data);
-    // router.push(`/profile/teacherProfile/${response.data}`);
+    const response = await axios.post(`/teachers`, data);  
+    context.commit("SAVE_TEACHERID", response.data);   
   } catch (error) {
     console.log("apiTeacherProfileCreate 중 에러 발생!!!", error);
     return null;
@@ -121,7 +120,7 @@ function apiTeacherProfileUpdate(context, data) {
     .put(`/teachers/${teacherId}`, data)
     .then(({ data }) => {
       console.log("풋전송", data);
-      return data
+      return data;
     })
     .catch((error) => {
       console.error(teacherId, "PUt 요청 에러 :", error);
@@ -179,6 +178,18 @@ function apiDeleteTeacher(context, teacherId) {
     });
 }
 
+// 강사 활성화/비활성화 토글
+async function apiToggleTeacherVisible(teacherId) {
+  axios
+    .put(`/teachers/${teacherId}/visible`)
+    .then(() => {
+      router.push(`/profile/myprofile`);
+    })
+    .catch((error) => {
+      console.error("PUT 요청 에러 : ", error);
+    });
+}
+
 export {
   apiGetReview,
   apiTeacherProfileUpdate,
@@ -193,4 +204,5 @@ export {
   apiDeleteAttachedImage,
   apiDeleteMyprofileImage,
   apiDeleteTeacher,
+  apiToggleTeacherVisible,
 };

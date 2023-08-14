@@ -49,7 +49,8 @@ function apiPutUpdateMemo(context, data) {
       memo: memo,
     })
     .then(() => {
-      router.go(0);
+      context.commit("UPDATEMEMO", { contactId, memo });
+      // router.go(0);
     })
     .catch((error) => {
       console.log("GET 요청 에러 : ", error);
@@ -81,10 +82,11 @@ function apiPostReview(context, params) {
 }
 
 function apiPutReviewUpdate(context, params) {
+  console.log(params);
   axios
     .put(`/reviews/${params.reviewId}`, params)
     .then(() => {
-      router.go(0);
+      context.commit("UPDATEREVIEW", params.content);
     })
     .catch((error) => {
       console.log(error);

@@ -75,12 +75,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ createId: "getArticleCreateId" }),
+    ...mapGetters({
+       createId: "getArticleCreateId",
+       articleId: "getAricleId",
+      }),
+    
   },
   methods: {
     ...mapActions(["postArticleCreate"]),
 
     async postArticle() {
+      
       if (
         this.title.split("\n").join("").length == 0 ||
         this.title.split(" ").join("").length == 0 ||
@@ -94,8 +99,10 @@ export default {
         title: this.title,
         content: this.content,       
       });
+      // const articleId = 
       if (this.attachedFiles.length > 0) { 
-        await this.submitImages();
+        await this.submitImages(this.createId);
+        console.log('크레이티드아이',this.createId)
       }
     },
 
@@ -119,26 +126,22 @@ export default {
 						file: selectedFiles[i],
 					});
 				};
-
 				fileReader.readAsDataURL(selectedFiles[i]);
 			}
 		},
 
-    async submitImages(teacherId) {
+    async submitImages(createId) {
 			let formData = new FormData();
-
 			this.attachedFiles.forEach((item) => {
 				formData.append("image", item.file);
 			});
 
 			try {
-				await axios.post(`/teachers/${teacherId}/images`, formData);
+				await axios.post(`/articles/${createId}/images`, formData);
 			} catch (error) {
 				console.log(error);
 			}
 		},
-
-
 
   },
 };

@@ -37,7 +37,12 @@ export default {
   },
   //자유게시글 작성
   postArticleCreate(context, data) {
-    apiArticlecreate(context, data);
+    const response = apiArticlecreate(context, data);
+    if(response) {
+      context.commit("SAVE_ARTICLEID",response)
+      console.log('세아액', response)
+    }
+    return response;
   },
   //자유게시글 삭제
   deleteArticleDelete(context, articleId) {

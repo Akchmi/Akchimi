@@ -1,16 +1,12 @@
 <template>
   <div>
-    <div class="chat-profile">
-      <div class="chat-left">강사:</div>
+    <div class="chat-profile" v-if="sender == 0">
       <img class="chat-img" :src="teacherProfile.profileImage" />
-      <div class="chat-teachername">
-        {{ teacherProfile.name }}
-      </div>
-      <div class="chat-studentname">
-        {{ studentProfile.name }}
-      </div>
+      <div class="chat-teachername">{{ teacherProfile.name }} 님</div>
+    </div>
+    <div class="chat-profile" v-if="sender == 1">
       <img class="chat-img" :src="studentProfile.profileImage" />
-      <div class="chat-right">:학생</div>
+      <div class="chat-teachername">{{ studentProfile.name }} 님</div>
     </div>
     <div class="chat-room" ref="chatroom">
       <!-- 채팅 목록 -->
@@ -121,6 +117,7 @@ export default {
         name: participantInfo.studentName,
         profileImage: participantInfo.studentProfileImage,
       };
+      console.log("아웃풋", participantInfo);
     },
 
     save(newChat) {
