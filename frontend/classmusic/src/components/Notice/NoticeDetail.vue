@@ -15,24 +15,9 @@
               "
             >
               <p>작성자 : 관리자</p>
-
-              <p
-                v-if="
-                  todayDate !=
-                  toLocalTimeStamp(noticeDetail.createAt).substr(0, 10)
-                "
-              >
+              <p>
                 작성일 :
-                {{ toLocalTimeStamp(noticeDetail.createAt).substr(0, 10) }}
-              </p>
-              <p
-                v-if="
-                  todayDate ==
-                  toLocalTimeStamp(noticeDetail.createAt).substr(0, 10)
-                "
-              >
-                작성일 :
-                {{ toLocalTimeStamp(noticeDetail.createAt).substr(10) }}
+                {{ toLocalTimeStamp(noticeDetail.createAt) }}
               </p>
             </div>
           </div>

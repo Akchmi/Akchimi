@@ -16,6 +16,10 @@
   object-fit: cover;
 }
 
+.teacher-card__image:hover {
+  cursor: pointer;
+}
+
 .teacher-card__info {
   display: flex;
   flex-direction: column;
@@ -66,6 +70,10 @@
 .teacher-name {
   margin-bottom: 10px;
   font-size: 24px;
+}
+
+.teacher-name:hover {
+  cursor: pointer;
 }
 
 .teacher-description {

@@ -23,23 +23,9 @@
             </div>
             <div>
               <p>조회수 : {{ articleDetail.hit }}</p>
-              <p
-                v-if="
-                  todayDate !=
-                  toLocalTimeStamp(articleDetail.createdAt).substr(0, 10)
-                "
-              >
+              <p>
                 작성일 :
-                {{ toLocalTimeStamp(articleDetail.createdAt).substr(0, 10) }}
-              </p>
-              <p
-                v-if="
-                  todayDate ==
-                  toLocalTimeStamp(articleDetail.createdAt).substr(0, 10)
-                "
-              >
-                작성일 :
-                {{ toLocalTimeStamp(articleDetail.createdAt).substr(10) }}
+                {{ toLocalTimeStamp(articleDetail.createdAt) }}
               </p>
             </div>
           </div>
@@ -60,23 +46,23 @@
             {{ articleDetail.content }}
           </h3>
 
-					<hr />
-					<h3>첨부파일</h3>
+          <hr />
+          <h3>첨부파일</h3>
           <div>
-						<img
-							v-for="(image, index) in attachedFiles"
-							:src="image"
-							:key="index"
-							alt="Attached file"
-							class="attach-image"
-						/>
-					</div>
-					<hr />
-				</div>
-			</div>
-			<div style="display: flex; justify-content: center">
-				<div style="width: 90%">
-					<!--게시판 댓글-->
+            <img
+              v-for="(image, index) in attachedFiles"
+              :src="image"
+              :key="index"
+              alt="Attached file"
+              class="attach-image"
+            />
+          </div>
+          <hr />
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center">
+        <div style="width: 90%">
+          <!--게시판 댓글-->
 
           <div class="commentContainer" v-if="!isLogin">
             <p>댓글을 작성하려면 로그인을 해주세요</p>
@@ -189,22 +175,22 @@ import { useRoute } from "vue-router";
 import utils from "@/common/utils";
 
 export default {
-	data() {
-		return {
-			nowUpdateCommentId: null,
-			nowUpdateCommentContent: "",
-			nowCreateComment: "",
+  data() {
+    return {
+      nowUpdateCommentId: null,
+      nowUpdateCommentContent: "",
+      nowCreateComment: "",
       attachedFiles: [],
-		};
-	},
-	computed: {
-		...mapGetters({ articleDetail: "getArticleDetail" }),
-		...mapGetters({ isLogin: "getIsLogin" }),
-		...mapGetters({ loginUser: "getUserId" }),
-		...mapGetters({ commentList: "getCommentList" }),
-	},
-	methods: {
-		...mapActions(["deleteArticleDelete"]),
+    };
+  },
+  computed: {
+    ...mapGetters({ articleDetail: "getArticleDetail" }),
+    ...mapGetters({ isLogin: "getIsLogin" }),
+    ...mapGetters({ loginUser: "getUserId" }),
+    ...mapGetters({ commentList: "getCommentList" }),
+  },
+  methods: {
+    ...mapActions(["deleteArticleDelete"]),
 
     articleDelete() {
       this.deleteArticleDelete(this.articleDetail.articleId);
@@ -300,10 +286,10 @@ export default {
 }
 
 .attach-image {
-    width:170px;
-    height:220px;
-    object-fit: cover;
-    margin-right: 10px;
-    margin-top: 10px;
-  }
+  width: 170px;
+  height: 220px;
+  object-fit: cover;
+  margin-right: 10px;
+  margin-top: 10px;
+}
 </style>
