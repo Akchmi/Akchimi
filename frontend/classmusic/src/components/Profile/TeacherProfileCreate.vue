@@ -120,6 +120,10 @@ export default {
 	},
 	data() {
 		return {
+      maxCareer: 100,
+      maxCost: 100,
+      maxStartTime: 23,
+      maxEndTime: 23,
 			userInfo: {},
 			instruments: {
 				피아노: false,
@@ -157,6 +161,35 @@ export default {
 		},
 	},
 
+  watch: {
+    career(value) {
+        if (value > this.maxCareer) {
+            this.career = this.maxCareer;
+        }
+    },
+    cost(value) {
+        if (value > this.maxCost) {
+            this.cost = this.maxCost;
+        }
+    },
+    startTime(value) {
+        if (value > this.maxStartTime) {
+            this.startTime = this.maxStartTime;
+        } else if (value >= this.endTime) {
+            this.startTime = this.endTime - 1;
+        }
+    },
+    endTime(value) {
+        if (value > this.maxEndTime) {
+            this.endTime = this.maxEndTime;
+        } else if (value <= this.startTime) {
+            this.endTime = this.startTime + 1;
+        }
+    }
+
+
+  },
+
 	methods: {
 		toggleInstrument(instrument) {
 			this.instruments[instrument] = !this.instruments[instrument];
@@ -168,22 +201,30 @@ export default {
 		triggerFileUpload() {
 			this.$refs.fileUploadInput.click();
 		},
-		handleFileUpload() {
-			const selectedFiles = this.$refs.fileUploadInput.files;
+    handleFileUpload() {
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+      const selectedFiles = this.$refs.fileUploadInput.files;
 
-			for (let i = 0; i < selectedFiles.length; i++) {
-				const fileReader = new FileReader();
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
 
-				fileReader.onload = (e) => {
-					this.attachedFiles.push({
-						preview: e.target.result,
-						file: selectedFiles[i],
-					});
-				};
+        if (allowedExtensions.includes(fileExtension)) {
+          const fileReader = new FileReader();
 
-				fileReader.readAsDataURL(selectedFiles[i]);
-			}
-		},
+          fileReader.onload = (e) => {
+            this.attachedFiles.push({
+              preview: e.target.result,
+              file: file,
+            });
+          };
+
+          fileReader.readAsDataURL(file);
+        } else {
+          alert(`${file.name}는 송희도 같은 파일입니다.`);
+        }
+      }
+    },
 
 		async getUserInfo() {
 			try {	

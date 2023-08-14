@@ -81,7 +81,7 @@
       </div>
       <div class="attach-file">
         <div class="file__header">
-          <h3>파일 첨부</h3>
+          <h3>강사 자랑</h3>
           <button @click="triggerFileUpload">첨부 파일 추가</button>
         </div>
         <div class="file__images">
@@ -93,6 +93,7 @@
             <img :src="image" alt="Attached file" class="attach-image" />
 
             <button class="image-remove" @click="removeAttachedFile(index)">삭제</button>
+        
           </div>
           <div
             v-for="(image, index) in newAttachedFiles"
@@ -102,6 +103,7 @@
             <img :src="image.preview" alt="Attached file" class="attach-image" />
 
             <button class="image-remove" @click="removeNewAttachedFile(index)">삭제</button>
+           
           </div>
         </div>
         <input
@@ -188,19 +190,27 @@ export default {
       this.$refs.fileUploadInput.click();
     },
     handleFileUpload() {
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
       const selectedFiles = this.$refs.fileUploadInput.files;
 
       for (let i = 0; i < selectedFiles.length; i++) {
-        const fileReader = new FileReader();
+        const file = selectedFiles[i];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
 
-        fileReader.onload = (e) => {
-          this.newAttachedFiles.push({
-            preview: e.target.result,
-            file: selectedFiles[i],
-          });
-        };
+        if (allowedExtensions.includes(fileExtension)) {
+          const fileReader = new FileReader();
 
-        fileReader.readAsDataURL(selectedFiles[i]);
+          fileReader.onload = (e) => {
+            this.newAttachedFiles.push({
+              preview: e.target.result,
+              file: file,
+            });
+          };
+
+          fileReader.readAsDataURL(file);
+        } else {
+          alert(`${file.name}는 송희도 같은 파일입니다.`);
+        }
       }
     },
 
