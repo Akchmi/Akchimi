@@ -3,7 +3,19 @@
     <!-- <div class="chat-name">보낸이: {{ profile.name }}</div> -->
     <img class="chat-img" :src="profile.profileImage" />
     <span class="chat-content"> {{ chat.content }}</span>
-    <span class="chat-sendtime">{{ toLocalTimeStamp(chat.createdTime) }}</span>
+
+    <p
+      v-if="todayDate != toLocalTimeStamp(chat.createdTime).substr(0, 10)"
+      class="chat-sendtime"
+    >
+      {{ toLocalTimeStamp(chat.createdTime).substr(0, 10) }}
+    </p>
+    <p
+      v-if="todayDate == toLocalTimeStamp(chat.createdTime).substr(0, 10)"
+      class="chat-sendtime"
+    >
+      {{ toLocalTimeStamp(chat.createdTime).substr(10) }}
+    </p>
   </div>
 </template>
 
@@ -28,6 +40,11 @@ export default {
     toLocalTimeStamp(unixTimeStamp) {
       return utils.unixTimeStampToLocalTimeStamp(unixTimeStamp);
     },
+  },
+
+  setup() {
+    const todayDate = utils.todayDate();
+    return { todayDate };
   },
 };
 </script>

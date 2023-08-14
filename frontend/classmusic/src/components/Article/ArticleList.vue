@@ -21,7 +21,7 @@
                 <th style="width: 10%">글 번호</th>
                 <th style="width: 45%">제목</th>
                 <th style="width: 20%">작성자</th>
-                <th style="width: 15%">작성시간</th>
+                <th style="width: 15%">작성일</th>
                 <th style="width: 10%">조회수</th>
               </tr>
             </thead>
@@ -37,7 +37,22 @@
                 </td>
                 <td>{{ article.name }}</td>
                 <td>
-                  {{ toLocalTimeStamp(article.createdAt) }}
+                  <p
+                    v-if="
+                      todayDate !=
+                      toLocalTimeStamp(article.createdAt).substr(0, 10)
+                    "
+                  >
+                    {{ toLocalTimeStamp(article.createdAt).substr(0, 10) }}
+                  </p>
+                  <p
+                    v-if="
+                      todayDate ==
+                      toLocalTimeStamp(article.createdAt).substr(0, 10)
+                    "
+                  >
+                    {{ toLocalTimeStamp(article.createdAt).substr(10) }}
+                  </p>
                 </td>
                 <td>{{ article.hit }}회</td>
               </tr>
@@ -185,6 +200,7 @@ export default {
     const store = useStore();
     const searchCategory = ["전체", "제목", "내용", "작성자"];
     const sortType = ["최신순", "조회순"];
+    const todayDate = utils.todayDate();
 
     onMounted(() => {
       store.dispatch("getArticlelist", {
@@ -198,6 +214,7 @@ export default {
     return {
       searchCategory,
       sortType,
+      todayDate,
     };
   },
 };

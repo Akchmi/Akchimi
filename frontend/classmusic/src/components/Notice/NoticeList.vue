@@ -14,7 +14,7 @@
               <th style="width: 10%">글 번호</th>
               <th style="width: 50%">제목</th>
               <th style="width: 20%">작성자</th>
-              <th style="width: 20%">작성시간</th>
+              <th style="width: 20%">작성일</th>
             </tr>
           </thead>
 
@@ -28,7 +28,22 @@
                 {{ notice.title }}
               </td>
               <td>관리자</td>
-              <td>{{ toLocalTimeStamp(notice.createAt) }}</td>
+              <td>
+                <p
+                  v-if="
+                    todayDate != toLocalTimeStamp(notice.createAt).substr(0, 10)
+                  "
+                >
+                  {{ toLocalTimeStamp(notice.createAt).substr(0, 10) }}
+                </p>
+                <p
+                  v-if="
+                    todayDate == toLocalTimeStamp(notice.createAt).substr(0, 10)
+                  "
+                >
+                  {{ toLocalTimeStamp(notice.createAt).substr(10) }}
+                </p>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -154,6 +169,7 @@ export default {
   setup() {
     const searchCategory = ["전체", "제목", "내용"];
     const store = useStore();
+    const todayDate = utils.todayDate();
 
     onMounted(() => {
       store.dispatch("getNoticelist", {
@@ -162,7 +178,7 @@ export default {
         searchType: "전체",
       });
     });
-    return { searchCategory };
+    return { searchCategory, todayDate };
   },
 };
 </script>

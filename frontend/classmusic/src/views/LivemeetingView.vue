@@ -360,7 +360,7 @@ export default {
           );
           this.subscribers.push(subscriber);
           console.log(this.subscribers);
-          console.log(subscriber.stream)
+          console.log(subscriber.stream);
           // this.changeMainScreen(subscriber.stream)
           // this.subscribers.push(subscriber);
           // When the HTML video has been appended to DOM...
@@ -625,7 +625,7 @@ export default {
   z-index: 5;
 }
 .bottom-container {
-  height: 12vh;
+  height: 20vh;
   width: 98vw;
   background-color: white;
   position: relative;
@@ -659,6 +659,7 @@ video {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: scroll;
 }
 #live-screens {
   width: 90%;
