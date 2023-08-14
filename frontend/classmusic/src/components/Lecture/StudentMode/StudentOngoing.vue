@@ -54,7 +54,6 @@
             v-for="lecture in lectureList"
             :key="lecture.id"
           >
-            {{ lecture }}
             <div class="ongoing__container__box">
               <div class="ongoing__container__left">
                 <div style="display: flex; justify-content: center">
