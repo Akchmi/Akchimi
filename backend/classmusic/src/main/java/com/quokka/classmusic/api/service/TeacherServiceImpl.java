@@ -1,5 +1,6 @@
 package com.quokka.classmusic.api.service;
 
+import com.quokka.classmusic.api.request.ImageDto;
 import com.quokka.classmusic.api.request.TeacherDto;
 import com.quokka.classmusic.api.response.FileVo;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
@@ -159,10 +160,11 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public void deleteImage(int teacherId, List<String> files) {
-        for (String file : files) {
-            amazonS3ResourceStorage.deleteFile(file);
-            teacherRepository.deleteImage(teacherId , file);
+    public void deleteImage(int teacherId, ImageDto imageDto) {
+        for (String fileUrl : imageDto.getImages()) {
+            System.out.println(fileUrl);
+            amazonS3ResourceStorage.deleteFile(fileUrl);
+            teacherRepository.deleteImage(teacherId , fileUrl);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.quokka.classmusic.api.service;
 
+import com.quokka.classmusic.api.request.ImageDto;
 import com.quokka.classmusic.api.request.TeacherDto;
 import com.quokka.classmusic.api.request.TeacherSelectDto;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
@@ -20,5 +21,5 @@ public interface TeacherService {
     void updateTeacher(int teacherId , TeacherDto teacherDto);
     void deleteTeacher(int teacherId);
     void insertImage(int teacherId , List<MultipartFile> multipartFiles);
-    void deleteImage(int teacherId , List<String> files);
+    void deleteImage(int teacherId , ImageDto imageDto);
 }

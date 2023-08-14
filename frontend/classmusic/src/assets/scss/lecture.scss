@@ -1,0 +1,189 @@
+.main__container {
+  margin: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.lectureButtonTop {
+  display: flex;
+  justify-content: space-between;
+  width: 800px;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.lectureSelectButton {
+  background-color: transparent;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border: solid #edd9b7 3px;
+  border-bottom-width: 0;
+  margin-bottom: -2.5px;
+  margin-right: -2.5px;
+  width: 80px;
+  height: 30px;
+  color: darkgrey;
+}
+
+.lectureSelectButton:hover {
+  width: 84px;
+  height: 34px;
+  margin-top: -4.5px;
+  margin-bottom: -4.5px;
+  margin-right: -2.5px;
+}
+
+.buttonLecture {
+  color: black;
+}
+
+.buttonOngoing {
+  color: green;
+}
+
+.buttonWaiting {
+  color: darkorange;
+}
+
+.buttonFinish {
+  color: red;
+}
+
+.out__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid #edd9b7;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  width: 797px;
+
+  background-color: white;
+}
+
+.noSearchLecture {
+  height: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.ongoing__container {
+  box-sizing: border-box;
+  flex-direction: column;
+  display: flex;
+  width: 80%;
+
+  border: 1px dashed black;
+  margin: 20px;
+  padding: 20px 20px 0px 20px;
+}
+
+.ongoing__container__box {
+  display: flex;
+  height: 120px;
+}
+
+.ongoing__container__left {
+  width: 25%;
+  display: flex;
+  margin-left: -20px;
+  flex-direction: column;
+}
+
+.profileImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid black;
+  border-radius: 100%;
+}
+
+.info-box {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  flex-grow: 1;
+}
+
+.name {
+  margin-top: 10px;
+  text-align: center;
+}
+.memo-box {
+  width: 100%;
+  height: 70%;
+  border: 1px solid black;
+  overflow: hidden;
+  padding: 0;
+}
+
+.memoInput {
+  resize: none;
+  width: 100%;
+  height: 100%;
+}
+
+.ongoing__container__button {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.input-field {
+  width: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.wating__listbox {
+  flex-direction: row;
+  width: 700px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid black;
+  overflow: hidden;
+  padding: 10px;
+  margin: 20px;
+}
+
+.wating__info {
+  display: flex;
+  align-items: center;
+}
+
+.watingProfileImage {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.watingProfileName {
+  margin-left: 10px;
+}
+
+.review__container__box {
+  margin: 10px;
+}
+
+.review-box {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid black;
+  overflow: hidden;
+}

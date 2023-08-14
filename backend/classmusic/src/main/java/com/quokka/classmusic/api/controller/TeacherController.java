@@ -1,6 +1,7 @@
 package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.TeacherDto;
+import com.quokka.classmusic.api.request.ImageDto;
 import com.quokka.classmusic.api.response.TeacherDetailVo;
 import com.quokka.classmusic.api.response.TeacherVo;
 import com.quokka.classmusic.api.response.UserDetailsVo;
@@ -66,9 +67,10 @@ public class TeacherController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{teacherId}/images")
-    public ResponseEntity<Void> deleteImage(@PathVariable int teacherId , @RequestPart(value = "image") List<String> files){
-        teacherService.deleteImage(teacherId , files);
+
+    @PostMapping("/{teacherId}/images/delete")
+    public ResponseEntity<Void> deleteImage(@PathVariable int teacherId , @RequestBody ImageDto imageDto){
+        teacherService.deleteImage(teacherId , imageDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

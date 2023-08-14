@@ -31,7 +31,7 @@ public class ContactsController {
     @DeleteMapping("/{contactId}")
     public ResponseEntity<Void> deleteContacts(@PathVariable int contactId){
         contactsService.deleteContacts(contactId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //    매칭 생성하기

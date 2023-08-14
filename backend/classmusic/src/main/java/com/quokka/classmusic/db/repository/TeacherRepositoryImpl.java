@@ -44,7 +44,8 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .join(treat.teacher , teacher)
                 .join(treat.instrument , instrument)
                 .join(teacher.user , user)
-                .where(selectTeacherFilter(params).and(selectTeacherIntroduceFilter(params.get("keyword"))))
+                .where(selectTeacherFilter(params))
+                .where(selectTeacherIntroduceFilter(params.get("keyword")))
                 .where(selectGenderFilter(params))
                 .where(instrumentEq(params.get("instrument")))
                 .where(getBitAndTemplate(Integer.parseInt(params.get("classDay"))).gt(0))
@@ -96,7 +97,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
         em.remove(query.selectFrom(teacherFile)
                 .join(teacherFile.teacher , teacher)
                 .where(teacher.teacherId.eq(teacherId).and(teacherFile.fileUrl.eq(file)))
-                .fetch());
+                .fetchOne());
     }
 
     @Override
@@ -181,7 +182,8 @@ public class TeacherRepositoryImpl implements TeacherRepository{
         if(keyword.equals("")){
             return null;
         }
-        return teacher.introduce.like(new StringBuilder().append('%').append(keyword).append('%').toString());
+        String str = new StringBuilder().append('%').append(keyword).append('%').toString();
+        return teacher.introduce.like(str).or(user.name.like(str));
     }
 
     private BooleanBuilder selectTeacherFilter(Map<String, String> params){
@@ -217,7 +219,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
 
 
     private OrderSpecifier orderType(String orderBy){
-        if(orderBy.equals("별점수")){
+        if(orderBy.equals("별점순")){
             return new OrderSpecifier(Order.DESC , teacher.avgRating);
         } else if(orderBy.equals("매칭순")){
             return new OrderSpecifier(Order.DESC , teacher.contactCnt);
