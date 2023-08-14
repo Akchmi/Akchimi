@@ -55,6 +55,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Exception 처리
             log.debug("JWT 토큰 인증 과정 Exception 발생");
 
+            e.printStackTrace();
+
             // 응답 처리
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType("application/json; charset=UTF-8");
