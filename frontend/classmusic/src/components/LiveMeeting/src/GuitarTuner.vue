@@ -16,18 +16,19 @@
       {{ note ? notes[note % 12] : "--" }}
     </div>
     <div :class="[...detuneClasses]">
-      <div :class="[...keySignatureClasses, ...flatClasses]">&#9837;</div>
-      <div
-        :class="[
+      <!-- <div :class="[...keySignatureClasses, ...flatClasses]" style="font-size: 30px;">&#9837;</div> -->
+      <div :class="[...keySignatureClasses, ...flatClasses]" style="font-size: 20px;">조여요</div>
+      <div :class="[
           ...detuneTipClasses,
           detune !== null && (Math.abs(detune) < 5 ? 'tuned' : 'untuned'),
         ]"
-        :style="{ transform: `translateX(${detune * 4 || 0}px)` }"
-      >
-        <span :class="[...detuneValueClasses]">{{ detune || "--" }}</span>
+        :style="{ transform: `translateX(${detune * 4 || 0}px)` }">
+        <img src="@/assets/images/quokka/quokka_emoji.png">
       </div>
-      <div :class="[...keySignatureClasses, ...sharpClasses]">&#9839;</div>
+      <!-- <div :class="[...keySignatureClasses, ...sharpClasses]" style="font-size: 30px;">&#9839;</div> -->
+      <div :class="[...keySignatureClasses, ...sharpClasses]" style="font-size: 20px;">풀어요</div>
     </div>
+    <!-- <div :class="[...detuneValueClasses]">{{ detune || "--" }}</div> -->
   </div>
 </template>
 
@@ -201,6 +202,7 @@ export default {
 .tuner * {
   margin: 0;
   padding: 0;
+  border-radius: 50px;
   box-sizing: border-box;
 }
 
@@ -208,7 +210,8 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  color: $c-silver;
+  border-radius: 50px;
+  // color: $c-silver;
 }
 
 .gridOverlay {
@@ -225,12 +228,12 @@ export default {
     content: "";
     width: 100%;
     height: 100%;
-    background: $c-san-juan-blue;
+    // background: $c-san-juan-blue;
     background-image: repeating-linear-gradient(
-        $c-white -1px 1px,
+        #6b5632 -1px 1px,
         transparent 1px 100%
       ),
-      repeating-linear-gradient(90deg, $c-white -1px 1px, transparent 1px 100%);
+      repeating-linear-gradient(90deg, #6b5632 -1px 1px, transparent 1px 100%);
     background-size: ($tuning-area-size / 20) ($tuning-area-size / 20);
     background-position: center center;
     opacity: 0.15;
@@ -269,13 +272,13 @@ export default {
 .detune {
   position: absolute;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
+  // align-items: center;
+  justify-content: space-between;
   bottom: $s-l;
   left: 0;
   right: 0;
-  width: 100%;
-  max-width: 100%;
+  width: 70%;
+  max-width: 70%;
   margin: 0 auto;
 }
 
@@ -293,51 +296,32 @@ export default {
   &.untuned::before {
     background: $c-passion-gradient;
   }
-  &::before {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    content: "";
-    height: 100%;
-    width: 100%;
-    margin: 0 auto;
-    background: $c-dove-gray;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50% 100%;
-    border-bottom-right-radius: 2.5px;
-    border-bottom-left-radius: 100% 50%;
-    transform: rotate(45deg);
-    opacity: 0.8;
-    box-shadow: $s-m 0 $s-m $c-cod-gray;
-  }
+  // &::before {
+  //   position: absolute;
+  //   bottom: 0;
+  //   right: 0;
+  //   left: 0;
+  //   content: "";
+  //   height: 100%;
+  //   width: 100%;
+  //   margin: 0 auto;
+  //   background: $c-dove-gray;
+  //   border-top-left-radius: 50%;
+  //   border-top-right-radius: 50% 100%;
+  //   border-bottom-right-radius: 2.5px;
+  //   border-bottom-left-radius: 100% 50%;
+  //   transform: rotate(45deg);
+  //   opacity: 0.8;
+  //   box-shadow: $s-m 0 $s-m $c-cod-gray;
+  // }
 }
 
 .detuneValue {
-  position: relative;
+  position: flex;
+  justify-content: center;
   z-index: $z-highlight;
   padding-top: $s-s;
   font-weight: bold;
   font-size: $s-l;
-}
-
-@include desktop {
-  .detune {
-    width: $tuning-area-size * 1.5;
-  }
-  .gridOverlay {
-    &::after {
-      @include fill;
-      content: "";
-      background-image: linear-gradient(
-          to left,
-          transparent 90%,
-          $c-cod-gray 100%
-        ),
-        linear-gradient(to right, transparent 90%, $c-cod-gray 100%),
-        linear-gradient(to top, transparent 90%, $c-cod-gray 100%),
-        linear-gradient(to bottom, transparent 90%, $c-cod-gray 100%);
-    }
-  }
 }
 </style>
