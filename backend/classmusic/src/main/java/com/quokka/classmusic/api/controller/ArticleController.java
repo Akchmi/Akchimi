@@ -2,6 +2,7 @@ package com.quokka.classmusic.api.controller;
 
 import com.quokka.classmusic.api.request.ArticleDto;
 import com.quokka.classmusic.api.request.CommentDto;
+import com.quokka.classmusic.api.request.ImageDto;
 import com.quokka.classmusic.api.response.ArticleVo;
 import com.quokka.classmusic.api.response.CommentVo;
 import com.quokka.classmusic.api.response.UserDetailsVo;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -111,5 +113,17 @@ public class ArticleController {
     public ResponseEntity deleteComment(@PathVariable int articleId, @PathVariable int commentId, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
         commentService.deleteComment(commentId, userDetailsVo.getUserVo().getUserId());
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{articleId}/images")
+    public ResponseEntity<Void> insertImage(@PathVariable int articleId , @RequestPart(value = "image") List<MultipartFile> multipartFiles){
+        articleService.insertImage(articleId , multipartFiles);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/{articleId}/images/delete")
+    public ResponseEntity<Void> deleteImage(@PathVariable int articleId , @RequestBody ImageDto imageDto){
+        articleService.deleteImage(articleId , imageDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

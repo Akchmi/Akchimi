@@ -1,33 +1,39 @@
 package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.ArticleDto;
+import com.quokka.classmusic.api.request.ImageDto;
 import com.quokka.classmusic.api.response.ArticleVo;
+import com.quokka.classmusic.api.response.FileVo;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
-import com.quokka.classmusic.db.entity.Article;
-import com.quokka.classmusic.db.entity.User;
+import com.quokka.classmusic.common.util.AmazonS3ResourceStorage;
+import com.quokka.classmusic.db.entity.*;
 import com.quokka.classmusic.db.repository.ArticleRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Instant;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
 @Transactional
 public class ArticleServiceImpl implements ArticleService{
 
-    private ArticleRepository articleRepository;
-    private UserRepository userRepository;
+    private final ArticleRepository articleRepository;
+    private final UserRepository userRepository;
+    private final AmazonS3ResourceStorage amazonS3ResourceStorage;
 
-    public ArticleServiceImpl(ArticleRepository articleRepository, UserRepository userRepository){
-        this.articleRepository=articleRepository;
-        this.userRepository=userRepository;
+    public ArticleServiceImpl(ArticleRepository articleRepository, UserRepository userRepository, AmazonS3ResourceStorage amazonS3ResourceStorage) {
+        this.articleRepository = articleRepository;
+        this.userRepository = userRepository;
+        this.amazonS3ResourceStorage = amazonS3ResourceStorage;
     }
 
     @Override
@@ -94,6 +100,29 @@ public class ArticleServiceImpl implements ArticleService{
             articleRepository.save(article);
         }else {
             throw new RestApiException(ErrorCode.NOT_AUTHOR);
+        }
+    }
+
+    @Override
+    public void insertImage(int articleId, List<MultipartFile> multipartFiles) {
+        Article article = articleRepository.findById(articleId);
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            FileVo fileVo = FileVo.multipartOf(multipartFile);
+            amazonS3ResourceStorage.store(fileVo.getPath() , multipartFile);
+            articleRepository
+                    .saveImage(ArticleFile.builder()
+                            .article(article)
+                            .fileUrl("https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/" + fileVo.getPath())
+                            .build());
+        }
+    }
+
+    @Override
+    public void deleteImage(int articleId, ImageDto imageDto) {
+        for (String file : imageDto.getImages()) {
+            amazonS3ResourceStorage.deleteFile(file);
+            articleRepository.deleteImage(articleId , file);
         }
     }
 

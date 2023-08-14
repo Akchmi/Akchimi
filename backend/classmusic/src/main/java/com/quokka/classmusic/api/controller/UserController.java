@@ -142,7 +142,9 @@ public class UserController {
 //    유저 프로필이미지 추가
     @PostMapping("/{id}/profileImage")
     public ResponseEntity<Void> saveProfileImage(@PathVariable String id, @RequestPart(value = "image") MultipartFile multipartFile , @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+        System.out.println(1);
         log.debug(userDetailsVo.getUserVo().getId());
+        System.out.println(2);
         String currentLoginId = userDetailsVo.getUserVo().getId();
 
         if (!currentLoginId.equals(id)) {
@@ -156,7 +158,9 @@ public class UserController {
 
     @DeleteMapping("/{id}/profileImage")
     public ResponseEntity<Void> deleteProfileImage(@PathVariable String id , @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+        System.out.println(1);
         log.debug(userDetailsVo.getUserVo().getId());
+        System.out.println(2);
         String currentLoginId = userDetailsVo.getUserVo().getId();
         if (!currentLoginId.equals(id)) {
             log.debug("아이디가 다릅니다.");

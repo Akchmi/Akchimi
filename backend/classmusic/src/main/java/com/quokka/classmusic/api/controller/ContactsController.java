@@ -28,10 +28,10 @@ public class ContactsController {
     }
 
 //    매칭 삭제하기
-    @DeleteMapping
-    public ResponseEntity<Void> deleteContacts(@RequestParam int contactId){
+    @DeleteMapping("/{contactId}")
+    public ResponseEntity<Void> deleteContacts(@PathVariable int contactId){
         contactsService.deleteContacts(contactId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //    매칭 생성하기
