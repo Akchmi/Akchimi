@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Article;
+import com.quokka.classmusic.db.entity.ArticleFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.quokka.classmusic.db.entity.QArticle.article;
+import static com.quokka.classmusic.db.entity.QArticleFile.articleFile;
+import static com.quokka.classmusic.db.entity.QTeacher.teacher;
+import static com.quokka.classmusic.db.entity.QTeacherFile.teacherFile;
 import static com.quokka.classmusic.db.entity.QUser.user;
 
 @Slf4j
@@ -121,5 +125,18 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
                 .where(searchKeyWord(searchType, keyword))
                 .fetchCount();
         return (int)(totalArticleNum-1)/20+1;
+    }
+
+    @Override
+    public void deleteImage(int articleId, String file) {
+        em.remove(query.selectFrom(articleFile)
+                .join(articleFile.article , article)
+                .where(article.articleId.eq(articleId).and(articleFile.fileUrl.eq(file)))
+                .fetch());
+    }
+
+    @Override
+    public void saveImage(ArticleFile articleFile) {
+        em.persist(articleFile);
     }
 }

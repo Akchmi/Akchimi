@@ -65,11 +65,9 @@ public class TeacherServiceImpl implements TeacherService{
         Teacher teacher = teacherRepository.findById(teacherId);
         User user = teacher.getUser();
         Integer likeId = null;
-        System.out.println("ddddddddddddddddddddddd" + userDetailsVo.getUserVo().getUserId());
         if(userDetailsVo != null){
             System.out.println(likeId);
             likeId = teacherRepository.findLikeById(userDetailsVo.getUserVo().getUserId() , teacherId);
-            System.out.println("asdfasdf" + likeId);
         }
         TeacherDetailVo teacherDetailVo = new TeacherDetailVo(
                 user.getUserId(),
