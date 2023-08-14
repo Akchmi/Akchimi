@@ -31,7 +31,6 @@ public class TeacherController {
 
     @GetMapping
     public ResponseEntity<List<TeacherVo>> selectAllTeacher(@RequestParam Map<String, String> params){
-
         return new ResponseEntity<>(teacherService.selectAllTeacher(params), HttpStatus.OK);
     }
 
@@ -54,10 +53,10 @@ public class TeacherController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{teacherId}")
-    public ResponseEntity<Void> deleteTeacher(@PathVariable int teacherId){
-        teacherService.deleteTeacher(teacherId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PutMapping("/{teacherId}/visible")
+    public ResponseEntity<Void> setVisibleTeacher(@PathVariable int teacherId){
+        teacherService.setVisibleTeacher(teacherId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

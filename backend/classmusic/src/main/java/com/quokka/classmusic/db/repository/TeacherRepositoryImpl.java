@@ -44,6 +44,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .join(treat.teacher , teacher)
                 .join(treat.instrument , instrument)
                 .join(teacher.user , user)
+                .where(teacher.visible.eq(1))
                 .where(selectTeacherFilter(params))
                 .where(selectTeacherIntroduceFilter(params.get("keyword")))
                 .where(selectGenderFilter(params))

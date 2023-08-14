@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "teacher")
 public class Teacher {
     @Builder
-    public Teacher(int teacherId, User user, Integer career, Integer cost, String introduce, Integer startTime, Integer endTime, Integer classDay, Float avgRating, Integer contactCnt) {
+    public Teacher(int teacherId, User user, Integer career, Integer cost, String introduce, Integer startTime, Integer endTime, Integer classDay, Float avgRating, Integer contactCnt , Integer visible) {
         this.teacherId = teacherId;
         this.user = user;
         this.career = career;
@@ -27,6 +27,7 @@ public class Teacher {
         this.classDay = classDay;
         this.avgRating = avgRating;
         this.contactCnt = contactCnt;
+        this.visible = visible;
     }
 
     @Id
@@ -69,6 +70,9 @@ public class Teacher {
 
     @Column(name = "contact_cnt")
     private Integer contactCnt;
+
+    @Column(name = "visible")
+    private Integer visible;
 
     @PrePersist
     private void prePersist(){

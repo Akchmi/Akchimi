@@ -84,7 +84,8 @@ public class TeacherServiceImpl implements TeacherService{
                 teacher.getContactCnt(),
                 treatRepository.findInstrumentNameByTeacherId(teacherId),
                 teacherRepository.findImageByTeacherId(teacherId),
-                likeId
+                likeId,
+                teacher.getVisible()
         );
         return teacherDetailVo;
     }
@@ -112,6 +113,7 @@ public class TeacherServiceImpl implements TeacherService{
                 .startTime(teacherDto.getStartTime())
                 .endTime(teacherDto.getEndTime())
                 .classDay(day)
+                .visible(1)
                 .build();
         teacherRepository.save(teacher);
 
@@ -137,9 +139,10 @@ public class TeacherServiceImpl implements TeacherService{
         saveInstruments(teacher , teacherDto.getInstruments());
     }
     @Override
-    public void deleteTeacher(int teacherId) {
+    public void setVisibleTeacher(int teacherId) {
         Teacher teacher = teacherRepository.findById(teacherId);
-        teacherRepository.delete(teacher);
+        teacher.setVisible(teacher.getVisible() ^ 1);
+//        teacherRepository.delete(teacher);
     }
 
     @Override

@@ -19,7 +19,7 @@ public interface TeacherService {
     TeacherDetailVo selectDetailTeacher(int teacherId , UserDetailsVo userDetailsVo);
     int insertTeacher(TeacherDto teacherDto);
     void updateTeacher(int teacherId , TeacherDto teacherDto);
-    void deleteTeacher(int teacherId);
+    void setVisibleTeacher(int teacherId);
     void insertImage(int teacherId , List<MultipartFile> multipartFiles);
     void deleteImage(int teacherId , ImageDto imageDto);
 }

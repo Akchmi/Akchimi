@@ -45,6 +45,9 @@ public class Article {
     @Column(name = "hit")
     private Integer hit;
 
+    @Column(name = "deleted_at")
+    private Integer deletedAt;
+
     @PrePersist
     private void prePersist(){
         this.hit = this.hit == null ? 0 : this.hit;
