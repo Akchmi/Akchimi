@@ -11,4 +11,15 @@ export default {
     console.log(data);
     state.lectures.review = data;
   },
+
+  UPDATEMEMO(state, data) {
+    for (let i = 0; i < state.lectures.lectureList.length; i++) {
+      if (state.lectures.lectureList[i].contactId == data.contactId) {
+        state.lectures.lectureList[i].memo = data.memo;
+      }
+    }
+  },
+  UPDATEREVIEW(state, data) {
+    state.lectures.review.content = data;
+  },
 };
