@@ -360,7 +360,7 @@ export default {
           );
           this.subscribers.push(subscriber);
           console.log(this.subscribers);
-          console.log(subscriber.stream)
+          console.log(subscriber.stream);
           // this.changeMainScreen(subscriber.stream)
           // this.subscribers.push(subscriber);
           // When the HTML video has been appended to DOM...
@@ -564,7 +564,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #join {
   display: flex;
   justify-content: center;
