@@ -2,6 +2,8 @@ package com.quokka.classmusic.api.service;
 
 import com.quokka.classmusic.api.request.*;
 import com.quokka.classmusic.api.response.ContactsVo;
+import com.quokka.classmusic.common.exception.ErrorCode;
+import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.repository.ContactsRepository;
@@ -62,9 +64,6 @@ public class ContactsServiceImpl implements ContactsService{
         } else if(state == 2){
             contact.setEndTime((int) (System.currentTimeMillis() / 1000));
         }
-        else if(state == 4){
-            contact.setEndTime((int) (System.currentTimeMillis() / 1000));
-        }
         contact.setState(state);
         contactsRepository.save(contact);
     }
@@ -100,6 +99,10 @@ public class ContactsServiceImpl implements ContactsService{
 //    매칭 생성하기
     @Override
     public int insertContacts(ContactsInsertDto contactsInsertDto) {
+        if(contactsRepository.findByPair(contactsInsertDto.getStudentId() , contactsInsertDto.getTeacherId()) != null){
+            throw new RestApiException(ErrorCode.CONTACT_DUPLICATED);
+        }
+
         Contact contact = Contact.builder()
                 .student(userRepository.findById(contactsInsertDto.getStudentId()))
                 .teacher(teacherRepository.findById(contactsInsertDto.getTeacherId()))

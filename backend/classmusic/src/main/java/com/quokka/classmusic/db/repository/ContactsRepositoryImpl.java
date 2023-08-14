@@ -102,6 +102,13 @@ public class ContactsRepositoryImpl implements ContactsRepository {
         return order == null ? 0 : order;
     }
 
+    @Override
+    public Contact findByPair(int studentId, int teacherId) {
+        return query.selectFrom(contact)
+                .where(contact.student.userId.eq(studentId) , contact.teacher.teacherId.eq(teacherId) , contact.state.ne(2))
+                .fetchOne();
+    }
+
 
     private BooleanExpression userIdEq(Integer id){
         if(id == null){

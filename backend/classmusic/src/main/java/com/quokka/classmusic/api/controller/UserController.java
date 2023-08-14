@@ -86,8 +86,8 @@ public class UserController {
 
     // 즐겨찾기 추가
     @PostMapping("/{id}/like")
-    public ResponseEntity<Integer> addLike(@PathVariable String id, @RequestBody Map<String, Integer> param, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
-        log.debug(userDetailsVo.getUserVo().getId());
+    public ResponseEntity<Integer> addLike(@PathVariable String id, @RequestBody Map<String, String> param, @AuthenticationPrincipal UserDetailsVo userDetailsVo) {
+        log.debug("즐겨찾기 : {}",userDetailsVo.getUserVo().getId());
         String currentLoginId = userDetailsVo.getUserVo().getId();
 
         if (!currentLoginId.equals(id)) {
@@ -96,7 +96,7 @@ public class UserController {
         }
 
         LikeInsertDto likeInsertDto = new LikeInsertDto();
-        int teacherId = param.get("teacherId");
+        int teacherId = Integer.parseInt(param.get("teacherId"));
         log.debug("{} / {}", userService.findUserById(id).getUserId(), teacherId);
         likeInsertDto.setTeacherId(teacherId);
         likeInsertDto.setStudentId(userService.findUserById(id).getUserId());

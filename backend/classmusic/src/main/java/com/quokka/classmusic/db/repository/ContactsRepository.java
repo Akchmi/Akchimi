@@ -13,4 +13,5 @@ public interface ContactsRepository  {
     Contact findById(int contactId);
     void delete(Contact contact);
     int maxOrder(Integer id ,Integer state , Integer type);
+    Contact findByPair(int studentId , int teacherId);
 }
