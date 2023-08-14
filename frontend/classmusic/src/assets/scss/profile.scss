@@ -129,6 +129,17 @@
 
 .modal-body {
   padding: 20px 0;
+  label{
+    display: inline-block;
+    width: 100px;
+  }
+  input{
+    outline: none;
+    width: 200px;
+    padding: 5px;
+    border: 2px solid #edd9b7;
+    border-radius: 5px;
+  }
 }
 
 .modal-footer {

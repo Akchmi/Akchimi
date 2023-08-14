@@ -121,6 +121,7 @@ function apiTeacherProfileUpdate(context, data) {
     .put(`/teachers/${teacherId}`, data)
     .then(({ data }) => {
       console.log("풋전송", data);
+      return data
     })
     .catch((error) => {
       console.error(teacherId, "PUt 요청 에러 :", error);

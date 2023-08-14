@@ -46,7 +46,7 @@
 				<div class="teacher-details">
 					<h3 class="label">강사 소개</h3>
 					<div class="description-box">
-						<p>{{ introduce }}</p>
+						{{ introduce }}
 					</div>
 				</div>
 
@@ -173,8 +173,7 @@ export default {
 		this.attachedFiles = res.images;
 		this.avgRating = res.avgRating;
 		this.contactCnt = res.contactCnt;
-		this.likeId = res.likeId;
-		console.log("크라아", this.likeId);
+		this.likeId = res.likeId;	
 		this.getReview();
 	},
 	computed: {

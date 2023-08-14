@@ -23,7 +23,7 @@ export default {
 
   putTeacherProfileUpdate(context, data) {
     console.log("액션", context, data);
-    apiTeacherProfileUpdate(context, data);
+    return apiTeacherProfileUpdate(context, data);
   },
 
   postLikeTeacherUpdate(context, data) {

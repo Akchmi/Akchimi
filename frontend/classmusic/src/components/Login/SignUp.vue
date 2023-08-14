@@ -42,8 +42,7 @@
 							name="gender"
 							id="female"
 							value="2"
-							v-model="gender"
-							checked
+							v-model="gender"							
 						/>
 						<label for="female">여성</label>
 					</div>
@@ -87,7 +86,7 @@ export default {
 			confirmPassword: "",
 			name: "",
 			email: "",
-			gender: "2",
+			gender: null,
 			isIdChecked: false,
 			checkedId: "",
 		};
