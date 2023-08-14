@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service
 @Transactional
@@ -48,6 +49,16 @@ public class ContactsServiceImpl implements ContactsService{
             Teacher teacher = contact.getTeacher();
             teacher.setContactCnt(teacher.getContactCnt() + 1);
             contact.setStartTime((int) (System.currentTimeMillis() / 1000));
+
+            int leftLimit = 65;
+            int rightLimit = 90;
+            int targetStringLength = 16;
+            Random random = new Random();
+            String roomKey = random.ints(leftLimit, rightLimit + 1)
+                    .limit(targetStringLength)
+                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                    .toString();
+            contact.setRoomKey(roomKey);
         } else if(state == 2){
             contact.setEndTime((int) (System.currentTimeMillis() / 1000));
         }

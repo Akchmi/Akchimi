@@ -25,6 +25,7 @@ public class TeacherDetailVo {
     private List<String> instruments;
     private List<String> images;
     private Integer likeId;
+    private Integer visible;
 
     public void setClassDay(String classDay) {
         this.classDay = classDay;
