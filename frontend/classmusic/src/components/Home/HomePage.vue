@@ -6,10 +6,7 @@
         src="@/assets/images/home/mainImage.png"
         alt="메인이미지"
       /> -->
-      <TheBanner
-        :title="'악기라는 취미에 미치다.'"
-        :subTitle="'메인페이지입니다.'"
-      />
+      <TheBanner :title="'악기라는 취미에 미치다.'" />
     </div>
 
     <div class="mainSearch">
