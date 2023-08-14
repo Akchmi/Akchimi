@@ -36,7 +36,10 @@
         >
           자세히 보기
         </button>
-        <button @click="registerLecture(teacher.teacherId)">강의 신청</button>
+
+        <button v-if="loginUserId" @click="registerLecture(teacher.teacherId)">
+          강의 신청
+        </button>
       </div>
     </div>
   </div>
@@ -50,11 +53,16 @@ export default {
   },
   computed: {
     ...mapGetters({ loginUserId: "getUserId" }),
+    ...mapGetters({ loginTeacherId: "getTeacherId" }),
   },
 
   methods: {
     ...mapActions(["postMachingCreate"]),
     registerLecture(teacherId) {
+      if (teacherId == this.loginTeacherId) {
+        alert("자신에게 강의를 신청할 수 없습니다.");
+        return;
+      }
       this.postMachingCreate({
         teacherId: teacherId,
         studentId: this.loginUserId,

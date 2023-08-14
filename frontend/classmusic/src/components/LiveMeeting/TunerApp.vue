@@ -43,15 +43,16 @@ export default {
   // height: 300px;
   width: 100%;
   margin: 0 auto;
-  background-color: #333;
+  background-color: #edd9b7;
 }
 .tuner-button{
   height: 10%;
+  width: 40%;
   position: sticky;
   background-color: transparent;
-  color: white;
-  font-weight: 100;
-  top: 0;
-  left: 0;
+  color: black;
+  font-weight: bolder;
+  top: 100px;
+  left: 100px;
 }
 </style>
