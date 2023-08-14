@@ -11,96 +11,62 @@
         </div>
         <div class="info-container">
           <div class="name-container">
-            <h3>강사 이름</h3>
-            <p class="name-form">{{ name }}</p>
+            <h2>강사 이름 : {{ name }}</h2>
           </div>
-          <div class="teacher-profile-update-container">
-            <!-- <div class="left-field"> -->
-            <div class="input-field">
-              <label for="instrument">악기 : </label>
-              <select
-                id="instrument"
-                v-model="selectedInstrument"
-                @change="saveToselectedInsruments"
-              >
-                <option
-                  v-for="(instrument, index) in instruments"
-                  :value="instrument"
-                  :key="index"
-                >
-                  {{ instrument }}
-                </option>
-              </select>
-              <!-- 선택된 악기: -->
-              <span
-                class="instrument-selected"
-                v-for="(instrument, index) in selectedInstruments"
-                :key="index"
+            <div class="teacher-profile-update__instruments teacher-profile-form__update">
+              <label>악기 : </label>
+              <button
+                v-for="(checked, instrument) in instruments"
+                :key="instrument"
+                :class="checked ? 'update-selected-instrument' : 'update-unselected-instrument'"
+                :v-model="selectedInstruments[instrument]"
+                @click="toggleInstrument(instrument)"
               >
                 {{ instrument }}
-                <button class="button-delete" @click="removeInstrument(index)">
-                  x
-                </button>
-              </span>
+              </button>
             </div>
-            <div class="input-field">
+            
+            <div class="teacher-profile-form__row">
+              <div class="teacher-profile-form__update">
+                <label for="years">경력 : </label>
+                <input id="years" v-model.number="career" type="number" min="1" />
+                년
+              </div>
+              <div class="teacher-profile-form__update">
+                <label for="cost">시간당 비용 : </label>
+                <input id="cost" v-model.number="cost" type="number" min="0" />
+                만원
+              </div>
+            </div>
+            <div class="teacher-profile-form__update">
               <label>요일:</label>
-              <div
-                class="days-container"
-                v-for="(checked, day) in days"
-                :key="day"
-              >
+              <div class="days-container" v-for="(checked, day) in days" :key="day">
                 <input type="checkbox" :id="day" v-model="days[day]" />
                 <label :for="day">{{ day }}</label>
               </div>
             </div>
-            <div class="input-field">
-              <label for="start">시작 시간 :</label>
-              <input
-                id="start"
-                v-model.number="startTime"
-                type="number"
-                min="0"
-                max="23"
-              />
-              <label for="end">종료 시간 :</label>
-              <input
-                id="end"
-                v-model.number="endTime"
-                type="number"
-                min="0"
-                max="23"
-              />
-            </div>
-            <div class="input-field">
-              <div class="carrier-input">
-                <label for="years">경력 : </label>
+            <div class="teacher-profile-form__row">
+              <div class="teacher-profile-form__update">
+                <label for="start">시작 시간 :</label>
                 <input
-                  id="years"
-                  v-model.number="career"
-                  type="number"
-                  min="1"
-                  max="99"
-                />
-                년
-              </div>
-              <div class="cost-input">
-                <label for="cost">시간당 비용 : </label>
-                <input
-                  id="cost"
-                  v-model.number="cost"
+                  id="start"
+                  v-model.number="startTime"
                   type="number"
                   min="0"
-                  max="99"
+                  max="23"
                 />
-                만원
+              </div>
+              <div class="teacher-profile-form__update">
+                <label for="end">종료 시간 :</label>
+                <input
+                  id="end"
+                  v-model.number="endTime"
+                  type="number"
+                  min="0"
+                  max="23"
+                />
               </div>
             </div>
-            <!-- </div> -->
-            <!-- <div class="right-field"> -->
-
-            <!-- </div> -->
-          </div>
         </div>
       </div>
       <div class="teacher-details">
@@ -114,24 +80,29 @@
         </div>
       </div>
       <div class="attach-file">
-        <h3>파일 첨부</h3>
-        <div
-          v-for="(image, index) in attachedFiles"
-          :key="index"
-          class="image-container"
-        >
-          <img :src="image" alt="Attached file" class="attach-image" />
-
-          <button @click="removeAttachedFile(index)">삭제</button>
+        <div class="file__header">
+          <h3>파일 첨부</h3>
+          <button @click="triggerFileUpload">첨부 파일 추가</button>
         </div>
-        <div
-          v-for="(image, index) in newAttachedFiles"
-          :key="index"
-          class="image-container"
-        >
-          <img :src="image.preview" alt="Attached file" class="attach-image" />
+        <div class="file__images">
+          <div
+            v-for="(image, index) in attachedFiles"
+            :key="index"
+            class="image-container"
+          >
+            <img :src="image" alt="Attached file" class="attach-image" />
 
-          <button @click="removeNewAttachedFile(index)">삭제</button>
+            <button class="image-remove" @click="removeAttachedFile(index)">삭제</button>
+          </div>
+          <div
+            v-for="(image, index) in newAttachedFiles"
+            :key="index"
+            class="image-container"
+          >
+            <img :src="image.preview" alt="Attached file" class="attach-image" />
+
+            <button class="image-remove" @click="removeNewAttachedFile(index)">삭제</button>
+          </div>
         </div>
         <input
           type="file"
@@ -140,10 +111,9 @@
           @change="handleFileUpload"
           style="display: none"
         />
-        <button @click="triggerFileUpload">첨부 파일 추가</button>
       </div>
-      <div class="save-button">
-        <button @click="submitForm">강사 수정하기</button>
+      <div class="update-button">
+        <button class="update-submit" @click="submitForm">강사 수정하기</button>
       </div>
     </div>
   </div>
@@ -164,8 +134,14 @@ export default {
   data() {
     return {
       userInfo: {},
-      selectedInstrument: null,
-      instruments: ["피아노", "기타", "드럼", "바이올린", "트럼펫"],
+      // selectedInstrument: null,
+      instruments: {
+				피아노: false,
+				기타: false,
+				드럼: false,
+				바이올린: false,
+				트럼펫: false,
+			},
       selectedInstruments: [],
       days: {
         월: false,
@@ -228,9 +204,10 @@ export default {
       }
     },
 
-    removeInstrument(index) {
-      this.selectedInstruments.splice(index, 1);
-    },
+    toggleInstrument(instrument) {
+			this.instruments[instrument] = !this.instruments[instrument];
+      console.log(this.instruments);
+		},
 
     ...mapActions(["putTeacherProfileUpdate"]),
 
@@ -266,6 +243,8 @@ export default {
     async submitForm() {
       await this.submitImages();
       await this.submitAttachedFilesToDelete();
+      await this.saveToselectedInsruments();
+      console.log(this.selectedInstruments);
 
       const data = {
         career: this.career,
@@ -277,17 +256,16 @@ export default {
         instruments: [...this.selectedInstruments],
         teacherId: this.teacherId,
       };
-      this.putTeacherProfileUpdate(data).then((response) => {
+      this.putTeacherProfileUpdate(data).then(() => {
         const teacherId = JSON.parse(localStorage.getItem("vuex")).common
           .teacherId;
-        this.$store.commit("updateTeacherProfile", response);
-        this.$router.push(`/profile/teacherprofile/${teacherId}`);
+        
+        this.$router.push(`/profile/teacherprofile/${teacherId}`)      
       });
     },
     convertDaysToBitMask() {
       let index = 0,
         bitMaskedDays = 0;
-
       for (const day in this.days) {
         if (this.days[day]) {
           bitMaskedDays ^= 1 << index;
@@ -298,13 +276,12 @@ export default {
     },
 
     saveToselectedInsruments() {
-      const selectedInstrument = this.selectedInstrument;
-      for (let i = 0; i < this.selectedInstruments.length; i++) {
-        if (this.selectedInstruments[i] == selectedInstrument) {
-          return;
+      this.selectedInstruments = [];
+      for(const inst in this.instruments){
+        if(this.instruments[inst]){
+          this.selectedInstruments.push(inst);
         }
       }
-      this.selectedInstruments.push(selectedInstrument);
     },
   },
   async created() {
@@ -320,17 +297,32 @@ export default {
     this.classDay = res.classDay;
     this.userProfileImage = res.userProfileImage;
     this.attachedFiles = res.images;
-
-    const classDayBinary = parseInt(res.classDay, 2)
-      .toString(2)
-      .padStart(7, "0");
+    
+    res.classDay=res.classDay.toString().split('').reverse().join('');
+    // const classDayBinary = parseInt(res.classDay, 2)
+    //   .toString(2)
+    //   .padEnd(7, "0");
+    const diff = 7-res.classDay.toString().length;
+    let classDayBinary;
+    if(diff > 0){
+      classDayBinary = res.classDay+'0'.repeat(diff);
+    }
     Object.keys(this.days).forEach((day, index) => {
       this.days[day] = classDayBinary[index] === "1";
     });
+
+    for(let i=0; i<this.selectedInstruments.length; i++){
+      for(const inst in this.instruments){
+        if(inst === this.selectedInstruments[i]){
+          this.instruments[inst] = true;
+        }
+      }
+    }
   },
 };
 </script>
 
 <style scoped>
 @import "@/assets/scss/teacherprofileupdate.scss";
+@import "@/assets/scss/teacherprofileform.scss";
 </style>

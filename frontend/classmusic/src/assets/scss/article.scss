@@ -162,3 +162,17 @@ td {
   display: flex;
   align-items: center;
 }
+
+.image-container {
+	position: relative;
+	width: 170px;
+	height: 220px;
+	margin-right: 15px;
+	margin-bottom: 10px;
+}
+
+.image-remove {
+	position: absolute;
+	bottom: 3%;
+	right: 3%;
+}

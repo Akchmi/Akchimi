@@ -186,7 +186,7 @@ export default {
 		},
 
 		async getUserInfo() {
-			try {
+			try {	
 				const data = await apiGetUserInfo(this.id);
 				if (data) {
 					this.userInfo = data;
@@ -208,15 +208,19 @@ export default {
 				endTime: this.endTime,
 				classDay: this.convertDaysToBitMask(),
 				instruments: this.selectedInstruments,
-				teacherId: this.teacherId,
+		
 			};
-			await this.postTeacherProfileCreate(data).then(() => {
+			try {
+				await this.postTeacherProfileCreate(data);
 				const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
-				this.updateUserType(1);
-				this.$store.commit("updateTeacherProfile");
+				if (this.attachedFiles.length > 0) { 
+					await this.submitImages(teacherId);
+				}
+				this.updateUserType(1);	
 				this.$router.push(`/profile/teacherprofile/${teacherId}`);
-				this.submitImages(teacherId);
-			});
+			} catch (error) {
+				console.error("Error while submitting the form:", error);
+			}
 		},
 
 		async submitImages(teacherId) {

@@ -46,12 +46,13 @@
           <div class="aditional-function">
             <!-- {{ subscribers }} -->
             <div id="live-screens" class="" @click="changeMainScreen">
+              <!-- {{ subscribers }} -->
+              <user-video :stream-manager="publisher" />
               <user-video
                 v-for="sub in subscribers"
                 :key="sub.stream.connection.connectionId"
                 :stream-manager="sub"
               />
-              <user-video :stream-manager="publisher" />
               <div id="shared-video" class="row panel panel-default">
                 <!-- <div class="panel-heading">User Screens</div> -->
                 <div class="panel-body" id="container-screens"></div>
@@ -251,6 +252,8 @@ export default {
       this.messages.push(receivedMessage);
     },
     changeMainScreen(event) {
+      console.log("##########we did click!###########");
+      console.log(event.target.srcObject);
       const mainVideoDiv = document.querySelector("#video-container");
       const mainVideo = mainVideoDiv.querySelector("video");
       const selectedVideo = event.target;
@@ -322,7 +325,6 @@ export default {
       });
 
       publisherScreen.on("videoElementCreated", (event) => {
-        console.log(event);
         this.appendUserData(event.element, this.sessionScreen.connection);
         event.element["muted"] = true;
       });
@@ -347,6 +349,8 @@ export default {
 
       // On every new Stream received...
       this.sessionCamera.on("streamCreated", (event) => {
+        console.log(event);
+        console.log(this.sessionScreen);
         if (event.stream.typeOfVideo == "CAMERA") {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-cameras' id
           console.log(this.sessionCamera);
@@ -354,6 +358,11 @@ export default {
             event.stream,
             "container-cameras"
           );
+          this.subscribers.push(subscriber);
+          console.log(this.subscribers);
+          console.log(subscriber.stream)
+          // this.changeMainScreen(subscriber.stream)
+          // this.subscribers.push(subscriber);
           // When the HTML video has been appended to DOM...
           subscriber.on("videoElementCreated", (event) => {
             // Add a new <p> element for the user's nickname just below its video
@@ -650,7 +659,6 @@ video {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* // border: solid 1px red; */
 }
 #live-screens {
   width: 90%;
@@ -662,7 +670,6 @@ video {
 .video-box {
   width: 60%;
   float: center;
-  /* // border: solid 1px red; */
 }
 .message-box {
   width: 20%;
@@ -671,7 +678,6 @@ video {
   box-sizing: border-box;
   position: relative;
   background-color: #f5f5f5;
-  /* // border: solid 1px red; */
 }
 .messages-container {
   width: 100%;
@@ -679,7 +685,6 @@ video {
   justify-content: space-between;
   box-sizing: border-box;
   overflow: auto;
-  /* border: solid 5px black; */
 }
 .message-input-container {
   height: 10%;
