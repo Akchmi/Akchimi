@@ -49,6 +49,7 @@ public class CommentServiceImpl implements CommentService{
                 .content(commentDto.getContent())
                 .build();
         commentRepository.save(comment);
+
         return comment.getCommentId();
     }
 
