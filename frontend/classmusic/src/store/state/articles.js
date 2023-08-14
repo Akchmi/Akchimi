@@ -3,7 +3,7 @@ export default {
   articleList: [],
   articleDetail: [],
   articleCreateId: null,
-
+  articleId : '',
   // comment
   articleCommentsList: [],
 };

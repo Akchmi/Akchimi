@@ -129,7 +129,7 @@ import axios from "@/api/imageAxios.js";
 
 export default {
   props: {
-    image: { type: String, default: "https://via.placeholder.com/280" },
+    // image: { type: String, default: "https://via.placeholder.com/280" },
   },
   data() {
     return {
