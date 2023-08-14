@@ -12,10 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -88,7 +88,10 @@ public class ArticleServiceImpl implements ArticleService{
     public void deleteArticle(int articleId, int userId) {
         Article article = articleRepository.findById(articleId);
         if(article.getUser().getUserId() == userId){
-            articleRepository.delete(article);
+//            articleRepository.delete(article);
+            // 삭제 시 현재 시간을 deletedAt에 저장
+            article.setDeletedAt((int) Instant.now().getEpochSecond());
+            articleRepository.save(article);
         }else {
             throw new RestApiException(ErrorCode.NOT_AUTHOR);
         }

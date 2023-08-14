@@ -51,7 +51,7 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
                 ))
                 .from(article)
                 .join(article.user , user)
-                .where(searchKeyWord(searchType, keyWord))
+                .where(searchKeyWord(searchType, keyWord), article.deletedAt.isNull())
                 .limit(20).offset((pageNo-1)*20)
                 .orderBy(sortKeyWord(sortType))
                 .fetch();
@@ -98,13 +98,14 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
                 ))
                 .from(article)
                 .join(article.user , user)
-                .where(article.articleId.eq(articleId))
+                .where(article.articleId.eq(articleId), article.deletedAt.isNull())
                 .fetchOne();
     }
 
     @Override
     public Article findById(int articleId){
-        return em.find(Article.class, articleId);
+        return selectOneById(articleId);
+//        return em.find(Article.class, articleId);
     }
 
     @Override
@@ -118,7 +119,7 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
         String keyword = params.get("keyword");
         long totalArticleNum = query
                 .selectFrom(article)
-                .where(searchKeyWord(searchType, keyword))
+                .where(searchKeyWord(searchType, keyword), article.deletedAt.isNull())
                 .fetchCount();
         return (int)(totalArticleNum-1)/20+1;
     }
