@@ -15,4 +15,7 @@ export default {
   getCommentList(state) {
     return state.articles.articleCommentsList;
   },
-};
+  getAricleId(state) {
+    return state.articles.articleId;
+  },
+}

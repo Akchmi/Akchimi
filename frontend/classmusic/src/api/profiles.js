@@ -79,6 +79,7 @@ function apiLikeTeacherUpdate(context, data) {
       return data;
     })
     .catch((error) => {
+      console.log('즐찾이 안되나요?', )
       throw error;
     });
 }
@@ -105,10 +106,8 @@ async function apiDetailTeacherInfo(teacherId) {
 
 async function apiTeacherProfileCreate(context, data) {
   try {
-    const response = await axios.post(`/teachers`, data);
-    console.log("axios실행", response);
-    context.commit("SAVE_TEACHERID", response.data);
-    // router.push(`/profile/teacherProfile/${response.data}`);
+    const response = await axios.post(`/teachers`, data);  
+    context.commit("SAVE_TEACHERID", response.data);   
   } catch (error) {
     console.log("apiTeacherProfileCreate 중 에러 발생!!!", error);
     return null;

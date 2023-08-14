@@ -252,34 +252,34 @@ export default {
         });
     },
 
-    parseDays(classDay) {
-      const days = ["월", "화", "수", "목", "금", "토", "일"];
-      return classDay
-        .toString(2)
-        .padStart(7, "0")
-        .split("")
-        .reverse()
-        .map((day, index) => (day === "1" ? days[index] : null))
-        .filter(Boolean)
-        .join(", ");
-    },
-    likeTeacherUpdate() {
-      const data = {
-        id: JSON.parse(localStorage.getItem("vuex")).common.id,
-        teacherId: this.$route.params.id,
-      };
-      this.postLikeTeacherUpdate(data)
-        .then(() => {
-          alert("즐겨찾기에 성공하였습니다");
-          this.$router.push(`/profile/myprofile`);
-        })
-        .catch((error) => {
-          console.log("즐찾실패", error);
-        });
-    },
-    async getReview() {
-      try {
-        const reviewData = await apiGetReview(this.teacherId);
+		parseDays(classDay) {
+			const days = ["월", "화", "수", "목", "금", "토", "일"];
+			return classDay
+				.toString(2)
+				.padStart(7, "0")
+				.split("")
+				.reverse()
+				.map((day, index) => (day === "1" ? days[index] : null))
+				.filter(Boolean)
+				.join(", ");
+		},
+		likeTeacherUpdate() {
+			const data = {
+				id: JSON.parse(localStorage.getItem("vuex")).common.id,
+				teacherId: this.$route.params.id,
+			};
+			this.postLikeTeacherUpdate(data)
+				.then(() => {
+					alert("즐겨찾기에 성공하였습니다");
+					this.$router.push(`/profile/myprofile`);
+				})
+				.catch((error) => {
+					console.log("즐찾실패", error);
+				});
+		},
+		async getReview() {
+			try {
+				const reviewData = await apiGetReview(this.teacherId);
 
         if (reviewData) {
           this.reviews = reviewData;
