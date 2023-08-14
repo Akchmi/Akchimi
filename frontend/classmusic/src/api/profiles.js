@@ -121,7 +121,7 @@ function apiTeacherProfileUpdate(context, data) {
     .put(`/teachers/${teacherId}`, data)
     .then(({ data }) => {
       console.log("풋전송", data);
-      return data
+      return data;
     })
     .catch((error) => {
       console.error(teacherId, "PUt 요청 에러 :", error);
@@ -179,6 +179,18 @@ function apiDeleteTeacher(context, teacherId) {
     });
 }
 
+// 강사 활성화/비활성화 토글
+async function apiToggleTeacherVisible(teacherId) {
+  axios
+    .put(`/teachers/${teacherId}/visible`)
+    .then(() => {
+      router.push(`/profile/myprofile`);
+    })
+    .catch((error) => {
+      console.error("PUT 요청 에러 : ", error);
+    });
+}
+
 export {
   apiGetReview,
   apiTeacherProfileUpdate,
@@ -193,4 +205,5 @@ export {
   apiDeleteAttachedImage,
   apiDeleteMyprofileImage,
   apiDeleteTeacher,
+  apiToggleTeacherVisible,
 };
