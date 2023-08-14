@@ -564,7 +564,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 #join {
   display: flex;
   justify-content: center;
