@@ -1,6 +1,7 @@
 .user-image {
-  width: 180px;
+  width: 170px;
   height: 220px;
+  object-fit: cover;
 }
 
 .myprofile-container {
@@ -18,7 +19,7 @@
   border: 3px solid #edd9b7;
   padding: 20px;
   align-items: center;
-  border-radius: 10px;;
+  border-radius: 10px;
 }
 
 .top-section {
@@ -40,7 +41,7 @@
   object-fit: cover;
 }
 
-.img-button-container{
+.img-button-container {
   width: 170px;
   padding-top: 10px;
   display: flex;
@@ -59,12 +60,12 @@
 .info-field {
   /*flex-basis: calc(50% - 10px);*/
   flex: 1;
-  padding:20px;
+  padding: 20px;
   height: 50%;
   box-sizing: border-box;
   text-align: left;
 }
-.info-content{
+.info-content {
   border: 2px solid #edd9b7;
   padding: 10px;
   margin-top: 5px;
@@ -84,7 +85,7 @@
   width: 100px;
 }
 
-.favorite-title{
+.favorite-title {
   font-size: larger;
   font-weight: bold;
 }
@@ -129,11 +130,11 @@
 
 .modal-body {
   padding: 20px 0;
-  label{
+  label {
     display: inline-block;
     width: 100px;
   }
-  input{
+  input {
     outline: none;
     width: 200px;
     padding: 5px;
