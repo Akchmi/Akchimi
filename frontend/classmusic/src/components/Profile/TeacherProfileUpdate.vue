@@ -29,12 +29,12 @@
             <div class="teacher-profile-form__row">
               <div class="teacher-profile-form__update">
                 <label for="years">경력 : </label>
-                <input id="years" v-model.number="career" type="number" min="1" />
+                <input id="years" v-model.number="career" type="number" :max="maxCareer" min="0" @input="filterInput" />
                 년
               </div>
               <div class="teacher-profile-form__update">
                 <label for="cost">시간당 비용 : </label>
-                <input id="cost" v-model.number="cost" type="number" min="0" />
+                <input id="cost" v-model.number="cost" type="number" :max="maxCost" min="0" @input="filterInput" />
                 만원
               </div>
             </div>
@@ -48,23 +48,12 @@
             <div class="teacher-profile-form__row">
               <div class="teacher-profile-form__update">
                 <label for="start">시작 시간 :</label>
-                <input
-                  id="start"
-                  v-model.number="startTime"
-                  type="number"
-                  min="0"
-                  max="23"
-                />
+                <input id="start" v-model.number="startTime" type="number" :max="maxStartTime" min="0" @input="filterInput" />
+
               </div>
               <div class="teacher-profile-form__update">
                 <label for="end">종료 시간 :</label>
-                <input
-                  id="end"
-                  v-model.number="endTime"
-                  type="number"
-                  min="0"
-                  max="23"
-                />
+                <input id="end" v-model.number="endTime" type="number" :max="maxEndTime" min="1" @input="filterInput" />
               </div>
             </div>
         </div>
@@ -154,8 +143,8 @@ export default {
         토: false,
         일: false,
       },
-      startTime: "",
-      endTime: "",
+      startTime: 0,
+      endTime: 24,
       description: "",
       career: 0,
       cost: 0,
@@ -168,6 +157,10 @@ export default {
       teacherId: JSON.parse(localStorage.getItem("vuex")).common.teacherId,
       newAttachedFiles: [],
       deleteAttachedFiles: [],
+      maxCareer: 100,
+      maxCost: 100,
+      maxStartTime: 23,
+      maxEndTime: 24,
     };
   },
   computed: {
@@ -178,7 +171,43 @@ export default {
     },
   },
 
+  watch: {
+    career(value) {
+        if (value > this.maxCareer) {
+            this.career = this.maxCareer;
+        }
+    },
+    cost(value) {
+        if (value > this.maxCost) {
+            this.cost = this.maxCost;
+        }
+    },
+    startTime(value) {
+        if (value > this.maxStartTime) {
+            this.startTime = this.maxStartTime;
+        } else if (value >= this.endTime) {
+            this.startTime = this.endTime - 1;
+        }
+    },
+    endTime(value) {
+        if (value > this.maxEndTime) {
+            this.endTime = this.maxEndTime;
+        } else if (value <= this.startTime) {
+            this.endTime = this.startTime + 1;
+        }
+    }
+  },
+  
+
+
   methods: {
+    filterInput(event) {
+      const validNumber = /^[0-9]*$/; 
+      if (!validNumber.test(event.target.value)) {
+        event.target.value = event.target.value.replace(/[^0-9]/g, ''); 
+      }
+      event.target.value = String(Number(event.target.value));
+    },
     removeAttachedFile(index) {
       this.deleteAttachedFiles.push(this.attachedFiles[index]);
       this.attachedFiles.splice(index, 1);
@@ -224,10 +253,6 @@ export default {
     async submitImages() {
       let formData = new FormData();
 
-      // for (let i = 0; i < this.$refs.fileUploadInput.files.length; i++) {
-      //   formData.append("image", this.$refs.fileUploadInput.files[i]);
-      // }
-
       this.newAttachedFiles.forEach((item) => {
         formData.append("image", item.file);
       });
@@ -254,7 +279,7 @@ export default {
       await this.submitImages();
       await this.submitAttachedFilesToDelete();
       await this.saveToselectedInsruments();
-      console.log(this.selectedInstruments);
+      
 
       const data = {
         career: this.career,
@@ -266,12 +291,9 @@ export default {
         instruments: [...this.selectedInstruments],
         teacherId: this.teacherId,
       };
-      this.putTeacherProfileUpdate(data).then(() => {
-        const teacherId = JSON.parse(localStorage.getItem("vuex")).common
-          .teacherId;
-        
-        this.$router.push(`/profile/teacherprofile/${teacherId}`)      
-      });
+      await this.putTeacherProfileUpdate(data); 
+      const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
+      this.$router.push(`/profile/teacherprofile/${teacherId}`);
     },
     convertDaysToBitMask() {
       let index = 0,
@@ -307,28 +329,35 @@ export default {
     this.classDay = res.classDay;
     this.userProfileImage = res.userProfileImage;
     this.attachedFiles = res.images;
-    
-    res.classDay=res.classDay.toString().split('').reverse().join('');
-    // const classDayBinary = parseInt(res.classDay, 2)
-    //   .toString(2)
-    //   .padEnd(7, "0");
-    const diff = 7-res.classDay.toString().length;
-    let classDayBinary;
-    if(diff > 0){
-      classDayBinary = res.classDay+'0'.repeat(diff);
-    }
-    Object.keys(this.days).forEach((day, index) => {
-      this.days[day] = classDayBinary[index] === "1";
-    });
 
-    for(let i=0; i<this.selectedInstruments.length; i++){
-      for(const inst in this.instruments){
-        if(inst === this.selectedInstruments[i]){
-          this.instruments[inst] = true;
+    res.classDay = res.classDay.toString().split('').reverse().join('');
+    
+    let classDayBinary;
+    if (res.classDay == 0 || res.classDay === '0') {
+      classDayBinary = '0000000';
+    } else {
+      const diff = 7 - res.classDay.toString().length;
+      if (diff > 0) {
+        classDayBinary = res.classDay + '0'.repeat(diff);
+      } else {
+        classDayBinary = res.classDay;
+      }
+    }
+
+    Object.keys(this.days).forEach((day, index) => {
+        this.days[day] = classDayBinary[index] === "1";
+    });
+  
+
+    for(let i = 0; i < this.selectedInstruments.length; i++) {
+      for(const inst in this.instruments) {
+          if(inst === this.selectedInstruments[i]) {
+            this.instruments[inst] = true;
         }
       }
     }
-  },
+  }
+
 };
 </script>
 

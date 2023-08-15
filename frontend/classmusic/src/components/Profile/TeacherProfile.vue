@@ -195,27 +195,27 @@ export default {
 
   async created() {
     // const route = useRoute();
-    const teacherId = this.$route.params.id;
-    const res = await apiDetailTeacherInfo(teacherId);
-    this.teacherId = teacherId;
-    this.name = res.name;
-    this.gender = res.gender;
-    this.userProfileImage = res.userProfileImage;
-    this.career = res.career;
-    this.cost = res.cost;
-    this.introduce = res.introduce;
-    this.startTime = res.startTime;
-    this.endTime = res.endTime;
-    this.classDay = res.classDay;
+      const teacherId = this.$route.params.id;
+      const res = await apiDetailTeacherInfo(teacherId);
+      this.teacherId = teacherId;
+      this.name = res.name;
+      this.gender = res.gender;
+      this.userProfileImage = res.userProfileImage;
+      this.career = res.career;
+      this.cost = res.cost;
+      this.introduce = res.introduce;
+      this.startTime = res.startTime;
+      this.endTime = res.endTime;
+      this.classDay = res.classDay;
     this.instrument = res.instruments.join(" ");
     // this.instrument = res.instruments;
-    this.attachedFiles = res.images;
-    this.avgRating = res.avgRating;
-    this.contactCnt = res.contactCnt;
-    this.likeId = res.likeId;
-    this.visible = res.visible;
-    this.getReview();
-  },
+      this.attachedFiles = res.images;
+      this.avgRating = res.avgRating;
+      this.contactCnt = res.contactCnt;
+      this.likeId = res.likeId;
+      this.visible = res.visible;
+      this.getReview();
+    },
   computed: {
     genderText() {
       return this.gender === 1 ? "남자" : "여자";
