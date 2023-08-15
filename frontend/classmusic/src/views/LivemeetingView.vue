@@ -727,10 +727,8 @@ video {
   border-radius: 10px;
 }
 .rightviduchat {
-  width: 93%;
-  margin: 0px 10px 0px 10px;
-  display: flex;
-  justify-content: right;
-  align-content: center;
+  margin-bottom: 10px;
+
+  word-break: break-all;
 }
 </style>
