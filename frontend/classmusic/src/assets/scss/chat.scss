@@ -104,7 +104,7 @@
 
   padding: 0.5rem 0.875rem;
   // position: relative;
-  word-wrap: break-word;
+  word-break: break-all;
 }
 .chat-content :focus {
   border: none;
@@ -131,6 +131,7 @@
   background-color: #edd9b7;
   color: #ffffff;
   width: fit-content;
+  max-width: 50%;
   border-radius: 1.15rem;
   line-height: 1.25;
   // max-width: 75%;
@@ -143,6 +144,7 @@
   align-self: flex-end;
   background-color: #edd9b7;
   width: fit-content;
+  max-width: 50%;
   color: #fff;
   border-radius: 1.15rem;
   line-height: 1.25;
@@ -170,6 +172,8 @@
 //  채팅 시간
 .chat-room .left .chat-sendtime {
   font-size: small;
+  align-self: flex-end;
+  margin-bottom: 10px;
 }
 .chat-room .right .chat-sendtime {
   font-size: small;

@@ -28,7 +28,15 @@
         type="text"
         @keyup.enter="sendMessage"
       />
-      <button class="chat-button" @click="sendMessage">전송</button>
+      <button
+        v-if="content.length == 0"
+        class="chat-button"
+        @click="sendMessage"
+        disabled
+      >
+        전송
+      </button>
+      <button v-else class="chat-button" @click="sendMessage">전송</button>
     </div>
   </div>
 </template>
@@ -126,6 +134,10 @@ export default {
     },
 
     sendMessage() {
+      if (this.content.length == 0) {
+        return;
+      }
+
       if (this.userName !== "" && this.message !== "") {
         const newChat = {
           content: this.content,

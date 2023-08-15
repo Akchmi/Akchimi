@@ -10,12 +10,13 @@
 			<div>
 				<!-- 글 제목, 내용 -->
 				<h3>제목</h3>
-				<input class="input__title" type="text" v-model="title" />
+				<input class="input__title" type="text" v-model="title" maxlength="50" />
 				<h3>내용</h3>
 				<textarea
 					class="input__content"
 					type="text"
 					v-model="content"
+					maxlength="4000"
 				/>
 				<!-- <hr /> -->
 			</div>

@@ -4,7 +4,7 @@
       <div class="create__content">
         <div style="width: 95%; padding: 10px">
           <div class="notice-detail__header">
-            <p style="margin: 10px; font-size: 28px">
+            <p style="margin: 10px; font-size: 28px; word-break: break-all">
               {{ noticeDetail.title }}
             </p>
             <div
@@ -23,7 +23,12 @@
           </div>
           <hr />
           <h3
-            style="margin: 20px 5px; min-height: 300px; white-space: pre-line"
+            style="
+              margin: 20px 5px;
+              min-height: 300px;
+              white-space: pre-line;
+              word-break: break-all;
+            "
           >
             {{ noticeDetail.content }}
           </h3>
