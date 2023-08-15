@@ -8,7 +8,7 @@
           <button class="detailButton" @click="$router.push('/article/list')">
             목록으로
           </button>
-          <p style="margin: 10px; font-size: 28px">
+          <p style="margin: 10px; font-size: 28px; word-break: break-all">
             {{ articleDetail.title }}
           </p>
           <div class="detailTitleBottom">
@@ -42,7 +42,14 @@
             <button @click="articleDelete">삭제</button>
           </div>
           <hr />
-          <h3 style="margin: 10px; min-height: 300px; white-space: pre-line">
+          <h3
+            style="
+              margin: 10px;
+              min-height: 300px;
+              white-space: pre-line;
+              word-break: break-all;
+            "
+          >
             {{ articleDetail.content }}
           </h3>
 
@@ -113,7 +120,7 @@
                       maxlength="200"
                     />
                     <p
-                      style="min-height: 24px"
+                      style="min-height: 24px; word-break: break-all"
                       v-if="nowUpdateCommentId != comment.commentId"
                     >
                       {{ comment.content }}
