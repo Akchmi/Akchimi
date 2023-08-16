@@ -131,7 +131,7 @@
               >
                 <!-- 리뷰 작성-->
 
-                <div v-if="!review.content && nowUpdateReviewId == -1">
+                <div v-if="!review.content">
                   <textarea
                     placeholder="리뷰를 작성해주세요."
                     class="memoInput"
@@ -155,7 +155,7 @@
                 </div>
                 <!-- <div v-if="review.content "> -->
                 <!-- 리뷰 확인 -->
-                <div v-if="review.reviewId == nowUpdateReviewId">
+                <div v-if="review.content && nowUpdateReviewId == -1">
                   <div class="review-box">
                     {{ review.content }}
                   </div>
@@ -185,36 +185,43 @@
                 </div>
                 <!--리뷰 수정 -->
 
-                <div v-if="review.reviewId == nowUpdateReviewId">
+                <div v-if="review.content && nowUpdateReviewId != -1">
                   <textarea
                     class="memoInput"
                     type="text"
-                    v-model="review.content"
+                    v-model="nowUpdateReview"
                   >
                   </textarea>
-
-                  <select v-model="nowUpdateRating" style="margin: 10px">
-                    <option
-                      v-for="score in [1, 2, 3, 4, 5]"
-                      :key="score.id"
-                      :value="score"
-                    >
-                      {{ score }}
-                    </option>
-                  </select>
-                  <button
-                    @click="
-                      runUpdateReview(
-                        review.reviewId,
-                        review.content,
-                        review.rating,
-                        lecture.contactId
-                      )
-                    "
-                  >
-                    수정완료
-                  </button>
-                  <button @click="cancleUpdateReview">취소</button>
+                  <div style="display: flex; justify-content: space-between">
+                    <div>
+                      평점 :
+                      <select v-model="nowUpdateRating" style="margin: 10px">
+                        <option
+                          v-for="score in [1, 2, 3, 4, 5]"
+                          :key="score.id"
+                          :value="score"
+                        >
+                          {{ score }}
+                        </option>
+                      </select>
+                    </div>
+                    <div style="margin: 10px">
+                      <button
+                        style="margin-right: 10px"
+                        @click="
+                          runUpdateReview(
+                            review.reviewId,
+                            nowUpdateReview,
+                            nowUpdateRating,
+                            lecture.contactId
+                          )
+                        "
+                      >
+                        수정완료
+                      </button>
+                      <button @click="cancleUpdateReview">취소</button>
+                    </div>
+                  </div>
                 </div>
                 <!-- </div> -->
               </div>
@@ -292,8 +299,8 @@ export default {
         rating: this.nowUpdateRating,
         content: this.nowUpdateReview,
       });
-      this.nowUpdateRating = null;
-      this.nowUpdateReview = null;
+      this.nowUpdateRating = 5;
+      this.nowUpdateReview = "";
     },
 
     ...mapActions(["putReviewUpdate"]),
@@ -301,12 +308,15 @@ export default {
       if (this.nowUpdateReviewId != reviewId) {
         this.lastReviewcontent = content;
         this.nowUpdateReviewId = reviewId;
+        this.nowUpdateReview = this.review.content;
+        this.nowUpdateRating = this.review.rating;
         return;
       } else {
-        if (this.review.content.length == 0) {
+        if (this.nowUpdateReview.length == 0) {
           alert("리뷰를 작성해주세요.");
           return;
         }
+
         this.putReviewUpdate({
           reviewId: reviewId,
           content: content,
@@ -316,7 +326,7 @@ export default {
       }
       this.nowUpdateReviewId = -1;
       this.nowUpdateReview = "";
-      this.nowUpdateRating = null;
+      this.nowUpdateRating = 5;
     },
 
     cancleUpdateReview() {

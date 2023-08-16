@@ -74,7 +74,10 @@ function apiPostReview(context, params) {
   axios
     .post("/reviews", params)
     .then(() => {
-      router.go(0);
+      context.commit("UPDATEREVIEW", {
+        content: params.content,
+        rating: params.rating,
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -86,7 +89,10 @@ function apiPutReviewUpdate(context, params) {
   axios
     .put(`/reviews/${params.reviewId}`, params)
     .then(() => {
-      context.commit("UPDATEREVIEW", params.content);
+      context.commit("UPDATEREVIEW", {
+        content: params.content,
+        rating: params.rating,
+      });
     })
     .catch((error) => {
       console.log(error);
