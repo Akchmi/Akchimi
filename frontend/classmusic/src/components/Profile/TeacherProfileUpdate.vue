@@ -267,7 +267,7 @@ export default {
         this.formValid = false;
         alert("모든 정보를 입력해주세요.");
         console.log("누락된 정보:", missingFields.join(", "));
-        console.log('아긱', this.selectedInstruments)
+        console.log("아긱", this.selectedInstruments);
         return false;
       }
 
@@ -292,31 +292,35 @@ export default {
       this.$refs.fileUploadInput.click();
     },
     handleFileUpload() {
-    const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "jfif"];
-    const maxFileSize = 30 * 1024 * 1024; // 30MB in bytes
-    const selectedFiles = this.$refs.fileUploadInput.files;
+      const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "jfif"];
+      const maxFileSize = 30 * 1024 * 1024; // 30MB in bytes
+      const selectedFiles = this.$refs.fileUploadInput.files;
 
-    for (let i = 0; i < selectedFiles.length; i++) {
+      for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
         const fileExtension = file.name.split(".").pop().toLowerCase();
 
         if (!allowedExtensions.includes(fileExtension)) {
-            alert(`${file.name}는 파일 형식이 잘못되었습니다."jfif", "jpg", "jpeg", "png", "gif", "webp" 형식의 파일만 가능합니다.`);
-            continue;
+          alert(
+            `${file.name}는 파일 형식이 잘못되었습니다."jfif", "jpg", "jpeg", "png", "gif", "webp" 형식의 파일만 가능합니다.`
+          );
+          continue;
         }
 
         if (file.size > maxFileSize) {
-            alert(`${file.name}의 파일 용량이 너무 큽니다. 30MB 이하만 가능합니다.`);
-            continue;
+          alert(
+            `${file.name}의 파일 용량이 너무 큽니다. 30MB 이하만 가능합니다.`
+          );
+          continue;
         }
 
         const fileReader = new FileReader();
 
         fileReader.onload = (e) => {
-            this.newAttachedFiles.push({
-                preview: e.target.result,
-                file: file,
-            });
+          this.newAttachedFiles.push({
+            preview: e.target.result,
+            file: file,
+          });
         };
 
         fileReader.readAsDataURL(file);
@@ -378,7 +382,10 @@ export default {
       await this.putTeacherProfileUpdate(data);
       const teacherId = JSON.parse(localStorage.getItem("vuex")).common
         .teacherId;
-      this.$router.push(`/profile/teacherprofile/${teacherId}`);
+
+      setTimeout(() => {
+        this.$router.push(`/profile/teacherprofile/${teacherId}`);
+      }, 500);
     },
     convertDaysToBitMask() {
       let index = 0,
@@ -404,7 +411,6 @@ export default {
   async created() {
     const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
     const res = await apiDetailTeacherInfo(teacherId);
-
 
     this.name = res.name;
     this.selectedInstruments = res.instruments;
