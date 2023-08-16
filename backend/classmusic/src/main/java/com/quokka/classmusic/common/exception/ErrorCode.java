@@ -41,7 +41,8 @@ public enum ErrorCode {
     /*
      * 500 INTERNAL_SERVER_ERROR: 내부 서버 오류
      */
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류...");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류..."),
+    MAILSERVICERROR(HttpStatus.INTERNAL_SERVER_ERROR, "메일 서비스 오류...");
 
     private final HttpStatus httpStatus;
     private final String message;
