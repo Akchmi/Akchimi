@@ -242,6 +242,38 @@ export default {
   },
 
   methods: {
+    checkFormValidity() {
+      let missingFields = [];
+
+      if (!this.career) {
+        missingFields.push("경력");
+      }
+      if (!this.cost) {
+        missingFields.push("시간당 비용");
+      }
+      if (!this.description.trim()) {
+        missingFields.push("자기 소개");
+      }
+      if (this.startTime >= this.endTime) {
+        missingFields.push("시간");
+      }
+      if (!this.selectedDaysString.includes("1")) {
+        missingFields.push("요일");
+      }
+      if (this.selectedInstruments.length === 0) {
+        missingFields.push("악기 선택");
+      }
+      if (missingFields.length) {
+        this.formValid = false;
+        alert("모든 정보를 입력해주세요.");
+        console.log("누락된 정보:", missingFields.join(", "));
+        console.log('아긱', this.selectedInstruments)
+        return false;
+      }
+
+      this.formValid = true;
+      return true;
+    },
     filterInput(event) {
       const validNumber = /^[0-9]*$/;
       if (!validNumber.test(event.target.value)) {
@@ -279,7 +311,7 @@ export default {
 
           fileReader.readAsDataURL(file);
         } else {
-          alert(`${file.name}는 송희도 같은 파일입니다.`);
+          alert(`${file.name}는 파일 형식이 잘못되었습니다."jpg", "jpeg", "png", "gif", "webp"형식의 파일만 가능합니다.`);
         }
       }
     },
@@ -287,6 +319,7 @@ export default {
     toggleInstrument(instrument) {
       this.instruments[instrument] = !this.instruments[instrument];
       console.log(this.instruments);
+      this.saveToselectedInsruments();
     },
 
     ...mapActions(["putTeacherProfileUpdate"]),
@@ -317,6 +350,10 @@ export default {
     },
 
     async submitForm() {
+      if (!this.checkFormValidity()) {
+        return;
+      }
+
       await this.submitImages();
       await this.submitAttachedFilesToDelete();
       await this.saveToselectedInsruments();
@@ -360,6 +397,8 @@ export default {
   async created() {
     const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
     const res = await apiDetailTeacherInfo(teacherId);
+
+
     this.name = res.name;
     this.selectedInstruments = res.instruments;
     this.description = res.introduce;

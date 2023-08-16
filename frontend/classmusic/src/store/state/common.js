@@ -6,4 +6,5 @@ export default {
   userType: null,
   teacherId: null,
   name: null,
+  nowNavPage: "main",
 };

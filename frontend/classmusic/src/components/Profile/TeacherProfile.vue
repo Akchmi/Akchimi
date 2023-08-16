@@ -198,6 +198,7 @@ export default {
 		this.startTime = res.startTime;
 		this.endTime = res.endTime;
 		this.classDay = res.classDay;
+    
 		this.instrument = res.instruments.join(" ");
 		// this.instrument = res.instruments;
 		this.attachedFiles = res.images;
