@@ -15,15 +15,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -78,14 +80,30 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserVo findId(FindIdDto findIdDto) {
         User user = userRepository.findId(findIdDto);
+        String content="";
         if(user == null){
             throw new RestApiException(ErrorCode.ID_NOT_FOUND);
         }
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(user.getEmail());
-        message.setSubject("악취미 : 아이디 찾기");
-        message.setText("악취미 아이디 찾기 서비스입니다.\n아이디 : "+user.getId());
-        mailSender.send(message);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            mimeMessageHelper.setFrom("quokkain");
+            mimeMessageHelper.setTo(user.getEmail());
+            mimeMessageHelper.setSubject("[악취미] 아이디 찾기 안내");
+            content+="<html><body><div style=\"text-align: center;\">";
+            content+="<div><img src=\"https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/akchimilogo.png\"></div>";
+            content+="<div><br/>";
+            content+="<h3>안녕하세요 "+user.getName()+"님!</h3>";
+            content+="악취미 아이디 찾기 서비스입니다. 요청하신 가입아이디 전송드립니다.<br/><br/>";
+            content+="<span style=\"padding: 10px 100px; justify-content: center; font-weight: bolder; text-align: center; background-color: rgb(231, 231, 231) ;\">아이디 : "+user.getId()+"</span><br/><br/>";
+            content+="악취미를 이용해주셔서 감사합니다.<br/>더욱 편리한 서비스를 제공하기 위해 항상 최선을 다하겠습니다.<br/><br/>";
+            content+="<a href=\"http://i9a210.p.ssafy.io\" style=\"font-weight: bolder;\">악취미 바로가기</a>";
+            content+="<br/><br/><br/></body></html>";
+            mimeMessageHelper.setText(content, true);
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RestApiException(ErrorCode.MAILSERVICERROR);
+        }
 
         return new UserVo(user);
     }
@@ -152,6 +170,7 @@ public class UserServiceImpl implements UserService{
     public void sendTemporaryPassword(MailDto mailDto) {
         User userIdFindById = userRepository.findUserById(mailDto.getId());
         User userIdFindByEmail = userRepository.findByEmail(mailDto.getEmail());
+        String content="";
         if(userIdFindById==null || userIdFindByEmail==null){
             log.debug("그런 사용자 없습니다.");
             throw new RestApiException(ErrorCode.ID_NOT_FOUND);
@@ -162,17 +181,28 @@ public class UserServiceImpl implements UserService{
             }
         }
         String tmpPassword = getRandomPassword(10);
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(mailDto.getEmail());
-        message.setSubject("악취미 : 임시 비밀번호 발급");
-        message.setText("임시 비밀번호 발급드립니다 : \n" + tmpPassword);
-        log.debug("{} / {} / {}",message.getTo(),message.getSubject(),message.getText());
-        mailSender.send(message);
-
         User user = userRepository.findByEmail(mailDto.getEmail());
-
         user.setPassword(passwordEncoder.encode(tmpPassword));
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            mimeMessageHelper.setFrom("quokkain");
+            mimeMessageHelper.setTo(user.getEmail());
+            mimeMessageHelper.setSubject("[악취미] 임시 비밀번호 발급");
+            content+="<html><body><div style=\"text-align: center;\">";
+            content+="<div><img src=\"https://music-class-bucket.s3.ap-northeast-2.amazonaws.com/images/akchimilogo.png\"></div>";
+            content+="<div><br/>";
+            content+="<h3>안녕하세요 "+user.getName()+"님!</h3>";
+            content+="악취미 임시 비밀번호 발급 서비스입니다. 발급 요청하신 임시 비밀번호 전송드립니다.<br/><br/>";
+            content+="<span style=\"padding: 10px 100px; justify-content: center; font-weight: bolder; text-align: center; background-color: rgb(231, 231, 231) ;\">임시비밀번호 : "+tmpPassword+"</span><br/><br/>";
+            content+="악취미를 이용해주셔서 감사합니다.<br/>더욱 편리한 서비스를 제공하기 위해 항상 최선을 다하겠습니다.<br/><br/>";
+            content+="<a href=\"http://i9a210.p.ssafy.io\" style=\"font-weight: bolder;\">악취미 바로가기</a>";
+            content+="<br/><br/><br/></body></html>";
+            mimeMessageHelper.setText(content, true);
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RestApiException(ErrorCode.MAILSERVICERROR);
+        }
         userRepository.save(user);
     }
 
