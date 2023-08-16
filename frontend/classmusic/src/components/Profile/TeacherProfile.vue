@@ -64,7 +64,7 @@
 				</div>
 
 				<div class="attach-file">
-					<h3 class="label">첨부파일</h3>
+					<h3 class="label">강사 자랑</h3>
 					<div>
 						<img
 							v-for="(image, index) in attachedFiles"
