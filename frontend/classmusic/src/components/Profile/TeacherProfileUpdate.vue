@@ -13,49 +13,86 @@
           <div class="name-container">
             <h2>강사 이름 : {{ name }}</h2>
           </div>
-            <div class="teacher-profile-update__instruments teacher-profile-form__update">
-              <label>악기 : </label>
-              <button
-                v-for="(checked, instrument) in instruments"
-                :key="instrument"
-                :class="checked ? 'update-selected-instrument' : 'update-unselected-instrument'"
-                :v-model="selectedInstruments[instrument]"
-                @click="toggleInstrument(instrument)"
-              >
-                {{ instrument }}
-              </button>
-            </div>
-            
-            <div class="teacher-profile-form__row">
-              <div class="teacher-profile-form__update">
-                <label for="years">경력 : </label>
-                <input id="years" v-model.number="career" type="number" :max="maxCareer" min="0" @input="filterInput" />
-                년
-              </div>
-              <div class="teacher-profile-form__update">
-                <label for="cost">시간당 비용 : </label>
-                <input id="cost" v-model.number="cost" type="number" :max="maxCost" min="0" @input="filterInput" />
-                만원
-              </div>
+          <div
+            class="teacher-profile-update__instruments teacher-profile-form__update"
+          >
+            <label>악기 : </label>
+            <button
+              v-for="(checked, instrument) in instruments"
+              :key="instrument"
+              :class="
+                checked
+                  ? 'update-selected-instrument'
+                  : 'update-unselected-instrument'
+              "
+              :v-model="selectedInstruments[instrument]"
+              @click="toggleInstrument(instrument)"
+            >
+              {{ instrument }}
+            </button>
+          </div>
+
+          <div class="teacher-profile-form__row">
+            <div class="teacher-profile-form__update">
+              <label for="years">경력 : </label>
+              <input
+                id="years"
+                v-model.number="career"
+                type="number"
+                :max="maxCareer"
+                min="0"
+                @input="filterInput"
+              />
+              년
             </div>
             <div class="teacher-profile-form__update">
-              <label>요일:</label>
-              <div class="days-container" v-for="(checked, day) in days" :key="day">
-                <input type="checkbox" :id="day" v-model="days[day]" />
-                <label :for="day">{{ day }}</label>
-              </div>
+              <label for="cost">시간당 비용 : </label>
+              <input
+                id="cost"
+                v-model.number="cost"
+                type="number"
+                :max="maxCost"
+                min="0"
+                @input="filterInput"
+              />
+              만원
             </div>
-            <div class="teacher-profile-form__row">
-              <div class="teacher-profile-form__update">
-                <label for="start">시작 시간 :</label>
-                <input id="start" v-model.number="startTime" type="number" :max="maxStartTime" min="0" @input="filterInput" />
-
-              </div>
-              <div class="teacher-profile-form__update">
-                <label for="end">종료 시간 :</label>
-                <input id="end" v-model.number="endTime" type="number" :max="maxEndTime" min="1" @input="filterInput" />
-              </div>
+          </div>
+          <div class="teacher-profile-form__update">
+            <label>요일:</label>
+            <div
+              class="days-container"
+              v-for="(checked, day) in days"
+              :key="day"
+            >
+              <input type="checkbox" :id="day" v-model="days[day]" />
+              <label :for="day">{{ day }}</label>
             </div>
+          </div>
+          <div class="teacher-profile-form__row">
+            <div class="teacher-profile-form__update">
+              <label for="start">시작 시간 :</label>
+              <input
+                id="start"
+                v-model.number="startTime"
+                type="number"
+                :max="maxStartTime"
+                min="0"
+                @input="filterInput"
+              />
+            </div>
+            <div class="teacher-profile-form__update">
+              <label for="end">종료 시간 :</label>
+              <input
+                id="end"
+                v-model.number="endTime"
+                type="number"
+                :max="maxEndTime"
+                min="1"
+                @input="filterInput"
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div class="teacher-details">
@@ -81,18 +118,24 @@
           >
             <img :src="image" alt="Attached file" class="attach-image" />
 
-            <button class="image-remove" @click="removeAttachedFile(index)">삭제</button>
-        
+            <button class="image-remove" @click="removeAttachedFile(index)">
+              삭제
+            </button>
           </div>
           <div
             v-for="(image, index) in newAttachedFiles"
             :key="index"
             class="image-container"
           >
-            <img :src="image.preview" alt="Attached file" class="attach-image" />
+            <img
+              :src="image.preview"
+              alt="Attached file"
+              class="attach-image"
+            />
 
-            <button class="image-remove" @click="removeNewAttachedFile(index)">삭제</button>
-           
+            <button class="image-remove" @click="removeNewAttachedFile(index)">
+              삭제
+            </button>
           </div>
         </div>
         <input
@@ -127,12 +170,12 @@ export default {
       userInfo: {},
       // selectedInstrument: null,
       instruments: {
-				피아노: false,
-				기타: false,
-				드럼: false,
-				바이올린: false,
-				트럼펫: false,
-			},
+        피아노: false,
+        기타: false,
+        드럼: false,
+        바이올린: false,
+        색소폰: false,
+      },
       selectedInstruments: [],
       days: {
         월: false,
@@ -173,38 +216,36 @@ export default {
 
   watch: {
     career(value) {
-        if (value > this.maxCareer) {
-            this.career = this.maxCareer;
-        }
+      if (value > this.maxCareer) {
+        this.career = this.maxCareer;
+      }
     },
     cost(value) {
-        if (value > this.maxCost) {
-            this.cost = this.maxCost;
-        }
+      if (value > this.maxCost) {
+        this.cost = this.maxCost;
+      }
     },
     startTime(value) {
-        if (value > this.maxStartTime) {
-            this.startTime = this.maxStartTime;
-        } else if (value >= this.endTime) {
-            this.startTime = this.endTime - 1;
-        }
+      if (value > this.maxStartTime) {
+        this.startTime = this.maxStartTime;
+      } else if (value >= this.endTime) {
+        this.startTime = this.endTime - 1;
+      }
     },
     endTime(value) {
-        if (value > this.maxEndTime) {
-            this.endTime = this.maxEndTime;
-        } else if (value <= this.startTime) {
-            this.endTime = this.startTime + 1;
-        }
-    }
+      if (value > this.maxEndTime) {
+        this.endTime = this.maxEndTime;
+      } else if (value <= this.startTime) {
+        this.endTime = this.startTime + 1;
+      }
+    },
   },
-  
-
 
   methods: {
     filterInput(event) {
-      const validNumber = /^[0-9]*$/; 
+      const validNumber = /^[0-9]*$/;
       if (!validNumber.test(event.target.value)) {
-        event.target.value = event.target.value.replace(/[^0-9]/g, ''); 
+        event.target.value = event.target.value.replace(/[^0-9]/g, "");
       }
       event.target.value = String(Number(event.target.value));
     },
@@ -219,12 +260,12 @@ export default {
       this.$refs.fileUploadInput.click();
     },
     handleFileUpload() {
-      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+      const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
       const selectedFiles = this.$refs.fileUploadInput.files;
 
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
-        const fileExtension = file.name.split('.').pop().toLowerCase();
+        const fileExtension = file.name.split(".").pop().toLowerCase();
 
         if (allowedExtensions.includes(fileExtension)) {
           const fileReader = new FileReader();
@@ -244,9 +285,9 @@ export default {
     },
 
     toggleInstrument(instrument) {
-			this.instruments[instrument] = !this.instruments[instrument];
+      this.instruments[instrument] = !this.instruments[instrument];
       console.log(this.instruments);
-		},
+    },
 
     ...mapActions(["putTeacherProfileUpdate"]),
 
@@ -279,7 +320,6 @@ export default {
       await this.submitImages();
       await this.submitAttachedFilesToDelete();
       await this.saveToselectedInsruments();
-      
 
       const data = {
         career: this.career,
@@ -291,8 +331,9 @@ export default {
         instruments: [...this.selectedInstruments],
         teacherId: this.teacherId,
       };
-      await this.putTeacherProfileUpdate(data); 
-      const teacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
+      await this.putTeacherProfileUpdate(data);
+      const teacherId = JSON.parse(localStorage.getItem("vuex")).common
+        .teacherId;
       this.$router.push(`/profile/teacherprofile/${teacherId}`);
     },
     convertDaysToBitMask() {
@@ -309,8 +350,8 @@ export default {
 
     saveToselectedInsruments() {
       this.selectedInstruments = [];
-      for(const inst in this.instruments){
-        if(this.instruments[inst]){
+      for (const inst in this.instruments) {
+        if (this.instruments[inst]) {
           this.selectedInstruments.push(inst);
         }
       }
@@ -330,34 +371,32 @@ export default {
     this.userProfileImage = res.userProfileImage;
     this.attachedFiles = res.images;
 
-    res.classDay = res.classDay.toString().split('').reverse().join('');
-    
+    res.classDay = res.classDay.toString().split("").reverse().join("");
+
     let classDayBinary;
-    if (res.classDay == 0 || res.classDay === '0') {
-      classDayBinary = '0000000';
+    if (res.classDay == 0 || res.classDay === "0") {
+      classDayBinary = "0000000";
     } else {
       const diff = 7 - res.classDay.toString().length;
       if (diff > 0) {
-        classDayBinary = res.classDay + '0'.repeat(diff);
+        classDayBinary = res.classDay + "0".repeat(diff);
       } else {
         classDayBinary = res.classDay;
       }
     }
 
     Object.keys(this.days).forEach((day, index) => {
-        this.days[day] = classDayBinary[index] === "1";
+      this.days[day] = classDayBinary[index] === "1";
     });
-  
 
-    for(let i = 0; i < this.selectedInstruments.length; i++) {
-      for(const inst in this.instruments) {
-          if(inst === this.selectedInstruments[i]) {
-            this.instruments[inst] = true;
+    for (let i = 0; i < this.selectedInstruments.length; i++) {
+      for (const inst in this.instruments) {
+        if (inst === this.selectedInstruments[i]) {
+          this.instruments[inst] = true;
         }
       }
     }
-  }
-
+  },
 };
 </script>
 

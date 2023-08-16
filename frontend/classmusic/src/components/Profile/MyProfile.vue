@@ -89,8 +89,7 @@
 		</div>
 
 		<div class="favorites">
-			<br />
-			<hr />
+			<br />		
 			<br />
 			<div class="favorite-title">{{ userInfo.name }} 님이 즐겨찾기한 강사</div>
 			<div class="teacher-list">

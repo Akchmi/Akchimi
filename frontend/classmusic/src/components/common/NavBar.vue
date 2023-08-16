@@ -44,7 +44,7 @@ export default {
       this.$store.commit("LOGOUT");
       this.$router.push("/main");
     },
-
+        
     goLecture() {
       if (!this.$store.getters.getIsLogin) {
         alert("로그인이 필요한 서비스입니다.");
@@ -130,5 +130,8 @@ li:hover {
 .mainLogo {
   height: 70px;
   cursor: pointer;
+}
+.active {
+  font-weight: bold; 
 }
 </style>
