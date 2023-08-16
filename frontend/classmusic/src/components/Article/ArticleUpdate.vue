@@ -31,7 +31,7 @@
       <div class="create__content__bottom">
         <div>
           <!-- 첨부파일 -->
-          <button class="createButton">첨부파일 추가</button>
+          <!-- <button class="createButton">첨부파일 추가</button> -->
         </div>
 
         <div>

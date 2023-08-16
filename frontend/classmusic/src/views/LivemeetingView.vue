@@ -48,7 +48,8 @@
             <div id="live-screens" class="" @click="changeMainScreen">
               <!-- {{ subscribers }} -->
               <user-video :stream-manager="publisher" />
-              <user-video id="participants"
+              <user-video
+                id="participants"
                 v-for="sub in subscribers"
                 :key="sub.stream.connection.connectionId"
                 :stream-manager="sub"
@@ -58,12 +59,12 @@
                 <div class="panel-body" id="container-screens"></div>
               </div>
             </div>
-            <TheMetronome />
           </div>
         </div>
         <!-- 바디 가운데: 큰메인화면 -->
         <div id="video-container" class="video-box">
           <user-video :stream-manager="publisher" />
+          <TheMetronome v-if="metronomePopState" />
           <TunerApp v-if="popState" @close="changePopState()" />
         </div>
         <!-- 바디 오른쪽: 채팅창 -->
@@ -93,6 +94,9 @@
       <!-- 바텀: 튜너, 화면공유, 나가기 버튼 -->
       <div class="bottom-container">
         <div class="button-box">
+          <button class="bottom-button" @click="changeMetronomePopState()">
+            매트로놈
+          </button>
           <button class="bottom-button" @click="changePopState()">튜너</button>
           <button
             id="buttonScreenShare"
@@ -193,6 +197,7 @@ export default {
 
       myUserName: JSON.parse(localStorage.getItem("vuex")).common.name,
       popState: false,
+      metronomePopState: false,
 
       // 대기 화면 내 비디오 확인
       myVideo: null,
@@ -543,6 +548,9 @@ export default {
     changePopState() {
       this.popState = !this.popState;
     },
+    changeMetronomePopState() {
+      this.metronomePopState = !this.metronomePopState;
+    },
   },
   beforeUnmount() {
     // `this`를 통해 컴포넌트 인스턴스에 접근할 수 있습니다.
@@ -622,7 +630,7 @@ export default {
   z-index: 5;
 }
 .bottom-container {
-  height: 20vh;
+  height: 10vh;
   width: 98vw;
   background-color: white;
   position: relative;
@@ -717,7 +725,7 @@ video {
   position: absolute;
   width: 60%;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 .bottom-button {
   width: 15%;

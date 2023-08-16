@@ -151,16 +151,7 @@ export default {
         orderBy: "최신순",
         gender: "0",
         career: [0, 100],
-        cost: [0, 100],
-        days: {
-          월: true,
-          화: true,
-          수: true,
-          목: true,
-          금: true,
-          토: true,
-          일: true,
-        },
+        cost: [0, 100],       
         time: [0, 24], 
       },
     };
@@ -224,8 +215,10 @@ export default {
 
     setClassDay(value, day) {
       console.log("요일 필터 수정", value, day);
-      this.searchParams.days[day] = value;
+
+      this.days[day] = value;
       const daysBitMask = this.convertDaysToBitMask();
+
       this.commitClassDay(daysBitMask);
     },
 

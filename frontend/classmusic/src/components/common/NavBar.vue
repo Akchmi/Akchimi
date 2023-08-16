@@ -41,7 +41,7 @@
         <ul class="navbar__menu">
           <li
             :class="{ navColor: nowNavPage == 'mypage' }"
-            if="isLoggedIn"
+            v-if="isLoggedIn"
             @click="clickMypage"
           >
             마이페이지
@@ -103,6 +103,7 @@ export default {
     clickLecture() {
       if (!this.$store.getters.getIsLogin) {
         alert("로그인이 필요한 서비스입니다.");
+        this.changeNavPage("login");
         this.$router.push("/login/signin");
         return;
       }

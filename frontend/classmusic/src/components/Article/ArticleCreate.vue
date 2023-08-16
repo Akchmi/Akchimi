@@ -32,9 +32,9 @@
       <div class="create__content__bottom">
         <div>
           <!-- 첨부파일 -->
-          <button class="createButton" @click="triggerFileUpload">
+          <!-- <button class="createButton" @click="triggerFileUpload">
             첨부파일 추가
-          </button>
+          </button> -->
         </div>
         <div
           v-for="(image, index) in attachedFiles"
