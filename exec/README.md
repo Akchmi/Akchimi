@@ -13,18 +13,22 @@
 - 형상 관리 : Git, GitLab
 - 커뮤니케이션 : Notion, Mattermost
 - 디자인 : Figma
+- UCC : Adobe
 
 ## 2. 기술스택
 
 - IntelliJ : 2023.1.3
 - Visual Studio Code : 1.81.1
 - JVM : 11.0.20
+- Vue : 3.2.13
+- SpringBoot : 2.7.14
 - Node.js : 18.16.1
 - DBMS : MySQL 8.0.34
 - AWS : Ubuntu 20.04 LTS
 - Nginx : 1.18.0
 - Docker : 20.10.21
 - Gradle : 8.1.1
+- Certbot : 2.6.0
 
 ## 3. 빌드
 
@@ -187,13 +191,7 @@ HTTPS_PORT=8443
 ./openvidu start &
 ```
 
-#### 4.4 Certbot 설정
-
-```bash
-
-```
-
-#### 4.5 Nginx 설정
+#### 4.4 Nginx 설정
 
 default 파일 수정
 
@@ -245,4 +243,13 @@ server {
 
 ```bash
 sudo systemctl start nginx
+```
+
+#### 4.5 Certbot 설정
+
+```bash
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt install python-certbot-nginx
+sudo certbot --nginx -d example.com
+//설치시 이메일 , 약관동의 , http > https redirect 설정
 ```
