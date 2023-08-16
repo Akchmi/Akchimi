@@ -82,8 +82,12 @@ export default {
   },
   methods: {
     ...mapActions(["postArticleCreate"]),
+    ...mapActions(["getArticlelist"]),
+    ...mapActions(["changePage"]),
 
     async postArticle() {
+      this.changePage(1);
+
       if (
         this.title.split("\n").join("").length == 0 ||
         this.title.split(" ").join("").length == 0 ||

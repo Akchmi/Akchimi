@@ -201,8 +201,10 @@ export default {
   },
   methods: {
     ...mapActions(["deleteArticleDelete"]),
+    ...mapActions(["changePage"]),
 
     articleDelete() {
+      this.changePage(1);
       this.deleteArticleDelete(this.articleDetail.articleId);
     },
 

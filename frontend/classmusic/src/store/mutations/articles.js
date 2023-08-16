@@ -15,6 +15,7 @@ export default {
   },
   SET_CREATE_ID(state, data) {
     state.articles.articleCreateId = data;
+
     router.push(`/article/${data}`);
   },
   UPDATE_ARTICLE_COMMENTS(state, data) {
@@ -37,7 +38,7 @@ export default {
     }
   },
   SAVE_ARTICLEID(state, data) {
-    state.articles.articleId = data
-    console.log('세아뮤',data)
-  }
+    state.articles.articleId = data;
+    console.log("세아뮤", data);
+  },
 };

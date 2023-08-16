@@ -85,6 +85,7 @@
         <button @click="pageDown" v-if="pages[0] != 1">이전</button>
         <button
           class="pageBtn"
+          :class="{ nowPageBtn: page == nowPage }"
           v-for="page in pages"
           :key="page"
           @click="pageChange(page)"
@@ -121,6 +122,7 @@ export default {
     ...mapGetters({ isLogin: "getIsLogin" }),
     ...mapGetters({ userType: "getUsertype" }),
     ...mapGetters({ lastpage: "getEndPageNo" }),
+    ...mapGetters({ nowPage: "getNowPage" }),
   },
   methods: {
     ...mapActions(["getNoticelist"]),
@@ -154,7 +156,9 @@ export default {
       }
     },
 
+    ...mapActions(["changePage"]),
     pageChange(page) {
+      this.changePage(page);
       this.getNoticelist({
         pageNo: page,
         keyword: this.searchQuery,
@@ -174,7 +178,7 @@ export default {
     const todayDate = utils.todayDate();
 
     onMounted(() => {
-      if (store.state.notices.noticeList.length == 0) {
+      if (store.state.notices.nowPage == 1) {
         store.dispatch("getNoticelist", {
           pageNo: 1,
           keyword: "",

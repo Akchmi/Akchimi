@@ -3,4 +3,5 @@ export default {
   noticeList: [],
   noticeDetail: [],
   endPageno: 1,
+  nowPage: 1,
 };

@@ -38,9 +38,9 @@ export default {
   //자유게시글 작성
   postArticleCreate(context, data) {
     const response = apiArticlecreate(context, data);
-    if(response) {
-      context.commit("SAVE_ARTICLEID",response)
-      console.log('세아액', response)
+    if (response) {
+      context.commit("SAVE_ARTICLEID", response);
+      console.log("세아액", response);
     }
     return response;
   },
@@ -67,4 +67,9 @@ export default {
     apiCommentdelete(context, data);
   },
   //첨부파일?
+
+  //현재 페이지 변경
+  changePage(context, page) {
+    context.state.articles.nowPage = page;
+  },
 };

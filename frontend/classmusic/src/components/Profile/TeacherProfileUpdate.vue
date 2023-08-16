@@ -385,7 +385,7 @@ export default {
 
       setTimeout(() => {
         this.$router.push(`/profile/teacherprofile/${teacherId}`);
-      }, 500);
+      }, 300);
     },
     convertDaysToBitMask() {
       let index = 0,

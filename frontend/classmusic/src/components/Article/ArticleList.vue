@@ -3,6 +3,7 @@
     <div class="article__list">
       <div class="articleTableBanner">
         <!-- 자유게시판 정렬-->
+
         <select v-model="selectedSorttype" @change="sortTypeChange">
           <option v-for="(item, idx) in sortType" :key="idx" :value="item">
             {{ item }}
@@ -99,6 +100,7 @@
         <button @click="pageDown" v-if="pages[0] != 1">이전</button>
         <button
           class="pageBtn"
+          :class="{ nowPageBtn: page == nowPage }"
           v-for="page in pages"
           :key="page"
           @click="pageChange(page)"
@@ -133,6 +135,7 @@ export default {
     ...mapGetters({ articleList: "getArticleList" }),
     ...mapGetters({ endPageno: "getArticleEndPageNo" }),
     ...mapGetters({ isLogin: "getIsLogin" }),
+    ...mapGetters({ nowPage: "getNowPage" }),
   },
   methods: {
     ...mapActions(["getArticlelist"]),
@@ -167,7 +170,10 @@ export default {
       }
     },
 
+    ...mapActions(["changePage"]),
     pageChange(page) {
+      this.changePage(page);
+
       this.getArticlelist({
         searchType: this.selectedSearchCategory,
         keyword: this.searchQuery,
@@ -205,7 +211,7 @@ export default {
     const todayDate = utils.todayDate();
 
     onMounted(() => {
-      if (store.state.articles.articleList.length == 0) {
+      if (store.state.articles.nowPage == 1) {
         store.dispatch("getArticlelist", {
           searchType: "전체",
           keyword: "",
