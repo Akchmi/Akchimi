@@ -41,7 +41,9 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public int insertReview(ReviewInsertDto reviewInsertDto) {
          Contact contact = contactsRepository.findById(reviewInsertDto.getContactId());
-         if(contact.getReviews() != null){
+
+         System.out.println(contact.getReview());
+         if(contact.getReview() != null){
              throw new RestApiException(ErrorCode.REVIEW_DUPLICATED);
          }
          Review review = Review.builder()
@@ -84,12 +86,12 @@ public class ReviewServiceImpl implements ReviewService{
 
     public void updateRating(Teacher teacher) {
         log.debug("teacher : {}", teacher);
-        float sum = teacherRepository.findReviewSum(teacher.getTeacherId());
-        long cnt = teacherRepository.findReviewCount(teacher.getTeacherId());
-        if(cnt != 0){
-            teacher.setAvgRating(Math.round(sum / cnt * 10) / 10f);
-        } else{
-            teacher.setAvgRating(0f);
-        }
+//        float sum = teacherRepository.findReviewSum(teacher.getTeacherId());
+//        long cnt = teacherRepository.findReviewCount(teacher.getTeacherId());
+//        if(cnt != 0){
+//            teacher.setAvgRating(Math.round(sum / cnt * 10) / 10f);
+//        } else{
+//            teacher.setAvgRating(0f);
+//        }
     }
 }

@@ -28,7 +28,7 @@ public class Review {
     @Column(name = "review_id")
     private int reviewId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne()
     @JoinColumn(name = "contact_id")
     private Contact contact;
 
