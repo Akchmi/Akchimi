@@ -14,6 +14,7 @@
           <button
             class="lectureSelectButton"
             @click="$router.push(`/lecture/teacherongoing`)"
+            v-if="teacherId"
           >
             가르치기
           </button>
@@ -45,7 +46,10 @@
       <div class="out__container">
         <div class="container">
           <div>
-            <div v-if="lectureList.length == 0" class="noSearchLecture">
+            <div
+              v-if="lectureList.length == 0 && refusedLectureList.length == 0"
+              class="noSearchLecture"
+            >
               <h2>신청한 강의가 없습니다.</h2>
             </div>
             <div
@@ -130,6 +134,7 @@ export default {
   setup() {
     const store = useStore();
     const userId = store.getters.getUserId;
+    const teacherId = store.getters.getTeacherId;
 
     onMounted(() => {
       store.dispatch("getLectureList", {
@@ -144,6 +149,8 @@ export default {
         type: 0,
       });
     });
+
+    return { teacherId };
   },
 };
 </script>

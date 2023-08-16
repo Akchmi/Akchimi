@@ -12,11 +12,17 @@
 <script>
 import NavBar from "@/components/common/NavBar.vue";
 import TheBanner from "@/components/common/TheBanner";
+import { onMounted } from "vue";
 
 export default {
   components: {
     NavBar,
     TheBanner,
+  },
+  setup() {
+    onMounted(() => {
+      window.scrollTo(0, 0);
+    });
   },
 };
 </script>

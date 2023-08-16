@@ -84,6 +84,7 @@ export default {
     ...mapActions(["commitTime"]),
     ...mapActions(["commitCareer"]),
     ...mapActions(["searchTeacher"]),
+    ...mapActions(["commitOrderBy"]),
 
     ...mapActions(["changeNavPage"]),
 
@@ -117,7 +118,7 @@ export default {
       this.commitCost([0, 100]);
       this.commitTime([0, 100]);
       this.commitCareer([0, 100]);
-
+      this.commitOrderBy("최신순");
       this.searchTeacher();
 
       this.$router.push("/search");

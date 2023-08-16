@@ -151,7 +151,7 @@ const routes = [
         store.dispatch("commitCost", [0, 100]);
         store.dispatch("commitTime", [0, 100]);
         store.dispatch("commitCareer", [0, 100]);
-
+        store.dispatch("commitOrderBy", "최신순");
         store.dispatch("searchTeacher");
         next();
       } else {

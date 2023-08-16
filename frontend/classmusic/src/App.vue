@@ -9,16 +9,11 @@
 </template>
 
 <script>
-// import { computed } from "vue";
-// import { useStore } from "vuex";
 import TheFooter from "@/components/common/TheFooter";
 export default {
   name: "AppVue",
   components: {
     TheFooter,
-  },
-  setup() {
-    // const store = useStore();
   },
 };
 </script>

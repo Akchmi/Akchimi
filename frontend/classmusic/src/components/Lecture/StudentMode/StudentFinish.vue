@@ -14,6 +14,7 @@
           <button
             class="lectureSelectButton"
             @click="$router.push(`/lecture/teacherongoing`)"
+            v-if="teacherId"
           >
             가르치기
           </button>
