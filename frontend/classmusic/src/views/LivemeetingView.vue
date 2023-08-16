@@ -69,13 +69,13 @@
         </div>
         <!-- 바디 오른쪽: 채팅창 -->
         <div class="message-box">
-          <div class="messages-container">
+          <div class="messages-container" ref="chatroom">
             <div
               v-for="(message, index) in receivedMessages"
               :class="message.className"
               :key="index"
             >
-              <div>
+              <div class="words-container">
                 {{ message.message }}
               </div>
             </div>
@@ -234,7 +234,7 @@ export default {
       if (this.sessionCamera) {
         this.sessionCamera
           .signal({
-            data: this.myUserName + ":" + this.newMessage, // Any string (optional)
+            data: this.myUserName + " : " + this.newMessage, // Any string (optional)
             to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
             type: "my-chat",
             // The type of message (optional)
@@ -256,6 +256,13 @@ export default {
 
       // Push the received message into the messages array
       this.messages.push(receivedMessage);
+    },
+    scrollToBottom() {
+      console.log("내려가");
+      this.$nextTick(() => {
+        const chatroom = this.$refs.chatroom;
+        chatroom.scrollTop = chatroom.scrollHeight;
+      });
     },
     changeMainScreen(event) {
       console.log("##########we did click!###########");
@@ -398,7 +405,7 @@ export default {
       this.sessionCamera.on("signal", (event) => {
         const receivedMessage = event.data;
         console.log(event.from);
-        if (receivedMessage != this.myUserName + ":" + this.newMessage) {
+        if (receivedMessage != this.myUserName + " : " + this.newMessage) {
           this.receivedMessages.push({
             message: receivedMessage,
             className: "left",
@@ -552,6 +559,11 @@ export default {
       this.metronomePopState = !this.metronomePopState;
     },
   },
+  updated(){
+    if(this.$refs.chatroom!=null){
+      this.scrollToBottom();
+    }
+  },
   beforeUnmount() {
     // `this`를 통해 컴포넌트 인스턴스에 접근할 수 있습니다.
     this.leaveSession();
@@ -685,13 +697,6 @@ video {
   position: relative;
   background-color: #f5f5f5;
 }
-.messages-container {
-  width: 100%;
-  height: 90%;
-  justify-content: space-between;
-  box-sizing: border-box;
-  overflow: auto;
-}
 .message-input-container {
   height: 10%;
   bottom: 0;
@@ -731,9 +736,29 @@ video {
   width: 15%;
   border-radius: 10px;
 }
+.messages-container {
+  width: 100%;
+  height: 90%;
+  /* justify-content: space-between; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  overflow: auto;
+}
 .rightviduchat {
-  margin-bottom: 10px;
-
+  align-self: flex-end;
   word-break: break-all;
+  text-align: right;
+}
+.left{
+  align-self: flex-start;
+  word-break: break-all;
+}
+.words-container{
+  background-color: white;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
 }
 </style>
