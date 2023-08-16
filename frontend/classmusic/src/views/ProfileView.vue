@@ -5,7 +5,7 @@
     </div>
     <TheBanner :title="'프로필'" />
     <br />
-    <div v-if="isLogin " class="top-button-container">
+    <div v-if="isLogin && (isOnMyProfilePage || showProfileButtons)" class="top-button-container">
       <button @click="movePage('/profile/myprofile')">내 프로필</button>
       |
       <button @click="navigateToTeacherProfile">강사 프로필</button>
@@ -35,12 +35,12 @@ export default {
 
   computed: {
     ...mapGetters({ isLogin: "getIsLogin" }),
-
+    isOnMyProfilePage() {
+      return this.$route.path === "/profile/myprofile";
+    },
     showProfileButtons() { 
-      const storedTeacherId = JSON.parse(localStorage.getItem("vuex")).common.teacherId;
-      console.log(this.currentTeacherId, storedTeacherId);
-      return this.currentTeacherId === storedTeacherId;
-
+      const storedTeacherId = Number(JSON.parse(localStorage.getItem("vuex")).common.teacherId);
+      return Number(this.currentTeacherId) === storedTeacherId;
     },
   },
 
