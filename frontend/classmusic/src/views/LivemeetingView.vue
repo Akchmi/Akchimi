@@ -548,6 +548,9 @@ export default {
     changePopState() {
       this.popState = !this.popState;
     },
+    changeMetronomePopState() {
+      this.metronomePopState = !this.metronomePopState;
+    },
   },
   beforeUnmount() {
     // `this`를 통해 컴포넌트 인스턴스에 접근할 수 있습니다.
