@@ -15,7 +15,7 @@ export default {
     },
     subTitle: {
       type: String,
-      default: "악기라는 취미에 미치다.",
+      default: "",
     },
   },
 };

@@ -58,7 +58,7 @@
                 <div class="panel-body" id="container-screens"></div>
               </div>
             </div>
-            <MetronomeApp />
+            <TheMetronome />
           </div>
         </div>
         <!-- 바디 가운데: 큰메인화면 -->
@@ -154,7 +154,7 @@
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/LiveMeeting/UserVideo";
 import { useRoute } from "vue-router";
-import MetronomeApp from "../components/LiveMeeting/MetronomeApp";
+import TheMetronome from "@/components/LiveMeeting/TheMetronome";
 import TunerApp from "../components/LiveMeeting/TunerApp.vue";
 import axios from "axios";
 // import api from "@/api/axios";
@@ -168,8 +168,8 @@ export default {
 
   components: {
     UserVideo,
-    MetronomeApp,
     TunerApp,
+    TheMetronome,
   },
 
   data() {
@@ -765,10 +765,8 @@ video {
   border-radius: 10px;
 }
 .rightviduchat {
-  width: 93%;
-  margin: 0px 10px 0px 10px;
-  display: flex;
-  justify-content: right;
-  align-content: center;
+  margin-bottom: 10px;
+
+  word-break: break-all;
 }
 </style>

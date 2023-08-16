@@ -83,7 +83,8 @@
   display: flex;
   width: 80%;
 
-  border: 1px dashed black;
+  border: 1.5px solid black;
+  border-radius: 10px;
   margin: 20px;
   padding: 20px 20px 0px 20px;
 }
@@ -104,7 +105,7 @@
   width: 100px;
   height: 100px;
   object-fit: cover;
-  border: 1px solid black;
+  // border: 1px solid black;
   border-radius: 100%;
 }
 
@@ -125,7 +126,9 @@
   height: 70%;
   border: 1px solid black;
   overflow: hidden;
-  padding: 0;
+  box-sizing: border-box;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .memoInput {

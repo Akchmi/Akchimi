@@ -27,12 +27,12 @@
 					<div class="teacher-profile-form__row">
 						<div class="teacher-profile-form__input">
 							<label for="years">경력 : </label>
-							<input id="years" v-model.number="career" type="number" min="1" />
+							<input id="years" v-model.number="career" type="number" :max="maxCareer" min="0" @input="filterInput" />
 							년
 						</div>
 						<div class="teacher-profile-form__input">
 							<label for="cost">시간당 비용 : </label>
-							<input id="cost" v-model.number="cost" type="number" min="0" />
+							<input id="cost" v-model.number="cost" type="number" :max="maxCost" min="0" @input="filterInput" />
 							만원
 						</div>
 					</div>
@@ -46,23 +46,11 @@
 					<div class="teacher-profile-form__row">
 						<div class="teacher-profile-form__input">
 							<label for="start">시작 시간 :</label>
-							<input
-								id="start"
-								v-model.number="startTime"
-								type="number"
-								min="0"
-								max="23"
-							/>
+							<input id="start" v-model.number="startTime" type="number" :max="maxStartTime" min="0" @input="filterInput" />
 						</div>
 						<div class="teacher-profile-form__input">
 							<label for="end">종료 시간 :</label>
-							<input
-								id="end"
-								v-model.number="endTime"
-								type="number"
-								min="0"
-								max="23"
-							/>
+							<input id="end" v-model.number="endTime" type="number" :max="maxEndTime" min=1 @input="filterInput" />
 						</div>
 					</div>
 				</div>
@@ -120,6 +108,10 @@ export default {
 	},
 	data() {
 		return {
+      maxCareer: 100,
+      maxCost: 100,
+      maxStartTime: 23,
+      maxEndTime: 24,
 			userInfo: {},
 			instruments: {
 				피아노: false,
@@ -138,8 +130,8 @@ export default {
 				토: false,
 				일: false,
 			},
-			startTime: "00",
-			endTime: "00",
+			startTime: 0,
+			endTime: 24,
 			description: "",
 			career: 0,
 			cost: 0,
@@ -157,7 +149,43 @@ export default {
 		},
 	},
 
+  watch: {
+    career(value) {
+        if (value > this.maxCareer) {
+            this.career = this.maxCareer;
+        }
+    },
+    cost(value) {
+        if (value > this.maxCost) {
+            this.cost = this.maxCost;
+        }
+    },
+    startTime(value) {
+        if (value > this.maxStartTime) {
+            this.startTime = this.maxStartTime;
+        } else if (value >= this.endTime) {
+            this.startTime = this.endTime - 1;
+        }
+    },
+    endTime(value) {
+        if (value > this.maxEndTime) {
+            this.endTime = this.maxEndTime;
+        } else if (value <= this.startTime) {
+            this.endTime = this.startTime + 1;
+        }
+    }
+
+
+  },
+
 	methods: {
+    filterInput(event) {
+      const validNumber = /^[0-9]*$/; 
+      if (!validNumber.test(event.target.value)) {
+        event.target.value = event.target.value.replace(/[^0-9]/g, ''); 
+      }
+      event.target.value = String(Number(event.target.value));
+    },
 		toggleInstrument(instrument) {
 			this.instruments[instrument] = !this.instruments[instrument];
 		},
@@ -168,22 +196,30 @@ export default {
 		triggerFileUpload() {
 			this.$refs.fileUploadInput.click();
 		},
-		handleFileUpload() {
-			const selectedFiles = this.$refs.fileUploadInput.files;
+    handleFileUpload() {
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+      const selectedFiles = this.$refs.fileUploadInput.files;
 
-			for (let i = 0; i < selectedFiles.length; i++) {
-				const fileReader = new FileReader();
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
 
-				fileReader.onload = (e) => {
-					this.attachedFiles.push({
-						preview: e.target.result,
-						file: selectedFiles[i],
-					});
-				};
+        if (allowedExtensions.includes(fileExtension)) {
+          const fileReader = new FileReader();
 
-				fileReader.readAsDataURL(selectedFiles[i]);
-			}
-		},
+          fileReader.onload = (e) => {
+            this.attachedFiles.push({
+              preview: e.target.result,
+              file: file,
+            });
+          };
+
+          fileReader.readAsDataURL(file);
+        } else {
+          alert(`${file.name}는 송희도 같은 파일입니다.`);
+        }
+      }
+    },
 
 		async getUserInfo() {
 			try {	

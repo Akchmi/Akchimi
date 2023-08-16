@@ -4,10 +4,13 @@
       :src="teacher.userProfileImage"
       alt="Teacher profile picture"
       class="teacher-card__image"
+      @click="goToProfile(teacher.teacherId)"
     />
     <div class="teacher-card__info">
       <div class="teacher-card__info__title">
-        <h2 class="teacher-name">{{ teacher.name }}</h2>
+        <h2 class="teacher-name" @click="goToProfile(teacher.teacherId)">
+          {{ teacher.name }}
+        </h2>
         <div class="teacher-card__info__grade">
           <span class="teacher-avg-rating"
             >평점 : {{ teacher.avgRating }}점</span

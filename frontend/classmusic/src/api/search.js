@@ -19,8 +19,8 @@ function apiPostMatchingCreate(context, data) {
     .then(() => {
       router.push("/lecture/studentwaiting");
     })
-    .catch((error) => {
-      console.log(error);
+    .catch(() => {
+      alert("이미 신청한 강사입니다.");
     });
 }
 
