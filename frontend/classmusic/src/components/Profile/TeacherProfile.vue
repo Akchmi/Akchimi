@@ -119,14 +119,15 @@
 			<div class="teacher-reviews">
 				<div class="review-header">
 					<h2 class="review-title">강사 리뷰</h2>
+					
 					<div class="avg-rating">
 						평균 별점:
-						<span v-if="0 <= avgRating && avgRating <= 0.5"> </span>
-						<span v-else-if="0.5 < avgRating && avgRating < 1.5"> ⭐</span>
-						<span v-if="1.5 <= avgRating && avgRating < 2.5"> ⭐⭐</span>
-						<span v-if="2.5 <= avgRating && avgRating < 3.5"> ⭐⭐⭐</span>
-						<span v-if="3.5 <= avgRating && avgRating < 4.5"> ⭐⭐⭐⭐</span>
-						<span v-if="4.5 <= avgRating && avgRating <= 5"> ⭐⭐⭐⭐⭐</span>
+						<span v-for="star in Math.floor(avgRating)" :key="star">
+							<i class="fa-solid fa-star" style="color: #ffdd00;"></i>
+						</span>
+						<span v-if="25<=avgRating*100%100 && avgRating*100%100<75">
+							<i class="fa-solid fa-star-half" style="color: #ffdd00;"></i>
+						</span>
 						( {{ avgRating }} )
 					</div>
 				</div>
