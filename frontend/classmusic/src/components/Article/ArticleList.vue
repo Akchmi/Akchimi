@@ -205,12 +205,14 @@ export default {
     const todayDate = utils.todayDate();
 
     onMounted(() => {
-      store.dispatch("getArticlelist", {
-        searchType: "전체",
-        keyword: "",
-        pageNo: 1,
-        sortType: "최신순",
-      });
+      if (store.state.articles.articleList.length == 0) {
+        store.dispatch("getArticlelist", {
+          searchType: "전체",
+          keyword: "",
+          pageNo: 1,
+          sortType: "최신순",
+        });
+      }
     });
 
     return {

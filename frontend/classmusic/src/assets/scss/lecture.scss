@@ -109,6 +109,10 @@
   border-radius: 100%;
 }
 
+.profileImage:hover {
+  cursor: pointer;
+}
+
 .info-box {
   width: 75%;
   display: flex;
@@ -174,6 +178,10 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
+}
+
+.watingProfileImage:hover {
+  cursor: pointer;
 }
 
 .watingProfileName {

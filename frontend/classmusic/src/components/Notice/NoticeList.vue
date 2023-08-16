@@ -174,11 +174,13 @@ export default {
     const todayDate = utils.todayDate();
 
     onMounted(() => {
-      store.dispatch("getNoticelist", {
-        pageNo: 1,
-        keyword: "",
-        searchType: "전체",
-      });
+      if (store.state.notices.noticeList.length == 0) {
+        store.dispatch("getNoticelist", {
+          pageNo: 1,
+          keyword: "",
+          searchType: "전체",
+        });
+      }
     });
     return { searchCategory, todayDate };
   },
