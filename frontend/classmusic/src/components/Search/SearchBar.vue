@@ -47,7 +47,7 @@
       <!-- 경력 필터 -->
       <div class="dropdown">
         <button id="careerButton" @click="toggleInputDropdown('career')">
-          경력
+          경력: {{ searchParams.career[0] }}년 ~ {{ searchParams.career[1] }}년
         </button>
         <div
           id="careerDropdown"
@@ -64,7 +64,7 @@
       <!-- 비용 필터 -->
       <div class="dropdown">
         <button id="expenseButton" @click="toggleInputDropdown('cost')">
-          비용
+          비용: {{ searchParams.cost[0] }}만원 ~ {{ searchParams.cost[1] }}만원
         </button>
         <div
           id="expenseDropdown"
@@ -81,7 +81,9 @@
       <!-- 시간 필터 -->
       <div class="dropdown">
         <button id="timeButton" @click="toggleInputDropdown('time')">
-          시간
+          시간 :{{ searchParams.time[0] }}시 ~ {{ searchParams.time[1] }}시
+          <!-- <br> -->
+          <!-- 요일: <span v-for="day in filteredDays" :key="day">{{ day }} </span> -->
         </button>
         <div
           id="timeDropdown"
@@ -113,6 +115,13 @@ export default {
     InputCost,
     InputTime,
   },
+  computed: {
+    filteredDays() {
+      return Object.entries(this.searchParams.days)
+      .filter(([, value]) => value)
+      .map(([key]) => key);
+    },
+  },
 
   data() {
     return {
@@ -141,6 +150,18 @@ export default {
         keyword: "",
         orderBy: "최신순",
         gender: "0",
+        career: [0, 100],
+        cost: [0, 100],
+        days: {
+          월: true,
+          화: true,
+          수: true,
+          목: true,
+          금: true,
+          토: true,
+          일: true,
+        },
+        time: [0, 24], 
       },
     };
   },
@@ -185,25 +206,26 @@ export default {
 
     setCareer(career) {
       console.log("경력 필터 수정", career);
+      this.searchParams.career = career;
       this.commitCareer(career);
     },
 
     setCost(cost) {
       console.log("비용 필터 수정", cost);
+      this.searchParams.cost = cost;
       this.commitCost(cost);
     },
 
     setTime(time) {
       console.log("시간 필터 수정", time);
+      this.searchParams.time = time;
       this.commitTime(time);
     },
 
     setClassDay(value, day) {
       console.log("요일 필터 수정", value, day);
-
-      this.days[day] = value;
+      this.searchParams.days[day] = value;
       const daysBitMask = this.convertDaysToBitMask();
-
       this.commitClassDay(daysBitMask);
     },
 
