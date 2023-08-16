@@ -10,7 +10,7 @@ const autoCorrelate = (buf, sampleRate) => {
 
   rms = Math.sqrt(rms / SIZE);
 
-  if (rms < 0.1) {
+  if (rms < 0.01) {
     // not enough signal
     return -1;
   }

@@ -282,7 +282,7 @@ export default {
       // }
       // loadMediaStream();
       console.log(selectedVideo);
-      console.log(selectedVideo.srcObject);
+      // console.log(selectedVideo.srcObject);
       console.log(mainVideo.srcObject);
 
       if (
