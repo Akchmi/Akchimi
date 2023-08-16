@@ -146,6 +146,7 @@ export default {
   },
   data() {
     return {
+      formValid: true,
       maxCareer: 100,
       maxCost: 100,
       maxStartTime: 23,
@@ -214,7 +215,40 @@ export default {
     },
   },
 
-  methods: {
+  methods: {    
+    checkFormValidity() {
+      let missingFields = [];
+
+      if (!this.career) {
+        missingFields.push("경력");
+      }
+      if (!this.cost) {
+        missingFields.push("시간당 비용");
+      }
+      if (!this.description.trim()) {
+        missingFields.push("자기 소개");
+      }
+      if (this.startTime >= this.endTime) {
+        missingFields.push("시간");
+      }
+      if (!this.selectedDaysString.includes("1")) {
+        missingFields.push("요일");
+      }
+      if (this.selectedInstruments.length === 0) {
+        missingFields.push("악기 선택");
+      }
+      if (missingFields.length) {
+        this.formValid = false;
+        alert("모든 정보를 입력해주세요.");
+        console.log("누락된 정보:", missingFields.join(", "));
+        console.log('아긱', this.selectedInstruments)
+        return false;
+      }
+
+      this.formValid = true;
+      return true;
+    },
+
     filterInput(event) {
       const validNumber = /^[0-9]*$/;
       if (!validNumber.test(event.target.value)) {
@@ -224,6 +258,7 @@ export default {
     },
     toggleInstrument(instrument) {
       this.instruments[instrument] = !this.instruments[instrument];
+      this.saveToselectedInsruments();
     },
 
     removeAttachedFile(index) {
@@ -233,7 +268,7 @@ export default {
       this.$refs.fileUploadInput.click();
     },
     handleFileUpload() {
-      const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+      const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
       const selectedFiles = this.$refs.fileUploadInput.files;
 
       for (let i = 0; i < selectedFiles.length; i++) {
@@ -252,7 +287,7 @@ export default {
 
           fileReader.readAsDataURL(file);
         } else {
-          alert(`${file.name}는 송희도 같은 파일입니다.`);
+          alert(`${file.name}는 파일 형식이 잘못되었습니다."jpg", "jpeg", "png", "gif", "webp"형식의 파일만 가능합니다. `);
         }
       }
     },
@@ -271,6 +306,9 @@ export default {
     ...mapActions(["postTeacherProfileCreate", "updateUserType"]),
 
     async submitForm() {
+      if (!this.checkFormValidity()) {
+        return;
+      }
       this.saveToselectedInsruments();
       const data = {
         career: this.career,
@@ -325,6 +363,7 @@ export default {
       return bitMaskedDays.toString(2);
     },
 
+  
     saveToselectedInsruments() {
       this.selectedInstruments = [];
       for (const instrument in this.instruments) {
