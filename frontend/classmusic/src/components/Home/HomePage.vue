@@ -33,14 +33,7 @@
           @click="searchPiano"
         />
       </button>
-      <button>
-        <img
-          class="intstumentButton"
-          src="@/assets/images/home/baseButton.png"
-          alt=""
-          @click="searchBase"
-        />
-      </button>
+
       <button>
         <img
           class="intstumentButton"
@@ -63,6 +56,14 @@
           src="@/assets/images/home/drumButton.png"
           alt=""
           @click="searchDrum"
+        />
+      </button>
+      <button>
+        <img
+          class="intstumentButton"
+          src="@/assets/images/home/saxophoneButton.png"
+          alt=""
+          @click="searchSaxophone"
         />
       </button>
       <button>
@@ -108,9 +109,9 @@ export default {
 
       this.$router.push("/search");
     },
-    searchBase() {
+    searchSaxophone() {
       this.commitKeyword("");
-      this.commitInstrument("베이스");
+      this.commitInstrument("색소폰");
       this.searchTeacher();
 
       this.$router.push("/search");

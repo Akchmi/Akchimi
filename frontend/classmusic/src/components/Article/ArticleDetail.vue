@@ -80,6 +80,7 @@
               type="text"
               v-model="nowCreateComment"
               maxlength="200"
+              @keyup.enter="createComment"
             >
             </textarea>
             <button @click="createComment">댓글작성</button>
@@ -118,6 +119,9 @@
                       v-if="nowUpdateCommentId == comment.commentId"
                       v-model="nowUpdateCommentContent"
                       maxlength="200"
+                      @keyup.enter="
+                        commentUpdate(comment.commentId, comment.content)
+                      "
                     />
                     <p
                       style="min-height: 24px; word-break: break-all"
@@ -290,6 +294,7 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 100%;
+  object-fit: cover;
 }
 
 .attach-image {
