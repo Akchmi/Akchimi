@@ -96,7 +96,7 @@
       <!-- 페이지 번호-->
 
       <div class="articlePageBox">
-        <button @click="pageDown">이전</button>
+        <button @click="pageDown" v-if="pages[0] != 1">이전</button>
         <button
           class="pageBtn"
           v-for="page in pages"
@@ -106,7 +106,9 @@
         >
           {{ page }}
         </button>
-        <button @click="pageUp">다음</button>
+        <button @click="pageUp" v-if="pages[pages.length - 1] < endPageno">
+          다음
+        </button>
       </div>
     </div>
   </div>
@@ -144,10 +146,10 @@ export default {
     },
 
     pageDown() {
-      if (this.pages[0] == 1) {
-        alert("최근 페이지입니다.");
-        return;
-      }
+      // if (this.pages[0] == 1) {
+      //   alert("1페이지 입니다.");
+      //   return;
+      // }
 
       for (let i = 0; i < 10; i++) {
         this.pages[i] -= 10;
@@ -155,10 +157,10 @@ export default {
     },
 
     pageUp() {
-      if (this.pages[this.pages.length - 1] >= this.endPageno) {
-        alert("마지막 페이지입니다.");
-        return;
-      }
+      // if (this.pages[this.pages.length - 1] >= this.endPageno) {
+      //   alert("마지막 페이지입니다.");
+      //   return;
+      // }
 
       for (let i = 0; i < 10; i++) {
         this.pages[i] += 10;
