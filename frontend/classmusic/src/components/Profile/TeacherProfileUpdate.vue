@@ -292,7 +292,7 @@ export default {
       this.$refs.fileUploadInput.click();
     },
     handleFileUpload() {
-    const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "jfif"];
     const maxFileSize = 30 * 1024 * 1024; // 30MB in bytes
     const selectedFiles = this.$refs.fileUploadInput.files;
 
@@ -301,7 +301,7 @@ export default {
         const fileExtension = file.name.split(".").pop().toLowerCase();
 
         if (!allowedExtensions.includes(fileExtension)) {
-            alert(`${file.name}는 파일 형식이 잘못되었습니다. "jpg", "jpeg", "png", "gif", "webp" 형식의 파일만 가능합니다.`);
+            alert(`${file.name}는 파일 형식이 잘못되었습니다."jfif", "jpg", "jpeg", "png", "gif", "webp" 형식의 파일만 가능합니다.`);
             continue;
         }
 

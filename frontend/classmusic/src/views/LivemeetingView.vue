@@ -628,14 +628,16 @@ export default {
 
 .top-container {
   width: 98vw;
-  height: 3vh;
+  height: 5vh;
   font-weight: bolder;
   font-size: larger;
   position: relative;
+  box-sizing: border-box;
+  padding: 10px;
   /* // border: solid 1px red; */
 }
 .body-container {
-  width: 98vw;
+  width: 99vw;
   height: 85vh;
   display: flex;
   position: relative;
@@ -696,20 +698,34 @@ video {
   box-sizing: border-box;
   position: relative;
   background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.messages-container {
+  width: 100%;
+  height: 85%;
+  justify-content: space-between;
+  box-sizing: border-box;
+  overflow: auto;
 }
 .message-input-container {
+  width: 100%;
   height: 10%;
   bottom: 0;
   position: sticky;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .message-input-form {
-  width: 77%;
+  width: 70%;
   height: 89%;
-  border: none;
+  border: 2px solid #edd9b7;
   border-radius: 10px;
-  box-shadow: 1px 2px 1px 2px rgb(199, 199, 199);
+  margin-right: 5px;
+  outline: none;
 }
 .message-send-btn {
   width: 19%;

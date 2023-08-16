@@ -62,6 +62,11 @@
                   :src="lecture.userProfileImage"
                   alt="Teacher profile picture"
                   class="watingProfileImage"
+                  @click="
+                    $router.push(
+                      `/profile/teacherprofile/${lecture.matchingUserId}`
+                    )
+                  "
                 />
                 <span class="watingProfileName">{{ lecture.name }}</span>
               </div>
