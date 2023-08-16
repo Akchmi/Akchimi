@@ -13,7 +13,6 @@ import java.util.Map;
 public interface ArticleRepository{
     void save(Article article);
     List<Article> findAll(Map<String, String> params);
-    Article selectOneById(int articleId);
     Article findById(int articleId);
     void delete(Article article);
     int getEndPage(Map<String, String> params);

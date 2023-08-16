@@ -51,14 +51,12 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public ArticleVo select(int articleId) {
-        ArticleVo articleVo = new ArticleVo(articleRepository.selectOneById(articleId));
-
-        // 없는 글 조회시
-        if(articleVo == null){
+        Article article = articleRepository.findById(articleId);
+        if(article == null){
             throw new RestApiException(ErrorCode.NOT_FOUND);
         }
-
-        return articleVo;
+        article.setHit(article.getHit() + 1);
+        return new ArticleVo(article);
     }
 
     @Override
@@ -75,7 +73,6 @@ public class ArticleServiceImpl implements ArticleService{
                     article.getHit());
             articleList.add(new ArticleVo(article));
         }
-
         return articleList;
     }
 
@@ -85,7 +82,6 @@ public class ArticleServiceImpl implements ArticleService{
         if(article.getUser().getUserId() == userId){
             article.setTitle(articleDto.getTitle());
             article.setContent(articleDto.getContent());
-            articleRepository.save(article);
         }else{
             throw new RestApiException(ErrorCode.NOT_AUTHOR);
         }
@@ -98,7 +94,6 @@ public class ArticleServiceImpl implements ArticleService{
 //            articleRepository.delete(article);
             // 삭제 시 현재 시간을 deletedAt에 저장
             article.setDeletedAt((int) Instant.now().getEpochSecond());
-            articleRepository.save(article);
         }else {
             throw new RestApiException(ErrorCode.NOT_AUTHOR);
         }

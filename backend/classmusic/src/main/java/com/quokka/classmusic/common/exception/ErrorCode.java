@@ -16,6 +16,7 @@ public enum ErrorCode {
     ID_EMAIL_MISMATCH(HttpStatus.BAD_REQUEST, "아이디와 이메일이 일치하지 않습니다."),
     LIKE_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 존재하는 즐겨찾기입니다."),
     CONTACT_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 존재하는 강의입니다."),
+    REVIEW_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 존재하는 리뷰입니다."),
     /*
      * 401 UNAUTHORIZED: 인증되지 않은 사용자의 요청
      */
