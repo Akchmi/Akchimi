@@ -12,30 +12,30 @@
 				</div>
 
 				<ul class="navbar__menu">
-					<li :class="{ navColor: nowNavPage == 'notice' }" @click="clickNotice">
+					<li :class="{ navColor: isNoticeRoute }" @click="clickNotice">
 						공지사항
 					</li>
-					<li :class="{ navColor: nowNavPage == 'article' }" @click="clickArticle">
+					<li :class="{ navColor: isArticleRoute }" @click="clickArticle">
 						자유게시판
 					</li>
-					<li :class="{ navColor: nowNavPage == 'lecture' }" @click="clickLecture">
+					<li :class="{ navColor: isLectureRoute }" @click="clickLecture">
 						강의실
 					</li>
-					<li :class="{ navColor: nowNavPage == 'search' }" @click="clickSearch">
+					<li :class="{ navColor: isSearchRoute }" @click="clickSearch">
 						강사검색
 					</li>
 				</ul>
 
 				<ul class="navbar__menu">
 					<li
-						:class="{ navColor: nowNavPage == 'mypage' }"
+						:class="{ navColor: isProfileRoute }"
 						v-if="isLoggedIn"
 						@click="clickMypage"
 					>
 						마이페이지
 					</li>
 					<li v-if="isLoggedIn" @click="logOut">로그아웃</li>
-					<li :class="{ navColor: nowNavPage == 'login' }" v-else @click="clickLogin">
+					<li :class="{ navColor: isLoginRoute }" v-else @click="clickLogin">
 						로그인
 					</li>
 				</ul>
@@ -53,6 +53,27 @@ export default {
 	computed: {
 		...mapGetters({ isLoggedIn: "getIsLogin" }),
 		...mapGetters({ nowNavPage: "getNowNavPage" }),
+		isNoticeRoute() {
+            return this.$route.path.includes('/notice');
+        },
+
+        isArticleRoute() {
+            return this.$route.path.includes('/article');
+        },
+
+        isLectureRoute() {
+            return this.$route.path.includes('/lecture');
+        },
+
+        isSearchRoute() {
+            return this.$route.path.includes('/search');
+        },
+		isLoginRoute() {
+            return this.$route.path.includes('/login');
+        },
+		isProfileRoute() {
+			return this.$route.path.includes('/profile');
+		},
 	},
 	methods: {
 		logOut() {
