@@ -17,4 +17,7 @@ export default {
   getTeacherId(state) {
     return state.common.teacherId;
   },
+  getNowNavPage(state) {
+    return state.common.nowNavPage;
+  },
 };

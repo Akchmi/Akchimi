@@ -1,20 +1,25 @@
 <template>
-	<div>
-		<!-- 구성 화면 -->
-		<div class="container">
-			<router-view></router-view>
-		</div>
-	</div>
+  <div>
+    <!-- 구성 화면 -->
+    <div class="container">
+      <router-view></router-view>
+      <TheFooter></TheFooter>
+    </div>
+  </div>
 </template>
 
 <script>
 // import { computed } from "vue";
 // import { useStore } from "vuex";
-
+import TheFooter from "@/components/common/TheFooter";
 export default {
-	setup() {
-		// const store = useStore();
-	},
+  name: "AppVue",
+  components: {
+    TheFooter,
+  },
+  setup() {
+    // const store = useStore();
+  },
 };
 </script>
 "
@@ -24,11 +29,11 @@ export default {
 @import "@/assets/scss/templates/common.scss";
 
 @font-face {
-	font-family: "mainfont";
-	src: url("assets/font/Maplestory.ttf") format("truetype");
+  font-family: "mainfont";
+  src: url("assets/font/Maplestory.ttf") format("truetype");
 }
 
 .container {
-	font-family: "mainfont";
+  font-family: "mainfont";
 }
 </style>

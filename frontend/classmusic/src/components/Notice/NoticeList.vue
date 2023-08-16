@@ -82,7 +82,7 @@
 
       <div class="noticePageBox">
         <!-- 페이지 번호-->
-        <button @click="pageDown">이전</button>
+        <button @click="pageDown" v-if="pages[0] != 1">이전</button>
         <button
           class="pageBtn"
           v-for="page in pages"
@@ -92,7 +92,9 @@
         >
           {{ page }}
         </button>
-        <button @click="pageUp">다음</button>
+        <button @click="pageUp" v-if="pages[pages.length - 1] < lastpage">
+          다음
+        </button>
       </div>
     </div>
   </div>

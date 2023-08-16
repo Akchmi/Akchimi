@@ -8,7 +8,7 @@
           <button class="detailButton" @click="$router.push('/article/list')">
             목록으로
           </button>
-          <p style="margin: 10px; font-size: 28px">
+          <p style="margin: 10px; font-size: 28px; word-break: break-all">
             {{ articleDetail.title }}
           </p>
           <div class="detailTitleBottom">
@@ -23,23 +23,9 @@
             </div>
             <div>
               <p>조회수 : {{ articleDetail.hit }}</p>
-              <p
-                v-if="
-                  todayDate !=
-                  toLocalTimeStamp(articleDetail.createdAt).substr(0, 10)
-                "
-              >
+              <p>
                 작성일 :
-                {{ toLocalTimeStamp(articleDetail.createdAt).substr(0, 10) }}
-              </p>
-              <p
-                v-if="
-                  todayDate ==
-                  toLocalTimeStamp(articleDetail.createdAt).substr(0, 10)
-                "
-              >
-                작성일 :
-                {{ toLocalTimeStamp(articleDetail.createdAt).substr(10) }}
+                {{ toLocalTimeStamp(articleDetail.createdAt) }}
               </p>
             </div>
           </div>
@@ -56,27 +42,34 @@
             <button @click="articleDelete">삭제</button>
           </div>
           <hr />
-          <h3 style="margin: 10px; min-height: 300px; white-space: pre-line">
+          <h3
+            style="
+              margin: 10px;
+              min-height: 300px;
+              white-space: pre-line;
+              word-break: break-all;
+            "
+          >
             {{ articleDetail.content }}
           </h3>
 
-					<hr />
-					<h3>첨부파일</h3>
+          <hr />
+          <h3>첨부파일</h3>
           <div>
-						<img
-							v-for="(image, index) in attachedFiles"
-							:src="image"
-							:key="index"
-							alt="Attached file"
-							class="attach-image"
-						/>
-					</div>
-					<hr />
-				</div>
-			</div>
-			<div style="display: flex; justify-content: center">
-				<div style="width: 90%">
-					<!--게시판 댓글-->
+            <img
+              v-for="(image, index) in attachedFiles"
+              :src="image"
+              :key="index"
+              alt="Attached file"
+              class="attach-image"
+            />
+          </div>
+          <hr />
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center">
+        <div style="width: 90%">
+          <!--게시판 댓글-->
 
           <div class="commentContainer" v-if="!isLogin">
             <p>댓글을 작성하려면 로그인을 해주세요</p>
@@ -87,6 +80,7 @@
               type="text"
               v-model="nowCreateComment"
               maxlength="200"
+              @keyup.enter="createComment"
             >
             </textarea>
             <button @click="createComment">댓글작성</button>
@@ -125,9 +119,12 @@
                       v-if="nowUpdateCommentId == comment.commentId"
                       v-model="nowUpdateCommentContent"
                       maxlength="200"
+                      @keyup.enter="
+                        commentUpdate(comment.commentId, comment.content)
+                      "
                     />
                     <p
-                      style="min-height: 24px"
+                      style="min-height: 24px; word-break: break-all"
                       v-if="nowUpdateCommentId != comment.commentId"
                     >
                       {{ comment.content }}
@@ -189,22 +186,22 @@ import { useRoute } from "vue-router";
 import utils from "@/common/utils";
 
 export default {
-	data() {
-		return {
-			nowUpdateCommentId: null,
-			nowUpdateCommentContent: "",
-			nowCreateComment: "",
+  data() {
+    return {
+      nowUpdateCommentId: null,
+      nowUpdateCommentContent: "",
+      nowCreateComment: "",
       attachedFiles: [],
-		};
-	},
-	computed: {
-		...mapGetters({ articleDetail: "getArticleDetail" }),
-		...mapGetters({ isLogin: "getIsLogin" }),
-		...mapGetters({ loginUser: "getUserId" }),
-		...mapGetters({ commentList: "getCommentList" }),
-	},
-	methods: {
-		...mapActions(["deleteArticleDelete"]),
+    };
+  },
+  computed: {
+    ...mapGetters({ articleDetail: "getArticleDetail" }),
+    ...mapGetters({ isLogin: "getIsLogin" }),
+    ...mapGetters({ loginUser: "getUserId" }),
+    ...mapGetters({ commentList: "getCommentList" }),
+  },
+  methods: {
+    ...mapActions(["deleteArticleDelete"]),
 
     articleDelete() {
       this.deleteArticleDelete(this.articleDetail.articleId);
@@ -297,13 +294,14 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 100%;
+  object-fit: cover;
 }
 
 .attach-image {
-    width:170px;
-    height:220px;
-    object-fit: cover;
-    margin-right: 10px;
-    margin-top: 10px;
-  }
+  width: 170px;
+  height: 220px;
+  object-fit: cover;
+  margin-right: 10px;
+  margin-top: 10px;
+}
 </style>

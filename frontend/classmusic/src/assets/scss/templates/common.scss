@@ -5,24 +5,25 @@
   --slider-handle-ring-color: #edd9b7;
 }
 
-h1{
+h1 {
   font-size: 28px;
 }
 
-h2{
+h2 {
   font-size: 24px;
 }
 
-h3{
+h3 {
   font-size: 20px;
 }
 
-input, textarea{
+input,
+textarea {
   padding-left: 5px;
   font-family: "mainfont";
 }
 
-hr{
+hr {
   background-color: #edd9b7;
   height: 1px;
   border: 0px;
@@ -34,7 +35,6 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   background-color: #edd9b7;
   border-radius: 0.5em;
   border-color: transparent;
@@ -82,4 +82,12 @@ button {
 
 ::-webkit-scrollbar-track {
   background: rgba(33, 122, 244, 0.1); /*스크롤바 뒷 배경 색상*/
+}
+
+.footer__container {
+  margin-top: 150px;
+  background-color: #edd9b7;
+  padding: 0px 100px 0px 100px;
+  height: 100px;
+  display: flex;
 }

@@ -48,7 +48,7 @@
             <div id="live-screens" class="" @click="changeMainScreen">
               <!-- {{ subscribers }} -->
               <user-video :stream-manager="publisher" />
-              <user-video
+              <user-video id="participants"
                 v-for="sub in subscribers"
                 :key="sub.stream.connection.connectionId"
                 :stream-manager="sub"
@@ -58,7 +58,7 @@
                 <div class="panel-body" id="container-screens"></div>
               </div>
             </div>
-            <MetronomeApp />
+            <TheMetronome />
           </div>
         </div>
         <!-- 바디 가운데: 큰메인화면 -->
@@ -154,7 +154,7 @@
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/LiveMeeting/UserVideo";
 import { useRoute } from "vue-router";
-import MetronomeApp from "../components/LiveMeeting/MetronomeApp";
+import TheMetronome from "@/components/LiveMeeting/TheMetronome";
 import TunerApp from "../components/LiveMeeting/TunerApp.vue";
 import axios from "axios";
 // import api from "@/api/axios";
@@ -168,8 +168,8 @@ export default {
 
   components: {
     UserVideo,
-    MetronomeApp,
     TunerApp,
+    TheMetronome,
   },
 
   data() {
@@ -200,6 +200,7 @@ export default {
   },
   created() {
     // App.vue가 생성되면 소켓 연결을 시도합니다.
+    // RoomKey axios호출로 수정
     const route = useRoute();
     this.mySessionId = route.params.lectureId;
 
@@ -253,6 +254,7 @@ export default {
     },
     changeMainScreen(event) {
       console.log("##########we did click!###########");
+      console.log(event.target);
       console.log(event.target.srcObject);
       const mainVideoDiv = document.querySelector("#video-container");
       const mainVideo = mainVideoDiv.querySelector("video");
@@ -262,6 +264,32 @@ export default {
         selectedVideo.srcObject != null &&
         mainVideo.srcObject !== selectedVideo.srcObject
       ) {
+        const mainVideoContainer = document.querySelector("#video-container");
+        mainVideoContainer.style.display = "none";
+
+        mainVideo.srcObject = selectedVideo.srcObject;
+        mainVideoContainer.style.display = "block";
+      }
+    },
+    updateMainScreen(event){
+      console.log("###############participants coming!#####################");
+      const mainVideoDiv = document.querySelector("#video-container");
+      console.log(mainVideoDiv);
+      const mainVideo = mainVideoDiv.querySelector("video");
+      let selectedVideo = event.querySelector("video");
+      // async function loadMediaStream() {
+      //   selectedVideo = event.querySelector("video");
+      // }
+      // loadMediaStream();
+      console.log(selectedVideo);
+      // console.log(selectedVideo.srcObject);
+      console.log(mainVideo.srcObject);
+
+      if (
+        selectedVideo.srcObject != null &&
+        mainVideo.srcObject !== selectedVideo.srcObject
+      ) {
+        console.log("!!!!!!!!!!!!!!!in main div!!!!!!!!!!!!!!!!");
         const mainVideoContainer = document.querySelector("#video-container");
         mainVideoContainer.style.display = "none";
 
@@ -354,15 +382,17 @@ export default {
         if (event.stream.typeOfVideo == "CAMERA") {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-cameras' id
           console.log(this.sessionCamera);
+          console.log("#############################################");
+          console.log(this.sessionCamera.streamManagers);
+          // this.updateMainScreen(this.sessionCamera.connection.stream);
           var subscriber = this.sessionCamera.subscribe(
             event.stream,
             "container-cameras"
-          );
+            );
+            console.log("미디아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ서터림 : ", event.stream.getMediaStream());
           this.subscribers.push(subscriber);
           console.log(this.subscribers);
           console.log(subscriber.stream);
-          // this.changeMainScreen(subscriber.stream)
-          // this.subscribers.push(subscriber);
           // When the HTML video has been appended to DOM...
           subscriber.on("videoElementCreated", (event) => {
             // Add a new <p> element for the user's nickname just below its video
@@ -547,6 +577,14 @@ export default {
       this.popState = !this.popState;
     },
   },
+  updated(){
+    console.log("########################DOMUPDATED#########################");
+    const newDivs = this.$el.querySelector('#participants');
+    if(newDivs!=null){
+      console.log(newDivs);
+      this.updateMainScreen(newDivs);
+    }
+  },
   beforeUnmount() {
     // `this`를 통해 컴포넌트 인스턴스에 접근할 수 있습니다.
     this.leaveSession();
@@ -727,10 +765,8 @@ video {
   border-radius: 10px;
 }
 .rightviduchat {
-  width: 93%;
-  margin: 0px 10px 0px 10px;
-  display: flex;
-  justify-content: right;
-  align-content: center;
+  margin-bottom: 10px;
+
+  word-break: break-all;
 }
 </style>
