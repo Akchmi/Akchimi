@@ -85,7 +85,6 @@ public class ArticleServiceImpl implements ArticleService{
         if(article.getUser().getUserId() == userId){
             article.setTitle(articleDto.getTitle());
             article.setContent(articleDto.getContent());
-            articleRepository.save(article);
         }else{
             throw new RestApiException(ErrorCode.NOT_AUTHOR);
         }

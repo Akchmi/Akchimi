@@ -49,7 +49,7 @@ public class TeacherRepositoryImpl implements TeacherRepository{
                 .where(selectTeacherIntroduceFilter(params.get("keyword")))
                 .where(selectGenderFilter(params))
                 .where(instrumentEq(params.get("instrument")))
-                .where(getBitAndTemplate(Integer.parseInt(params.get("classDay"))).gt(0))
+                .where(getBitAndTemplate(Integer.parseInt(params.get("classDay") , 2)).gt(0))
                 .offset((Long.parseLong(params.get("page")) - 1) * 20)
                 .limit(20)
                 .orderBy(orderType(String.valueOf(params.get("orderBy"))))
