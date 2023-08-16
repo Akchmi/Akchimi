@@ -54,8 +54,7 @@ const onlyLoginUser = (to, from, next) => {
 
 // 관리자 유저만 통과시키는 navigation guard
 const onlyAdminUser = (to, from, next) => {
-	const store = useStore();
-	const userType = store.getters["common/getUsertype"];
+	const userType = JSON.parse(localStorage.getItem("vuex")).common.userType;
 	// vuex에서 로그인 여부 확인
 	if (userType != null && userType === 2) {
 		next();
