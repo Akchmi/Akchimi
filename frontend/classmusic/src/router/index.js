@@ -42,9 +42,8 @@ import ErrorPage from "../components/common/ErrorPage.vue";
 
 // 로그인한 유저만 통과시키는 navigation guard
 const onlyLoginUser = (to, from, next) => {
-	const store = useStore();
-	const isLogin = store.getters["common/getIsLogin"];
-	// vuex에서 로그인 여부 확인
+	const isLogin = JSON.parse(localStorage.getItem("vuex")).common.isLogin;
+	// 로그인 여부 확인
 	if (isLogin) {
 		next();
 	} else {
