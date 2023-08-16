@@ -153,7 +153,7 @@ export default {
 					email: this.registered_email,
 				});
 				alert("임시 비밀번호를 발급했습니다. 이메일을 확인하세요.");
-				this.$router.push("login/singin");
+				this.$router.push("/login/signin");
 			} catch (error) {
 				console.error(error);
 				alert(`정보가 잘못 되었습니다.`);
