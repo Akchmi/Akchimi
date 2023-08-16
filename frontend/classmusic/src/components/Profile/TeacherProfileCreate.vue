@@ -150,42 +150,42 @@ export default {
       maxCost: 100,
       maxStartTime: 23,
       maxEndTime: 24,
-			userInfo: {},
-			instruments: {
-				피아노: false,
-				기타: false,
-				드럼: false,
-				바이올린: false,
-				트럼펫: false,
-			},
-			selectedInstruments: [],
-			days: {
-				월: false,
-				화: false,
-				수: false,
-				목: false,
-				금: false,
-				토: false,
-				일: false,
-			},
-			startTime: 0,
-			endTime: 24,
-			description: "",
-			career: 0,
-			cost: 0,
-			selectedDays: [],
-			userProfileImage: "",
-			attachedFiles: [],
-			id: JSON.parse(localStorage.getItem("vuex")).common.id,
-		};
-	},
-	computed: {
-		selectedDaysString() {
-			return Object.keys(this.days)
-				.map((day) => (this.days[day] ? "1" : "0"))
-				.join("");
-		},
-	},
+      userInfo: {},
+      instruments: {
+        피아노: false,
+        기타: false,
+        드럼: false,
+        바이올린: false,
+        색소폰: false,
+      },
+      selectedInstruments: [],
+      days: {
+        월: false,
+        화: false,
+        수: false,
+        목: false,
+        금: false,
+        토: false,
+        일: false,
+      },
+      startTime: 0,
+      endTime: 24,
+      description: "",
+      career: 0,
+      cost: 0,
+      selectedDays: [],
+      userProfileImage: "",
+      attachedFiles: [],
+      id: JSON.parse(localStorage.getItem("vuex")).common.id,
+    };
+  },
+  computed: {
+    selectedDaysString() {
+      return Object.keys(this.days)
+        .map((day) => (this.days[day] ? "1" : "0"))
+        .join("");
+    },
+  },
 
   watch: {
     career(value) {
