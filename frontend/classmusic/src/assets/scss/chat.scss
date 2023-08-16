@@ -26,6 +26,7 @@
   height: 550px;
   padding: 0.5rem 1.5rem;
   overflow: auto;
+  width: 100%;
 }
 //채팅창 해더
 .chat-profile {
@@ -104,7 +105,7 @@
 
   padding: 0.5rem 0.875rem;
   // position: relative;
-  word-break: break-all;
+  word-wrap: break-word;
 }
 .chat-content :focus {
   border: none;
@@ -118,11 +119,13 @@
 .chat-room .left {
   margin-bottom: 10px;
   margin-top: 10px;
+  width: 60%;
 }
 .chat-room .right {
   align-self: flex-end;
   margin-bottom: 10px;
   margin-top: 10px;
+  width: 60%;
 }
 
 /* 채팅내용 */
@@ -131,28 +134,28 @@
   background-color: #edd9b7;
   color: #ffffff;
   width: fit-content;
-  max-width: 50%;
   border-radius: 1.15rem;
   line-height: 1.25;
-  // max-width: 75%;
+  max-width: 75%;
   padding: 0.5rem 0.875rem;
   position: relative;
   word-wrap: break-word;
   margin-left: 10px;
+  word-break: break-all;
 }
 .chat-room .right .chat-content {
   align-self: flex-end;
   background-color: #edd9b7;
   width: fit-content;
-  max-width: 50%;
   color: #fff;
   border-radius: 1.15rem;
   line-height: 1.25;
-  // max-width: 75%;
+  max-width: 75%;
   padding: 0.5rem 0.875rem;
   position: relative;
   word-wrap: break-word;
   margin-right: 10px;
+  word-break: break-all;
 }
 
 // 채팅자 이미지
@@ -172,8 +175,6 @@
 //  채팅 시간
 .chat-room .left .chat-sendtime {
   font-size: small;
-  align-self: flex-end;
-  margin-bottom: 10px;
 }
 .chat-room .right .chat-sendtime {
   font-size: small;

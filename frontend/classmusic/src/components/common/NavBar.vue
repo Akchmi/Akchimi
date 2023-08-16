@@ -41,7 +41,7 @@
         <ul class="navbar__menu">
           <li
             :class="{ navColor: nowNavPage == 'mypage' }"
-            if="isLoggedIn"
+            v-if="isLoggedIn"
             @click="clickMypage"
           >
             마이페이지
@@ -84,6 +84,7 @@ export default {
     ...mapActions(["commitTime"]),
     ...mapActions(["commitCareer"]),
     ...mapActions(["searchTeacher"]),
+    ...mapActions(["commitOrderBy"]),
 
     ...mapActions(["changeNavPage"]),
 
@@ -102,6 +103,7 @@ export default {
     clickLecture() {
       if (!this.$store.getters.getIsLogin) {
         alert("로그인이 필요한 서비스입니다.");
+        this.changeNavPage("login");
         this.$router.push("/login/signin");
         return;
       }
@@ -117,7 +119,7 @@ export default {
       this.commitCost([0, 100]);
       this.commitTime([0, 100]);
       this.commitCareer([0, 100]);
-
+      this.commitOrderBy("최신순");
       this.searchTeacher();
 
       this.$router.push("/search");

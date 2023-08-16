@@ -268,29 +268,37 @@ export default {
       this.$refs.fileUploadInput.click();
     },
     handleFileUpload() {
-      const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
-      const selectedFiles = this.$refs.fileUploadInput.files;
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+    const maxFileSize = 30 * 1024 * 1024; // 30MB in bytes
+    const selectedFiles = this.$refs.fileUploadInput.files;
 
-      for (let i = 0; i < selectedFiles.length; i++) {
+    for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
         const fileExtension = file.name.split(".").pop().toLowerCase();
 
-        if (allowedExtensions.includes(fileExtension)) {
-          const fileReader = new FileReader();
-
-          fileReader.onload = (e) => {
-            this.attachedFiles.push({
-              preview: e.target.result,
-              file: file,
-            });
-          };
-
-          fileReader.readAsDataURL(file);
-        } else {
-          alert(`${file.name}는 파일 형식이 잘못되었습니다."jpg", "jpeg", "png", "gif", "webp"형식의 파일만 가능합니다. `);
+        if (!allowedExtensions.includes(fileExtension)) {
+            alert(`${file.name}는 파일 형식이 잘못되었습니다. "jpg", "jpeg", "png", "gif", "webp" 형식의 파일만 가능합니다.`);
+            continue;
         }
+
+        if (file.size > maxFileSize) {
+            alert(`${file.name}의 파일 용량이 너무 큽니다. 30MB 이하만 가능합니다.`);
+            continue;
+        }
+
+        const fileReader = new FileReader();
+
+        fileReader.onload = (e) => {
+            this.attachedFiles.push({
+                preview: e.target.result,
+                file: file,
+            });
+        };
+
+        fileReader.readAsDataURL(file);
       }
     },
+
 
     async getUserInfo() {
       try {

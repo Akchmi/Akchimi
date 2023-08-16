@@ -14,6 +14,7 @@
           <button
             class="lectureSelectButton"
             @click="$router.push(`/lecture/teacherongoing`)"
+            v-if="teacherId"
           >
             가르치기
           </button>
@@ -195,7 +196,7 @@ export default {
   setup() {
     const store = useStore();
     const userId = store.getters.getUserId;
-
+    const teacherId = store.getters.getTeacherId;
     onMounted(() => {
       store.dispatch("getLectureList", {
         id: userId,
@@ -203,6 +204,7 @@ export default {
         type: 0,
       });
     });
+    return { teacherId };
   },
 };
 </script>
