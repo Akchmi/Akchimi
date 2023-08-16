@@ -18,11 +18,11 @@
 						v-model="password"
 						@keyup.enter="loginclick"
 					/>
-					<div class="login__form__buttons">
-						<button @click="movePage('/login/signup')">회원가입</button>
-						<button @click="loginclick">로그인</button>
+					<div class="login__form__button">
+            <button class="login-btn" @click="loginclick">로그인</button>
 					</div>
 					<div class="login__form__buttons">
+            <button @click="movePage('/login/signup')">회원가입</button>
 						<button @click="showIdFinder">아이디 찾기</button>
 						<button @click="showPwFinder">비밀번호 찾기</button>
 					</div>
