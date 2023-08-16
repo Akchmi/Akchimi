@@ -5,7 +5,6 @@ input {
   padding-left: 10px;
 }
 
-
 .login-btn {
   height: 40px;
 }
@@ -32,24 +31,25 @@ input {
   border-radius: 10px;
   padding: 20px;
 
-  h1{
+  h1 {
     margin-top: 15px;
   }
 }
 
-.login__form__buttons{
-  width: 100%;
+.login__form__buttons {
+  width: 260px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
   margin: 5px 0px;
 
-  button{
-    width: 100px;
+  span {
+    cursor: pointer;
+    font-size: 14px;
   }
 }
-.login__form__button{
+.login__form__button {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -57,8 +57,9 @@ input {
   justify-content: space-evenly;
   margin: 5px 0px;
 
-  button{
-    width: 330px;
+  button {
+    width: 260px;
+    font-size: 16px;
   }
 }
 
@@ -71,13 +72,13 @@ input {
   width: 100%;
   height: 100%;
 
-  input{
+  input {
     width: 250px;
     height: 30px;
     margin: 7px 20px;
   }
 
-  .login__form__label{
+  .login__form__label {
     width: 260px;
     display: flex;
     justify-content: flex-start;
@@ -98,12 +99,12 @@ input {
   justify-content: center;
   align-items: center;
 
-  h1{
+  h1 {
     margin-top: 10px;
   }
 }
 
-.signup__form{
+.signup__form {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -112,7 +113,7 @@ input {
   margin-top: 30px;
 }
 
-.signup__form__input{
+.signup__form__input {
   padding-left: 10px;
   width: 200px;
   height: 30px;
@@ -120,7 +121,7 @@ input {
 }
 
 // 회원가입 성별 라디오 버튼
-.signup__form__radios{
+.signup__form__radios {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -128,7 +129,7 @@ input {
   margin-left: 10px;
   width: 70%;
 
-  div{
+  div {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -136,19 +137,19 @@ input {
   }
 }
 
-.signup__form__radio{
+.signup__form__radio {
   width: 20px;
   margin-right: 10px;
 }
 
-.signup__form__buttons{
+.signup__form__buttons {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   width: 100%;
   margin-top: 20px;
 
-  button{
+  button {
     width: 80px;
   }
 }
