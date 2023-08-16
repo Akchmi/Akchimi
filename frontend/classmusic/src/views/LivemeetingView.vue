@@ -271,32 +271,6 @@ export default {
         mainVideoContainer.style.display = "block";
       }
     },
-    updateMainScreen(event){
-      console.log("###############participants coming!#####################");
-      const mainVideoDiv = document.querySelector("#video-container");
-      console.log(mainVideoDiv);
-      const mainVideo = mainVideoDiv.querySelector("video");
-      let selectedVideo = event.querySelector("video");
-      // async function loadMediaStream() {
-      //   selectedVideo = event.querySelector("video");
-      // }
-      // loadMediaStream();
-      console.log(selectedVideo);
-      // console.log(selectedVideo.srcObject);
-      console.log(mainVideo.srcObject);
-
-      if (
-        selectedVideo.srcObject != null &&
-        mainVideo.srcObject !== selectedVideo.srcObject
-      ) {
-        console.log("!!!!!!!!!!!!!!!in main div!!!!!!!!!!!!!!!!");
-        const mainVideoContainer = document.querySelector("#video-container");
-        mainVideoContainer.style.display = "none";
-
-        mainVideo.srcObject = selectedVideo.srcObject;
-        mainVideoContainer.style.display = "block";
-      }
-    },
     appendUserData(videoElement, connection) {
       var nodeId;
 
@@ -381,18 +355,11 @@ export default {
         console.log(this.sessionScreen);
         if (event.stream.typeOfVideo == "CAMERA") {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-cameras' id
-          console.log(this.sessionCamera);
-          console.log("#############################################");
-          console.log(this.sessionCamera.streamManagers);
-          // this.updateMainScreen(this.sessionCamera.connection.stream);
           var subscriber = this.sessionCamera.subscribe(
             event.stream,
             "container-cameras"
-            );
-            console.log("미디아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ서터림 : ", event.stream.getMediaStream());
+          );
           this.subscribers.push(subscriber);
-          console.log(this.subscribers);
-          console.log(subscriber.stream);
           // When the HTML video has been appended to DOM...
           subscriber.on("videoElementCreated", (event) => {
             // Add a new <p> element for the user's nickname just below its video
@@ -576,14 +543,6 @@ export default {
     changePopState() {
       this.popState = !this.popState;
     },
-  },
-  updated(){
-    console.log("########################DOMUPDATED#########################");
-    const newDivs = this.$el.querySelector('#participants');
-    if(newDivs!=null){
-      console.log(newDivs);
-      this.updateMainScreen(newDivs);
-    }
   },
   beforeUnmount() {
     // `this`를 통해 컴포넌트 인스턴스에 접근할 수 있습니다.
