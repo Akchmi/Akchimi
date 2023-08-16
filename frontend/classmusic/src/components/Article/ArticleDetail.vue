@@ -54,7 +54,7 @@
           </h3>
 
           <hr />
-          <h3>첨부파일</h3>
+          <!-- <h3>첨부파일</h3> -->
           <div>
             <img
               v-for="(image, index) in attachedFiles"
