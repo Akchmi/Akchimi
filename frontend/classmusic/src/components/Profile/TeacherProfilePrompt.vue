@@ -5,7 +5,11 @@
         아직 강사 등록을 하지 않으셨군요?
       </h3>
       <button @click="this.$router.push('/profile/teacherprofilecreate')">
-        강사 등록하러 가기
+        강사 등록하기
+      </button>
+      <br>
+      <button @click="this.$router.push('/profile/myprofile')">
+        다음에 등록하기
       </button>
     </div>
   </div>
