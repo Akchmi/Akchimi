@@ -44,11 +44,9 @@ export default {
   data: () => ({}),
   methods: {
     onTimeChange(value) {
-      console.log("InputTime.vue time 수정");
       this.$emit("timeChange", value);
     },
     onDaysChange(event, day) {
-      console.log("InputTime.vue days 수정");
       this.$emit("dayChange", event.target.checked, day);
     },
     closeFilter() {

@@ -104,7 +104,6 @@ export default {
       // const articleId =
       if (this.attachedFiles.length > 0) {
         await this.submitImages(this.createId);
-        console.log("크레이티드아이", this.createId);
       }
     },
 

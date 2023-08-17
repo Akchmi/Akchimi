@@ -53,7 +53,7 @@ export default {
     "$route.params.id": {
       immediate: true,
       handler(newVal) {
-        console.log("Watching id:", newVal);
+        // console.log("Watching id:", newVal);
         this.currentTeacherId = newVal;
       },
     },

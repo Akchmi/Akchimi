@@ -124,7 +124,6 @@ export default {
           password: this.password,
         });
         this.$router.push("/main");
-        console.log(1);
       } catch (error) {
         console.error(error);
         this.$router.push("/login/signin");

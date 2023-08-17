@@ -2,7 +2,7 @@ import axios from "@/api/axios";
 import router from "@/router/index";
 
 async function apiSearchTeachers(params, success, fail) {
-  console.log("apiSearchTeachers params : ", params);
+  // console.log("apiSearchTeachers params : ", params);
   try {
     const response = await axios.get(`/teachers`, { params: params });
     console.log("데이터는", response);

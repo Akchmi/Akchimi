@@ -118,8 +118,8 @@ export default {
   computed: {
     filteredDays() {
       return Object.entries(this.searchParams.days)
-      .filter(([, value]) => value)
-      .map(([key]) => key);
+        .filter(([, value]) => value)
+        .map(([key]) => key);
     },
   },
 
@@ -151,8 +151,8 @@ export default {
         orderBy: "최신순",
         gender: "0",
         career: [0, 100],
-        cost: [0, 100],       
-        time: [0, 24], 
+        cost: [0, 100],
+        time: [0, 24],
       },
     };
   },
@@ -170,11 +170,11 @@ export default {
     ]),
 
     closeDropdown(targetDropDown) {
-      console.log(
-        targetDropDown,
-        " 드롭다운 닫기 ",
-        this.isDisplaySearchInputs[targetDropDown]
-      );
+      // console.log(
+      //   targetDropDown,
+      //   " 드롭다운 닫기 ",
+      //   this.isDisplaySearchInputs[targetDropDown]
+      // );
       this.isDisplaySearchInputs[targetDropDown] = false;
     },
 
@@ -184,7 +184,7 @@ export default {
     },
 
     toggleInputDropdown(targetSearchInput) {
-      console.log("toggle clicked", targetSearchInput);
+      // console.log("toggle clicked", targetSearchInput);
 
       for (const searchInput in this.isDisplaySearchInputs) {
         if (searchInput != targetSearchInput) {
@@ -196,25 +196,25 @@ export default {
     },
 
     setCareer(career) {
-      console.log("경력 필터 수정", career);
+      // console.log("경력 필터 수정", career);
       this.searchParams.career = career;
       this.commitCareer(career);
     },
 
     setCost(cost) {
-      console.log("비용 필터 수정", cost);
+      // console.log("비용 필터 수정", cost);
       this.searchParams.cost = cost;
       this.commitCost(cost);
     },
 
     setTime(time) {
-      console.log("시간 필터 수정", time);
+      // console.log("시간 필터 수정", time);
       this.searchParams.time = time;
       this.commitTime(time);
     },
 
     setClassDay(value, day) {
-      console.log("요일 필터 수정", value, day);
+      // console.log("요일 필터 수정", value, day);
 
       this.days[day] = value;
       const daysBitMask = this.convertDaysToBitMask();
@@ -223,13 +223,13 @@ export default {
     },
 
     setInstrument() {
-      console.log("악기 종류 수정", this.searchParams.instrument);
+      // console.log("악기 종류 수정", this.searchParams.instrument);
 
       this.commitInstrument(this.searchParams.instrument);
     },
 
     setGender() {
-      console.log("성별 수정", this.searchParams.gender);
+      // console.log("성별 수정", this.searchParams.gender);
 
       this.commitGender(
         this.searchParams.gender == 0 ? "" : this.searchParams.gender
@@ -237,19 +237,19 @@ export default {
     },
 
     setOrderBy() {
-      console.log("정렬 수정", this.searchParams.orderBy);
+      // console.log("정렬 수정", this.searchParams.orderBy);
 
       this.commitOrderBy(this.searchParams.orderBy);
     },
 
     setKeyword() {
-      console.log("검색 키워드 수정", this.searchParams.keyword);
+      // console.log("검색 키워드 수정", this.searchParams.keyword);
 
       this.commitKeyword(this.searchParams.keyword);
     },
 
     convertDaysToBitMask() {
-      console.log("ConvertDaysToBitMask");
+      // console.log("ConvertDaysToBitMask");
       let index = 0,
         bitMaskedDays = 0;
 
@@ -260,7 +260,6 @@ export default {
         index++;
       }
 
-      console.log(bitMaskedDays.toString(2));
       return bitMaskedDays.toString(2);
     },
   },

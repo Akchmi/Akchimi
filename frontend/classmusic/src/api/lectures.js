@@ -27,7 +27,6 @@ function apiGetRefusedLectureList(context, data) {
 }
 
 function apiDeleteContact(context, contactId) {
-  console.log(contactId);
   axios
     .delete(`/contacts/${contactId}`)
     .then(() => {
@@ -85,7 +84,6 @@ function apiPostReview(context, params) {
 }
 
 function apiPutReviewUpdate(context, params) {
-  console.log(params);
   axios
     .put(`/reviews/${params.reviewId}`, params)
     .then(() => {
@@ -100,7 +98,6 @@ function apiPutReviewUpdate(context, params) {
 }
 
 function apiDeleteReview(context, reviewId) {
-  console.log(reviewId);
   axios
     .delete(`/reviews/${reviewId}`)
     .then(() => {

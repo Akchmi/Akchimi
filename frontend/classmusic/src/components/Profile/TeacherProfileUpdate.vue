@@ -266,8 +266,8 @@ export default {
       if (missingFields.length) {
         this.formValid = false;
         alert("모든 정보를 입력해주세요.");
-        console.log("누락된 정보:", missingFields.join(", "));
-        console.log("아긱", this.selectedInstruments);
+        // console.log("누락된 정보:", missingFields.join(", "));
+        // console.log("아긱", this.selectedInstruments);
         return false;
       }
 
@@ -329,7 +329,7 @@ export default {
 
     toggleInstrument(instrument) {
       this.instruments[instrument] = !this.instruments[instrument];
-      console.log(this.instruments);
+
       this.saveToselectedInsruments();
     },
 
@@ -345,7 +345,7 @@ export default {
       try {
         await axios.post(`/teachers/${this.teacherId}/images`, formData);
       } catch (error) {
-        console.log("폼폼", error);
+        console.log(error);
       }
     },
 
@@ -354,7 +354,6 @@ export default {
         await apiDeleteAttachedImage(this.teacherId, {
           images: this.deleteAttachedFiles,
         });
-        console.log("첨부 파일 삭제 성공");
       } catch (error) {
         console.log("첨부 파일 삭제 실패", error);
       }

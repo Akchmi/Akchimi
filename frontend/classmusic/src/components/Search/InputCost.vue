@@ -21,7 +21,6 @@ export default {
   },
   methods: {
     onCostChange(costs) {
-      console.log("InputCost.vue cost 수정");
       this.$emit("costChange", costs);
     },
     closeFilter() {
