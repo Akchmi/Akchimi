@@ -107,7 +107,7 @@ import InputCareer from "./InputCareer.vue";
 import InputCost from "./InputCost.vue";
 import InputTime from "./InputTime.vue";
 import { mapActions } from "vuex";
-// import { useStore } from "vuex";
+import { useStore } from "vuex";
 import { onMounted } from "vue";
 export default {
   components: {
@@ -121,6 +121,8 @@ export default {
         .filter(([, value]) => value)
         .map(([key]) => key);
     },
+
+    // ...mapGetters({ stateSearchParams: "getSearchParams" }),
   },
 
   data() {
@@ -146,8 +148,8 @@ export default {
       },
 
       searchParams: {
-        instrument: "악기종류",
-        keyword: "",
+        instrument: this.createdInstrument,
+        keyword: this.createdKeyword,
         orderBy: "최신순",
         gender: "0",
         career: [0, 100],
@@ -156,6 +158,7 @@ export default {
       },
     };
   },
+
   methods: {
     ...mapActions([
       "searchTeacher",
@@ -264,7 +267,9 @@ export default {
     },
   },
   setup() {
-    // const store = useStore();
+    const store = useStore();
+    const createdInstrument = store.state.search.searchParams.instrument;
+    const createdKeyword = store.state.search.searchParams.keyword;
 
     onMounted(() => {
       // store.dispatch("commitInstrument", "악기종류");
@@ -278,6 +283,8 @@ export default {
       // 모든 요일 설정
       // store.dispatch("commitClassDay", (1 << 8) - 1);
     });
+
+    return { createdInstrument, createdKeyword };
   },
 };
 </script>
