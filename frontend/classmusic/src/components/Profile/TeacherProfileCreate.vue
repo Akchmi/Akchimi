@@ -215,7 +215,7 @@ export default {
     },
   },
 
-  methods: {    
+  methods: {
     checkFormValidity() {
       let missingFields = [];
 
@@ -240,8 +240,8 @@ export default {
       if (missingFields.length) {
         this.formValid = false;
         alert("모든 정보를 입력해주세요.");
-        console.log("누락된 정보:", missingFields.join(", "));
-        console.log('아긱', this.selectedInstruments)
+        // console.log("누락된 정보:", missingFields.join(", "));
+        // console.log('아긱', this.selectedInstruments)
         return false;
       }
 
@@ -268,27 +268,38 @@ export default {
       this.$refs.fileUploadInput.click();
     },
     handleFileUpload() {
-      const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+      const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "jfif"];
+      const maxFileSize = 30 * 1024 * 1024; // 30MB in bytes
       const selectedFiles = this.$refs.fileUploadInput.files;
 
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
         const fileExtension = file.name.split(".").pop().toLowerCase();
 
-        if (allowedExtensions.includes(fileExtension)) {
-          const fileReader = new FileReader();
-
-          fileReader.onload = (e) => {
-            this.attachedFiles.push({
-              preview: e.target.result,
-              file: file,
-            });
-          };
-
-          fileReader.readAsDataURL(file);
-        } else {
-          alert(`${file.name}는 파일 형식이 잘못되었습니다."jpg", "jpeg", "png", "gif", "webp"형식의 파일만 가능합니다. `);
+        if (!allowedExtensions.includes(fileExtension)) {
+          alert(
+            `${file.name}는 파일 형식이 잘못되었습니다."jfif", "jpg", "jpeg", "png", "gif", "webp" 형식의 파일만 가능합니다.`
+          );
+          continue;
         }
+
+        if (file.size > maxFileSize) {
+          alert(
+            `${file.name}의 파일 용량이 너무 큽니다. 30MB 이하만 가능합니다.`
+          );
+          continue;
+        }
+
+        const fileReader = new FileReader();
+
+        fileReader.onload = (e) => {
+          this.attachedFiles.push({
+            preview: e.target.result,
+            file: file,
+          });
+        };
+
+        fileReader.readAsDataURL(file);
       }
     },
 
@@ -363,12 +374,10 @@ export default {
       return bitMaskedDays.toString(2);
     },
 
-  
     saveToselectedInsruments() {
       this.selectedInstruments = [];
       for (const instrument in this.instruments) {
         if (this.instruments[instrument]) {
-          console.log(instrument);
           this.selectedInstruments.push(instrument);
         }
       }

@@ -8,4 +8,7 @@ export default {
   getNoticeDetail(state) {
     return state.notices.noticeDetail;
   },
+  getNowPage(state) {
+    return state.notices.nowPage;
+  },
 };

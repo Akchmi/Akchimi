@@ -1,38 +1,40 @@
 <template>
   <div class="metronome-container">
-    <h3>Metronome</h3>
-    <h1>{{ nowBpm }} BPM</h1>
-    <div class="metronome-control">
-      <input
-        class="bpm-input"
-        type="range"
-        id="bpm"
-        min="40"
-        max="220"
-        v-model="nowBpm"
-      />
-      <button class="start-button" @click="togglePlay">
-        {{ playBtnText }}
-      </button>
-    </div>
-    <audio ref="sound" :src="soundPath"></audio>
+    <div>
+      <h3>Metronome</h3>
+      <h1>{{ nowBpm }} BPM</h1>
+      <div class="metronome-control">
+        <input
+          class="bpm-input"
+          type="range"
+          id="bpm"
+          min="40"
+          max="220"
+          v-model="nowBpm"
+        />
+        <button class="start-button" @click="togglePlay">
+          {{ playBtnText }}
+        </button>
+      </div>
+      <audio ref="sound" :src="soundPath"></audio>
 
-    <div
-      ref="metronome"
-      :class="
-        this.side == 0
-          ? 'metronome is-playing-right'
-          : 'metronome is-playing-left'
-      "
-    >
-      <div ref="blink" class="metronome__blink"></div>
-      <div class="metronome__viz">
-        <div class="metronome__line"></div>
-        <div
-          ref="indicator"
-          :style="cssVariable"
-          class="metronome__indicator"
-        ></div>
+      <div
+        ref="metronome"
+        :class="
+          this.side == 0
+            ? 'metronome is-playing-right'
+            : 'metronome is-playing-left'
+        "
+      >
+        <div ref="blink" class="metronome__blink"></div>
+        <div class="metronome__viz">
+          <div class="metronome__line"></div>
+          <div
+            ref="indicator"
+            :style="cssVariable"
+            class="metronome__indicator"
+          ></div>
+        </div>
       </div>
     </div>
   </div>
@@ -60,6 +62,10 @@ export default {
         "--left-width": "-" + this.vizWidth,
       };
     },
+  },
+
+  unmounted() {
+    this.isPlay = false;
   },
 
   methods: {
@@ -127,14 +133,16 @@ export default {
 }
 
 .metronome-container {
-  width: 90%;
-  height: 23%;
+  width: 325px;
+  height: 150px;
   margin-top: 10px;
   padding-top: 10px;
   text-align: center;
   background-color: #edd9b7;
   border-radius: 10px;
-  position: relative;
+  position: absolute;
+  left: 17%;
+  bottom: 0px;
 }
 
 .metronome {

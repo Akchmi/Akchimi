@@ -48,7 +48,8 @@
             <div id="live-screens" class="" @click="changeMainScreen">
               <!-- {{ subscribers }} -->
               <user-video :stream-manager="publisher" />
-              <user-video id="participants"
+              <user-video
+                id="participants"
                 v-for="sub in subscribers"
                 :key="sub.stream.connection.connectionId"
                 :stream-manager="sub"
@@ -58,23 +59,23 @@
                 <div class="panel-body" id="container-screens"></div>
               </div>
             </div>
-            <TheMetronome />
           </div>
         </div>
         <!-- 바디 가운데: 큰메인화면 -->
         <div id="video-container" class="video-box">
           <user-video :stream-manager="publisher" />
+          <TheMetronome v-if="metronomePopState" />
           <TunerApp v-if="popState" @close="changePopState()" />
         </div>
         <!-- 바디 오른쪽: 채팅창 -->
         <div class="message-box">
-          <div class="messages-container">
+          <div class="messages-container" ref="chatroom">
             <div
               v-for="(message, index) in receivedMessages"
               :class="message.className"
               :key="index"
             >
-              <div>
+              <div class="words-container">
                 {{ message.message }}
               </div>
             </div>
@@ -93,6 +94,9 @@
       <!-- 바텀: 튜너, 화면공유, 나가기 버튼 -->
       <div class="bottom-container">
         <div class="button-box">
+          <button class="bottom-button" @click="changeMetronomePopState()">
+            매트로놈
+          </button>
           <button class="bottom-button" @click="changePopState()">튜너</button>
           <button
             id="buttonScreenShare"
@@ -193,6 +197,7 @@ export default {
 
       myUserName: JSON.parse(localStorage.getItem("vuex")).common.name,
       popState: false,
+      metronomePopState: false,
 
       // 대기 화면 내 비디오 확인
       myVideo: null,
@@ -229,13 +234,13 @@ export default {
       if (this.sessionCamera) {
         this.sessionCamera
           .signal({
-            data: this.myUserName + ":" + this.newMessage, // Any string (optional)
+            data: this.myUserName + " : " + this.newMessage, // Any string (optional)
             to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
             type: "my-chat",
             // The type of message (optional)
           })
           .then(() => {
-            console.log("Message successfully sent");
+            // console.log("Message successfully sent");
             this.newMessage = "";
           })
           .catch((error) => {
@@ -252,10 +257,13 @@ export default {
       // Push the received message into the messages array
       this.messages.push(receivedMessage);
     },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const chatroom = this.$refs.chatroom;
+        chatroom.scrollTop = chatroom.scrollHeight;
+      });
+    },
     changeMainScreen(event) {
-      console.log("##########we did click!###########");
-      console.log(event.target);
-      console.log(event.target.srcObject);
       const mainVideoDiv = document.querySelector("#video-container");
       const mainVideo = mainVideoDiv.querySelector("video");
       const selectedVideo = event.target;
@@ -264,32 +272,6 @@ export default {
         selectedVideo.srcObject != null &&
         mainVideo.srcObject !== selectedVideo.srcObject
       ) {
-        const mainVideoContainer = document.querySelector("#video-container");
-        mainVideoContainer.style.display = "none";
-
-        mainVideo.srcObject = selectedVideo.srcObject;
-        mainVideoContainer.style.display = "block";
-      }
-    },
-    updateMainScreen(event){
-      console.log("###############participants coming!#####################");
-      const mainVideoDiv = document.querySelector("#video-container");
-      console.log(mainVideoDiv);
-      const mainVideo = mainVideoDiv.querySelector("video");
-      let selectedVideo = event.querySelector("video");
-      // async function loadMediaStream() {
-      //   selectedVideo = event.querySelector("video");
-      // }
-      // loadMediaStream();
-      console.log(selectedVideo);
-      // console.log(selectedVideo.srcObject);
-      console.log(mainVideo.srcObject);
-
-      if (
-        selectedVideo.srcObject != null &&
-        mainVideo.srcObject !== selectedVideo.srcObject
-      ) {
-        console.log("!!!!!!!!!!!!!!!in main div!!!!!!!!!!!!!!!!");
         const mainVideoContainer = document.querySelector("#video-container");
         mainVideoContainer.style.display = "none";
 
@@ -330,9 +312,9 @@ export default {
           .getVideoTracks()[0]
           .addEventListener("ended", () => {
             // 공유중지 버튼 누르면
-            console.log(
-              'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
-            );
+            // console.log(
+            //   'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
+            // );
             this.sessionScreen.unpublish(publisherScreen);
             document.getElementById("buttonScreenShare").style.visibility =
               "visible";
@@ -377,22 +359,15 @@ export default {
 
       // On every new Stream received...
       this.sessionCamera.on("streamCreated", (event) => {
-        console.log(event);
-        console.log(this.sessionScreen);
+        // console.log(event);
+        // console.log(this.sessionScreen);
         if (event.stream.typeOfVideo == "CAMERA") {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-cameras' id
-          console.log(this.sessionCamera);
-          console.log("#############################################");
-          console.log(this.sessionCamera.streamManagers);
-          // this.updateMainScreen(this.sessionCamera.connection.stream);
           var subscriber = this.sessionCamera.subscribe(
             event.stream,
             "container-cameras"
-            );
-            console.log("미디아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ서터림 : ", event.stream.getMediaStream());
+          );
           this.subscribers.push(subscriber);
-          console.log(this.subscribers);
-          console.log(subscriber.stream);
           // When the HTML video has been appended to DOM...
           subscriber.on("videoElementCreated", (event) => {
             // Add a new <p> element for the user's nickname just below its video
@@ -402,8 +377,8 @@ export default {
       });
       console.log(this.sessionScreen);
       this.sessionScreen.on("streamCreated", (event) => {
-        console.log(this);
-        console.log(this.sessionScreen);
+        // console.log(this);
+        // console.log(this.sessionScreen);
         if (
           this.sessionScreen != null &&
           event.stream.typeOfVideo == "SCREEN"
@@ -425,8 +400,8 @@ export default {
       });
       this.sessionCamera.on("signal", (event) => {
         const receivedMessage = event.data;
-        console.log(event.from);
-        if (receivedMessage != this.myUserName + ":" + this.newMessage) {
+        // console.log(event.from);
+        if (receivedMessage != this.myUserName + " : " + this.newMessage) {
           this.receivedMessages.push({
             message: receivedMessage,
             className: "left",
@@ -491,11 +466,7 @@ export default {
             this.sessionCamera.publish(this.publisher);
           })
           .catch((error) => {
-            console.log(
-              "There was an error connecting to the session:",
-              error.code,
-              error.message
-            );
+            console.log(error);
           });
       });
       this.getToken(this.mySessionId).then((tokenScreen) => {
@@ -505,12 +476,12 @@ export default {
           .then(() => {
             document.getElementById("buttonScreenShare").style.visibility =
               "visible";
-            console.log("Session screen connected");
+            // console.log("Session screen connected");
           })
           .catch((error) => {
             console.warn(
-              "There was an error connecting to the session for screen share:",
-              error.code,
+              // "There was an error connecting to the session for screen share:",
+              // error.code,
               error.message
             );
           });
@@ -576,13 +547,13 @@ export default {
     changePopState() {
       this.popState = !this.popState;
     },
+    changeMetronomePopState() {
+      this.metronomePopState = !this.metronomePopState;
+    },
   },
-  updated(){
-    console.log("########################DOMUPDATED#########################");
-    const newDivs = this.$el.querySelector('#participants');
-    if(newDivs!=null){
-      console.log(newDivs);
-      this.updateMainScreen(newDivs);
+  updated() {
+    if (this.$refs.chatroom != null) {
+      this.scrollToBottom();
     }
   },
   beforeUnmount() {
@@ -597,7 +568,7 @@ export default {
 
       this.myVideo = null;
     }
-    console.log("mounted()가 호출 되었습니다:", this);
+    // console.log("mounted()가 호출 되었습니다:", this);
   },
 };
 </script>
@@ -649,21 +620,23 @@ export default {
 
 .top-container {
   width: 98vw;
-  height: 3vh;
+  height: 5vh;
   font-weight: bolder;
   font-size: larger;
   position: relative;
+  box-sizing: border-box;
+  padding: 10px;
   /* // border: solid 1px red; */
 }
 .body-container {
-  width: 98vw;
+  width: 99vw;
   height: 85vh;
   display: flex;
   position: relative;
   z-index: 5;
 }
 .bottom-container {
-  height: 20vh;
+  height: 10vh;
   width: 98vw;
   background-color: white;
   position: relative;
@@ -717,27 +690,34 @@ video {
   box-sizing: border-box;
   position: relative;
   background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
 }
 .messages-container {
   width: 100%;
-  height: 90%;
+  height: 85%;
   justify-content: space-between;
   box-sizing: border-box;
   overflow: auto;
 }
 .message-input-container {
+  width: 100%;
   height: 10%;
   bottom: 0;
   position: sticky;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .message-input-form {
-  width: 77%;
+  width: 70%;
   height: 89%;
-  border: none;
+  border: 2px solid #edd9b7;
   border-radius: 10px;
-  box-shadow: 1px 2px 1px 2px rgb(199, 199, 199);
+  margin-right: 5px;
+  outline: none;
 }
 .message-send-btn {
   width: 19%;
@@ -758,15 +738,35 @@ video {
   position: absolute;
   width: 60%;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 .bottom-button {
   width: 15%;
   border-radius: 10px;
 }
+.messages-container {
+  width: 100%;
+  height: 90%;
+  /* justify-content: space-between; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  overflow: auto;
+}
 .rightviduchat {
-  margin-bottom: 10px;
-
+  align-self: flex-end;
   word-break: break-all;
+  text-align: right;
+}
+.left {
+  align-self: flex-start;
+  word-break: break-all;
+}
+.words-container {
+  background-color: white;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
 }
 </style>

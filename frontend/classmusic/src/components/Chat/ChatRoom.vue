@@ -94,13 +94,12 @@ export default {
       try {
         this.chats = await apiGetChatLog(this.roomId);
 
-        console.log("getChatLog : ", this.chats);
+        // console.log("getChatLog : ", this.chats);
       } catch (error) {
         console.log(error);
       }
     },
     scrollToBottom() {
-      console.log("내려가");
       this.$nextTick(() => {
         const chatroom = this.$refs.chatroom;
         chatroom.scrollTop = chatroom.scrollHeight;
@@ -125,7 +124,7 @@ export default {
         name: participantInfo.studentName,
         profileImage: participantInfo.studentProfileImage,
       };
-      console.log("아웃풋", participantInfo);
+      // console.log("아웃풋", participantInfo);
     },
 
     save(newChat) {
@@ -151,7 +150,7 @@ export default {
     },
 
     send(newChat) {
-      console.log("Send message:" + this.content);
+      // console.log("Send message:" + this.content);
       if (this.stompClient && this.stompClient.connected) {
         this.stompClient.send("/receive", JSON.stringify(newChat), {});
       }
@@ -161,17 +160,17 @@ export default {
       const serverURL = "https://i9a210.p.ssafy.io:3000/api/websocket";
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
-      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
+      // console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
       this.stompClient.connect(
         {},
         (frame) => {
           // 소켓 연결 성공
           this.connected = true;
-          console.log("소켓 연결 성공", frame);
+          console.log(frame);
           // 서버의 메시지 전송 endpoint를 구독합니다.
 
           this.stompClient.subscribe("/send", (res) => {
-            console.log("구독으로 받은 메시지 입니다.", res.body);
+            // console.log("구독으로 받은 메시지 입니다.", res.body);
             const livemessage = JSON.parse(res.body);
             if (livemessage.roomId == this.roomId) {
               livemessage.createdTime = new Date() / 1000;

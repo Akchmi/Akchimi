@@ -27,7 +27,6 @@ function apiGetRefusedLectureList(context, data) {
 }
 
 function apiDeleteContact(context, contactId) {
-  console.log(contactId);
   axios
     .delete(`/contacts/${contactId}`)
     .then(() => {
@@ -74,7 +73,10 @@ function apiPostReview(context, params) {
   axios
     .post("/reviews", params)
     .then(() => {
-      router.go(0);
+      context.commit("UPDATEREVIEW", {
+        content: params.content,
+        rating: params.rating,
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -82,11 +84,13 @@ function apiPostReview(context, params) {
 }
 
 function apiPutReviewUpdate(context, params) {
-  console.log(params);
   axios
     .put(`/reviews/${params.reviewId}`, params)
     .then(() => {
-      context.commit("UPDATEREVIEW", params.content);
+      context.commit("UPDATEREVIEW", {
+        content: params.content,
+        rating: params.rating,
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -94,7 +98,6 @@ function apiPutReviewUpdate(context, params) {
 }
 
 function apiDeleteReview(context, reviewId) {
-  console.log(reviewId);
   axios
     .delete(`/reviews/${reviewId}`)
     .then(() => {

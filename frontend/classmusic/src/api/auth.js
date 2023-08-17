@@ -36,7 +36,6 @@ async function apiCheckId(params) {
   console.log("URL:", url);
   try {
     const response = await axios.get(`/auth/check-id?id=${params}`);
-    console.log(response);
 
     return response;
   } catch (error) {
@@ -45,11 +44,10 @@ async function apiCheckId(params) {
 }
 
 async function apiCheckEmail(email) {
-  const url = `/auth/check-email?email=${email}`;
-  console.log("URL:", url);
+  // const url = `/auth/check-email?email=${email}`;
+  // console.log("URL:", url);
   try {
     const response = await axios.get(`/auth/check-email?email=${email}`);
-    console.log(response);
 
     return response;
   } catch (error) {

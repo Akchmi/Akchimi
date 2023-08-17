@@ -32,9 +32,9 @@
       <div class="create__content__bottom">
         <div>
           <!-- 첨부파일 -->
-          <button class="createButton" @click="triggerFileUpload">
+          <!-- <button class="createButton" @click="triggerFileUpload">
             첨부파일 추가
-          </button>
+          </button> -->
         </div>
         <div
           v-for="(image, index) in attachedFiles"
@@ -82,8 +82,12 @@ export default {
   },
   methods: {
     ...mapActions(["postArticleCreate"]),
+    ...mapActions(["getArticlelist"]),
+    ...mapActions(["changePage"]),
 
     async postArticle() {
+      this.changePage(1);
+
       if (
         this.title.split("\n").join("").length == 0 ||
         this.title.split(" ").join("").length == 0 ||
@@ -100,7 +104,6 @@ export default {
       // const articleId =
       if (this.attachedFiles.length > 0) {
         await this.submitImages(this.createId);
-        console.log("크레이티드아이", this.createId);
       }
     },
 

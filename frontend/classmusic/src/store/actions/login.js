@@ -5,7 +5,7 @@ export default {
   async login({ commit }, loginInfo) {
     const response = await apiLogin(loginInfo);
     const { status, data } = response;
-    console.log(`로그인 요청 결과 : ${status}`);
+    // console.log(`로그인 요청 결과 : ${status}`);
 
     if (status == HttpStatusCode.Ok) {
       // 로그인 성공 시 vuex common에 저장
@@ -23,7 +23,7 @@ export default {
     try {
       const { data } = await apiFindId(namemail);
       console.log(data);
-      console.log(namemail);
+
       commit("SET_FINDID_ERROR", null);
     } catch (error) {
       console.log(error.response.data);

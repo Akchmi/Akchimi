@@ -34,4 +34,9 @@ export default {
   },
 
   //첨부파일?
+
+  //현재 페이지 변경
+  changePage(context, page) {
+    context.state.notices.nowPage = page;
+  },
 };
