@@ -28,9 +28,7 @@
         <div class="teacher-career">경력 : {{ teacher.career }}년</div>
       </div>
 
-      <div>
-        <div class="teacher-description">{{ teacher.introduce }}</div>
-      </div>
+      <div class="teacher-description">{{ teacher.introduce }}</div>
 
       <div class="teacher-card__buttons">
         <button

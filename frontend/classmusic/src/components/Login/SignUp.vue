@@ -83,7 +83,7 @@
 
 <script>
 import { apiCheckId, apiCheckEmail, apiRegister } from "@/api/auth.js";
-import { mapActions } from "vuex";
+// import { mapActions } from "vuex";
 import router from "@/router";
 
 export default {
@@ -105,7 +105,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setToken"]),
     async checkId() {
       if (!this.loginIdRegEx.test(this.loginid)) {
         alert("아이디는 6~16자리의 영어 대소문자, 숫자여야 합니다.");
@@ -203,7 +202,7 @@ export default {
           gender: this.gender,
         });
 
-        this.setToken(response.data.token);
+        console.log(response);
         router.push("/login/signin");
       } catch (error) {
         console.error(error);
