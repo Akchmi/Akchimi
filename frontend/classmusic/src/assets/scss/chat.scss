@@ -164,6 +164,7 @@
   height: 60px;
   align-self: flex-end;
   border-radius: 70%;
+  object-fit: cover;
 }
 
 // .chat-room .right .chat-img {
@@ -175,6 +176,8 @@
 //  채팅 시간
 .chat-room .left .chat-sendtime {
   font-size: small;
+  align-self: flex-end;
+  margin-bottom: 10px;
 }
 .chat-room .right .chat-sendtime {
   font-size: small;

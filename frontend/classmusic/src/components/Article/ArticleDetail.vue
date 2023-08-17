@@ -211,6 +211,11 @@ export default {
     ...mapActions(["postArticleComment"]),
 
     createComment() {
+      if (this.nowCreateComment.length == 0 || this.nowCreateComment == "\n") {
+        alert("댓글내용을 작성해주세요.");
+        this.nowCreateComment = "";
+        return;
+      }
       this.postArticleComment({
         articleId: this.articleDetail.articleId,
         content: this.nowCreateComment,

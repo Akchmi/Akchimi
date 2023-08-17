@@ -73,10 +73,11 @@ function apiPostReview(context, params) {
   axios
     .post("/reviews", params)
     .then(() => {
-      context.commit("UPDATEREVIEW", {
-        content: params.content,
-        rating: params.rating,
-      });
+      apiGetReview(context, { contactId: params.contactId });
+      // context.commit("UPDATEREVIEW", {
+      //   content: params.content,
+      //   rating: params.rating,
+      // });
     })
     .catch((error) => {
       console.log(error);
