@@ -57,7 +57,7 @@
                   <img
                     :src="lecture.userProfileImage"
                     alt="Student profile picture"
-                    class="profileImage"
+                    class="profileImage_teacher"
                   />
                 </div>
                 <div class="name">{{ lecture.name }}</div>
