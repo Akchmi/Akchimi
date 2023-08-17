@@ -45,9 +45,8 @@ public class Contact {
     @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
     private Teacher teacher;
 
-    @OneToMany()
-    @JoinColumn(name = "review_id")
-    private List<Review> reviews = new ArrayList<>();
+    @OneToOne(mappedBy = "contact")
+    private Review review;
 
     @Column(name = "state")
     private Integer state;
@@ -72,7 +71,4 @@ public class Contact {
 
     @Column(name = "room_key", length = 255)
     private String roomKey;
-
-
-    // Constructors, getters, and setters
 }

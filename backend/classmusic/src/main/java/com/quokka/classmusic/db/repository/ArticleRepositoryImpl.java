@@ -86,30 +86,10 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     }
 
     @Override
-    public Article selectOneById(int articleId) {
-        Article viewArticle = em.find(Article.class, articleId);
-        if(viewArticle == null)
-            throw new RestApiException(ErrorCode.NOT_FOUND);
-        viewArticle.setHit(viewArticle.getHit()+1);
-        return query
-                .select(Projections.constructor(Article.class,
-                        article.articleId,
-                        user,
-                        article.title,
-                        article.content,
-                        article.createdAt,
-                        article.hit
-                ))
-                .from(article)
-                .join(article.user , user)
-                .where(article.articleId.eq(articleId), article.deletedAt.isNull())
-                .fetchOne();
-    }
-
-    @Override
     public Article findById(int articleId){
-        return selectOneById(articleId);
-//        return em.find(Article.class, articleId);
+        return query.selectFrom(article)
+                .where(article.articleId.eq(articleId) , article.deletedAt.isNull())
+                .fetchOne();
     }
 
     @Override
@@ -140,4 +120,5 @@ public class ArticleRepositoryImpl implements  ArticleRepository{
     public void saveImage(ArticleFile articleFile) {
         em.persist(articleFile);
     }
+
 }

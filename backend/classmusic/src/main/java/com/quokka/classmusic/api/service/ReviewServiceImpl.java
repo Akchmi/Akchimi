@@ -41,6 +41,11 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public int insertReview(ReviewInsertDto reviewInsertDto) {
          Contact contact = contactsRepository.findById(reviewInsertDto.getContactId());
+
+         System.out.println(contact.getReview());
+         if(contact.getReview() != null){
+             throw new RestApiException(ErrorCode.REVIEW_DUPLICATED);
+         }
          Review review = Review.builder()
                  .contact(contact)
                  .rating(reviewInsertDto.getRating())
