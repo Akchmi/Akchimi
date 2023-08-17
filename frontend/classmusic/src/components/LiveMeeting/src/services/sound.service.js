@@ -49,7 +49,7 @@ export default () => {
 
   const updatePitch = () => {
     analyser.getFloatTimeDomainData(buf);
-    console.log(audioContext.sampleRate);
+    // console.log(audioContext.sampleRate);
     // audioContext.sampleRate=96000;
     const ac = autoCorrelate(buf, 48000);
     emitAcUpdate(ac);

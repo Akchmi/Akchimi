@@ -17,6 +17,7 @@ function apiPostMatchingCreate(context, data) {
   axios
     .post("/contacts", data)
     .then(() => {
+      alert("강의 신청이 완료되었습니다.");
       router.push("/lecture/studentwaiting");
     })
     .catch(() => {
