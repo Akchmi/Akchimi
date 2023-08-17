@@ -706,7 +706,6 @@ video {
 .messages-container {
   width: 100%;
   height: 85%;
-  justify-content: space-between;
   box-sizing: border-box;
   overflow: auto;
 }
