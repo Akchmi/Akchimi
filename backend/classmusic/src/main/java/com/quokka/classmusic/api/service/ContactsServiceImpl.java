@@ -8,10 +8,7 @@ import com.quokka.classmusic.db.entity.Contact;
 import com.quokka.classmusic.db.entity.Event;
 import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.entity.User;
-import com.quokka.classmusic.db.repository.ContactsRepository;
-import com.quokka.classmusic.db.repository.EventRepository;
-import com.quokka.classmusic.db.repository.TeacherRepository;
-import com.quokka.classmusic.db.repository.UserRepository;
+import com.quokka.classmusic.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,13 +24,15 @@ public class ContactsServiceImpl implements ContactsService{
     private final UserRepository userRepository;
     private final TeacherRepository teacherRepository;
     private final EventRepository eventRepository;
+    private final ChatRepository chatRepository;
 
     @Autowired
-    public ContactsServiceImpl(ContactsRepository contactsRepository, UserRepository userRepository, TeacherRepository teacherRepository, EventRepository eventRepository) {
+    public ContactsServiceImpl(ContactsRepository contactsRepository, UserRepository userRepository, TeacherRepository teacherRepository, EventRepository eventRepository, ChatRepository chatRepository) {
         this.contactsRepository = contactsRepository;
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
         this.eventRepository = eventRepository;
+        this.chatRepository = chatRepository;
     }
 
     //    내 매칭 보기
@@ -75,6 +74,7 @@ public class ContactsServiceImpl implements ContactsService{
             eventRepository.save(new Event(teacher.getUser() , 6 , student.getName() + " 학생과의 강의가 완료되었습니다."));
             eventRepository.save(new Event(student , 3 , teacher.getUser().getName() + " 강사와의 강의가 완료되었습니다."));
         } else if(state == 3){
+            chatRepository.deleteByContactId(contact.getContactId());
             eventRepository.save(new Event(student , 2 , teacher.getUser().getName() + " 강사가 강의를 거절했습니다."));
         }
         contact.setState(state);
@@ -128,7 +128,6 @@ public class ContactsServiceImpl implements ContactsService{
                 .build();
 
         eventRepository.save(new Event(teacher.getUser() , 5 , student.getName() + " 학생에게 강의 신청이 왔습니다."));
-
         contactsRepository.save(contact);
         return contact.getContactId();
     }

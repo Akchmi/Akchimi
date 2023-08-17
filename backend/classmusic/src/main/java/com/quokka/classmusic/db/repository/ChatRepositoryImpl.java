@@ -1,10 +1,12 @@
 package com.quokka.classmusic.db.repository;
 
+import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quokka.classmusic.api.response.ArticleVo;
 import com.quokka.classmusic.api.response.ChatsVo;
 import com.quokka.classmusic.db.entity.Chat;
+import com.quokka.classmusic.db.entity.Contact;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -48,5 +50,11 @@ public class ChatRepositoryImpl implements ChatRepository{
                 .where(chat.contact.contactId.eq(contentId))
                 .orderBy(chat.createdAt.asc())
                 .fetch();
+    }
+
+    public void deleteByContactId(int contactId) {
+        query.delete(chat)
+                .where(chat.contact.contactId.eq(contactId))
+                .execute();
     }
 }
