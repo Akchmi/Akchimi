@@ -72,25 +72,48 @@
           <div class="teacher-profile-form__row">
             <div class="teacher-profile-form__update">
               <label for="start">시작 시간 :</label>
-              <input
+
+              <select v-model.number="startTime">
+                <option
+                  v-for="starttime in [
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                    17, 18, 19, 20, 21, 22, 23,
+                  ]"
+                  :key="starttime.id"
+                >
+                  {{ starttime }}
+                </option>
+              </select>
+              <!-- <input
                 id="start"
                 v-model.number="startTime"
                 type="number"
                 :max="maxStartTime"
                 min="0"
                 @input="filterInput"
-              />
+              /> -->
             </div>
             <div class="teacher-profile-form__update">
               <label for="end">종료 시간 :</label>
-              <input
+              <select v-model.number="endTime">
+                <option
+                  v-for="endtime in [
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+                    18, 19, 20, 21, 22, 23, 24,
+                  ]"
+                  :key="endtime.id"
+                >
+                  {{ endtime }}
+                </option>
+              </select>
+              <!-- <input
                 id="end"
                 v-model.number="endTime"
                 type="number"
                 :max="maxEndTime"
                 min="1"
                 @input="filterInput"
-              />
+              /> -->
             </div>
           </div>
         </div>
@@ -362,6 +385,10 @@ export default {
     async submitForm() {
       if (!this.checkFormValidity()) {
         return;
+      }
+
+      if (this.startTime >= this.endTime) {
+        alert("시작시간과 종료시간을 정확히 입력해주세요.");
       }
 
       await this.submitImages();
