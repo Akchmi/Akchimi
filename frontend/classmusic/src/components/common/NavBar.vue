@@ -52,7 +52,12 @@
 										</button>
 									</div>
 								</li>
-								<li v-if="alarms.length === 0">알림이 없습니다.</li>
+								<li
+									class="alarm__message alarm__message__nope"
+									v-if="alarms.length === 0"
+								>
+									알림이 없습니다.
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -354,6 +359,7 @@ li:hover {
 	flex-direction: column;
 	align-items: left;
 	justify-content: center;
+	min-height: 80px;
 
 	div {
 		width: 100%;
@@ -366,5 +372,9 @@ li:hover {
 }
 .alarm__message:hover {
 	color: black;
+}
+.alarm__message__nope {
+	font-size: 20px;
+	align-items: center;
 }
 </style>
