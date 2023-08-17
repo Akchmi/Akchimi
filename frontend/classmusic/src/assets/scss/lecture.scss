@@ -101,7 +101,7 @@
   flex-direction: column;
 }
 
-.profileImage {
+.profileImage_student {
   width: 100px;
   height: 100px;
   object-fit: cover;
@@ -109,7 +109,15 @@
   border-radius: 100%;
 }
 
-.profileImage:hover {
+.profileImage_teacher {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  // border: 1px solid black;
+  border-radius: 100%;
+}
+
+.profileImage_student:hover {
   cursor: pointer;
 }
 
