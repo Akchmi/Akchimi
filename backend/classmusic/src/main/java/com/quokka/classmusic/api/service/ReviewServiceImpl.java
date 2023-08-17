@@ -6,9 +6,11 @@ import com.quokka.classmusic.api.response.ReviewVo;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Contact;
+import com.quokka.classmusic.db.entity.Event;
 import com.quokka.classmusic.db.entity.Review;
 import com.quokka.classmusic.db.entity.Teacher;
 import com.quokka.classmusic.db.repository.ContactsRepository;
+import com.quokka.classmusic.db.repository.EventRepository;
 import com.quokka.classmusic.db.repository.ReviewRepository;
 import com.quokka.classmusic.db.repository.TeacherRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +27,13 @@ public class ReviewServiceImpl implements ReviewService{
     private final ReviewRepository reviewRepository;
     private final ContactsRepository contactsRepository;
     private final TeacherRepository teacherRepository;
+    private final EventRepository eventRepository;
 
-    @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ContactsRepository contactsRepository, TeacherRepository teacherRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ContactsRepository contactsRepository, TeacherRepository teacherRepository, EventRepository eventRepository) {
         this.reviewRepository = reviewRepository;
         this.contactsRepository = contactsRepository;
         this.teacherRepository = teacherRepository;
+        this.eventRepository = eventRepository;
     }
 
     @Override
@@ -39,10 +42,10 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
+    @Transactional
     public int insertReview(ReviewInsertDto reviewInsertDto) {
          Contact contact = contactsRepository.findById(reviewInsertDto.getContactId());
 
-         System.out.println(contact.getReview());
          if(contact.getReview() != null){
              throw new RestApiException(ErrorCode.REVIEW_DUPLICATED);
          }
@@ -52,12 +55,13 @@ public class ReviewServiceImpl implements ReviewService{
                  .content(reviewInsertDto.getContent())
                  .build();
          reviewRepository.save(review);
-         updateRating(review.getContact().getTeacher());
-
+         updateRating(contact.getTeacher());
+         eventRepository.save(new Event(contact.getTeacher().getUser() , 7,contact.getStudent().getName() + " 학생에게 리뷰가 달렸습니다."));
          return review.getReviewId();
     }
 
     @Override
+    @Transactional
     public void updateReview(int reviewId , ReviewUpdateDto reviewUpdateDto) {
         Review review = reviewRepository.findById(reviewId);
         review.setContent(reviewUpdateDto.getContent());

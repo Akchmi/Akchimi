@@ -5,8 +5,11 @@ import com.quokka.classmusic.api.response.ContactsVo;
 import com.quokka.classmusic.common.exception.ErrorCode;
 import com.quokka.classmusic.common.exception.RestApiException;
 import com.quokka.classmusic.db.entity.Contact;
+import com.quokka.classmusic.db.entity.Event;
 import com.quokka.classmusic.db.entity.Teacher;
+import com.quokka.classmusic.db.entity.User;
 import com.quokka.classmusic.db.repository.ContactsRepository;
+import com.quokka.classmusic.db.repository.EventRepository;
 import com.quokka.classmusic.db.repository.TeacherRepository;
 import com.quokka.classmusic.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +26,17 @@ public class ContactsServiceImpl implements ContactsService{
     private final ContactsRepository contactsRepository;
     private final UserRepository userRepository;
     private final TeacherRepository teacherRepository;
+    private final EventRepository eventRepository;
 
     @Autowired
-    public ContactsServiceImpl(ContactsRepository contactsRepository, UserRepository userRepository, TeacherRepository teacherRepository) {
+    public ContactsServiceImpl(ContactsRepository contactsRepository, UserRepository userRepository, TeacherRepository teacherRepository, EventRepository eventRepository) {
         this.contactsRepository = contactsRepository;
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
+        this.eventRepository = eventRepository;
     }
-//    내 매칭 보기
+
+    //    내 매칭 보기
     @Override
     public List<ContactsVo> selectAllContacts(Map<String,Integer> params){
         return contactsRepository.findAll(params);
@@ -47,8 +53,9 @@ public class ContactsServiceImpl implements ContactsService{
         Contact contact = contactsRepository.findById(contactId);
         int state = contactsUpdateStateDto.getState();
 //        수락 시 매칭 수 증가 > 시간 넣어줘야됨
+        Teacher teacher = contact.getTeacher();
+        User student = contact.getStudent();
         if(state == 1){
-            Teacher teacher = contact.getTeacher();
             teacher.setContactCnt(teacher.getContactCnt() + 1);
             contact.setStartTime((int) (System.currentTimeMillis() / 1000));
 
@@ -61,8 +68,14 @@ public class ContactsServiceImpl implements ContactsService{
                     .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                     .toString();
             contact.setRoomKey(roomKey);
+            eventRepository.save(new Event(student , 1 , teacher.getUser().getName() + " 강사가 강의를 수락했습니다."));
+
         } else if(state == 2){
             contact.setEndTime((int) (System.currentTimeMillis() / 1000));
+            eventRepository.save(new Event(teacher.getUser() , 6 , student.getName() + " 학생과의 강의가 완료되었습니다."));
+            eventRepository.save(new Event(student , 3 , teacher.getUser().getName() + " 강사와의 강의가 완료되었습니다."));
+        } else if(state == 3){
+            eventRepository.save(new Event(student , 2 , teacher.getUser().getName() + " 강사가 강의를 거절했습니다."));
         }
         contact.setState(state);
         contactsRepository.save(contact);
@@ -103,13 +116,19 @@ public class ContactsServiceImpl implements ContactsService{
             throw new RestApiException(ErrorCode.CONTACT_DUPLICATED);
         }
 
+        User student = userRepository.findById(contactsInsertDto.getStudentId());
+        Teacher teacher = teacherRepository.findById(contactsInsertDto.getTeacherId());
+
         Contact contact = Contact.builder()
-                .student(userRepository.findById(contactsInsertDto.getStudentId()))
-                .teacher(teacherRepository.findById(contactsInsertDto.getTeacherId()))
+                .student(student)
+                .teacher(teacher)
                 .state(0)
                 .studentOrder(contactsRepository.maxOrder(contactsInsertDto.getStudentId() ,0,0) + 1)
                 .teacherOrder(contactsRepository.maxOrder(contactsInsertDto.getTeacherId() ,0,1) + 1)
                 .build();
+
+        eventRepository.save(new Event(teacher.getUser() , 5 , student.getName() + " 학생에게 강의 신청이 왔습니다."));
+
         contactsRepository.save(contact);
         return contact.getContactId();
     }
