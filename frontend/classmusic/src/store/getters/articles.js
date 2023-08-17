@@ -18,4 +18,8 @@ export default {
   getAricleId(state) {
     return state.articles.articleId;
   },
-}
+
+  getNowPage(state) {
+    return state.articles.nowPage;
+  },
+};

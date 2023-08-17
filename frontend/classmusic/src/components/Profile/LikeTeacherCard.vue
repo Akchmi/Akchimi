@@ -33,26 +33,44 @@
         <button class="teacher-card__button" @click="deleteLikeTeacher">
           즐겨찾기 취소
         </button>
-        
+
         <button
           class="teacher-card__button"
           @click="goToProfile(teacher.teacherId)"
         >
           자세히 보기
         </button>
-        <button @click="goToLecture">강의 신청</button>
+        <button @click="registerLecture(teacher.teacherId)">강의 신청</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   props: {
     teacher: Object,
   },
+  computed: {
+    ...mapGetters({ loginUserId: "getUserId" }),
+    ...mapGetters({ loginTeacherId: "getTeacherId" }),
+  },
   methods: {
-    goToProfile(teacherId) {  
+    ...mapActions(["postMachingCreate"]),
+    registerLecture(teacherId) {
+      if (teacherId == this.loginTeacherId) {
+        alert("자신에게 강의를 신청할 수 없습니다.");
+        return;
+      }
+      this.postMachingCreate({
+        teacherId: teacherId,
+        studentId: this.loginUserId,
+        mode: "registerLecture",
+      });
+    },
+    goToProfile(teacherId) {
       this.$router.push(`/profile/teacherprofile/${teacherId}`);
     },
     goToLecture() {
@@ -60,7 +78,6 @@ export default {
     },
     deleteLikeTeacher() {
       this.$emit("deleteLikeTeacher", this.teacher.likeId);
-      
     },
   },
 };

@@ -109,6 +109,10 @@
   border-radius: 100%;
 }
 
+.profileImage:hover {
+  cursor: pointer;
+}
+
 .info-box {
   width: 75%;
   display: flex;
@@ -129,6 +133,7 @@
   box-sizing: border-box;
   padding: 5px;
   border-radius: 5px;
+  white-space: pre;
 }
 
 .memoInput {
@@ -174,6 +179,10 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
+}
+
+.watingProfileImage:hover {
+  cursor: pointer;
 }
 
 .watingProfileName {

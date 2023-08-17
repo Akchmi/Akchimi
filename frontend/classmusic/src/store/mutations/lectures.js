@@ -8,7 +8,6 @@ export default {
   },
 
   GET_REVIEW(state, data) {
-    console.log(data);
     state.lectures.review = data;
   },
 
@@ -20,6 +19,7 @@ export default {
     }
   },
   UPDATEREVIEW(state, data) {
-    state.lectures.review.content = data;
+    state.lectures.review.content = data.content;
+    state.lectures.review.rating = data.rating;
   },
 };

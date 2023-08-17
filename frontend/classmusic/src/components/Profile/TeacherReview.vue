@@ -11,26 +11,13 @@
           <span class="student-name">{{ review.name }}</span>
           <span class="rating-star"
             >별점:
-            <span v-if="0 <= review.rating && review.rating <= 0.5"> </span>
-            <span v-else-if="0.5 < review.rating && review.rating < 1.5">
-              ⭐</span
-            >
-            <span v-if="1.5 <= review.rating && review.rating < 2.5">
-              ⭐⭐</span
-            >
-            <span v-if="2.5 <= review.rating && review.rating < 3.5">
-              ⭐⭐⭐</span
-            >
-            <span v-if="3.5 <= review.rating && review.rating < 4.5">
-              ⭐⭐⭐⭐</span
-            >
-            <span v-if="4.5 <= review.rating && review.rating <= 5">
-              ⭐⭐⭐⭐⭐</span
-            >
+            <span v-for="star in review.rating" :key="star">
+              <i class="fa-solid fa-star" style="color: #ffdd00;"></i>
+            </span>
           </span>
           <span class="course-duration"
-            >수강 기간: {{ toLocalTimeStamp(review.startTime).substr(0, 8) }} ~
-            {{ toLocalTimeStamp(review.endTime).substr(0, 8) }}</span
+            >수강 기간: {{ toLocalTimeStamp(review.startTime).substr(0, 10) }} ~
+            {{ toLocalTimeStamp(review.endTime).substr(0, 10) }}</span
           >
         </div>
         <div class="review-text">

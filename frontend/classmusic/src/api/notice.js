@@ -8,7 +8,6 @@ function apiGetNoticelist(context, params) {
     })
     .then(({ data }) => {
       context.commit("SET_NOTICE_LIST", data);
-      console.log(data);
     })
     .catch((error) => {
       console.error("GET 요청 에러 : ", error);
@@ -36,7 +35,6 @@ function apiGetNoticedetail(context, noticeId) {
     .get(`/notices/${noticeId}`)
     .then(({ data }) => {
       context.commit("SET_NOTICE_DETAIL", data);
-      console.log(data);
     })
     .catch((error) => {
       console.error("GET 요청 에러 : ", error);

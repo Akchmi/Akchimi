@@ -73,8 +73,10 @@ export default {
   },
   methods: {
     ...mapActions(["deleteNoticeDelete"]),
+    ...mapActions(["changePage"]),
 
     noticeDelete() {
+      this.changePage(1);
       this.deleteNoticeDelete(this.noticeId);
     },
     toLocalTimeStamp(unixTimeStamp) {

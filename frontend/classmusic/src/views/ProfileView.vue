@@ -5,7 +5,10 @@
     </div>
     <TheBanner :title="'프로필'" />
     <br />
-    <div v-if="isLogin && (isOnMyProfilePage || showProfileButtons)" class="top-button-container">
+    <div
+      v-if="isLogin && (isOnMyProfilePage || showProfileButtons)"
+      class="top-button-container"
+    >
       <button @click="movePage('/profile/myprofile')">내 프로필</button>
       |
       <button @click="navigateToTeacherProfile">강사 프로필</button>
@@ -19,8 +22,8 @@
 import NavBar from "@/components/common/NavBar.vue";
 import TheBanner from "@/components/common/TheBanner";
 import { mapGetters } from "vuex";
+import { onMounted } from "vue";
 // import {useRoute} from "vue-route";
-
 
 export default {
   components: {
@@ -38,20 +41,22 @@ export default {
     isOnMyProfilePage() {
       return this.$route.path === "/profile/myprofile";
     },
-    showProfileButtons() { 
-      const storedTeacherId = Number(JSON.parse(localStorage.getItem("vuex")).common.teacherId);
+    showProfileButtons() {
+      const storedTeacherId = Number(
+        JSON.parse(localStorage.getItem("vuex")).common.teacherId
+      );
       return Number(this.currentTeacherId) === storedTeacherId;
     },
   },
 
   watch: {
-    '$route.params.id': {
+    "$route.params.id": {
       immediate: true,
       handler(newVal) {
-        console.log("Watching id:", newVal);
+        // console.log("Watching id:", newVal);
         this.currentTeacherId = newVal;
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -68,6 +73,11 @@ export default {
     movePage(path) {
       this.$router.push(path);
     },
+  },
+  setup() {
+    onMounted(() => {
+      window.scrollTo(0, 0);
+    });
   },
 };
 </script>

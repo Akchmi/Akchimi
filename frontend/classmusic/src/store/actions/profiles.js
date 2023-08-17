@@ -22,7 +22,7 @@ export default {
   },
 
   putTeacherProfileUpdate(context, data) {
-    console.log("액션", context, data);
+    // console.log("액션", context, data);
     return apiTeacherProfileUpdate(context, data);
   },
 
@@ -30,11 +30,11 @@ export default {
     apiLikeTeacherUpdate(context, data);
   },
   putChangePw(context, data) {
-    console.log("비번변경", context, data);
+    // console.log("비번변경", context, data);
     apiChangePw(context, data);
   },
   deleteAttachedImage(context, data) {
-    console.log("첨사삭제", context, data);
+    // console.log("첨사삭제", context, data);
     apiDeleteAttachedImage(context, data);
   },
   deleteMyprofileImage(context, data) {

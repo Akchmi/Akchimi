@@ -25,7 +25,6 @@ export default {
   },
   methods: {
     onCareerChange(value) {
-      console.log("InputCareer.vue career 수정");
       this.$emit("careerChange", value);
     },
     closeFilter() {
