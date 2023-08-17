@@ -8,7 +8,6 @@ export default {
   },
 
   GET_REVIEW(state, data) {
-    console.log(data);
     state.lectures.review = data;
   },
 

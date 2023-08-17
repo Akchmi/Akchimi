@@ -240,7 +240,7 @@ export default {
             // The type of message (optional)
           })
           .then(() => {
-            console.log("Message successfully sent");
+            // console.log("Message successfully sent");
             this.newMessage = "";
           })
           .catch((error) => {
@@ -258,16 +258,12 @@ export default {
       this.messages.push(receivedMessage);
     },
     scrollToBottom() {
-      console.log("내려가");
       this.$nextTick(() => {
         const chatroom = this.$refs.chatroom;
         chatroom.scrollTop = chatroom.scrollHeight;
       });
     },
     changeMainScreen(event) {
-      console.log("##########we did click!###########");
-      console.log(event.target);
-      console.log(event.target.srcObject);
       const mainVideoDiv = document.querySelector("#video-container");
       const mainVideo = mainVideoDiv.querySelector("video");
       const selectedVideo = event.target;
@@ -316,9 +312,9 @@ export default {
           .getVideoTracks()[0]
           .addEventListener("ended", () => {
             // 공유중지 버튼 누르면
-            console.log(
-              'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
-            );
+            // console.log(
+            //   'User pressed the "Stop sharing" button!!!!!!!!!!!!!!!!!'
+            // );
             this.sessionScreen.unpublish(publisherScreen);
             document.getElementById("buttonScreenShare").style.visibility =
               "visible";
@@ -363,8 +359,8 @@ export default {
 
       // On every new Stream received...
       this.sessionCamera.on("streamCreated", (event) => {
-        console.log(event);
-        console.log(this.sessionScreen);
+        // console.log(event);
+        // console.log(this.sessionScreen);
         if (event.stream.typeOfVideo == "CAMERA") {
           // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-cameras' id
           var subscriber = this.sessionCamera.subscribe(
@@ -381,8 +377,8 @@ export default {
       });
       console.log(this.sessionScreen);
       this.sessionScreen.on("streamCreated", (event) => {
-        console.log(this);
-        console.log(this.sessionScreen);
+        // console.log(this);
+        // console.log(this.sessionScreen);
         if (
           this.sessionScreen != null &&
           event.stream.typeOfVideo == "SCREEN"
@@ -404,7 +400,7 @@ export default {
       });
       this.sessionCamera.on("signal", (event) => {
         const receivedMessage = event.data;
-        console.log(event.from);
+        // console.log(event.from);
         if (receivedMessage != this.myUserName + " : " + this.newMessage) {
           this.receivedMessages.push({
             message: receivedMessage,
@@ -470,11 +466,7 @@ export default {
             this.sessionCamera.publish(this.publisher);
           })
           .catch((error) => {
-            console.log(
-              "There was an error connecting to the session:",
-              error.code,
-              error.message
-            );
+            console.log(error);
           });
       });
       this.getToken(this.mySessionId).then((tokenScreen) => {
@@ -484,12 +476,12 @@ export default {
           .then(() => {
             document.getElementById("buttonScreenShare").style.visibility =
               "visible";
-            console.log("Session screen connected");
+            // console.log("Session screen connected");
           })
           .catch((error) => {
             console.warn(
-              "There was an error connecting to the session for screen share:",
-              error.code,
+              // "There was an error connecting to the session for screen share:",
+              // error.code,
               error.message
             );
           });
@@ -559,8 +551,8 @@ export default {
       this.metronomePopState = !this.metronomePopState;
     },
   },
-  updated(){
-    if(this.$refs.chatroom!=null){
+  updated() {
+    if (this.$refs.chatroom != null) {
       this.scrollToBottom();
     }
   },
@@ -576,7 +568,7 @@ export default {
 
       this.myVideo = null;
     }
-    console.log("mounted()가 호출 되었습니다:", this);
+    // console.log("mounted()가 호출 되었습니다:", this);
   },
 };
 </script>
@@ -767,11 +759,11 @@ video {
   word-break: break-all;
   text-align: right;
 }
-.left{
+.left {
   align-self: flex-start;
   word-break: break-all;
 }
-.words-container{
+.words-container {
   background-color: white;
   border-radius: 10px;
   margin: 10px;

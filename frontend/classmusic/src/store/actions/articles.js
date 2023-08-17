@@ -32,7 +32,7 @@ export default {
 
   //자유게시글 수정
   putArticleupdate(context, data) {
-    console.log("자유수정", context, data);
+    // console.log("자유수정", context, data);
     apiArticleupdate(context, data);
   },
   //자유게시글 작성
@@ -40,7 +40,7 @@ export default {
     const response = apiArticlecreate(context, data);
     if (response) {
       context.commit("SAVE_ARTICLEID", response);
-      console.log("세아액", response);
+      // console.log("세아액", response);
     }
     return response;
   },
