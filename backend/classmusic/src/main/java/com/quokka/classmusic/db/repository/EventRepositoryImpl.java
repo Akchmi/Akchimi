@@ -25,8 +25,9 @@ public class EventRepositoryImpl implements EventRepository{
     @Override
     public List<Event> findAll(int userId) {
         return query
-                .selectFrom(event)
-                .join(user)
+                .select(event)
+                .from(event)
+                .join(event.user , user)
                 .where(user.userId.eq(userId))
                 .fetch();
     }
