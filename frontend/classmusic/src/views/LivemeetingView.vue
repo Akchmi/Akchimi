@@ -36,9 +36,7 @@
 
     <div id="session" v-if="sessionCamera">
       <!-- 탑 (세션번호) -->
-      <div id="session-header" class="top-container">
-        {{ mySessionId }}번 세션
-      </div>
+      <div id="session-header" class="top-container"></div>
       <!-- 바디 (왼쪽: 작은화면, 메트로놈 / 가운데: 큰메인화면 / 오른쪽: 채팅창) -->
       <div class="body-container">
         <!-- 바디 왼쪽: 작은화면, 메트로놈 -->
@@ -698,7 +696,6 @@ video {
 .messages-container {
   width: 100%;
   height: 85%;
-  justify-content: space-between;
   box-sizing: border-box;
   overflow: auto;
 }

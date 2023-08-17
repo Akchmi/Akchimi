@@ -81,11 +81,11 @@
   font-size: 16px;
   margin: 5px 0px;
   height: 50px;
-  width: 640px;
+  width: 620px;
 
   text-overflow: ellipsis;
   overflow: hidden;
-  word-break: break-word;
+  word-break: break-all;
 
   display: -webkit-box;
   -webkit-line-clamp: 3;

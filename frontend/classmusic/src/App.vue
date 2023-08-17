@@ -2,7 +2,7 @@
   <div>
     <!-- 구성 화면 -->
     <div class="container">
-      <router-view></router-view>
+      <router-view style="min-height: 600px"></router-view>
       <TheFooter></TheFooter>
     </div>
   </div>
