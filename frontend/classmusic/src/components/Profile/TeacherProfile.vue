@@ -130,7 +130,6 @@
           <h2 class="review-title">강사 리뷰</h2>
 
           <div class="avg-rating">
-            평균 별점:
             <span v-for="star in Math.floor(avgRating)" :key="star">
               <i class="fa-solid fa-star" style="color: #ffdd00"></i>
             </span>
@@ -141,7 +140,10 @@
             >
               <i class="fa-solid fa-star-half" style="color: #ffdd00"></i>
             </span>
-            ( {{ avgRating }} )
+            <div v-if="avgRating != 0">평균 별점:( {{ avgRating }} )</div>
+            <div v-else>
+              <p>아직 등록된 리뷰가 존재하지 않습니다.</p>
+            </div>
           </div>
         </div>
         <TeacherReview
@@ -220,6 +222,7 @@ export default {
     this.contactCnt = res.contactCnt;
     this.likeId = res.likeId;
     this.visible = res.visible;
+
     this.getReview();
   },
   computed: {
