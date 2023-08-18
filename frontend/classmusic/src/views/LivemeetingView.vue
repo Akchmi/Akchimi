@@ -104,6 +104,16 @@
           >
             화면공유
           </button>
+          <button v-if="audioEnabled"
+            class="bottom-button"
+            id="buttonMute"
+            @click="muteSound"
+            >음소거</button>
+          <button v-else
+            class="bottom-button"
+            id="buttonMute"
+            @click="muteSound">
+          음소거 해제</button>
           <button
             class="bottom-button"
             id="buttonLeaveSession"
@@ -111,6 +121,7 @@
           >
             강의 떠나기
           </button>
+          
         </div>
       </div>
       <!-- <user-video :stream-manager="mainStreamManager" />
@@ -199,6 +210,7 @@ export default {
 
       // 대기 화면 내 비디오 확인
       myVideo: null,
+      audioEnabled: true,
     };
   },
   created() {
@@ -509,6 +521,15 @@ export default {
       this.screensharing = false;
       this.screens = [];
       // Remove beforeunload listener
+    },
+
+    muteSound(){
+      if(this.audioEnabled==true){
+        this.audioEnabled=false;
+      }else{
+        this.audioEnabled=true;
+      }
+      this.publisher.publishAudio(this.audioEnabled);
     },
 
     updateMainVideoStreamManager(stream) {
