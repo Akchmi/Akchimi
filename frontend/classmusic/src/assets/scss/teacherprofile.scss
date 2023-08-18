@@ -1,0 +1,163 @@
+.teacher-profile-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+}
+
+.button {
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  outline: inherit;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.teacher-bottom-button {
+  text-align: center;
+  margin-left: 10px;
+}
+
+.teacher-details {
+  margin-top: 20px;
+}
+
+.attach-image {
+  width: 170px;
+  height: 220px;
+  object-fit: cover;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.description-box {
+  border: 2px solid #edd9b7;
+  padding: 10px;
+  height: auto;
+  min-height: 6em;
+  max-height: auto;
+  overflow: auto;
+  line-height: 1.2em;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  white-space: pre-line;
+}
+
+.introduce {
+  border: 2px solid #edd9b7;
+  width: 30px;
+}
+
+.teacher-profile {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  border: 3px solid #edd9b7;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.top-section {
+  display: flex;
+}
+
+.teacher-image {
+  width: 170px;
+  height: 220px;
+  object-fit: cover;
+}
+
+.teacher-name-gender-info {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 200px;
+  flex-grow: 1;
+}
+
+.name-gender-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.name-box,
+.gender-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-basis: 30%;
+  text-align: center;
+}
+
+.box {
+  display: flex;
+  font-size: 16px;
+  border: 2px solid #edd9b7;
+  width: 200px;
+  height: 30px;
+  margin: 5px;
+  padding-left: 10px;
+  border-radius: 10px;
+  // justify-content: center;
+  text-align: left;
+  align-items: center;
+}
+.teacher-info-container {
+  margin-top: 20px;
+}
+.teacher-info-box {
+  border: 2px solid #edd9b7;
+  border-radius: 10px;
+  margin-top: 5px;
+  padding: 10px;
+  height: 90px;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-box {
+  margin-bottom: 5px;
+  text-align: left;
+  height: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.teacher-reviews {
+  padding: 15px 0px;
+}
+.review-header {
+  width: 800px;
+  /*display: flex;
+    justify-content: space-between;*/
+  align-items: center;
+}
+.review-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}

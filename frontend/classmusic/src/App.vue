@@ -1,26 +1,34 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <!-- 구성 화면 -->
+    <div class="container">
+      <router-view style="min-height: 600px"></router-view>
+      <TheFooter></TheFooter>
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import TheFooter from "@/components/common/TheFooter";
 export default {
-  name: 'App',
+  name: "AppVue",
   components: {
-    HelloWorld
-  }
-}
+    TheFooter,
+  },
+};
 </script>
+"
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+@import "@/assets/scss/reset.scss";
+@import "@/assets/scss/templates/common.scss";
+
+@font-face {
+  font-family: "mainfont";
+  src: url("assets/font/Maplestory.ttf") format("truetype");
+}
+
+.container {
+  font-family: "mainfont";
 }
 </style>
