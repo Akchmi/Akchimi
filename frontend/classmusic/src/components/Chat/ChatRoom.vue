@@ -1,12 +1,22 @@
 <template>
   <div>
-    <div class="chat-profile" v-if="sender == 0">
-      <img class="chat-img" :src="teacherProfile.profileImage" />
-      <div class="chat-teachername">{{ teacherProfile.name }} 님</div>
-    </div>
-    <div class="chat-profile" v-if="sender == 1">
-      <img class="chat-img" :src="studentProfile.profileImage" />
-      <div class="chat-teachername">{{ studentProfile.name }} 님</div>
+    <div class="chat-header-container">
+      <div class="chat-header">
+        <div class="chat-profile" v-if="sender == 0">
+          <img class="chat-img" :src="teacherProfile.profileImage" />
+          <div class="chat-teachername">{{ teacherProfile.name }} 님</div>
+        </div>
+        <div class="chat-profile" v-if="sender == 1">
+          <img class="chat-img" :src="studentProfile.profileImage" />
+          <div class="chat-teachername">{{ studentProfile.name }} 님</div>
+        </div>
+        <button
+          class="exit-button"
+          @click="this.$router.push('/lecture/studentongoing')"
+        >
+          나가기
+        </button>
+      </div>
     </div>
     <div class="chat-room" ref="chatroom">
       <!-- 채팅 목록 -->
