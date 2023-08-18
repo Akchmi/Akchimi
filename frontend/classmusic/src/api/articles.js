@@ -44,7 +44,6 @@ function apiGetArticledetail(context, articleId) {
     .get(`/articles/${articleId}`)
     .then(({ data }) => {
       context.commit("SET_ARTICLE_DETAIL", data);
-      console.log(data);
     })
     .catch((error) => {
       console.error("GET 요청 에러 : ", error);
@@ -98,7 +97,6 @@ function apiGetArticlecomment(context, articleId) {
     .get(`/articles/${articleId}/comments`)
     .then(({ data }) => {
       context.commit("SET_ARTICLE_COMMENTS", data);
-      console.log(data);
     })
     .catch((error) => {
       console.error("GET 요청 에러 : ", error);

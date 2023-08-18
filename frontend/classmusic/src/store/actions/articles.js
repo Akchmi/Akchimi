@@ -37,6 +37,7 @@ export default {
   },
   //자유게시글 작성
   postArticleCreate(context, data) {
+    context.state.articles.nowPage = 1;
     const response = apiArticlecreate(context, data);
     if (response) {
       context.commit("SAVE_ARTICLEID", response);
@@ -46,6 +47,7 @@ export default {
   },
   //자유게시글 삭제
   deleteArticleDelete(context, articleId) {
+    context.state.articles.nowPage = 1;
     apiArticledelete(context, articleId);
   },
 
@@ -66,10 +68,9 @@ export default {
   deleteComment(context, data) {
     apiCommentdelete(context, data);
   },
-  //첨부파일?
 
   //현재 페이지 변경
-  changePage(context, page) {
+  articleChangePage(context, page) {
     context.state.articles.nowPage = page;
   },
 };
