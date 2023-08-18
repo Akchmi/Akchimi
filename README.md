@@ -46,7 +46,7 @@
  <img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
 
 ## ERD
-
+ <img src="./docs/images/ERD.png">
 ## 기능 설명
 
 [기능설명](./exec/시연시나리오.md)
