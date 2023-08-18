@@ -95,7 +95,7 @@
       </div>
 
       <!-- 페이지 번호-->
-
+      {{ nowPageList }}
       <div class="articlePageBox">
         <button @click="pageDown" v-if="pages[0] != 1">이전</button>
         <button
@@ -125,7 +125,7 @@ export default {
   data() {
     return {
       pageNo: 1,
-      pages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      pages: this.nowPageList,
       searchQuery: "",
       selectedSearchCategory: "전체",
       selectedSorttype: "최신순",
@@ -135,10 +135,11 @@ export default {
     ...mapGetters({ articleList: "getArticleList" }),
     ...mapGetters({ endPageno: "getArticleEndPageNo" }),
     ...mapGetters({ isLogin: "getIsLogin" }),
-    ...mapGetters({ nowPage: "getNowPage" }),
+    ...mapGetters({ nowPage: "getArticleNowPage" }),
   },
   methods: {
     ...mapActions(["getArticlelist"]),
+
     runSearch() {
       this.getArticlelist({
         searchType: this.selectedSearchCategory,
@@ -170,9 +171,9 @@ export default {
       }
     },
 
-    ...mapActions(["changePage"]),
+    ...mapActions(["articleChangePage"]),
     pageChange(page) {
-      this.changePage(page);
+      this.articleChangePage(page);
 
       this.getArticlelist({
         searchType: this.selectedSearchCategory,
@@ -209,6 +210,21 @@ export default {
     const searchCategory = ["전체", "제목", "내용", "작성자"];
     const sortType = ["최신순", "조회순"];
     const todayDate = utils.todayDate();
+    const nowFirstPage =
+      Math.floor(store.getters.getArticleNowPage / 10) * 10 + 1;
+
+    const nowPageList = [
+      nowFirstPage,
+      nowFirstPage + 1,
+      nowFirstPage + 2,
+      nowFirstPage + 3,
+      nowFirstPage + 4,
+      nowFirstPage + 5,
+      nowFirstPage + 6,
+      nowFirstPage + 7,
+      nowFirstPage + 8,
+      nowFirstPage + 9,
+    ];
 
     onMounted(() => {
       if (store.state.articles.nowPage == 1) {
@@ -225,6 +241,7 @@ export default {
       searchCategory,
       sortType,
       todayDate,
+      nowPageList,
     };
   },
 };

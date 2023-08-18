@@ -19,7 +19,7 @@ export default {
     return state.articles.articleId;
   },
 
-  getNowPage(state) {
+  getArticleNowPage(state) {
     return state.articles.nowPage;
   },
 };
