@@ -95,7 +95,7 @@
       </div>
 
       <!-- 페이지 번호-->
-      {{ nowPageList }}
+
       <div class="articlePageBox">
         <button @click="pageDown" v-if="pages[0] != 1">이전</button>
         <button
