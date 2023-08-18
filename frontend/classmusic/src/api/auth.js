@@ -67,19 +67,19 @@ async function apiRegister(params) {
 
 async function apiEventAlarm(userId) {
   try {
-    const response = await axios.get(`/event/${userId}`)
-    console.log('apiAlarm', response)
-    return response
-  } catch(error) {
-    console.log(error)
+    const response = await axios.get(`/event/${userId}`);
+
+    return response;
+  } catch (error) {
+    console.log(error);
   }
 }
 
 async function apiDeleteEventAlarm(eventId) {
   try {
-    await axios.delete(`/event/${eventId}`)
-  } catch(error) {
-    console.log(error)
+    await axios.delete(`/event/${eventId}`);
+  } catch (error) {
+    console.log(error);
   }
 }
 
