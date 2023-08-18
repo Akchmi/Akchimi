@@ -154,12 +154,11 @@ async function apiDeleteAttachedImage(teacherId, data) {
 }
 
 async function apiDeleteMyprofileImage(id) {
-  console.log("사진지", id);
   try {
     await axios.delete(`/users/${id}/profileImage`);
     router.go(0);
   } catch (error) {
-    console.log("내프사삭", error);
+    console.log(error);
     return error;
   }
 }
@@ -179,9 +178,7 @@ function apiDeleteTeacher(context, teacherId) {
 async function apiToggleTeacherVisible(teacherId) {
   axios
     .put(`/teachers/${teacherId}/visible`)
-    .then(() => {
-      console.log("강사 활성화 토글 요청 성공");
-    })
+    .then(() => {})
     .catch((error) => {
       console.error("PUT 요청 에러 : ", error);
     });
