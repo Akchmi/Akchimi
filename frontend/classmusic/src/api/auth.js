@@ -66,9 +66,11 @@ async function apiRegister(params) {
 }
 
 async function apiEventAlarm(userId) {
+  if (!JSON.parse(localStorage.getItem("vuex")).common.isLogin) {
+    return;
+  }
   try {
     const response = await axios.get(`/event/${userId}`);
-
     return response;
   } catch (error) {
     console.log(error);
