@@ -86,7 +86,7 @@
   border: 1.5px solid black;
   border-radius: 10px;
   margin: 20px;
-  padding: 20px 20px 0px 20px;
+  padding: 15px 15px 0px 15px;
 }
 
 .ongoing__container__box {
@@ -146,14 +146,25 @@
 
 .memoInput {
   resize: none;
-  width: 100%;
-  height: 100%;
+  width: 98%;
+  height: 50px;
+  outline: none;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.review__container__box__buttons{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+  margin-top: 5px;
 }
 
 .ongoing__container__button {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .input-field {
@@ -198,12 +209,15 @@
 }
 
 .review__container__box {
-  margin: 10px;
+  margin-bottom: 15px;
 }
 
 .review-box {
-  width: 100%;
+  width: 98%;
   min-height: 50px;
   border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
   overflow: hidden;
+  font-size: 13px;
 }
