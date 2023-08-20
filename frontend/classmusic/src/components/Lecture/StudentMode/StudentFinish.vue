@@ -134,7 +134,7 @@
 									<h4 style="margin-bottom: 10px">리뷰 작성</h4>
 									<textarea
 										placeholder="리뷰를 작성해주세요."
-										class="memoInput"
+										class="reviewInput"
 										v-model="nowUpdateReview"
 									></textarea>
 									<div class="review__container__box__buttons">
@@ -199,7 +199,7 @@
 								<div v-if="review.content && nowUpdateReviewId != -1">
 									<h4 style="margin-bottom: 10px">리뷰 수정</h4>
 									<textarea
-										class="memoInput"
+										class="reviewInput"
 										type="text"
 										v-model="nowUpdateReview"
 									>
